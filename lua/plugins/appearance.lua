@@ -9,12 +9,7 @@ return {
 		version = "^4.0.0",
 	}, ]]
 	{
-		"mstcl/lush",
-		lazy = false,
-		priority = 1000,
-	},
-	{
-		"mstcl/dmg",
+		"https://git.bim.boats/dmg",
 		lazy = false,
 		priority = 1000,
 		config = function()
