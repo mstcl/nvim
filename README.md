@@ -6,7 +6,7 @@ __lckdscl's opinionated configuration of Neovim.__
 
 ## Plugin manager
 
-Requires (lazy.nvim)[https://github.com/folke/lazy.nvim] as the plugin manager.
+Requires [lazy.nvim](https://github.com/folke/lazy.nvim) as the plugin manager.
 
 ## Configured language servers
 
