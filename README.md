@@ -26,3 +26,6 @@ Requires (lazy.nvim)[https://github.com/folke/lazy.nvim] as the plugin manager.
 - shellcheck
 - stylua
 - latexindent
+
+![Alpha](./pics/2023-06-13_19-47.png)
+![Editor](./pics/2023-06-13_19-49.png)
