@@ -1,6 +1,8 @@
 # NeoBim
 
-lckdscl's opinionated configuration of Neovim.
+__lckdscl's opinionated configuration of Neovim.__
+
+<img src="./pics/2023-06-13_19-49.png" alt="Editor" width="500"/>
 
 ## Plugin manager
 
@@ -26,9 +28,3 @@ Requires (lazy.nvim)[https://github.com/folke/lazy.nvim] as the plugin manager.
 - shellcheck
 - stylua
 - latexindent
-
-## Screenshots
-
-<img src="./pics/2023-06-13_19-47.png" alt="Alpha" width="300"/>
-
-<img src="./pics/2023-06-13_19-49.png" alt="Editor" width="300"/>
