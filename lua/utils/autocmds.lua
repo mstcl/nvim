@@ -119,6 +119,7 @@ local indentgroup = {
 	"*.hpp",
 	"*.rs",
 	"*.js",
+	"*.org",
 	"*config*",
 	"*rc",
 }
@@ -138,6 +139,13 @@ autocmd({ "Filetype" }, {
 	pattern = "floaterm",
 	group = floaterm,
 	command = "set nonumber | set norelativenumber",
+})
+
+local org = augroup("org", { clear = true })
+autocmd({ "Filetype" }, {
+	pattern = "org",
+	group = org,
+	command = "setlocal nolist",
 })
 
 local procsearch = augroup("procsearch", { clear = true })
