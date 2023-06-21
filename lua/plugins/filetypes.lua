@@ -29,4 +29,9 @@ return {
 			require("orgmode").setup_ts_grammar()
 		end,
 	},
+	{
+		"nblock/vim-dokuwiki",
+		lazy = true,
+		ft = "dokuwiki",
+	},
 }
