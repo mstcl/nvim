@@ -22,9 +22,10 @@ return {
 	{
 		"nvim-orgmode/orgmode",
 		config = function()
-			require("orgmode").setup{
-				org_agenda_files = { "/mnt/sshftps/orgzly/Main.org", "/mnt/sshftps/shared/orgzly/*" },
-            }
+			require("orgmode").setup({
+				org_agenda_files = { "~/sftpgo/orgzly/Main.org", "~/sftpgo/shared/orgzly/*" },
+				win_split_mode = "float",
+			})
 			require("orgmode").setup_ts_grammar()
 		end,
 	},
