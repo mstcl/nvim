@@ -76,3 +76,11 @@ endfunction
 function OpenMarkdownPreview (url)
   execute "silent ! librewolf --new-window " . a:url
 endfunction
+
+autocmd ColorScheme * call s:setup_org_colors()
+
+function! s:setup_org_colors() abort
+  hi link OrgAgendaScheduled HintMsg
+  hi link OrgDONE DiffAdd
+  hi link OrgTODO DiffDelete
+endfunction
