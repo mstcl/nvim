@@ -23,7 +23,9 @@ ts.setup({
         "bash",
         "toml",
         "comment",
-        "org"
+        "org",
+        "rust",
+        "go",
     },
     highlight = {
         enable = true,
