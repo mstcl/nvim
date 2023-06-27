@@ -93,7 +93,7 @@ map(
 	opts
 )
 
-map("n", "<leader>f", "<cmd>Telescope find_files<CR>", opts)
+map("n", "<leader>f", "<cmd>Telescope find_files path=%:p:h<CR>", opts)
 
 map("n", "<leader>gs", "<cmd>Telescope git_status<CR>", opts)
 map("n", "<leader>gb", "<cmd>Telescope git_bcommits<CR>", opts)
@@ -141,7 +141,7 @@ map("n", "<leader>w", ":call TrimWhiteSpace()<CR>", opts)
 
 map("n", "<leader>x", "<cmd>Trouble workspace_diagnostics<CR>", opts)
 
-map("n", "<leader>y", "<cmd>Telescope file_browser<CR>", opts)
+map("n", "<leader>y", "<cmd>Telescope file_browser path=%:p:h<CR>", opts)
 
 map("n", "<leader>z", "<cmd>ZenMode<CR>", opts)
 
@@ -195,7 +195,6 @@ map('n', '#', "<Cmd>lua Scroll('#', 1)<CR>")
 map('n', 'g*', "<Cmd>lua Scroll('g*', 1)<CR>")
 map('n', 'g#', "<Cmd>lua Scroll('g#', 1)<CR>")
 
-
 -- Screen scrolling:
 map('n', 'zz', "<Cmd>lua Scroll('zz', 0, 1)<CR>")
 map('n', 'zt', "<Cmd>lua Scroll('zt', 0, 1)<CR>")
@@ -220,3 +219,16 @@ map('n', 'zl', "<Cmd>lua Scroll('zl', 0, 1)<CR>")
 
 map({ 'n', 'x' }, '<ScrollWheelUp>', "<Cmd>lua Scroll('<ScrollWheelUp>')<CR>")
 map({ 'n', 'x' }, '<ScrollWheelDown>', "<Cmd>lua Scroll('<ScrollWheelDown>')<CR>")
+
+-- Up/down movements:
+vim.keymap.set({ 'n', 'x' }, 'k', "<Cmd>lua Scroll('k', 0, 1)<CR>")
+vim.keymap.set({ 'n', 'x' }, 'j', "<Cmd>lua Scroll('j', 0, 1)<CR>")
+vim.keymap.set({ 'n', 'x' }, '<Up>', "<Cmd>lua Scroll('k', 0, 1)<CR>")
+vim.keymap.set({ 'n', 'x' }, '<Down>', "<Cmd>lua Scroll('j', 0, 1)<CR>")
+
+-- Left/right movements:
+vim.keymap.set({ 'n', 'x' }, 'h', "<Cmd>lua Scroll('h', 0, 1)<CR>")
+vim.keymap.set({ 'n', 'x' }, 'l', "<Cmd>lua Scroll('l', 0, 1)<CR>")
+vim.keymap.set({ 'n', 'x' }, '<Left>', "<Cmd>lua Scroll('h', 0, 1)<CR>")
+vim.keymap.set({ 'n', 'x' }, '<Right>', "<Cmd>lua Scroll('l', 0, 1)<CR>")
+
