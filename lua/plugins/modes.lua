@@ -3,10 +3,18 @@ return {
 	{
 		-- Terminal panel
 		"numToStr/FTerm.nvim",
+		event = "VeryLazy",
 		lazy = true,
-		config = function()
-			require("configs.fterm")
-		end,
+		opts = {
+			border = "single",
+			blend = 0,
+			dimensions = {
+				height = 0.3,
+				width = 0.8,
+				x = 0.5,
+				y = 0.9,
+			},
+		},
 	},
 	{
 		-- Distraction-free editing mode
@@ -23,18 +31,24 @@ return {
 		"folke/twilight.nvim",
 		lazy = true,
 		cmd = "Twilight",
-		config = function()
-			require("twilight").setup()
-		end,
+		opts = {},
 	},
 	{
 		-- Utility to align text by delimiters
 		"echasnovski/mini.align",
-		version = false,
 		event = "VeryLazy",
+		version = false,
 		lazy = true,
-		config = function()
-			require("mini.align").setup()
-		end,
+		opts = {},
+	},
+	{
+		-- View git diff
+		"sindrets/diffview.nvim",
+		lazy = true,
+		cmd = {
+			"DiffviewOpen",
+			"DiffviewFileHistory",
+		},
+		opts = {},
 	},
 }

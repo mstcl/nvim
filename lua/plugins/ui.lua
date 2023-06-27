@@ -1,7 +1,7 @@
 -- Plugins that modify big UI
 return {
 	{
-        -- Colorscheme
+		-- Colorscheme
 		"https://git.bim.boats/dmg",
 		lazy = false,
 		priority = 1000,
@@ -10,7 +10,7 @@ return {
 		end,
 	},
 	{
-        -- Statusline
+		-- Statusline
 		"AkashKarnatak/galaxyline.nvim",
 		lazy = true,
 		event = "VeryLazy",
@@ -113,5 +113,17 @@ return {
 				dependencies = { "kkharji/sqlite.lua" },
 			},
 		},
+	},
+	{
+		-- Revamped UI
+		"folke/noice.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+			"rcarriga/nvim-notify",
+		},
+		config = function()
+			require("configs.noice")
+		end,
 	},
 }

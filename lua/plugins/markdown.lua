@@ -24,12 +24,9 @@ return {
 		"dimfeld/section-wordcount.nvim",
 		lazy = true,
 		ft = { "markdown" },
-		config = function()
-			require("section-wordcount").setup({
-				-- These are the default values and can be omitted
-				highlight = "NonText",
-				virt_text_pos = "eol",
-			})
-		end,
+		opts = {
+			highlight = "NonText",
+			virt_text_pos = "eol",
+		}
 	},
 }
