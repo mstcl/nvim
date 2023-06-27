@@ -6,10 +6,6 @@ end
 
 local handlers = {
 	["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" }),
-	["textDocument/signatureHelp"] = vim.lsp.with(
-		vim.lsp.handlers.signature_help,
-		{ border = "single", focusable = false, silent = true }
-	),
 	["textDocument/publishDiagnostics"] = vim.lsp.with(
 		vim.lsp.diagnostic.on_publish_diagnostics,
 		{ update_in_insert = false }
@@ -56,16 +52,6 @@ local on_attach_fold_lsp = function(client, bufnr)
 	end
 	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
 	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
-	require("lsp_signature").on_attach({
-		bind = false,
-		handler_opts = { border = "single" },
-		transparency = 0,
-		floating_window = true,
-		floating_window_above_cur_line = true,
-		fix_pos = false,
-		hint_enable = false,
-		hi_parameter = "LspSignatureActiveParameter",
-	})
 	if client.server_capabilities.documentSymbolProvider then
 		navic.attach(client, bufnr)
 	end
@@ -93,16 +79,6 @@ local on_attach_fold_indent = function(client, bufnr)
 	end
 	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
 	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
-	require("lsp_signature").on_attach({
-		bind = false,
-		handler_opts = { border = "single" },
-		transparency = 0,
-		floating_window = true,
-		floating_window_above_cur_line = true,
-		fix_pos = false,
-		hint_enable = false,
-		hi_parameter = "LspSignatureActiveParameter",
-	})
 	if client.server_capabilities.documentSymbolProvider then
 		navic.attach(client, bufnr)
 	end
@@ -117,7 +93,7 @@ local on_attach_pyright = function(client, bufnr)
 	client.server_capabilities.documentFormattingProvider = false
 	client.server_capabilities.documentSymbolProvider = false
 	client.server_capabilities.renameProvider = false
-	client.server_capabilities.signatureHelpProvider = false
+	-- client.server_capabilities.signatureHelpProvider = false
 	client.server_capabilities.referencesProvider = false
 end
 
@@ -143,16 +119,6 @@ local on_attach_ruff = function(client, bufnr)
 	end
 	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
 	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
-	require("lsp_signature").on_attach({
-		bind = false,
-		handler_opts = { border = "single" },
-		transparency = 0,
-		floating_window = true,
-		floating_window_above_cur_line = true,
-		fix_pos = false,
-		hint_enable = false,
-		hi_parameter = "LspSignatureActiveParameter",
-	})
 	if client.server_capabilities.documentSymbolProvider then
 		navic.attach(client, bufnr)
 	end
