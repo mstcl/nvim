@@ -4,56 +4,56 @@ if not present then
 end
 
 local kind_icons = {
-	Namespace = "ξ",
-	Text = "☰",
-	Method = "ƒ",
-	Function = "ƒ",
-	Constructor = "☂",
-	Field = "⊟",
-	Variable = "Ψ",
-	Class = "⁐",
-	Interface = "♺",
-	Module = "◫",
-	Property = "✓",
-	Unit = "",
-	Value = "λ",
-	Enum = "ζ",
-	Keyword = "✮",
-	Snippet = "",
-	Color = "",
-	File = "⊡",
-	Reference = "⇒",
-	Folder = "₪",
-	EnumMember = "⁜",
-	Constant = "π",
-	Struct = "◧",
-	Event = "",
-	Operator = "⁑",
-	TypeParameter = "⊞",
-	Table = "☷",
-	Object = "☁",
-	Tag = "⭤",
-	Array = "☷",
-	Boolean = "◕",
-	Number = "#",
-	Null = "∅",
-	String = "⟙",
-	Calendar = "◪",
-	Watch = "◔",
-	Package = "◫",
-	Copilot = "",
+    Namespace = "ξ",
+    Text = "☰",
+    Method = "ƒ",
+    Function = "ƒ",
+    Constructor = "☂",
+    Field = "⊟",
+    Variable = "Ψ",
+    Class = "⁐",
+    Interface = "♺",
+    Module = "◫",
+    Property = "✓",
+    Unit = "",
+    Value = "λ",
+    Enum = "ζ",
+    Keyword = "✮",
+    Snippet = "",
+    Color = "",
+    File = "⊡",
+    Reference = "⇒",
+    Folder = "₪",
+    EnumMember = "⁜",
+    Constant = "π",
+    Struct = "◧",
+    Event = "",
+    Operator = "⁑",
+    TypeParameter = "⊞",
+    Table = "☷",
+    Object = "☁",
+    Tag = "⭤",
+    Array = "☷",
+    Boolean = "◕",
+    Number = "#",
+    Null = "∅",
+    String = "⟙",
+    Calendar = "◪",
+    Watch = "◔",
+    Package = "◫",
+    Copilot = "",
 }
 
 local has_any_words_before = function()
-	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
-		return false
-	end
-	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+    if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+        return false
+    end
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
 local press = function(key)
-	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), "n", true)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), "n", true)
 end
 
 cmp.setup({
