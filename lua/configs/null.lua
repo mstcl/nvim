@@ -4,7 +4,20 @@ if not present then
 	return
 end
 
+local function applyFoldsAndThenCloseAllFolds(bufnr, providerName)
+	require("async")(function()
+		bufnr = bufnr or vim.api.nvim_get_current_buf()
+		require("ufo").attach(bufnr)
+		local ok, ranges = pcall(await, require("ufo").getFolds(bufnr, providerName))
+		if ok and ranges then
+			ok = require("ufo").applyFolds(bufnr, ranges)
+		end
+	end)
+end
+
 local on_attach = function(client, bufnr)
+	applyFoldsAndThenCloseAllFolds(bufnr, "indent")
+
 	local function buf_set_keymap(...)
 		vim.api.nvim_buf_set_keymap(bufnr, ...)
 	end
@@ -16,14 +29,6 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap("n", "<Leader>qR", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
 	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
-	require("lsp_signature").on_attach({
-		bind = true,
-		handler_opts = { border = "single" },
-		floating_window = true,
-		floating_window_above_cur_line = true,
-		fix_pos = false,
-		hint_enable = false,
-	})
 	if client.server_capabilities.documentSymbolProvider then
 		navic.attach(client, bufnr)
 	end

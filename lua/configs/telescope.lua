@@ -27,6 +27,7 @@ telescope.setup({
         prompt_prefix = " ❯❯ ",
         selection_caret = "  ",
         entry_prefix = "  ",
+        results_title = "",
         path_display = { "truncate" },
         color_devicons = true,
         sorting_strategy = "ascending",
