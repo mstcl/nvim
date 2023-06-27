@@ -21,7 +21,7 @@ set.hidden = true
 set.showmode = false
 set.showcmd = true
 -- set.cmdheight = 0
-set.lazyredraw = true
+set.lazyredraw = false
 set.ttyfast = true
 set.conceallevel = 2
 set.showtabline = 2
@@ -55,7 +55,7 @@ set.linebreak = true
 set.formatoptions = set.formatoptions - "cro"
 
 set.number = true
-set.relativenumber = false
+set.relativenumber = true
 
 set.splitbelow = true
 set.splitright = true
@@ -104,7 +104,7 @@ vim.cmd([[set listchars=tab:<->,extends:›,precedes:‹,nbsp:∩,eol:¶,trail:�
 set.showbreak = "↳"
 
 set.completeopt = { "menu", "menuone", "noselect" }
-set.shortmess = set.shortmess + "OosSatTcI"
+set.shortmess = set.shortmess + "OosatTcI"
 set.swapfile = false
 set.path = set.path + "**"
 set.history = 1000

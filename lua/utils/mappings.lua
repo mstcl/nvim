@@ -12,9 +12,6 @@ map("n", "<Right>", "", opts)
 map("n", "<space>", ":", opts)
 map("v", "<space>", ":", opts)
 
-map("x", "ga", "<Plug>(EasyAlign)", { silent = true, noremap = false })
-map("n", "ga", "<Plug>(EasyAlign)", { silent = true, noremap = false })
-
 map("n", "<C-S>v", ":vs<CR>", opts)
 map("n", "<C-S>h", ":sp<CR>", opts)
 
