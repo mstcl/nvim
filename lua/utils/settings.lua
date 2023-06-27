@@ -1,4 +1,12 @@
 local set = vim.opt
+local let = vim.g
+
+-- neovide settings
+set.guifont = "scientifica:h17"
+let.neovide_scroll_animation_length = 0
+let.neovide_refresh_rate = 144
+let.neovide_cursor_animation_length = 0
+let.neovide_cursor_trail_size = 0
 
 set.autochdir = false
 
