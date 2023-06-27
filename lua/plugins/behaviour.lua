@@ -5,11 +5,9 @@ return {
 		"lewis6991/foldsigns.nvim",
 		lazy = true,
 		event = "BufRead",
-		config = function()
-			require("foldsigns").setup({
-				exclude = { "LspDiagnosticsSignWarning" },
-			})
-		end,
+		opts = {
+			exclude = { "LspDiagnosticsSignWarning" },
+		},
 	},
 	{
 		-- Folding customization using LSP and more
@@ -26,21 +24,17 @@ return {
 		"nmac427/guess-indent.nvim",
 		lazy = true,
 		event = "BufRead",
-		config = function()
-			require("guess-indent").setup({
-				auto_cmd = true,
-				override_editorconfig = true,
-			})
-		end,
+		opts = {
+			override_editorconfig = true,
+			auto_cmd = true,
+		},
 	},
 	{
 		-- Force cursor to stay in place when doing certain visual motions
 		"gbprod/stay-in-place.nvim",
 		lazy = true,
 		event = "CursorMoved",
-		config = function()
-			require("stay-in-place").setup({})
-		end,
+		opts = {}
 	},
 	{
 		-- Show gutter symbols for marks
@@ -57,7 +51,7 @@ return {
 		lazy = true,
 		cmd = "Registers",
 		keys = {
-			{ '"', mode = { "n", "v" } },
+			{ '"',     mode = { "n", "v" } },
 			{ "<C-R>", mode = "i" },
 		},
 		config = function()
@@ -69,9 +63,7 @@ return {
 		"echasnovski/mini.cursorword",
 		event = "CursorMoved",
 		version = false,
-		config = function()
-			require("mini.cursorword").setup()
-		end,
+		opts = {}
 	},
 	{
 		-- Highlight color blocks
@@ -105,9 +97,14 @@ return {
 			"IndentBlanklineEnable",
 			"IndentBlanklineToggle",
 		},
-		config = function()
-			require("configs.indent")
-		end,
+		opts = {
+			buftype_exclude = { "terminal" },
+			bufnameExclude = { "README.md" },
+			show_current_context = true,
+			show_end_of_line = false,
+			filetype_exclude = { "tex" },
+			enabled = "true",
+		}
 	},
 	{
 		-- Utility to hide numbers in foldcolumn
@@ -117,7 +114,7 @@ return {
 			require("statuscol").setup({
 				segments = {
 					{ text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
-					{ text = { "%s" }, click = "v:lua.ScSa" },
+					{ text = { "%s" },                  click = "v:lua.ScSa" },
 					{
 						text = { builtin.lnumfunc, " " },
 						condition = { true, builtin.not_empty },
@@ -125,6 +122,16 @@ return {
 					},
 				},
 			})
+		end,
+	},
+	{
+		-- Git status in gutter
+		"lewis6991/gitsigns.nvim",
+		lazy = true,
+		event = "BufRead",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("configs.gitsigns")
 		end,
 	},
 }

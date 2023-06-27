@@ -10,12 +10,12 @@ return {
 			require("configs.lspconfig")
 		end,
 	},
-	{
-		-- Display and autofill code signatures
-		"ray-x/lsp_signature.nvim",
-		lazy = true,
-		event = "LspAttach",
-	},
+	-- {
+	-- 	-- Display and autofill code signatures
+	-- 	"ray-x/lsp_signature.nvim",
+	-- 	lazy = true,
+	-- 	event = "LspAttach",
+	-- },
 	{
 		-- Breadcrumb bar
 		"utilyre/barbecue.nvim",
@@ -45,9 +45,7 @@ return {
 		-- Easy texlab configuration
 		"f3fora/nvim-texlabconfig",
 		lazy = true,
-		config = function()
-			require("texlabconfig").setup()
-		end,
+		opts = {},
 		ft = { "tex", "bib" },
 		build = "go build",
 	},
@@ -57,9 +55,10 @@ return {
 		lazy = true,
 		event = "LspAttach",
 		dependencies = "kyazdani42/nvim-web-devicons",
-		config = function()
-			require("configs.trouble")
-		end,
+		opts = {
+			mode = "workspace_diagnostics",
+			padding = false,
+		}
 	},
 	{
 		-- Linter manager
@@ -75,12 +74,10 @@ return {
 		"dnlhc/glance.nvim",
 		lazy = true,
 		event = "LspAttach",
-		config = function()
-			require("glance").setup({
-				list = {
-					width = 0.5,
-				},
-			})
-		end,
+		opts = {
+			list = {
+				width = 0.5,
+			},
+		}
 	},
 }

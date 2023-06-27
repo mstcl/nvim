@@ -1,15 +1,5 @@
 return {
 	{
-		-- Fancy command wildmenu
-		"gelguy/wilder.nvim",
-		lazy = true,
-		build = ":UpdateRemotePlugins",
-		event = "CmdlineEnter",
-		config = function()
-			require("configs.wilder")
-		end,
-	},
-	{
 		-- Snippet engine
 		"sirver/ultisnips",
 		lazy = true,

@@ -18,9 +18,7 @@ return {
 			"JoosepAlviste/nvim-ts-context-commentstring",
 			{
 				"m-demare/hlargs.nvim",
-				config = function()
-					require("hlargs").setup({ color = "#a77212" })
-				end,
+				opts = { color = "#a77212" },
 			},
 		},
 	},
@@ -50,6 +48,8 @@ return {
 	{
 		-- Orgmode syntax
 		"nvim-orgmode/orgmode",
+		lazy = true,
+		event = "VeryLazy",
 		config = function()
 			require("orgmode").setup({
 				org_agenda_files = { "~/sftpgo/orgzly/Main.org", "~/sftpgo/shared/orgzly/*" },
