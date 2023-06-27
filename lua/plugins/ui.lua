@@ -1,4 +1,5 @@
--- Plugins that modify big UI autocomplete.lua{
+-- Plugins that modify big UI
+return {
 	{
         -- Colorscheme
 		"https://git.bim.boats/dmg",
