@@ -118,6 +118,7 @@ return {
 		-- Revamped UI
 		"folke/noice.nvim",
 		event = "VeryLazy",
+		lazy = true,
 		dependencies = {
 			"MunifTanjim/nui.nvim",
 			"rcarriga/nvim-notify",
@@ -125,5 +126,14 @@ return {
 		config = function()
 			require("configs.noice")
 		end,
+	},
+	{
+		-- Virt column character
+		-- "lukas-reineke/virt-column.nvim",
+		-- event = "BufEnter",
+		-- lazy = true,
+		-- opts = {
+		-- 	char = "║",
+		-- },
 	},
 }
