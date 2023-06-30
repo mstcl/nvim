@@ -64,4 +64,21 @@ return {
 		lazy = true,
 		ft = "dokuwiki",
 	},
+	{
+		-- Org bullet
+		"akinsho/org-bullets.nvim",
+		lazy = true,
+		ft = "org",
+		opts = {
+			symbols = {
+				list = "•",
+				headlines = { "❄", "○", "✮", "✖" },
+				checkboxes = {
+					half = { "☀", "OrgTSCheckboxHalfChecked" },
+					done = { "✓", "OrgDone" },
+					todo = { "✗", "OrgTODO" },
+				},
+			},
+		},
+	},
 }
