@@ -107,13 +107,13 @@ return {
 	},
 	{
 		-- Enforce good vim habits
-		"mm4xshen/hardtime.nvim",
-		lazy = true,
-		event = "VeryLazy",
-		opts = {
-			disable_mouse = false,
-			disabled_filetypes = { "qf", "netrw", "NvimTree", "lazy", "mason", "alpha" },
-			disabled_keys = {},
-		},
+		-- "m4xshen/hardtime.nvim",
+		-- lazy = true,
+		-- event = "VeryLazy",
+		-- opts = {
+		-- 	disable_mouse = false,
+		-- 	disabled_filetypes = { "qf", "netrw", "NvimTree", "lazy", "mason", "alpha" },
+		-- 	disabled_keys = {},
+		-- },
 	},
 }
