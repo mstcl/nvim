@@ -29,4 +29,12 @@ return {
 			virt_text_pos = "eol",
 		}
 	},
+	{
+		-- Add background to some blocks
+		"lukas-reineke/headlines.nvim",
+		lazy = true,
+		ft = {"markdown", "org"},
+		dependences = "nvim-treesitter/nvim-treesitter",
+		opts = {},
+	}
 }
