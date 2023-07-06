@@ -54,6 +54,7 @@ return {
 			require("orgmode").setup({
 				org_agenda_files = { "~/sftpgo/orgzly/Main.org", "~/sftpgo/shared/orgzly/*" },
 				win_split_mode = "float",
+				org_hide_emphasis_markers = true,
 			})
 			require("orgmode").setup_ts_grammar()
 		end,
