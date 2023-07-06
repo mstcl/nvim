@@ -119,7 +119,7 @@ local indentgroup = {
 	"*.hpp",
 	"*.rs",
 	"*.js",
-	"*.org",
+	-- "*.org",
 	"*config*",
 	"*rc",
 }
@@ -145,8 +145,14 @@ local org = augroup("org", { clear = true })
 autocmd({ "Filetype" }, {
 	pattern = "org",
 	group = org,
-	command = "setlocal nolist",
+	command = "setlocal nolist | setlocal conceallevel=2 | setlocal concealcursor=nc | setlocal sw=2 | setlocal cc=",
 })
+
+autocmd({ "WinEnter", "BufRead", "BufNewFile" }, {
+	pattern = "*",
+	command = "if &ft != 'org' | nnoremap <buffer> <Tab> za | nnoremap <buffer> <S-Tab> zc | endif",
+})
+
 
 local procsearch = augroup("procsearch", { clear = true })
 autocmd({ "CmdLineLeave" }, {
@@ -174,7 +180,7 @@ autocmd({ "InsertLeave", "InsertEnter" }, {
 local barbecue = augroup("barbecue", { clear = true })
 
 autocmd({ "WinResized", "BufWinEnter", "CursorHold", "InsertLeave" }, {
-	pattern = {"*.lua", "*.python", "*.tex", "*.vim", "*.sh", "*.cpp"},
+	pattern = {"*.lua", "*.py", "*.tex", "*.vim", "*.sh", "*.cpp"},
 	group = barbecue,
 	callback = function()
 		require("barbecue.ui").update()
