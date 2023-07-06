@@ -2,18 +2,29 @@
 return {
 	{
 		-- Terminal panel
-		"numToStr/FTerm.nvim",
+		"akinsho/toggleterm.nvim",
 		event = "VeryLazy",
 		lazy = true,
 		opts = {
-			border = "single",
-			blend = 0,
-			dimensions = {
-				height = 0.3,
-				width = 0.8,
-				x = 0.5,
-				y = 0.9,
+			size = function(term)
+				if term.direction == "horizontal" then
+					return 15
+				elseif term.direction == "vertical" then
+					return vim.o.columns * 0.4
+				end
+			end,
+			open_mapping = [[<c-\>]],
+			hide_numbers = true,
+			shade_filetypes = {},
+			autochdir = false,
+			shade_terminals = false,
+			shading_factor = "2",
+			highlights = {
+				Normal = {
+					link = "ColorColumn",
+				},
 			},
+			direction = "vertical",
 		},
 	},
 	{
