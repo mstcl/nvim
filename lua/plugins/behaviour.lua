@@ -104,6 +104,7 @@ return {
 			show_end_of_line = false,
 			filetype_exclude = { "tex" },
 			enabled = "true",
+			char_priority = 50
 		}
 	},
 	{
