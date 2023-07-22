@@ -10,10 +10,14 @@ Requires [lazy.nvim](https://github.com/folke/lazy.nvim) as the plugin manager.
 
 ## Configured language servers
 
-- Python
-- Lua
-- Tex 
-- Vim
+- Python (jedi)
+- Lua (luals)
+- Tex (texlab)
+- Vim (vimls)
+- Bash (bashls)
+- C/C++ (clangd)
+- CSS/SCSS/LESS (cssls)
+- Markdown (marksman)
 
 ## Other linters
 
@@ -23,8 +27,11 @@ Requires [lazy.nvim](https://github.com/folke/lazy.nvim) as the plugin manager.
 - cppcheck
 - codespell
 - vint
+- revive
 - proselint
+- mypy
 - pylint
 - shellcheck
 - stylua
 - latexindent
+- gitsigns
