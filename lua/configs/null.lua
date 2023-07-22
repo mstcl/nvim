@@ -24,9 +24,9 @@ local on_attach = function(client, bufnr)
 
 	local opts = { noremap = true, silent = true }
 	buf_set_keymap("n", "<C-K>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-	buf_set_keymap("n", "<Leader>qD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-	buf_set_keymap("n", "<Leader>qf", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
-	buf_set_keymap("n", "<Leader>qR", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+	buf_set_keymap("n", "<Leader>qq", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+	buf_set_keymap("n", "<Leader><space>", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
+	buf_set_keymap("n", "<Leader>r", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
 	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
 	if client.server_capabilities.documentSymbolProvider then
@@ -41,7 +41,9 @@ local sources = {
 	null_ls.builtins.diagnostics.cppcheck,
 	null_ls.builtins.diagnostics.codespell,
 	null_ls.builtins.diagnostics.vint,
+	null_ls.builtins.diagnostics.revive,
 	null_ls.builtins.diagnostics.proselint,
+	null_ls.builtins.diagnostics.mypy,
 	null_ls.builtins.diagnostics.pylint,
 	null_ls.builtins.diagnostics.shellcheck,
 	null_ls.builtins.formatting.stylua,
