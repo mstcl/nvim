@@ -7,6 +7,9 @@ local notify = require("notify")
 
 noice.setup({
 	lsp = {
+		progress = {
+			enabled = false,
+		},
 		override = {
 			["vim.lsp.util.convert_input_to_markdown_lines"] = true,
 			["vim.lsp.util.stylize_markdown"] = true,
@@ -95,7 +98,7 @@ noice.setup({
 })
 
 notify.setup({
-	fps = 60,
+	fps = 144,
 	icons = {
 		DEBUG = "*",
 		ERROR = "✘",
