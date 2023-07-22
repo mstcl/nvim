@@ -10,6 +10,13 @@ autocmd({ "BufWritePost" }, {
 	command = "CmpUltisnipsReloadSnippets",
 })
 
+local dokuwiki = augroup("dokuwiki", {clear = true})
+autocmd({"BufEnter"}, {
+	pattern = "*.txt",
+	group = dokuwiki,
+	command = "setlocal ft=dokuwiki"
+})
+
 local alpha = augroup("alpha", { clear = true })
 autocmd({ "User" }, {
 	pattern = "AlphaReady",
@@ -81,6 +88,11 @@ autocmd({ "BufReadPost" }, {
 	pattern = "*.conf",
 	group = filetypes,
 	command = "set filetype=config",
+})
+autocmd({ "BufReadPost" }, {
+	pattern = "*.sbat",
+	group = filetypes,
+	command = "set filetype=sh",
 })
 
 local mdoptions = augroup("mdoptions", { clear = true })
@@ -226,3 +238,17 @@ autocmd("Filetype", {
 		require("section-wordcount").wordcounter({})
 	end,
 })
+
+-- autocmd({ "BufWritePost", "BufEnter", "InsertLeave" }, {
+--     pattern = "*",
+--     callback = function()
+--         require("lint").try_lint()
+--     end,
+-- })
+--
+-- autocmd({ "BufWritePost", "BufEnter", "InsertLeave" }, {
+--     pattern = "*",
+--     callback = function()
+--         require("lint").try_lint({"codespell"})
+--     end,
+-- })
