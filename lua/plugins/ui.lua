@@ -23,11 +23,11 @@ return {
 	{
 		-- Add a sidebar map
 		"echasnovski/mini.map",
-		ft = { "python", "tex", "lua", "markdown", "md" },
+		lazy = true,
+		event = "VeryLazy",
 		version = false,
 		config = function()
 			require("configs.map")
-			vim.cmd("lua MiniMap.toggle()")
 		end,
 	},
 	{
@@ -62,21 +62,6 @@ return {
 		end,
 	},
 	{
-		-- Smooth scrolling
-		"declancm/cinnamon.nvim",
-		lazy = true,
-		event = "BufEnter",
-		opts = {
-			default_keymaps = true,
-			centered = true,
-			disable = false,
-			scroll_limit = 150,
-			hide_cursor = true,
-			default_delay = 7,
-			horizontal_scroll = true,
-		},
-	},
-	{
 		-- Add nice input dialogs to prompt
 		"stevearc/dressing.nvim",
 		lazy = true,
@@ -94,6 +79,7 @@ return {
 			require("configs.telescope")
 		end,
 		dependencies = {
+			"nvim-telescope/telescope-ui-select.nvim",
 			"nvim-telescope/telescope-dap.nvim",
 			"tsakirist/telescope-lazy.nvim",
 			"debugloop/telescope-undo.nvim",
