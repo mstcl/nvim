@@ -52,7 +52,7 @@ return {
 		event = "VeryLazy",
 		config = function()
 			require("orgmode").setup({
-				org_agenda_files = { "~/sftpgo/orgzly/Main.org", "~/sftpgo/shared/orgzly/*" },
+				org_agenda_files = { "~/sftpgo/orgzly/*", "~/sftpgo/shared/orgzly/*" },
 				win_split_mode = "float",
 				org_hide_emphasis_markers = true,
 			})
