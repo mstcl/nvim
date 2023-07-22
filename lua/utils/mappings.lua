@@ -26,27 +26,27 @@ map("i", "<A-k>", "<Esc>:m .-2<CR>==gi", opts) ]]
 
 -- Normal-mode commands
 opts.desc = "Move lines up"
-map('n', '<A-j>', ':MoveLine(1)<CR>', opts)
+map("n", "<A-j>", ":MoveLine(1)<CR>", opts)
 opts.desc = "Move lines down"
-map('n', '<A-k>', ':MoveLine(-1)<CR>', opts)
+map("n", "<A-k>", ":MoveLine(-1)<CR>", opts)
 opts.desc = "Move char left"
-map('n', '<A-h>', ':MoveHChar(-1)<CR>', opts)
+map("n", "<A-h>", ":MoveHChar(-1)<CR>", opts)
 opts.desc = "Move char right"
-map('n', '<A-l>', ':MoveHChar(1)<CR>', opts)
+map("n", "<A-l>", ":MoveHChar(1)<CR>", opts)
 opts.desc = "Move word forward"
-map('n', '<leader>wf', ':MoveWord(1)<CR>', opts)
+map("n", "<leader>wf", ":MoveWord(1)<CR>", opts)
 opts.desc = "Move word backward"
-map('n', '<leader>wb', ':MoveWord(-1)<CR>', opts)
+map("n", "<leader>wb", ":MoveWord(-1)<CR>", opts)
 
 -- Visual-mode commands
 opts.desc = "Move lines up"
-vim.keymap.set('v', '<A-j>', ':MoveBlock(1)<CR>', opts)
+vim.keymap.set("v", "<A-j>", ":MoveBlock(1)<CR>", opts)
 opts.desc = "Move lines down"
-vim.keymap.set('v', '<A-k>', ':MoveBlock(-1)<CR>', opts)
+vim.keymap.set("v", "<A-k>", ":MoveBlock(-1)<CR>", opts)
 opts.desc = "Move char left"
-vim.keymap.set('v', '<A-h>', ':MoveHBlock(-1)<CR>', opts)
+vim.keymap.set("v", "<A-h>", ":MoveHBlock(-1)<CR>", opts)
 opts.desc = "Move char right"
-vim.keymap.set('v', '<A-l>', ':MoveHBlock(1)<CR>', opts)
+vim.keymap.set("v", "<A-l>", ":MoveHBlock(1)<CR>", opts)
 
 opts.desc = "Toggle terminal"
 map("n", "<F1>", "<cmd>lua require'FTerm'.toggle()<CR>", opts)
@@ -85,9 +85,9 @@ map("x", ">", ">gv", opts)
 opts.desc = "Toggle foldcolumn"
 map("n", "<leader>a", ":call FoldColumnToggle()<CR>", opts)
 opts.desc = "Open all folds"
-map('n', 'zR', require('ufo').openAllFolds)
+map("n", "zR", require("ufo").openAllFolds)
 opts.desc = "Close all folds"
-map('n', 'zM', require('ufo').closeAllFolds)
+map("n", "zM", require("ufo").closeAllFolds)
 
 opts.desc = "Show buffer list"
 map("n", "<leader>b", "<cmd>Telescope buffers<CR>", opts)
@@ -117,19 +117,9 @@ map("n", "<End>", "<cmd>lua require'dap'.step_out()<CR>", opts)
 opts.desc = "DAP: toggle breakpoint"
 map("n", "<Home>", "<cmd>lua require'dap'.toggle_breakpoint()<CR>", opts)
 opts.desc = "DAP: set breakpoint condition"
-map(
-	"n",
-	"<leader>ec",
-	"<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>",
-	opts
-)
+map("n", "<leader>ec", "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", opts)
 opts.desc = "DAP: set breakpoint with log message"
-map(
-	"n",
-	"<leader>ef",
-	"<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>",
-	opts
-)
+map("n", "<leader>ef", "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>", opts)
 
 opts.desc = "Show files in current path"
 map("n", "<leader>f", "<cmd>Telescope find_files path=%:p:h<CR>", opts)
@@ -144,7 +134,6 @@ opts.desc = "Toggle gitsigns"
 map("n", "<leader>gl", "<cmd>Gitsigns toggle_signs<CR>", opts)
 opts.desc = "Preview git hunk"
 map("n", "<leader>gh", "<cmd>Gitsigns preview_hunk<CR>", opts)
-
 
 opts.desc = "Show history"
 map("n", "<leader>h", "<cmd>Telescope oldfiles<CR>", opts)
@@ -182,10 +171,7 @@ map("n", "<leader>qi", "<cmd>Glance implementations<CR>", opts)
 opts.desc = "Show type definitions"
 map("n", "<leader>qt", "<cmd>Glance type_definitions<CR>", opts)
 opts.desc = "Show code actions"
-map({"n", "v"}, "<leader>qc", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-
-opts.desc = "Show and insert register entry"
-map("n", "<leader>r", "<cmd>Registers<CR>", opts)
+map({ "n", "v" }, "<leader>qc", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
 
 opts.desc = "Toggle code minimap"
 map("n", "<leader>sb", ":lua MiniMap.toggle() <CR>", opts)
@@ -216,11 +202,11 @@ map("n", "<leader>y", "<cmd>Telescope file_browser path=%:p:h<CR>", opts)
 opts.desc = "Enter Zen mode"
 map("n", "<leader>z", "<cmd>ZenMode<CR>", opts)
 
-opts.desc = "Switch to alternative buffer"
-map("n", "<leader><space>", "<C-^>", opts)
-
-opts.desc = "Live grep code"
+opts.desc = "Live grep workspace"
 map("n", "<leader>/", "<cmd>Telescope live_grep<CR>", opts)
+
+opts.desc = "Live grep buffer"
+map("n", "<leader>\\", "<cmd>Telescope current_buffer_fuzzy_find<CR>", opts)
 
 opts.desc = "Go to next git hunk"
 map("n", "]p", "<cmd>Gitsigns next_hunk<CR>", opts)
@@ -261,65 +247,5 @@ map("n", "<A-c>", "<cmd>BufferClose<CR>", opts)
 opts.desc = "Pick buffer"
 map("n", "<A-u>", "<cmd>BufferPick<CR>", opts)
 
--- Half-window movements:
-map({ 'n', 'x' }, '<C-u>', "<Cmd>lua Scroll('<C-u>', 1, 1)<CR>")
-map({ 'n', 'x' }, '<C-d>', "<Cmd>lua Scroll('<C-d>', 1, 1)<CR>")
-
--- Page movements:
-map({ 'n', 'x' }, '<C-b>', "<Cmd>lua Scroll('<C-b>', 1, 1)<CR>")
-map({ 'n', 'x' }, '<C-f>', "<Cmd>lua Scroll('<C-f>', 1, 1)<CR>")
-
--- Start/end of line:
-map({ 'n', 'x' }, '0', "<Cmd>lua Scroll('0')<CR>")
-map({ 'n', 'x' }, '^', "<Cmd>lua Scroll('^')<CR>")
-map({ 'n', 'x' }, '$', "<Cmd>lua Scroll('$', 0, 1)<CR>")
-
--- Paragraph movements:
-map({ 'n', 'x' }, '{', "<Cmd>lua Scroll('{')<CR>")
-map({ 'n', 'x' }, '}', "<Cmd>lua Scroll('}')<CR>")
-
--- Previous/next search result:
-map('n', 'n', "<Cmd>lua Scroll('n', 1)<CR>")
-map('n', 'N', "<Cmd>lua Scroll('N', 1)<CR>")
-map('n', '*', "<Cmd>lua Scroll('*', 1)<CR>")
-map('n', '#', "<Cmd>lua Scroll('#', 1)<CR>")
-map('n', 'g*', "<Cmd>lua Scroll('g*', 1)<CR>")
-map('n', 'g#', "<Cmd>lua Scroll('g#', 1)<CR>")
-
--- Screen scrolling:
-map('n', 'zz', "<Cmd>lua Scroll('zz', 0, 1)<CR>")
-map('n', 'zt', "<Cmd>lua Scroll('zt', 0, 1)<CR>")
-map('n', 'zb', "<Cmd>lua Scroll('zb', 0, 1)<CR>")
-map('n', 'z.', "<Cmd>lua Scroll('z.', 0, 1)<CR>")
-map('n', 'z<CR>', "<Cmd>lua Scroll('zt^', 0, 1)<CR>")
-map('n', 'z-', "<Cmd>lua Scroll('z-', 0, 1)<CR>")
-map('n', 'z^', "<Cmd>lua Scroll('z^', 0, 1)<CR>")
-map('n', 'z+', "<Cmd>lua Scroll('z+', 0, 1)<CR>")
-map('n', '<C-y>', "<Cmd>lua Scroll('<C-y>', 0, 1)<CR>")
-map('n', '<C-e>', "<Cmd>lua Scroll('<C-e>', 0, 1)<CR>")
-
--- Horizontal screen scrolling:
-map('n', 'zH', "<Cmd>lua Scroll('zH')<CR>")
-map('n', 'zL', "<Cmd>lua Scroll('zL')<CR>")
-map('n', 'zs', "<Cmd>lua Scroll('zs')<CR>")
-map('n', 'ze', "<Cmd>lua Scroll('ze')<CR>")
-map('n', 'zh', "<Cmd>lua Scroll('zh', 0, 1)<CR>")
-map('n', 'zl', "<Cmd>lua Scroll('zl', 0, 1)<CR>")
-
--- SCROLL_WHEEL_KEYMAPS:
-
-map({ 'n', 'x' }, '<ScrollWheelUp>', "<Cmd>lua Scroll('<ScrollWheelUp>')<CR>")
-map({ 'n', 'x' }, '<ScrollWheelDown>', "<Cmd>lua Scroll('<ScrollWheelDown>')<CR>")
-
--- Up/down movements:
-vim.keymap.set({ 'n', 'x' }, 'k', "<Cmd>lua Scroll('k', 0, 1)<CR>")
-vim.keymap.set({ 'n', 'x' }, 'j', "<Cmd>lua Scroll('j', 0, 1)<CR>")
-vim.keymap.set({ 'n', 'x' }, '<Up>', "<Cmd>lua Scroll('k', 0, 1)<CR>")
-vim.keymap.set({ 'n', 'x' }, '<Down>', "<Cmd>lua Scroll('j', 0, 1)<CR>")
-
--- Left/right movements:
-vim.keymap.set({ 'n', 'x' }, 'h', "<Cmd>lua Scroll('h', 0, 1)<CR>")
-vim.keymap.set({ 'n', 'x' }, 'l', "<Cmd>lua Scroll('l', 0, 1)<CR>")
-vim.keymap.set({ 'n', 'x' }, '<Left>', "<Cmd>lua Scroll('h', 0, 1)<CR>")
-vim.keymap.set({ 'n', 'x' }, '<Right>', "<Cmd>lua Scroll('l', 0, 1)<CR>")
-
+opts.desc = "Dismiss notification popup"
+map("n", "<A-BS>", ":Noice dismiss<CR>", opts)
