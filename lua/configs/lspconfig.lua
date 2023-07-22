@@ -12,13 +12,6 @@ local handlers = {
 	),
 }
 
-local handlers_pyright = {
-	["textDocument/publishDiagnostics"] = vim.lsp.with(
-		vim.lsp.diagnostic.on_publish_diagnostics,
-		{ update_in_insert = false }
-	),
-}
-
 local function applyFoldsAndThenCloseAllFolds(bufnr, providerName)
 	require("async")(function()
 		bufnr = bufnr or vim.api.nvim_get_current_buf()
@@ -42,13 +35,13 @@ local on_attach_fold_lsp = function(client, bufnr)
 		buf_set_keymap("n", "<C-K>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
 	end
 	if client.server_capabilities.definitionProvider then
-		buf_set_keymap("n", "<Leader>qD", "<cmd>lua Scroll('declaration')<CR>", opts)
+		buf_set_keymap("n", "<Leader>qq", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
 	end
 	if client.server_capabilities.documentFormattingProvider then
-		buf_set_keymap("n", "<Leader>qf", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
+		buf_set_keymap("n", "<Leader><space>", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
 	end
 	if client.server_capabilities.renameProvider then
-		buf_set_keymap("n", "<Leader>qR", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+		buf_set_keymap("n", "<Leader>r", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 	end
 	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
 	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
@@ -69,53 +62,13 @@ local on_attach_fold_indent = function(client, bufnr)
 		buf_set_keymap("n", "<C-K>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
 	end
 	if client.server_capabilities.definitionProvider then
-		buf_set_keymap("n", "<Leader>qD", "<cmd>lua Scroll('declaration')<CR>", opts)
+		buf_set_keymap("n", "<Leader>qq", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
 	end
 	if client.server_capabilities.documentFormattingProvider then
-		buf_set_keymap("n", "<Leader>qf", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
+		buf_set_keymap("n", "<Leader><space>", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
 	end
 	if client.server_capabilities.renameProvider then
-		buf_set_keymap("n", "<Leader>qR", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-	end
-	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
-	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
-	if client.server_capabilities.documentSymbolProvider then
-		navic.attach(client, bufnr)
-	end
-end
-
-local on_attach_pyright = function(client, bufnr)
-	applyFoldsAndThenCloseAllFolds(bufnr, "indent")
-	client.server_capabilities.codeActionProvider = true
-	client.server_capabilities.completionProvider = false
-	client.server_capabilities.hoverProvider = false
-	client.server_capabilities.definitionProvider = false
-	client.server_capabilities.documentFormattingProvider = false
-	client.server_capabilities.documentSymbolProvider = false
-	client.server_capabilities.renameProvider = false
-	-- client.server_capabilities.signatureHelpProvider = false
-	client.server_capabilities.referencesProvider = false
-end
-
-local on_attach_ruff = function(client, bufnr)
-	local function buf_set_keymap(...)
-		vim.api.nvim_buf_set_keymap(bufnr, ...)
-	end
-	client.server_capabilities.hoverProvider = false
-	client.server_capabilities.documentFormattingProvider = false
-	client.server_capabilities.renameProvider = false
-	local opts = { noremap = true, silent = true }
-	if client.server_capabilities.hoverProvider then
-		buf_set_keymap("n", "<C-K>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-	end
-	if client.server_capabilities.definitionProvider then
-		buf_set_keymap("n", "<Leader>qD", "<cmd>lua Scroll('declaration')<CR>", opts)
-	end
-	if client.server_capabilities.documentFormattingProvider then
-		buf_set_keymap("n", "<Leader>qf", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
-	end
-	if client.server_capabilities.renameProvider then
-		buf_set_keymap("n", "<Leader>qR", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+		buf_set_keymap("n", "<Leader>r", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 	end
 	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
 	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
@@ -125,13 +78,16 @@ local on_attach_ruff = function(client, bufnr)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.foldingRange = {
 	dynamicRegistration = false,
 	lineFoldingOnly = true,
 }
 capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
-local servers_fold_indent = { "clangd", "bashls" }
+local servers_fold_indent = { "clangd", "bashls", "jedi_language_server" }
+
+local servers_fold_lsp = {"vimls", "cssls", "gopls", "marksman" }
 
 for _, server in ipairs(servers_fold_indent) do
 	lsp[server].setup({
@@ -144,50 +100,22 @@ for _, server in ipairs(servers_fold_indent) do
 	})
 end
 
-lsp.vimls.setup({
-	on_attach = on_attach_fold_lsp,
-	capabilities = capabilities,
-	handlers = handlers,
-	flags = {
-		debounce_text_changes = 150,
-	},
-})
+for _, server in ipairs(servers_fold_lsp) do
+	lsp[server].setup({
+		on_attach = on_attach_fold_lsp,
+		capabilities = capabilities,
+		handlers = handlers,
+		flags = {
+			debounce_text_changes = 150,
+		},
+	})
+end
 
 lsp.ruff_lsp.setup({
-	on_attach = on_attach_ruff,
 	capabilities = capabilities,
 	handlers = handlers,
 	flags = {
 		debounce_text_changes = 150,
-	},
-})
-
-lsp.jedi_language_server.setup({
-	capabilities = capabilities,
-	handlers = handlers,
-	flags = {
-		debounce_text_changes = 150,
-	},
-})
-
-lsp.pyright.setup({
-	on_attach = on_attach_pyright,
-	capabilities = capabilities,
-	handlers = handlers_pyright,
-	flags = {
-		debounce_text_changes = 150,
-	},
-	settings = {
-		pyright = {
-			disableOrganizeImports = true,
-		},
-		python = {
-			analysis = {
-				autoSearchPaths = false,
-				useLibraryCodeForTypes = true,
-				diagnosticMode = "openFilesOnly",
-			},
-		},
 	},
 })
 
