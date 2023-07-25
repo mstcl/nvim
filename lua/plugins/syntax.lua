@@ -40,12 +40,6 @@ return {
 		wants = "tabular",
 	},
 	{
-		-- SXHKD syntax
-		"kovetskiy/sxhkd-vim",
-		lazy = true,
-		ft = "sxhkd",
-	},
-	{
 		-- Orgmode syntax
 		"nvim-orgmode/orgmode",
 		lazy = true,
