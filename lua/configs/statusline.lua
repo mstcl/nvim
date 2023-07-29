@@ -4,6 +4,7 @@ local gl = require("galaxyline")
 local condition = require("galaxyline.condition")
 local gls = gl.section
 local search = require("galaxyline.providers.search")
+local noice = require("noice")
 SearchResults = search.get_results
 
 gl.short_line_list = {
@@ -39,13 +40,12 @@ gl.short_line_list = {
 	"toggleterm",
 }
 local colors = {
-	-- normal = "#505050",
-	normal = "#101010",
-	insert = "#4F6C31",
-	visual = "#2b4c5e",
-	cmd = "#A8334C",
-	replace = "#88507D",
-	term = "#a36b37",
+	normal = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("TelescopeSelection", true).foreground)),
+	insert = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Statement", true).foreground)),
+	visual = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Constant", true).foreground)),
+	cmd = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Conditional", true).foreground)),
+	replace = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Exception", true).foreground)),
+	term = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Warning", true).background)),
 }
 
 local vi_mode = function()
@@ -102,16 +102,6 @@ gls.left[2] = {
 		highlight = "GalaxyFg",
 	},
 }
-
---[[ gls.left[4] = {
-	FileIcon = {
-		provider = "FileIcon",
-		separator = "",
-		icon = "  ",
-		condition = condition.buffer_not_empty,
-		highlight = "GalaxyFgAlt",
-	},
-} ]]
 
 gls.left[5] = {
 	FileName = {
@@ -175,10 +165,36 @@ gls.left[14] = {
 	},
 }
 
-gls.mid[3] = {
-	Search = {
-		provider = SearchResults,
-		highlight = "GalaxyFgAlt2",
+-- gls.mid[1] = {
+-- 	Msg = {
+-- 		provider = function()
+-- 			return noice.api.statusline.message.get()
+-- 		end,
+-- 		condition = noice.api.statusline.message.has(),
+-- 		icon = "❄ ",
+-- 		separator = " ",
+-- 		highlight = "GalaxyFgAlt2",
+-- 	},
+-- }
+
+gls.mid[1] = {
+	Cmd = {
+		provider = function()
+			return noice.api.statusline.command.get()
+		end,
+		condition = noice.api.statusline.command.has(),
+		icon = "  ",
+		highlight = "GalaxyRed",
+	},
+}
+
+gls.mid[2] = {
+	PaddingMid1 = {
+		provider = function()
+			return ">"
+		end,
+		condition = noice.api.statusline.command.has(),
+		highlight = "GalaxyRed",
 	},
 }
 
@@ -234,6 +250,28 @@ gls.right[14] = {
 	},
 }
 
+gls.right[15] = {
+	Macro = {
+		provider = function()
+			return noice.api.statusline.mode.get()
+		end,
+		condition = noice.api.status.mode.has(),
+		icon = "  ",
+		highlight = "GalaxyGreen",
+	},
+}
+
+gls.right[16] = {
+	Search = {
+		provider = function()
+			return noice.api.statusline.search.get()
+		end,
+		condition = noice.api.statusline.search.has(),
+		icon = " ∊ ",
+		highlight = "GalaxyBlue",
+	},
+}
+
 gls.short_line_left[1] = {
 	ViMode = {
 		provider = function()
@@ -244,15 +282,6 @@ gls.short_line_left[1] = {
 		separator_highlight = "GalaxyFgAlt",
 	},
 }
-
---[[ gls.short_line_left[2] = {
-	BufferSpace = {
-		provider = function()
-			return " "
-		end,
-		highlight = "GalaxyFgAlt2",
-	},
-} ]]
 
 gls.short_line_left[3] = {
 	BufferType = {
