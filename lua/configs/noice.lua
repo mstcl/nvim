@@ -71,8 +71,16 @@ noice.setup({
 	},
 	routes = {
 		{
-			view = "notify",
-			filter = { event = "msg_showmode" },
+			filter = {
+				event = "msg_show",
+				kind = "",
+				find = "[w]",
+			},
+			opts = { skip = true }
+		},
+		{
+			view = "split",
+			filter = { event = "msg_show", min_height = 20 },
 		},
 	},
 	cmdline = {
@@ -108,4 +116,5 @@ notify.setup({
 	},
 	minimum_width = 40,
 	render = "compact",
+	top_down = false,
 })
