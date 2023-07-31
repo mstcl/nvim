@@ -27,14 +27,22 @@ return {
 		opts = {
 			highlight = "NonText",
 			virt_text_pos = "eol",
-		}
+		},
 	},
 	{
 		-- Add background to some blocks
 		"lukas-reineke/headlines.nvim",
 		lazy = true,
-		ft = {"markdown", "org"},
+		ft = { "markdown", "org" },
 		dependences = "nvim-treesitter/nvim-treesitter",
-		opts = {},
-	}
+		opts = {
+			markdown = {
+				headline_highlights = {  },
+				fat_headlines = false,
+			},
+			org = {
+				headline_highlights = { "Headline", "Headline1", "Headline2" },
+			},
+		},
+	},
 }
