@@ -10,12 +10,6 @@ return {
             require("configs.lspconfig")
         end,
     },
-    -- {
-    -- 	-- Display and autofill code signatures
-    -- 	"ray-x/lsp_signature.nvim",
-    -- 	lazy = true,
-    -- 	event = "LspAttach",
-    -- },
     {
         -- Breadcrumb bar
         "utilyre/barbecue.nvim",
