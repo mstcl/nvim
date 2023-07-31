@@ -4,7 +4,6 @@ require("dressing").setup({
 		insert_only = true,
 		prompt_align = "left",
 		start_in_insert = true,
-		anchor = "SW",
 		relative = "cursor",
 		border = "single",
 		prefer_width = 20,
@@ -16,6 +15,9 @@ require("dressing").setup({
 			winhighlight = "NormalFloat:TelescopeNormal,FloatBorder:TelescopeBorder,FloatTitle:Pmenu",
 		},
 	},
+    override = {
+        anchor = "SW",
+    },
 	select = {
 		enabled = false,
 	},
