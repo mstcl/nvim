@@ -21,7 +21,7 @@ return {
 			shading_factor = "2",
 			highlights = {
 				Normal = {
-					link = "ColorColumn",
+					link = "Floaterm",
 				},
 			},
 			direction = "vertical",
@@ -62,4 +62,14 @@ return {
 		},
 		opts = {},
 	},
+	-- {
+	-- 	-- Editing in term like one does in a buffer
+	-- 	"chomosuke/term-edit.nvim",
+	-- 	lazy = true,
+	-- 	ft = "toggleterm",
+	-- 	version = "1.*",
+	-- 	opts = {
+	-- 		prompt_end = " %$ ",
+	-- 	},
+	-- },
 }
