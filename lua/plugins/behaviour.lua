@@ -34,7 +34,7 @@ return {
 		"gbprod/stay-in-place.nvim",
 		lazy = true,
 		event = "CursorMoved",
-		opts = {}
+		opts = {},
 	},
 	{
 		-- Show gutter symbols for marks
@@ -51,7 +51,7 @@ return {
 		lazy = true,
 		cmd = "Registers",
 		keys = {
-			{ '"',     mode = { "n", "v" } },
+			{ '"', mode = { "n", "v" } },
 			{ "<C-R>", mode = "i" },
 		},
 		config = function()
@@ -104,8 +104,8 @@ return {
 			show_end_of_line = false,
 			filetype_exclude = { "tex" },
 			enabled = "true",
-			char_priority = 50
-		}
+			char_priority = 50,
+		},
 	},
 	{
 		-- Utility to hide numbers in foldcolumn
@@ -115,7 +115,7 @@ return {
 			require("statuscol").setup({
 				segments = {
 					{ text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
-					{ text = { "%s" },                  click = "v:lua.ScSa" },
+					{ text = { "%s" }, click = "v:lua.ScSa" },
 					{
 						text = { builtin.lnumfunc, " " },
 						condition = { true, builtin.not_empty },
