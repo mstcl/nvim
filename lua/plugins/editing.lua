@@ -105,15 +105,4 @@ return {
 			exclude = {},
 		},
 	},
-	{
-		-- Enforce good vim habits
-		-- "m4xshen/hardtime.nvim",
-		-- lazy = true,
-		-- event = "VeryLazy",
-		-- opts = {
-		-- 	disable_mouse = false,
-		-- 	disabled_filetypes = { "qf", "netrw", "NvimTree", "lazy", "mason", "alpha" },
-		-- 	disabled_keys = {},
-		-- },
-	},
 }
