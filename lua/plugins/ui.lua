@@ -2,7 +2,7 @@
 return {
 	{
 		-- Colorscheme
-		"https://git.bim.boats/dmg",
+		"mstcl/dmg",
 		lazy = false,
 		priority = 1000,
 		config = function()
@@ -115,11 +115,11 @@ return {
 	},
 	{
 		-- Virt column character
-		-- "lukas-reineke/virt-column.nvim",
-		-- event = "BufEnter",
-		-- lazy = true,
-		-- opts = {
-		-- 	char = "║",
-		-- },
+		"lukas-reineke/virt-column.nvim",
+		event = "BufEnter",
+		lazy = true,
+		opts = {
+			char = "║",
+		},
 	},
 }
