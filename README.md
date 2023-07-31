@@ -2,6 +2,10 @@
 
 __lckdscl's opinionated configuration of Neovim.__
 
+<a href="https://dotfyle.com/mstcl/neobim"><img src="https://dotfyle.com/mstcl/neobim/badges/plugins?style=flat-square" /></a>
+<a href="https://dotfyle.com/mstcl/neobim"><img src="https://dotfyle.com/mstcl/neobim/badges/leaderkey?style=flat-square" /></a>
+<a href="https://dotfyle.com/mstcl/neobim"><img src="https://dotfyle.com/mstcl/neobim/badges/plugin-manager?style=flat-square" /></a>
+
 <img src="./pics/2023-06-13_19-49.png" alt="Editor" width="500"/>
 
 ## Plugin manager
