@@ -18,7 +18,7 @@ barbecue.setup({
 		dirname = { bg = bg, fg = fg },
 	},
 	show_dirname = false,
-	show_basename = false,
+	show_basename = true,
 	symbols = {
 		separator = "❯",
 		ellipsis = "…",
