@@ -3,7 +3,7 @@ if not present then
     return
 end
 symbols.setup({
-    highlight_hovered_item = true,
+    highlight_hovered_item = false,
     show_guides = true,
     border = "single",
     auto_preview = false,
@@ -12,7 +12,7 @@ symbols.setup({
     width = 30,
     auto_close = false,
     show_numbers = false,
-    show_relative_numbers = false,
+    show_relative_numbers = true,
     show_symbol_details = true,
     preview_bg_highlight = "OutlinePreviewBG",
     autofold_depth = nil,
@@ -35,7 +35,7 @@ symbols.setup({
         fold_reset = "R",
     },
     lsp_blacklist = {},
-    symbol_blacklist = {},
+    symbol_blacklist = {'String', 'Module'},
     symbols = {
         File = { icon = "⊡", hl = "@text.uri" },
         Module = { icon = "◫", hl = "@namespace" },
