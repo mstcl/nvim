@@ -63,7 +63,7 @@ return {
 		"echasnovski/mini.cursorword",
 		event = "CursorMoved",
 		version = false,
-		opts = {}
+		opts = {},
 	},
 	{
 		-- Highlight color blocks
@@ -101,7 +101,7 @@ return {
 			buftype_exclude = { "terminal" },
 			bufnameExclude = { "README.md" },
 			show_current_context = true,
-			show_end_of_line = false,
+			show_end_of_line = true,
 			filetype_exclude = { "tex" },
 			enabled = "true",
 			char_priority = 50,
