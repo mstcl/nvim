@@ -18,6 +18,20 @@ require("lazy").setup("plugins", {
 	},
 	ui = {
 		border = "single",
+        icons = {
+          cmd = "⌘",
+          config = "",
+          event = "",
+          ft = "",
+          init = "",
+          keys = "",
+          plugin = "",
+          runtime = "",
+          source = "",
+          start = "",
+          task = "",
+          lazy = " ",
+        },
 	},
 	change_detection = {
 		enabled = true,
