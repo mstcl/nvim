@@ -3,8 +3,6 @@ if not present then
 	return
 end
 
-local rainbow = require("ts-rainbow")
-
 ts.setup({
 	ensure_installed = {
 		"python",
@@ -50,26 +48,6 @@ ts.setup({
 		enable = true,
 		enable_autocmd = false,
 	},
-	rainbow = {
-		enable = true,
-		query = {
-			"rainbow-parens",
-			html = "rainbow-tags",
-			latex = "rainbow-blocks",
-		},
-		strategy = {
-			rainbow.strategy["global"],
-			html = rainbow.strategy["local"],
-			latex = function()
-				if vim.fn.line("$") > 10000 then
-					return nil
-				elseif vim.fn.line("$") > 1000 then
-					return rainbow.strategy["global"]
-				end
-				return rainbow.strategy["local"]
-			end,
-		},
-	},
 	incremental_selection = {
 		enable = true,
 		keymaps = {
@@ -79,9 +57,12 @@ ts.setup({
 			node_decremental = "grm",
 		},
 	},
-    indent = {
-        enable = true
-    },
+	indent = {
+		enable = true,
+	},
+	tree_setter = {
+		enable = true,
+	},
 	playground = {
 		enable = true,
 		disable = {},

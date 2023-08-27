@@ -42,7 +42,7 @@ telescope.setup({
 			"--smart-case",
 		},
 		borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
-		prompt_prefix = " ❯❯ ",
+		prompt_prefix = " ➤ ",
 		selection_caret = "  ",
 		entry_prefix = "  ",
 		results_title = "",
@@ -60,7 +60,7 @@ telescope.setup({
 			bottom_pane = { prompt_position = "top" },
 		},
 		path_display = { "truncate" },
-		color_devicons = true,
+		color_devicons = false,
 		sorting_strategy = "ascending",
 		winblend = 0,
 		file_ignore_patterns = {
@@ -75,7 +75,7 @@ telescope.setup({
 		buffers = {
 			layout_strategy = "center",
 			sort_lastused = true,
-			prompt_prefix = " ⊟  ",
+            disable_devicons = true,
 			previewer = false,
 			mappings = {
 				i = {
@@ -88,6 +88,7 @@ telescope.setup({
 		},
 		find_files = {
 			layout_strategy = "flex",
+            disable_devicons = true,
 			layout_config = flex_layout,
 			find_command = {
 				"rg",
@@ -98,45 +99,40 @@ telescope.setup({
 		},
 		oldfiles = {
 			layout_strategy = "flex",
+            disable_devicons = true,
 			layout_config = flex_layout,
-			prompt_prefix = " ◕  ",
 			previewer = false,
 		},
 		colorscheme = {
 			layout_strategy = "flex",
 			layout_config = flex_layout,
-			prompt_prefix = "   ",
 			previewer = false,
 		},
 		highlights = {
 			layout_strategy = "flex",
 			layout_config = flex_layout,
-			prompt_prefix = "   ",
 		},
 		live_grep = {
 			layout_strategy = "flex",
+            disable_devicons = true,
 			layout_config = flex_layout,
-			prompt_prefix = " ₪  ",
 		},
 		git_commits = {
 			layout_strategy = "flex",
 			layout_config = flex_layout,
-			prompt_prefix = " ∅  ",
 		},
 		git_bcommits = {
 			layout_strategy = "flex",
 			layout_config = flex_layout,
-			prompt_prefix = " ∅  ",
 		},
 		git_branches = {
 			layout_strategy = "flex",
 			layout_config = flex_layout,
-			prompt_prefix = "   ",
 		},
 		git_status = {
 			layout_strategy = "flex",
+            disable_devicons = true,
 			layout_config = flex_layout,
-			prompt_prefix = "   ",
 			git_icons = {
 				added = "+",
 				changed = "~",
@@ -147,9 +143,6 @@ telescope.setup({
 				untracked = "?",
 			},
 		},
-		git_files = {
-			prompt_prefix = "   ",
-		},
 	},
 	extensions = {
 		["ui-select"] = {
@@ -157,11 +150,11 @@ telescope.setup({
 		},
 		file_browser = {
 			layout_strategy = "flex",
+            disable_devicons = true,
 			layout_config = flex_layout,
-			dir_icon = "",
+			dir_icon = "",
 			git_status = true,
 			respect_gitignore = false,
-			prompt_prefix = " ◨  ",
 			initial_mode = "normal",
 			hijack_netrw = true,
 			auto_depth = true,
@@ -183,7 +176,7 @@ telescope.setup({
 		frecency = {
 			layout_strategy = "flex",
 			layout_config = flex_layout,
-			prompt_prefix = "   ",
+            disable_devicons = true,
 			show_scores = false,
 			workspaces = {
 				["conf"] = "/home/lckdscl/.config",

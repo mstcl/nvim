@@ -25,26 +25,7 @@ end
 
 local on_attach_fold_lsp = function(client, bufnr)
 	applyFoldsAndThenCloseAllFolds(bufnr, "lsp")
-
-	local function buf_set_keymap(...)
-		vim.api.nvim_buf_set_keymap(bufnr, ...)
-	end
-
-	local opts = { noremap = true, silent = true }
-	if client.server_capabilities.hoverProvider then
-		buf_set_keymap("n", "<C-K>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-	end
-	if client.server_capabilities.definitionProvider then
-		buf_set_keymap("n", "<Leader>qq", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-	end
-	if client.server_capabilities.documentFormattingProvider then
-		buf_set_keymap("n", "<Leader><space>", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
-	end
-	if client.server_capabilities.renameProvider then
-		buf_set_keymap("n", "<Leader>r", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-	end
-	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
-	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
+	require("utils.mappings").lsp_keymaps(client, bufnr)
 	if client.server_capabilities.documentSymbolProvider then
 		navic.attach(client, bufnr)
 	end
@@ -59,18 +40,24 @@ local on_attach_fold_indent = function(client, bufnr)
 
 	local opts = { noremap = true, silent = true }
 	if client.server_capabilities.hoverProvider then
+		opts.desc = "Documentation"
 		buf_set_keymap("n", "<C-K>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
 	end
 	if client.server_capabilities.definitionProvider then
+		opts.desc = "Buffer declaration"
 		buf_set_keymap("n", "<Leader>qq", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
 	end
 	if client.server_capabilities.documentFormattingProvider then
+		opts.desc = "Format buffer"
 		buf_set_keymap("n", "<Leader><space>", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
 	end
 	if client.server_capabilities.renameProvider then
+		opts.desc = "Rename object"
 		buf_set_keymap("n", "<Leader>r", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 	end
+	opts.desc = "Next diagnostic"
 	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
+	opts.desc = "Previous diagnostic"
 	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
 	if client.server_capabilities.documentSymbolProvider then
 		navic.attach(client, bufnr)
@@ -87,7 +74,7 @@ capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 local servers_fold_indent = { "clangd", "bashls", "jedi_language_server" }
 
-local servers_fold_lsp = {"vimls", "cssls", "gopls", "marksman" }
+local servers_fold_lsp = { "vimls", "cssls", "gopls", "marksman" }
 
 for _, server in ipairs(servers_fold_indent) do
 	lsp[server].setup({
@@ -193,7 +180,7 @@ lsp.lua_ls.setup({
 	},
 })
 
-local signs = { Error = " ✘", Warn = " !", Hint = " ?", Info = " i" }
+local signs = { Error = " ✗", Warn = " !", Hint = " ?", Info = " i" }
 for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
@@ -201,28 +188,28 @@ end
 
 local icons = {
 	Class = "⁐ Class",
-	Color = " Color",
+	Color = "% Color",
 	Constant = "π Constant",
 	Constructor = "☂ Constructor",
 	Enum = "ζ Enum",
-	EnumMember = "⁜ EnumMember",
-	Event = " Event",
+	EnumMember = "@ EnumMember",
+	Event = "! Event",
 	Field = "⊟ Field",
 	File = "⊡ File",
-	Folder = "₪ Folder",
+	Folder = "+ Folder",
 	Function = "ƒ Function",
 	Interface = "♺ Interface",
-	Keyword = "✮ Keyword",
+	Keyword = "★ Keyword",
 	Reference = "⇒ Reference",
 	Method = "ƒ Method",
 	Module = "◫ Module",
 	Operator = "⁑ Operator",
 	Property = "✓ Property",
-	Snippet = " Snippet",
+	Snippet = "& Snippet",
 	Struct = "◧ Structure",
 	Text = "☰ Text",
 	TypeParameter = "⊞ Parameter",
-	Unit = " Unit",
+	Unit = "$ Unit",
 	Value = "λ Value",
 	Variable = "Ψ Variable",
 }
@@ -275,5 +262,3 @@ vim.api.nvim_create_autocmd("CursorHold", {
 		vim.diagnostic.open_float(nil, opts)
 	end,
 })
-
-return on_attach_fold_lsp
