@@ -4,6 +4,7 @@ if not present then
 end
 
 local bg = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("WinBar", true).background))
+local mg = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Whitespace", true).foreground))
 local fg = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Operator", true).foreground))
 
 barbecue.setup({
@@ -12,15 +13,15 @@ barbecue.setup({
 		normal = { bg = bg, fg = fg },
 		context = { bg = bg, fg = fg },
 		basename = { bg = bg, fg = fg, bold = true },
-		ellipsis = { bg = bg, fg = fg },
-		separator = { bg = bg, fg = fg },
+		ellipsis = { bg = bg, fg = mg },
+		separator = { bg = bg, fg = mg },
 		modified = { bg = bg, fg = fg },
 		dirname = { bg = bg, fg = fg },
 	},
 	show_dirname = false,
 	show_basename = true,
 	symbols = {
-		separator = "❯",
+		separator = "⟫",
 		ellipsis = "…",
 		modified = "✗",
 	},
@@ -40,16 +41,16 @@ barbecue.setup({
 		Function = "ƒ",
 		Variable = "Ψ",
 		Constant = "π",
-		String = "⟙",
+		String = "T",
 		Number = "#",
 		Boolean = "◕",
 		Array = "☷",
 		Object = "☁",
-		Keyword = "✮",
+		Keyword = "★",
 		Null = "∅",
-		EnumMember = "⁜",
+		EnumMember = "@",
 		Struct = "◧",
-		Event = "",
+		Event = "!",
 		Operator = "⁑",
 		TypeParameter = "⊞",
 	},

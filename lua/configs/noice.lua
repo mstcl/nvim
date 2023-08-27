@@ -87,7 +87,7 @@ noice.setup({
 		enabled = true,
 		format = {
 			cmdline = {
-				icon = "❯❯",
+				icon = "➤",
 			},
 			search_up = {
 				icon = "↑",
@@ -109,7 +109,7 @@ notify.setup({
 	fps = 144,
 	icons = {
 		DEBUG = "*",
-		ERROR = "✘",
+		ERROR = "✗",
 		INFO = "i",
 		TRACE = ">",
 		WARN = "!",

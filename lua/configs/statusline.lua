@@ -148,7 +148,7 @@ gls.left[12] = {
 gls.left[13] = {
 	GitIcon = {
 		provider = function()
-			return " "
+			return " ∫"
 		end,
 		condition = condition.check_git_workspace,
 		separator = " ",
@@ -165,25 +165,13 @@ gls.left[14] = {
 	},
 }
 
--- gls.mid[1] = {
--- 	Msg = {
--- 		provider = function()
--- 			return noice.api.statusline.message.get()
--- 		end,
--- 		condition = noice.api.statusline.message.has(),
--- 		icon = "❄ ",
--- 		separator = " ",
--- 		highlight = "GalaxyFgAlt2",
--- 	},
--- }
-
 gls.mid[1] = {
 	Cmd = {
 		provider = function()
 			return noice.api.statusline.command.get()
 		end,
 		condition = noice.api.statusline.command.has(),
-		icon = "  ",
+		icon = "  ⟨",
 		highlight = "GalaxyRed",
 	},
 }
@@ -191,7 +179,7 @@ gls.mid[1] = {
 gls.mid[2] = {
 	PaddingMid1 = {
 		provider = function()
-			return ">"
+			return "⟩"
 		end,
 		condition = noice.api.statusline.command.has(),
 		highlight = "GalaxyRed",
@@ -236,8 +224,7 @@ gls.right[13] = {
 		separator = "",
 		separator_highlight = "GalaxyFgAlt2",
 		highlight = "GalaxyFgAlt2",
-		icon = "⭡ ",
-		-- separator = "│",
+		icon = "⊕ ",
 	},
 }
 
@@ -256,7 +243,7 @@ gls.right[15] = {
 			return noice.api.statusline.mode.get()
 		end,
 		condition = noice.api.status.mode.has(),
-		icon = "  ",
+		icon = " ❖ ",
 		highlight = "GalaxyGreen",
 	},
 }
