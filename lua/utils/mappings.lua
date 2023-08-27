@@ -1,5 +1,7 @@
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
+local wk = require("which-key")
+local M = {}
 
 map("n", "Q", "", opts)
 map("n", "gQ", "", opts)
@@ -12,17 +14,13 @@ map("n", "<Right>", "", opts)
 map("n", "<space>", ":", opts)
 map("v", "<space>", ":", opts)
 
+wk.register({
+	["<C-S>"] = { name = "Split commands" },
+})
 opts.desc = "Split vertical"
 map("n", "<C-S>v", ":vs<CR>", opts)
 opts.desc = "Split horizontal"
 map("n", "<C-S>h", ":sp<CR>", opts)
-
---[[ map("v", "<A-j>", ":m '>+1<CR>gv=gv", opts)
-map("v", "<A-k>", ":m '<-2<CR>gv=gv", opts)
-map("n", "<A-j>", ":<c-u>execute 'move +'. v:count1<CR>", opts)
-map("n", "<A-k>", ":<c-u>execute 'move -1-'. v:count1<CR>", opts)
-map("i", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)
-map("i", "<A-k>", "<Esc>:m .-2<CR>==gi", opts) ]]
 
 -- Normal-mode commands
 opts.desc = "Move lines up"
@@ -34,9 +32,9 @@ map("n", "<A-h>", ":MoveHChar(-1)<CR>", opts)
 opts.desc = "Move char right"
 map("n", "<A-l>", ":MoveHChar(1)<CR>", opts)
 opts.desc = "Move word forward"
-map("n", "<leader>wf", ":MoveWord(1)<CR>", opts)
+map("n", "<A-f>", ":MoveWord(1)<CR>", opts)
 opts.desc = "Move word backward"
-map("n", "<leader>wb", ":MoveWord(-1)<CR>", opts)
+map("n", "<A-b>", ":MoveWord(-1)<CR>", opts)
 
 -- Visual-mode commands
 opts.desc = "Move lines up"
@@ -48,10 +46,7 @@ vim.keymap.set("v", "<A-h>", ":MoveHBlock(-1)<CR>", opts)
 opts.desc = "Move char right"
 vim.keymap.set("v", "<A-l>", ":MoveHBlock(1)<CR>", opts)
 
-opts.desc = "Toggle terminal"
-map("n", "<F1>", "<cmd>lua require'FTerm'.toggle()<CR>", opts)
-
--- map("n", "<C-T>", "<cmd>NvimTreeToggle<CR>", opts)
+-- Toggling UI components
 opts.desc = "Toggle line number"
 map("n", "<C-N>", "<cmd>call SetNumber()<CR>", opts)
 opts.desc = "Toggle non-text characters"
@@ -60,6 +55,8 @@ opts.desc = "Toggle cursorline"
 map("n", "<C-J>", "<cmd>set cursorline!<CR>", opts)
 opts.desc = "Clear search highlight"
 map("n", "<C-P>", ":nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR><c-l>", opts)
+opts.desc = "Toggle code minimap"
+map("n", "<C-B>", ":lua MiniMap.toggle() <CR>", opts)
 
 opts.desc = "Next search result"
 map("n", "n", "nzz", opts)
@@ -74,8 +71,8 @@ map("n", "g*", "g*zz", opts)
 opts.desc = "Display matching"
 map("n", "g#", "g#zz", opts)
 
-opts.desc = "Quick comma"
-map("i", ",,", ",", opts)
+-- opts.desc = "Quick comma"
+-- map("i", ",,", ",", opts)
 
 opts.desc = "Unindent"
 map("x", "<", "<gv", opts)
@@ -84,10 +81,12 @@ map("x", ">", ">gv", opts)
 
 opts.desc = "Toggle foldcolumn"
 map("n", "<leader>a", ":call FoldColumnToggle()<CR>", opts)
-opts.desc = "Open all folds"
+opts.desc = "Open all folds (UFO)"
 map("n", "zR", require("ufo").openAllFolds)
-opts.desc = "Close all folds"
+opts.desc = "Close all folds (UFO)"
 map("n", "zM", require("ufo").closeAllFolds)
+opts.desc = "Toggle current fold"
+map("n", "<Tab>", "za", opts)
 
 opts.desc = "Show buffer list"
 map("n", "<leader>b", "<cmd>Telescope buffers<CR>", opts)
@@ -95,6 +94,9 @@ map("n", "<leader>b", "<cmd>Telescope buffers<CR>", opts)
 opts.desc = "Toggle colorizing hex colors"
 map("n", "<leader>c", ":ColorizerToggle<CR>", opts)
 
+wk.register({
+	["<leader>d"] = { name = "Diff commands" },
+})
 opts.desc = "Open diff mode"
 map("n", "<leader>dd", "<cmd>DiffviewOpen<CR>", opts)
 opts.desc = "Close diff mode"
@@ -102,6 +104,9 @@ map("n", "<leader>dc", "<cmd>DiffviewClose<CR>", opts)
 opts.desc = "Open diff history mode"
 map("n", "<leader>df", "<cmd>DiffviewFileHistory<CR>", opts)
 
+wk.register({
+	["<leader>e"] = { name = "DAP commands" },
+})
 opts.desc = "Show DAP commands"
 map("n", "-", "<cmd>Telescope dap commands<CR>", opts)
 opts.desc = "Show DAP variables"
@@ -124,6 +129,9 @@ map("n", "<leader>ef", "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.in
 opts.desc = "Show files in current path"
 map("n", "<leader>f", "<cmd>Telescope find_files path=%:p:h<CR>", opts)
 
+wk.register({
+	["<leader>g"] = { name = "Git commands" },
+})
 opts.desc = "Show git status"
 map("n", "<leader>gs", "<cmd>Telescope git_status<CR>", opts)
 opts.desc = "Show git commits (repository)"
@@ -137,9 +145,6 @@ map("n", "<leader>gh", "<cmd>Gitsigns preview_hunk<CR>", opts)
 
 opts.desc = "Show history"
 map("n", "<leader>h", "<cmd>Telescope oldfiles<CR>", opts)
-
-opts.desc = "Toggle indent lines"
-map("n", "<leader>i", "<cmd>IndentBlanklineToggle<CR>", opts)
 
 opts.desc = "Show last used Telescope picker"
 map("n", "<leader>j", "<cmd>Telescope resume<CR>", opts)
@@ -162,19 +167,9 @@ map("n", "<leader>o", "<cmd>SymbolsOutline<CR>", opts)
 opts.desc = "Show plugin list"
 map("n", "<leader>p", "<cmd>Telescope lazy<CR>", opts)
 
-opts.desc = "Show referencces"
-map("n", "<leader>qr", "<cmd>Glance references<CR>", opts)
-opts.desc = "Show definition"
-map("n", "<leader>qd", "<cmd>Glance definitions<CR>", opts)
-opts.desc = "Show implementations"
-map("n", "<leader>qi", "<cmd>Glance implementations<CR>", opts)
-opts.desc = "Show type definitions"
-map("n", "<leader>qt", "<cmd>Glance type_definitions<CR>", opts)
-opts.desc = "Show code actions"
-map({ "n", "v" }, "<leader>qc", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-
-opts.desc = "Toggle code minimap"
-map("n", "<leader>sb", ":lua MiniMap.toggle() <CR>", opts)
+wk.register({
+	["<leader>s"] = { name = "Spell checking" },
+})
 opts.desc = "Toggle spell checking"
 map("n", "<leader>sp", ":setlocal spell! spelllang=en_gb<CR>", opts)
 opts.desc = "Show spell suggestion"
@@ -182,9 +177,13 @@ map("n", "<leader>sf", "<cmd>Telescope spell_suggests<CR>", opts)
 
 opts.desc = "Show recent files"
 map("n", "<leader>t", "<cmd>Telescope frecency<CR>", opts)
+
 opts.desc = "Show undo tree"
 map("n", "<leader>u", "<cmd>Telescope undo<CR>", opts)
 
+wk.register({
+	["<leader>v"] = { name = "Treesitter toggles" },
+})
 opts.desc = "Toggle rainbow parentheses"
 map("n", "<leader>vr", "<cmd>TSBufToggle rainbow<CR>", opts)
 opts.desc = "Toggle syntax highlighting with TS"
@@ -249,3 +248,48 @@ map("n", "<A-u>", "<cmd>BufferPick<CR>", opts)
 
 opts.desc = "Dismiss notification popup"
 map("n", "<A-BS>", ":Noice dismiss<CR>", opts)
+
+function M.lsp_keymaps(client, bufnr)
+	local function bmap(...)
+		vim.api.nvim_buf_set_keymap(bufnr, ...)
+	end
+	wk.register({
+		["<leader>q"] = { name = "More LSP commands" },
+	})
+	if client.server_capabilities.codeActionProvider then
+		opts.desc = "Show referencces"
+		map("n", "<leader>qr", "<cmd>Glance references<CR>", opts)
+		opts.desc = "Show definition"
+		map("n", "<leader>qd", "<cmd>Glance definitions<CR>", opts)
+		opts.desc = "Show implementations"
+		map("n", "<leader>qi", "<cmd>Glance implementations<CR>", opts)
+		opts.desc = "Show type definitions"
+		map("n", "<leader>qt", "<cmd>Glance type_definitions<CR>", opts)
+	end
+	if client.server_capabilities.codeActionProvider then
+		opts.desc = "Show code actions"
+		map({ "n", "v" }, "<leader>qc", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+	end
+	if client.server_capabilities.hoverProvider then
+		opts.desc = "Documentation"
+		bmap("n", "<C-K>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
+	end
+	if client.server_capabilities.definitionProvider then
+		opts.desc = "Buffer declaration"
+		bmap("n", "<Leader>qq", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+	end
+	if client.server_capabilities.documentFormattingProvider then
+		opts.desc = "Format buffer"
+		bmap("n", "<Leader><space>", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
+	end
+	if client.server_capabilities.renameProvider then
+		opts.desc = "Rename object"
+		bmap("n", "<Leader>r", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+	end
+	opts.desc = "Next diagnostic"
+	bmap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
+	opts.desc = "Previous diagnostic"
+	bmap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
+end
+
+return M
