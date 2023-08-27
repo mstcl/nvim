@@ -16,7 +16,6 @@ return {
 		lazy = true,
 		event = "VeryLazy",
 		branch = "main",
-		dependencies = { "nvim-web-devicons" },
 		config = function()
 			require("configs.statusline")
 		end,
@@ -32,34 +31,15 @@ return {
 		end,
 	},
 	{
-		-- Add a customisable dashboard
-		"goolord/alpha-nvim",
-		lazy = true,
-		cmd = { "Alpha" },
-		config = function()
-			require("configs.alpha")
-		end,
-	},
-	{
 		-- Tabline and bufferline
 		"romgrk/barbar.nvim",
 		lazy = true,
-		event = "BufAdd",
-		dependencies = { "nvim-web-devicons" },
+		event = "VeryLazy",
 		init = function()
 			vim.g.barbar_auto_setup = false
 		end,
 		config = function()
 			require("configs.barbar")
-		end,
-	},
-	{
-		-- Nice icons for UI
-		"kyazdani42/nvim-web-devicons",
-		lazy = true,
-		event = "VimEnter",
-		config = function()
-			require("configs.devicons")
 		end,
 	},
 	{
@@ -97,7 +77,13 @@ return {
 			},
 			{
 				"nvim-telescope/telescope-frecency.nvim",
-				dependencies = { "kkharji/sqlite.lua" },
+				dependencies = {
+					{
+						"kkharji/sqlite.lua",
+						lazy = true,
+						event = "VeryLazy",
+					},
+				},
 			},
 		},
 	},
@@ -117,6 +103,9 @@ return {
 	{
 		-- Colorcolumn smart functionality
 		"fmbarina/multicolumn.nvim",
+		lazy = true,
+		priority = 10,
+		event = "VeryLazy",
 		opts = {
 			sets = {
 				lua = {
@@ -124,13 +113,14 @@ return {
 				},
 				default = {
 					rulers = { 88 },
-                    full_column = true,
+					full_column = true,
 				},
 				python = {
 					scope = "window",
 					rulers = { 88 },
 					to_line_end = true,
 				},
+				exclude_ft = { "markdown", "help", "netrw", "starter" },
 			},
 		},
 	},
@@ -140,9 +130,20 @@ return {
 		event = "VeryLazy",
 		opts = {
 			icons = {
-				breadcrumb = "❯",
-				separator = "▸",
+				breadcrumb = "▸",
+				separator = "⟫",
 			},
 		},
+	},
+	{
+		-- Minimalist start screen
+		"echasnovski/mini.starter",
+		lazy = true,
+		event = "VimEnter",
+		priority = 100,
+		version = false,
+		config = function()
+			require("configs.starter")
+		end,
 	},
 }

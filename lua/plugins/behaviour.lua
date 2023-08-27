@@ -46,19 +46,6 @@ return {
 		end,
 	},
 	{
-		-- Show an interactive registers when pasting in normal and insert
-		"tversteeg/registers.nvim",
-		lazy = true,
-		cmd = "Registers",
-		keys = {
-			{ '"', mode = { "n", "v" } },
-			{ "<C-R>", mode = "i" },
-		},
-		config = function()
-			require("configs.registers")
-		end,
-	},
-	{
 		-- Naively highlight word under cursor
 		"echasnovski/mini.cursorword",
 		event = "CursorMoved",
@@ -90,22 +77,12 @@ return {
 		end,
 	},
 	{
-		-- Show indentation levels
-		"lukas-reineke/indent-blankline.nvim",
-		lazy = true,
-		cmd = {
-			"IndentBlanklineEnable",
-			"IndentBlanklineToggle",
-		},
-		opts = {
-			buftype_exclude = { "terminal" },
-			bufnameExclude = { "README.md" },
-			show_current_context = true,
-			show_end_of_line = true,
-			filetype_exclude = { "tex" },
-			enabled = "true",
-			char_priority = 50,
-		},
+		-- Show indent lines
+		"shellRaining/hlchunk.nvim",
+		event = { "UIEnter" },
+		config = function()
+			require("configs.hlchunk")
+		end,
 	},
 	{
 		-- Utility to hide numbers in foldcolumn
@@ -115,7 +92,7 @@ return {
 			require("statuscol").setup({
 				segments = {
 					{ text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
-					{ text = { "%s" }, click = "v:lua.ScSa" },
+					{ text = { "%s" },                  click = "v:lua.ScSa" },
 					{
 						text = { builtin.lnumfunc, " " },
 						condition = { true, builtin.not_empty },

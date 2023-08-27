@@ -105,4 +105,17 @@ return {
 			exclude = {},
 		},
 	},
+	{
+		-- Highlight brackets when inside block
+		"utilyre/sentiment.nvim",
+		version = "*",
+		event = "VeryLazy",
+		opts = {
+			pairs = {
+				{ "(", ")" },
+				{ "{", "}" },
+				{ "[", "]" },
+			},
+		},
+	},
 }
