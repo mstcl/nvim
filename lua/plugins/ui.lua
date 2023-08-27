@@ -2,7 +2,8 @@
 return {
 	{
 		-- Colorscheme
-		"mstcl/dmg",
+		dir = "/media3/projects/dmg/",
+		name = "dmg",
 		lazy = false,
 		priority = 1000,
 		config = function()
@@ -114,12 +115,34 @@ return {
 		end,
 	},
 	{
-		-- Virt column character
-		"lukas-reineke/virt-column.nvim",
-		event = "BufEnter",
-		lazy = true,
+		-- Colorcolumn smart functionality
+		"fmbarina/multicolumn.nvim",
 		opts = {
-			char = "║",
+			sets = {
+				lua = {
+					scope = "file",
+				},
+				default = {
+					rulers = { 88 },
+                    full_column = true,
+				},
+				python = {
+					scope = "window",
+					rulers = { 88 },
+					to_line_end = true,
+				},
+			},
+		},
+	},
+	{
+		-- Keymapping cheatsheet
+		"folke/which-key.nvim",
+		event = "VeryLazy",
+		opts = {
+			icons = {
+				breadcrumb = "❯",
+				separator = "▸",
+			},
 		},
 	},
 }
