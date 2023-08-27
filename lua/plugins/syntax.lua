@@ -10,17 +10,32 @@ return {
 			require("configs.treesitter")
 		end,
 		dependencies = {
-			"HiPhish/nvim-ts-rainbow2",
+			"filNaj/tree-setter",
 			{
 				"nvim-treesitter/playground",
 				cmd = "TSPlaygroundToggle",
 			},
 			"JoosepAlviste/nvim-ts-context-commentstring",
-			{
-				"m-demare/hlargs.nvim",
-				opts = { color = "#a77212" },
-			},
 		},
+	},
+	{
+		-- Highlight argument's definition and usage
+		"m-demare/hlargs.nvim",
+		lazy = true,
+		event = { "BufWinEnter" },
+		opts = {
+			color = "#87591a",
+			hl_priority = 200,
+		},
+	},
+	{
+		-- Highlight parenthesis
+		"HiPhish/rainbow-delimiters.nvim",
+		lazy = true,
+		event = { "BufWinEnter" },
+		config = function()
+			require("configs.delimiters")
+		end,
 	},
 	{
 		-- Concealing in tex
