@@ -6,20 +6,23 @@ require'lazy-init'
 local disabled_built_ins = {
     "gzip",
     "zip",
+    "zipPlugin",
     "netrwPlugin",
     "netrwSettings",
+    "netrwFileHandlers",
     "tar",
     "tarPlugin",
-    "netrwFileHandlers",
-    "zipPlugin",
     "getscript",
     "getscriptPlugin",
     "vimball",
     "vimballPlugin",
     "2html_plugin",
     "logipat",
+    "rrhelper",
     "spellfile_plugin",
+    "tutor_mode_plugin",
     "matchit",
+    "matchparen",
 }
 for _, plugin in pairs(disabled_built_ins) do
     vim.g["loaded_" .. plugin] = 1
