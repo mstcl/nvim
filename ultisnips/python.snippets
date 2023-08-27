@@ -253,7 +253,7 @@ def write_function_docstring(t, snip):
 		snip += '-------'
 		snip += 'TODO'
 	else:
-		snip += format_return(style)
+		snip += '\n\t' + format_return(style)
 	snip.rv += '\n' + snip.mkline('', indent='')
 	snip += triple_quotes(snip)
 
@@ -702,7 +702,7 @@ ${1:${VISUAL:doc}}
 endsnippet
 
 snippet doc "doc block (triple quotes)"
-`!p snip.rv = triple_quotes(snip)` ${1:${VISUAL:doc}} `!p snip.rv = triple_quotes(snip)`
+`!p snip.rv = triple_quotes(snip)` ${1:${VISUAL:TODO}} `!p snip.rv = triple_quotes(snip)`
 endsnippet
 
 snippet pmdoc "pocoo style module doc string" b
