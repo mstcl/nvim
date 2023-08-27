@@ -20,7 +20,6 @@ set.synmaxcol = 400
 set.hidden = true
 set.showmode = false
 set.showcmd = true
--- set.cmdheight = 0
 set.lazyredraw = false
 set.ttyfast = true
 set.conceallevel = 2
@@ -52,7 +51,6 @@ set.wrapmargin = 0
 set.textwidth = 0
 set.breakindent = false
 set.linebreak = true
-set.formatoptions = set.formatoptions - "cro"
 
 set.number = true
 set.relativenumber = true
