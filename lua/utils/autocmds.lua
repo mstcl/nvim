@@ -1,48 +1,24 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
+local call = vim.api.nvim_call_function
 local bo = vim.bo
 local cmd = vim.cmd
+local setlocal = vim.opt_local
+local map = vim.keymap.set
+local opts = { noremap = true, silent = true }
+
+autocmd({ "ColorScheme" }, {
+	pattern = "*",
+	callback = function()
+		call("SetupOrgColors", {})
+	end,
+})
 
 local nvimcmp = augroup("nvimcmp", { clear = true })
 autocmd({ "BufWritePost" }, {
 	pattern = "*.snipppets",
 	group = nvimcmp,
 	command = "CmpUltisnipsReloadSnippets",
-})
-
-local dokuwiki = augroup("dokuwiki", {clear = true})
-autocmd({"BufEnter"}, {
-	pattern = "*.txt",
-	group = dokuwiki,
-	command = "setlocal ft=dokuwiki"
-})
-
-local alpha = augroup("alpha", { clear = true })
-autocmd({ "User" }, {
-	pattern = "AlphaReady",
-	group = alpha,
-	command = "set laststatus=0 | set showtabline=0 | set nofoldenable | autocmd BufUnload <buffer> set showtabline=2 | set laststatus=3",
-})
-autocmd({ "StdinReadPre" }, {
-	pattern = "*",
-	command = "let g:isReadingFromStdin = 1",
-	group = alpha,
-})
-
---[[ autocmd({ "VimEnter" }, {
-	pattern = "*",
-	group = alpha,
-	callback = function()
-		if vim.fn.argc() == 0 then
-			vim.cmd("Alpha")
-		end
-	end,
-}) ]]
-
-autocmd({ "WinEnter", "BufRead", "BufNewFile" }, {
-	pattern = "*",
-	command = "if &ft != 'alpha' | call CleanEmptyBuffers() | endif",
-	group = alpha,
 })
 
 local stay = augroup("stay", { clear = true })
@@ -56,14 +32,12 @@ local editing = augroup("editing", { clear = true })
 autocmd({ "BufEnter" }, {
 	pattern = "*",
 	group = editing,
-	command = "setlocal formatoptions-=cro",
-})
-
-local outline = augroup("outline", { clear = true })
-autocmd({ "BufEnter" }, {
-	pattern = "*",
-	group = outline,
-	command = "if (winnr(\"$\") == 1 && &filetype =~# 'Outline') | q | endif",
+	callback = function()
+		local vals = { "c", "r", "o" }
+		for _, val in ipairs(vals) do
+			setlocal.formatoptions:remove(val)
+		end
+	end,
 })
 
 local highlight_yank = augroup("highlight_yank", { clear = true })
@@ -77,100 +51,86 @@ local filetypes = augroup("filetypes", { clear = true })
 autocmd({ "BufReadPost" }, {
 	pattern = "*.rasi",
 	group = filetypes,
-	command = "set filetype=css",
+	callback = function()
+		setlocal.filetype = "css"
+	end,
 })
 autocmd({ "BufReadPost" }, {
 	pattern = "*.ipynb",
 	group = filetypes,
-	command = "set filetype=python",
+	callback = function()
+		setlocal.filetype = "python"
+	end,
 })
 autocmd({ "BufReadPost" }, {
 	pattern = "*.conf",
 	group = filetypes,
-	command = "set filetype=config",
+	callback = function()
+		setlocal.filetype = "config"
+	end,
 })
 autocmd({ "BufReadPost" }, {
 	pattern = "*.sbat",
 	group = filetypes,
-	command = "set filetype=sh",
+	callback = function()
+		setlocal.filetype = "sh"
+	end,
+})
+autocmd({ "BufReadPost" }, {
+	pattern = "*.txt",
+	group = filetypes,
+	callback = function()
+		setlocal.filetype = "dokuwiki"
+	end,
 })
 
 local mdoptions = augroup("mdoptions", { clear = true })
 autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = { "*.md", "*.markdown", "*.tex" },
+	pattern = { "*.md", "*.txt", "*.tex" },
 	group = mdoptions,
-	command = "set nolist | setlocal spell | inoremap <silent> <C-L>  <c-g>u<Esc>[s1z=`]a<c-g>u",
+	callback = function()
+		setlocal.list = false
+		setlocal.spell = true
+		map("i", "<C-L>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
+	end,
 })
 autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = { "*.md", "*.markdown" },
+	pattern = { "*.md" },
 	group = mdoptions,
-	command = "call MathAndLiquid()",
-})
-
-local indentft = augroup("indentft", { clear = true })
-local indentgroup = {
-	"*.vim",
-	"*.ipynb",
-	"*.tex",
-	"*.py",
-	"*.lua",
-	"*.cpp",
-	"*.ssh",
-	"*.sh",
-	"*.ini",
-	"*.conf",
-	"*.html",
-	"*.json",
-	"*.toml",
-	"*.zsh",
-	"*.yaml",
-	"*.xml",
-	"*.xml",
-	"*.c",
-	"*.h",
-	"*.hpp",
-	"*.rs",
-	"*.js",
-	-- "*.org",
-	"*config*",
-	"*rc",
-}
-autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = indentgroup,
-	group = indentft,
-	command = "silent! IndentBlanklineEnable",
-})
-autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = indentgroup,
-	group = indentft,
-	command = "nnoremap <silent> zA zA:IndentBlanklineRefresh<CR> | nnoremap <silent> za za:IndentBlanklineRefresh<CR> | nnoremap <silent> zm :lua require('ufo').closeFoldsWith() require('indent_blankline').refresh()<CR> | nnoremap <silent> zM :lua require('ufo').closeAllFolds() require('indent_blankline').refresh()<CR> | nnoremap <silent> zc zc:IndentBlanklineRefresh<CR> | nnoremap <silent> zC zC:IndentBlanklineRefresh<CR> | nnoremap <silent> zr :lua require('ufo').openFoldsExceptKinds() require('indent_blankline').refresh()<CR> | nnoremap <silent> zR :lua require('ufo').openAllFolds() require('indent_blankline').refresh()<CR> | nnoremap <silent> zo zo:IndentBlanklineRefresh<CR> | nnoremap <silent> zO zO:IndentBlanklineRefresh<CR>",
-})
-
-local floaterm = augroup("floaterm", { clear = true })
-autocmd({ "Filetype" }, {
-	pattern = "floaterm",
-	group = floaterm,
-	command = "set nonumber | set norelativenumber",
+	callback = function()
+		call("MathAndLiquid", {})
+	end,
 })
 
 local org = augroup("org", { clear = true })
 autocmd({ "Filetype" }, {
 	pattern = "org",
 	group = org,
-	command = "setlocal nolist | setlocal conceallevel=2 | setlocal concealcursor=nc | setlocal sw=2 | setlocal cc=",
+	callback = function()
+		setlocal.list = false
+		setlocal.conceallevel = 2
+		setlocal.concealcursor = "nc"
+		setlocal.shiftwidth = 2
+		setlocal.foldlevel = 99
+	end,
 })
 
-autocmd({ "WinEnter", "BufRead", "BufNewFile" }, {
+local starter = augroup("starter", { clear = true })
+autocmd({ "VimEnter" }, {
 	pattern = "*",
-	command = "if &ft != 'org' | nnoremap <buffer> <Tab> za | nnoremap <buffer> <S-Tab> zc | endif",
-})
-
-
-local procsearch = augroup("procsearch", { clear = true })
-autocmd({ "CmdLineLeave" }, {
-	pattern = "*",
-	group = procsearch,
-	command = "let b:cmdtype = expand('<afile>') | if (b:cmdtype == '/' || b:cmdtype == '?') | call timer_start(200, 'ProcessSearch') | endif",
+	group = starter,
+	callback = function()
+		if bo.filetype == "starter" then
+			setlocal.laststatus = 0
+			autocmd({ "BufUnload" }, {
+				group = starter,
+				pattern = "<buffer>",
+				callback = function()
+					setlocal.laststatus = 3
+				end,
+			})
+		end
+	end,
 })
 
 local telescope = augroup("telescope", { clear = true })
@@ -186,42 +146,26 @@ local showpaste = augroup("showpaste", { clear = true })
 autocmd({ "InsertLeave", "InsertEnter" }, {
 	pattern = "*",
 	group = showpaste,
-	command = "call ShowPaste()",
+	callback = function()
+		call("ShowPaste", {})
+	end,
 })
 
 local barbecue = augroup("barbecue", { clear = true })
-
 autocmd({ "WinResized", "BufWinEnter", "CursorHold", "InsertLeave" }, {
-	pattern = {"*.lua", "*.py", "*.tex", "*.vim", "*.sh", "*.cpp"},
+	pattern = { "*.lua", "*.py", "*.tex", "*.vim", "*.sh", "*.cpp" },
 	group = barbecue,
 	callback = function()
 		require("barbecue.ui").update()
 	end,
 })
 
-autocmd({
-	"BufWinLeave",
-	"BufLeave",
-	"QuitPre",
-	"FocusLost",
-	"InsertLeave"},
-	{
-		pattern = "?*", -- pattern required for some events
-		callback = function()
-			if not bo.readonly and vim.fn.expand("%") ~= "" and bo.buftype == "" and bo.filetype ~= "gitcommit" then
-				cmd.update(vim.fn.expand("%:p"))
-			end
-		end,
-	}
-)
-
 local autochdir = augroup("autochdir", { clear = true })
-
 autocmd("BufWinEnter", {
-	group = "autochdir",
+	group = autochdir,
 	pattern = "?*",
 	callback = function()
-		local ignoredFT = { "gitcommit", "NeogitCommitMessage", "DiffviewFileHistory", "" }
+		local ignoredFT = { "gitcommit", "DiffviewFileHistory", "" }
 		if not bo.modifiable or vim.tbl_contains(ignoredFT, bo.filetype) or not (vim.fn.expand("%:p"):find("^/")) then
 			return
 		end
@@ -229,37 +173,17 @@ autocmd("BufWinEnter", {
 	end,
 })
 
-local wordcount = augroup("wordcount", { clear = true })
+function _G.set_terminal_keymaps()
+	local opts_b = { buffer = 0 }
+	vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], opts_b)
+	vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts_b)
+end
 
-autocmd("Filetype", {
-	group = "wordcount",
-	pattern = "markdown",
+local toggleterm = augroup("toggleterm", { clear = true })
+autocmd({ "TermOpen" }, {
+	pattern = "term://*",
+	group = toggleterm,
 	callback = function()
-		require("section-wordcount").wordcounter({})
+		set_terminal_keymaps()
 	end,
 })
-
--- autocmd({ "BufWritePost", "BufEnter", "InsertLeave" }, {
---     pattern = "*",
---     callback = function()
---         require("lint").try_lint()
---     end,
--- })
---
--- autocmd({ "BufWritePost", "BufEnter", "InsertLeave" }, {
---     pattern = "*",
---     callback = function()
---         require("lint").try_lint({"codespell"})
---     end,
--- })
-
-function _G.set_terminal_keymaps()
-  local opts = {buffer = 0}
-  vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-  vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-  vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-  vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-  vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
-  vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
-end
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
