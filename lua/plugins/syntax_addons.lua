@@ -52,7 +52,6 @@ return {
 		init = function()
 			require("configs.syntax.markdown")
 		end,
-		wants = "tabular",
 	},
 	{
 		-- Orgmode syntax
