@@ -12,7 +12,7 @@ return {
 			vim.g.UltiSnipsRemoveSelectModeMappings = 0
 		end,
 		config = function()
-			vim.cmd('let g:UltiSnipsSnippetDirectories=["/home/lckdscl/.config/nvim/ultisnips"]')
+			vim.cmd('let g:UltiSnipsSnippetDirectories=["~/.config/nvim/ultisnips"]')
 		end,
 	},
 	{
