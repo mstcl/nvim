@@ -7,6 +7,7 @@ local disabled_built_ins = {
     "gzip",
     "zip",
     "zipPlugin",
+    "netrw",
     "netrwPlugin",
     "netrwSettings",
     "netrwFileHandlers",
