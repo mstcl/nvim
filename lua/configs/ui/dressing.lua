@@ -1,4 +1,9 @@
-require("dressing").setup({
+local present, dressing = pcall(require, "dressing")
+if not present then
+	return
+end
+
+dressing.setup({
 	input = {
 		default_prompt = "➤ ",
 		insert_only = true,
