@@ -36,4 +36,11 @@ return {
 			},
 		},
 	},
+	{
+		-- Add TOC
+		"mzlogin/vim-markdown-toc",
+		lazy = true,
+		ft = {"markdown"}
+		-- cmd = { "GenTocGFM", "GenTocRedCarpet", "GenTocGitLab", "GenTocMarked" },
+	},
 }
