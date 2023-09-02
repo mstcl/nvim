@@ -120,7 +120,10 @@ return {
 					rulers = { 88 },
 					to_line_end = true,
 				},
-				exclude_ft = { "markdown", "help", "netrw", "starter" },
+				starter = {
+					rulers = { 9999 },
+				},
+				exclude_ft = { "markdown", "help", "netrw", "starter", "man" },
 			},
 		},
 	},
@@ -145,5 +148,10 @@ return {
 		config = function()
 			require("configs.starter")
 		end,
+	},
+	{
+		-- Buffer-like file browser
+		"stevearc/oil.nvim",
+		opts = {},
 	},
 }
