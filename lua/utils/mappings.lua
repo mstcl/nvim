@@ -71,9 +71,6 @@ map("n", "g*", "g*zz", opts)
 opts.desc = "Display matching"
 map("n", "g#", "g#zz", opts)
 
--- opts.desc = "Quick comma"
--- map("i", ",,", ",", opts)
-
 opts.desc = "Unindent"
 map("x", "<", "<gv", opts)
 opts.desc = "Indent"
