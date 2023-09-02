@@ -18,6 +18,7 @@ local disabled_ft = {
     starter = true,
 	markdownpreview = true,
 	frecency = true,
+	oil = true
 }
 
 local hl = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("ErrorMsg")), "fg", "gui")
