@@ -156,7 +156,7 @@ telescope.setup({
 			git_status = true,
 			respect_gitignore = false,
 			initial_mode = "normal",
-			hijack_netrw = true,
+			hijack_netrw = false,
 			auto_depth = true,
 			hidden = true,
 			cwd_to_path = true,
