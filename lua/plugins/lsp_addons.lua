@@ -15,7 +15,7 @@ return {
 		"utilyre/barbecue.nvim",
 		lazy = true,
 		version = "*",
-		even = "BufEnter",
+		event = "BufEnter",
 		branch = "main",
 		dependencies = { "smiteshp/nvim-navic" },
 		config = function()

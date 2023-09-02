@@ -25,7 +25,7 @@ return {
 		"lukas-reineke/headlines.nvim",
 		lazy = true,
 		ft = { "markdown", "org" },
-		dependences = "nvim-treesitter/nvim-treesitter",
+		dependencies = "nvim-treesitter/nvim-treesitter",
 		opts = {
 			markdown = {
 				headline_highlights = {},
