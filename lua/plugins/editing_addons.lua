@@ -1,6 +1,37 @@
 -- Plugins that add extra functionality with keybindings or while editing
 return {
 	{
+		-- Snippet engine
+		"sirver/ultisnips",
+		lazy = true,
+		event = "InsertEnter",
+		init = function()
+			vim.g.UltiSnipsExpandTrigger = "<nop>"
+			vim.g.UltiSnipsJumpForwardTrigger = "<tab>"
+			vim.g.UltiSnipsJumpBackwardTrigger = "<s-tab>"
+			vim.g.UltiSnipsRemoveSelectModeMappings = 0
+		end,
+		config = function()
+			vim.cmd('let g:UltiSnipsSnippetDirectories=["/home/lckdscl/.config/nvim/ultisnips"]')
+		end,
+	},
+	{
+		-- Autocompletion menu & plugins
+		"hrsh7th/nvim-cmp",
+		lazy = true,
+		event = "InsertEnter",
+		dependencies = {
+			"ultisnips",
+			"quangnguyen30192/cmp-nvim-ultisnips",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-buffer",
+		},
+		config = function()
+			require("configs.editing.cmp")
+		end,
+	},
+	{
 		-- Syntax aware comments & keybindings
 		"numToStr/Comment.nvim",
 		lazy = true,
@@ -48,7 +79,7 @@ return {
 		---@type Flash.Config
 		opts = {
 			prompt = {
-				prefix = { { "", "FlashPromptIcon" } },
+				prefix = { { "◆", "FlashPromptIcon" } },
 			},
 		},
 		keys = {
@@ -88,26 +119,9 @@ return {
 			"hrsh7th/nvim-cmp",
 			"sirver/ultisnips",
 		},
-		opts = {
-			tabkey = "<Tab>",
-			backwards_tabkey = "<S-Tab>",
-			act_as_tab = true,
-			act_as_shift_tab = true,
-			default_tab = "<C-t>",
-			default_shift_tab = "<C-d>",
-			enable_backwards = true,
-			completion = true,
-			tabouts = {
-				{ open = "'", close = "'" },
-				{ open = '"', close = '"' },
-				{ open = "`", close = "`" },
-				{ open = "(", close = ")" },
-				{ open = "[", close = "]" },
-				{ open = "{", close = "}" },
-			},
-			ignore_beginning = true,
-			exclude = {},
-		},
+		config = function()
+			require('configs.editing.tabout')
+		end
 	},
 	{
 		-- Highlight brackets when inside block
@@ -121,5 +135,22 @@ return {
 				{ "[", "]" },
 			},
 		},
+	},
+	{
+		-- Quick guessing indent for filetypes
+		"nmac427/guess-indent.nvim",
+		lazy = true,
+		event = "BufRead",
+		opts = {
+			override_editorconfig = true,
+			auto_cmd = true,
+		},
+	},
+	{
+		-- Force cursor to stay in place when doing certain visual motions
+		"gbprod/stay-in-place.nvim",
+		lazy = true,
+		event = "CursorMoved",
+		opts = {},
 	},
 }

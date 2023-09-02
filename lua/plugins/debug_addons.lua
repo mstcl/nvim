@@ -15,7 +15,7 @@ return {
 		lazy = true,
 		ft = "python",
 		config = function()
-			require("configs.dap")
+			require("configs.debug.dap")
 		end,
 	},
 	{
