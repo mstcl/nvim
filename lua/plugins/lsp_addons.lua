@@ -7,7 +7,7 @@ return {
 		event = "BufRead",
 		dependencies = { "cmp-nvim-lsp" },
 		config = function()
-			require("configs.lspconfig")
+			require("configs.lsp.lspconfig")
 		end,
 	},
 	{
@@ -19,7 +19,7 @@ return {
 		branch = "main",
 		dependencies = { "smiteshp/nvim-navic" },
 		config = function()
-			require("configs.barbecue")
+			require("configs.lsp.barbecue")
 		end,
 	},
 	{
@@ -32,7 +32,7 @@ return {
 			"SymbolsOutlineClose",
 		},
 		config = function()
-			require("configs.outline")
+			require("configs.lsp.outline")
 		end,
 	},
 	{
@@ -63,7 +63,7 @@ return {
 		lazy = true,
 		event = "BufRead",
 		config = function()
-			require("configs.null")
+			require("configs.lsp.null")
 		end,
 	},
 	{

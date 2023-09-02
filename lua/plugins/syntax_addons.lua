@@ -7,7 +7,7 @@ return {
 		event = { "BufWinEnter" },
 		build = ":TSUpdate",
 		config = function()
-			require("configs.treesitter")
+			require("configs.syntax.treesitter")
 		end,
 		dependencies = {
 			"filNaj/tree-setter",
@@ -34,7 +34,7 @@ return {
 		lazy = true,
 		event = { "BufWinEnter" },
 		config = function()
-			require("configs.delimiters")
+			require("configs.syntax.delimiters")
 		end,
 	},
 	{
@@ -45,12 +45,12 @@ return {
 	},
 	{
 		-- Markdown syntax
-		"hhn-pham/vim-markdown",
+		"mstcl/vim-markdown",
 		lazy = true,
 		branch = "main",
 		ft = { "markdown" },
 		init = function()
-			require("configs.markdown")
+			require("configs.syntax.markdown")
 		end,
 		wants = "tabular",
 	},
@@ -60,12 +60,7 @@ return {
 		lazy = true,
 		event = "VeryLazy",
 		config = function()
-			require("orgmode").setup({
-				org_agenda_files = { "~/sftpgo/orgzly/*", "~/sftpgo/shared/orgzly/*" },
-				win_split_mode = "float",
-				org_hide_emphasis_markers = true,
-			})
-			require("orgmode").setup_ts_grammar()
+			require("configs.syntax.orgmode")
 		end,
 	},
 	{
@@ -82,9 +77,9 @@ return {
 		opts = {
 			symbols = {
 				list = "•",
-				headlines = { "❄", "○", "✮", "✖" },
+				headlines = { "◎", "○", "●", "◌" },
 				checkboxes = {
-					half = { "☀", "OrgTSCheckboxHalfChecked" },
+					half = { "♣", "OrgTSCheckboxHalfChecked" },
 					done = { "✓", "OrgDone" },
 					todo = { "✗", "OrgTODO" },
 				},
