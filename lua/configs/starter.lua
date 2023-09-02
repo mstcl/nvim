@@ -7,9 +7,14 @@ local plugins_gen = io.popen('echo "$(find ~/.local/share/nvim/lazy -maxdepth 1 
 local plugins = plugins_gen:read("*a")
 plugins_gen:close()
 
+local org_agenda = function()
+	require('orgmode').action("agenda.prompt")
+end
+
 local telescope = function()
 	return function()
 		return {
+			{ action = org_agenda, name = "Agenda", section = "Actions" },
 			{ action = "Telescope oldfiles", name = "History", section = "Actions" },
 			{ action = "Telescope frecency", name = "Frecency", section = "Actions" },
 			{ action = "Telescope find_files", name = "Files", section = "Actions" },
