@@ -47,7 +47,10 @@ return {
 	{
 		-- Buffer-like file browser
 		"stevearc/oil.nvim",
-		opts = {},
+		cmd = { "Oil" },
+		config = function()
+			require("configs.view.oil")
+		end,
 	},
 	{
 		-- Keymapping cheatsheet
