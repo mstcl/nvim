@@ -29,7 +29,7 @@ for _, plugin in pairs(disabled_built_ins) do
 end
 
 vim.cmd[[
-    source /home/lckdscl/.config/nvim/lua/utils/functions.vim
+    source ~/.config/nvim/lua/utils/functions.vim
 ]]
 
 require'utils.commands'
