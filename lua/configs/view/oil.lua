@@ -4,6 +4,7 @@ if not present then
 end
 
 oil.setup({
+	default_file_explorer = true,
 	keymaps = {
 		["g?"] = "actions.show_help",
 		["<CR>"] = "actions.select",

@@ -47,7 +47,6 @@ return {
 	{
 		-- Buffer-like file browser
 		"stevearc/oil.nvim",
-		cmd = { "Oil" },
 		config = function()
 			require("configs.view.oil")
 		end,
