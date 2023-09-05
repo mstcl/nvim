@@ -12,7 +12,7 @@ return {
 	},
 	{
 		-- Statusline
-		"AkashKarnatak/galaxyline.nvim",
+		"nvimdev/galaxyline.nvim",
 		lazy = true,
 		event = "VeryLazy",
 		branch = "main",
