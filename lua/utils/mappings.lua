@@ -271,6 +271,8 @@ function M.lsp_keymaps(client, bufnr)
 		map("n", "<leader>qi", "<cmd>Glance implementations<CR>", opts)
 		opts.desc = "Show type definitions"
 		map("n", "<leader>qt", "<cmd>Glance type_definitions<CR>", opts)
+		opts.desc = "Show floating diagnostic"
+		map("n", "<leader>qq", vim.diagnostic.open_float, opts)
 	end
 	if client.server_capabilities.codeActionProvider then
 		opts.desc = "Show code actions"
@@ -282,7 +284,7 @@ function M.lsp_keymaps(client, bufnr)
 	end
 	if client.server_capabilities.definitionProvider then
 		opts.desc = "Buffer declaration"
-		bmap("n", "<Leader>qq", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+		bmap("n", "<Leader>qD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
 	end
 	if client.server_capabilities.documentFormattingProvider then
 		opts.desc = "Format buffer"
@@ -293,9 +295,9 @@ function M.lsp_keymaps(client, bufnr)
 		bmap("n", "<Leader>r", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 	end
 	opts.desc = "Next diagnostic"
-	bmap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
+	bmap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = true })<CR>", opts)
 	opts.desc = "Previous diagnostic"
-	bmap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
+	bmap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = true })<CR>", opts)
 end
 
 return M
