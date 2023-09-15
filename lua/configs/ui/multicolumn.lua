@@ -6,6 +6,7 @@ end
 multicolumn.setup({
 	sets = {
 		lua = {
+			rulers = { 88 },
 			scope = "file",
 		},
 		default = {
