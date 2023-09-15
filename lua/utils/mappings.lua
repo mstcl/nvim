@@ -139,6 +139,12 @@ opts.desc = "Toggle gitsigns"
 map("n", "<leader>gl", "<cmd>Gitsigns toggle_signs<CR>", opts)
 opts.desc = "Preview git hunk"
 map("n", "<leader>gh", "<cmd>Gitsigns preview_hunk<CR>", opts)
+opts.desc = "Stage hunk"
+map("n", "<leader>gS", "<cmd>Gitsigns stage_hunk<CR>", opts)
+map("v", "<leader>gS", function()
+	require("gitsigns").stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+end)
+map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
 
 opts.desc = "Show history"
 map("n", "<leader>h", "<cmd>Telescope oldfiles<CR>", opts)
