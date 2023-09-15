@@ -1,26 +1,27 @@
 local present, gs = pcall(require, "gitsigns")
 if not present then
-    return
+	return
 end
 
 gs.setup({
-    numhl = false,
-    linehl = false,
-    watch_gitdir = {
-        interval = 1000,
-        follow_files = true,
-    },
-    signs = {
-        add = { hl = "GitSignsAdd", text = "⎮", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
-        change = { hl = "GitSignsChange", text = "⎮", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-        delete = { hl = "GitSignsDelete", text = "_", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-        topdelete = { hl = "GitSignsDelete", text = "‾", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-        changedelete = { hl = "GitSignsChange", text = "~", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-        untracked = { hl = "GitSignsAdd", text = "╎", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
-    },
-    current_line_blame = false,
-    sign_priority = 6,
-    update_debounce = 100,
-    status_formatter = nil,
-    word_diff = false,
+	numhl = true,
+	linehl = false,
+	signcolumn = true,
+	watch_gitdir = {
+		interval = 1000,
+		follow_files = true,
+	},
+	signs = {
+		add = { hl = "DiffAdd", text = " ", numhl = "DiffAdd", linehl = "DiffAdd" },
+		change = { hl = "DiffChange", text = " ", numhl = "DiffChange", linehl = "DiffChange" },
+		delete = { hl = "DiffDelete", text = " ", numhl = "DiffDelete", linehl = "DiffDelete" },
+		topdelete = { hl = "DiffDelete", text = "‾", numhl = "DiffDelete", linehl = "DiffDelete" },
+		changedelete = { hl = "DiffChange", text = "~", numhl = "DiffChange", linehl = "DiffChange" },
+		untracked = { hl = "DiffAdd", text = "╎", numhl = "DiffAdd", linehl = "DiffAdd" },
+	},
+	current_line_blame = false,
+	sign_priority = 6,
+	update_debounce = 100,
+	status_formatter = nil,
+	word_diff = false,
 })
