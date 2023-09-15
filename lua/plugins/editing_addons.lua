@@ -54,10 +54,10 @@ return {
 		-- Plug and play automatically insert autopairs
 		"windwp/nvim-autopairs",
 		opts = {
-            fast_wrap = {
-                manual_position = false
-            }
-        },
+			fast_wrap = {
+				manual_position = false,
+			},
+		},
 	},
 	{
 		-- Add motions to surround objects with brackets etc.
