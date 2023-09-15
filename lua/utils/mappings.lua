@@ -149,6 +149,9 @@ map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
 opts.desc = "Show history"
 map("n", "<leader>h", "<cmd>Telescope oldfiles<CR>", opts)
 
+opts.desc = "Invert value"
+map("n", "<leader>i", require("nvim-toggler").toggle, opts)
+
 opts.desc = "Show last used Telescope picker"
 map("n", "<leader>j", "<cmd>Telescope resume<CR>", opts)
 
