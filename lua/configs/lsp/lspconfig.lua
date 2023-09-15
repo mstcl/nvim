@@ -180,7 +180,7 @@ lsp.lua_ls.setup({
 	},
 })
 
-local signs = { Error = " ✗", Warn = " !", Hint = " ?", Info = " i" }
+local signs = { Error = "━━", Warn = "━━", Hint = "■", Info = "■" }
 for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
@@ -220,45 +220,34 @@ for i, kind in ipairs(kinds) do
 end
 
 vim.diagnostic.config({
-	virtual_text = false,
+	virtual_text = {
+		spacing = 2,
+		prefix = "",
+		format = function(diagnostic)
+			if diagnostic.severity == vim.diagnostic.severity.ERROR then
+				return string.format("✗ %s", diagnostic.message)
+			elseif diagnostic.severity == vim.diagnostic.severity.WARN then
+				return string.format("! %s", diagnostic.message)
+			elseif diagnostic.severity == vim.diagnostic.severity.INFO then
+				return string.format("i %s", diagnostic.message)
+			else return string.format("? %s", diagnostic.message)
+			end
+		end,
+		suffix = " ",
+	},
 	signs = true,
 	underline = true,
 	update_in_insert = false,
 	float = {
-		show_header = false,
+		header = false,
+		focusable = false,
+		prefix = " ",
+		suffix = " ",
+		close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+		border = "single",
 		source = "if_many",
+		scope = "cursor",
+		focus = false,
 	},
 	severity_sort = true,
-})
-
-function format_range_operator()
-	local old_func = vim.go.operatorfunc
-	_G.op_func_formatting = function()
-		local start = vim.api.nvim_buf_get_mark(0, "[")
-		local finish = vim.api.nvim_buf_get_mark(0, "]")
-		vim.lsp.buf.range_formatting({}, start, finish)
-		vim.go.operatorfunc = old_func
-		_G.op_func_formatting = nil
-	end
-	vim.go.operatorfunc = "v:lua.op_func_formatting"
-	vim.api.nvim_feedkeys("g@", "n", false)
-end
-
-vim.api.nvim_set_keymap("n", "gm", "<cmd>lua format_range_operator()<CR>", { noremap = true })
-
-vim.api.nvim_create_autocmd("CursorHold", {
-	buffer = bufnr,
-	callback = function()
-		local opts = {
-			focusable = false,
-			close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-			border = "single",
-			source = "if_many",
-			prefix = " ",
-			header = "",
-			scope = "cursor",
-			focus = false,
-		}
-		vim.diagnostic.open_float(nil, opts)
-	end,
 })
