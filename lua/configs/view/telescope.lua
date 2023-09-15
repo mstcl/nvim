@@ -174,6 +174,7 @@ telescope.setup({
 			layout_config = flex_layout,
 		},
 		frecency = {
+			use_sqlite = false,
 			layout_strategy = "flex",
 			layout_config = flex_layout,
             disable_devicons = true,
@@ -182,7 +183,7 @@ telescope.setup({
 				["conf"] = "~/.config",
 				["nvim"] = "~/.config/nvim",
 				["data"] = "~/.local/share",
-				["projects"] = "/media3/projects",
+				["projects"] = "~/projects",
 				["bimbox"] = "~/bimbox",
 			},
 		},
