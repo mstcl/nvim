@@ -120,8 +120,8 @@ return {
 			"sirver/ultisnips",
 		},
 		config = function()
-			require('configs.editing.tabout')
-		end
+			require("configs.editing.tabout")
+		end,
 	},
 	{
 		-- Highlight brackets when inside block
@@ -153,4 +153,24 @@ return {
 		event = "CursorMoved",
 		opts = {},
 	},
+	{
+		-- Invert toggler
+		"nguyenvukhang/nvim-toggler",
+		lazy = true,
+		event = "VeryLazy",
+		opts = {
+			remove_default_keybinds = true,
+		},
+	},
+	{
+		-- Context at end of block
+		"code-biscuits/nvim-biscuits",
+		lazy = true,
+		event = "VeryLazy",
+		opts = {
+			show_on_start = true,
+			cursor_line_only = true,
+			prefix_string = " □ "
+		}
+	}
 }

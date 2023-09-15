@@ -2,7 +2,7 @@
 return {
 	{
 		-- Colorscheme
-		dir = "/media3/projects/dmg/",
+		dir = "/hades/projects/dmg/",
 		name = "dmg",
 		lazy = false,
 		priority = 1000,
