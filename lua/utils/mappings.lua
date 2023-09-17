@@ -205,7 +205,9 @@ opts.desc = "Browse files in current directory"
 map("n", "<leader>y", "<cmd>Telescope file_browser path=%:p:h<CR>", opts)
 
 opts.desc = "Enter Zen mode"
-map("n", "<leader>z", "<cmd>ZenMode<CR>", opts)
+map("n", "<leader>zz", "<cmd>ZenMode<CR>", opts)
+opts.desc = "Jump to directory with zoxide"
+map("n", "<leader>zx", "<cmd>Telescope zoxide list<CR>", opts)
 
 opts.desc = "Live grep workspace"
 map("n", "<leader>/", "<cmd>Telescope live_grep<CR>", opts)

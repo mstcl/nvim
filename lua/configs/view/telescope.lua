@@ -180,6 +180,9 @@ telescope.setup({
 			layout_strategy = "flex",
 			layout_config = flex_layout,
 		},
+		zoxide = {
+			prompt_title = "Zoxide",
+		},
 		frecency = {
 			use_sqlite = false,
 			layout_strategy = "flex",
