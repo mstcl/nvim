@@ -16,7 +16,7 @@ toggleterm.setup({
 	shade_filetypes = {},
 	autochdir = false,
 	shade_terminals = false,
-	shading_factor = "2",
+	shading_factor = "1",
 	highlights = {
 		Normal = {
 			link = "Floaterm",
