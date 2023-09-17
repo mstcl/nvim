@@ -92,7 +92,7 @@ vim.cmd([[set fillchars+=eob:\ ,vert:│,foldopen:⏷,foldclose:▸,foldsep:│,
 vim.cmd([[set listchars=tab:\ \ ▸,extends:›,precedes:‹,nbsp:∩,eol:¶,trail:×,lead:\ ,space:·,multispace:···+]])
 set.showbreak = "↳"
 
-set.completeopt = { "menu", "menuone", "noselect" }
+set.completeopt = { "menu", "menuone", "noselect", "noinsert" }
 set.shortmess = set.shortmess + "OosatTcI"
 set.swapfile = false
 set.path = set.path + "**"
