@@ -65,8 +65,9 @@ cmp.setup({
 			vim.fn["UltiSnips#Anon"](args.body)
 		end,
 	},
+	preselect = cmp.PreselectMode.None,
 	completion = {
-		completeopt = "menu,menuone,noinsert",
+		completeopt = "menu,menuone,noinsert,noselect",
 	},
 	cmp.setup.filetype({ "markdown" }, {
 		sources = {
