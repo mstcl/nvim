@@ -48,7 +48,8 @@ local time = greetings()
 
 starter.setup({
 	items = {
-		starter.sections.recent_files(6, false, false),
+		starter.sections.recent_files(5, true, false),
+		starter.sections.recent_files(3, false, false),
 		telescope(),
 		plugin_actions(),
 		starter.sections.builtin_actions(),
