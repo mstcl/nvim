@@ -49,7 +49,6 @@ telescope.setup({
 		layout_config = {
 			horizontal = {
 				prompt_position = "top",
-				preview_width = 0.55,
 			},
 			vertical = {
 				prompt_position = "top",
@@ -63,19 +62,12 @@ telescope.setup({
 		color_devicons = false,
 		sorting_strategy = "ascending",
 		winblend = 0,
-		file_ignore_patterns = {
-			"steam",
-			"dosdevices",
-			"drive_c",
-			"compatdata",
-			".cache",
-		},
 	},
 	pickers = {
 		buffers = {
 			layout_strategy = "center",
 			sort_lastused = true,
-            disable_devicons = true,
+			disable_devicons = true,
 			previewer = false,
 			mappings = {
 				i = {
@@ -88,18 +80,33 @@ telescope.setup({
 		},
 		find_files = {
 			layout_strategy = "flex",
-            disable_devicons = true,
+			disable_devicons = true,
 			layout_config = flex_layout,
 			find_command = {
-				"rg",
-				"--no-ignore",
-				"--files",
-				"--hidden",
+				"fd",
+				"--type",
+				"file",
+				"--strip-cwd-prefix",
+				"--follow",
+				"--exclude",
+				"*.png*",
+				"--exclude",
+				"*.PNG",
+				"--exclude",
+				"*.pdf",
+				"--exclude",
+				"*.jpeg",
+				"--exclude",
+				"*.jpg",
+				"--exclude",
+				"*.svg",
+				"--exclude",
+				"*.pm",
 			},
 		},
 		oldfiles = {
 			layout_strategy = "flex",
-            disable_devicons = true,
+			disable_devicons = true,
 			layout_config = flex_layout,
 			previewer = false,
 		},
@@ -114,7 +121,7 @@ telescope.setup({
 		},
 		live_grep = {
 			layout_strategy = "flex",
-            disable_devicons = true,
+			disable_devicons = true,
 			layout_config = flex_layout,
 		},
 		git_commits = {
@@ -131,7 +138,7 @@ telescope.setup({
 		},
 		git_status = {
 			layout_strategy = "flex",
-            disable_devicons = true,
+			disable_devicons = true,
 			layout_config = flex_layout,
 			git_icons = {
 				added = "+",
@@ -150,7 +157,7 @@ telescope.setup({
 		},
 		file_browser = {
 			layout_strategy = "flex",
-            disable_devicons = true,
+			disable_devicons = true,
 			layout_config = flex_layout,
 			dir_icon = "",
 			git_status = true,
@@ -177,7 +184,7 @@ telescope.setup({
 			use_sqlite = false,
 			layout_strategy = "flex",
 			layout_config = flex_layout,
-            disable_devicons = true,
+			disable_devicons = true,
 			show_scores = false,
 			workspaces = {
 				["conf"] = "~/.config",
