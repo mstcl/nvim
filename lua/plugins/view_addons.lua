@@ -65,8 +65,14 @@ return {
 	{
 		-- Minimalist start screen
 		"echasnovski/mini.starter",
-		lazy = true,
-		event = "VimEnter",
+		cond = function()
+			if
+				vim.tbl_contains(vim.v.argv, "-R")
+			then
+				return false
+			end
+			return true
+		end,
 		priority = 100,
 		version = false,
 		config = function()
@@ -99,6 +105,7 @@ return {
 			},
 			{
 				"nvim-telescope/telescope-frecency.nvim",
+				commit = "fbda5d91d6e787f5977787fa4a81da5c8e22160a",
 			},
 		},
 	},
