@@ -56,6 +56,16 @@ local press = function(key)
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), "n", true)
 end
 
+local buffer_opts = {
+	get_bufnrs = function()
+		local bufs = {}
+		for _, win in ipairs(vim.api.nvim_list_wins()) do
+			bufs[vim.api.nvim_win_get_buf(win)] = true
+		end
+		return vim.tbl_keys(bufs)
+	end,
+}
+
 cmp.setup({
 	enabled = function()
 		return vim.g.cmp_toggle
@@ -76,15 +86,31 @@ cmp.setup({
 			{ name = "nvim_lsp" },
 			{
 				name = "buffer",
-				options = {
-					get_bufnrs = function()
-						local bufs = {}
-						for _, win in ipairs(vim.api.nvim_list_wins()) do
-							bufs[vim.api.nvim_win_get_buf(win)] = true
-						end
-						return vim.tbl_keys(bufs)
-					end,
-				},
+				options = buffer_opts,
+			},
+		},
+	}),
+	cmp.setup.filetype({ "quarto" }, {
+		sources = {
+			{ name = "quarto" },
+			{ name = "path" },
+			{ name = "ultisnips" },
+			{ name = "nvim_lsp" },
+			{
+				name = "buffer",
+				options = buffer_opts,
+			},
+		},
+	}),
+	cmp.setup.filetype({ "org" }, {
+		sources = {
+			{ name = "orgmode" },
+			{ name = "path" },
+			{ name = "ultisnips" },
+			{ name = "nvim_lsp" },
+			{
+				name = "buffer",
+				options = buffer_opts,
 			},
 		},
 	}),
@@ -99,11 +125,10 @@ cmp.setup({
         } ]]
 	},
 	sources = cmp.config.sources({
-		{ name = "orgmode" },
 		{ name = "ultisnips", priority = 9 },
 		{ name = "path" },
-		{ name = "nvim_lsp", priority = 8, group_index = 1 },
-		{ name = "buffer", group_index = 2 },
+		{ name = "nvim_lsp",  priority = 8,   group_index = 1 },
+		{ name = "buffer",    group_index = 2 },
 	}),
 	mapping = cmp.mapping.preset.insert({
 		["<C-d>"] = cmp.mapping.scroll_docs(-4),
