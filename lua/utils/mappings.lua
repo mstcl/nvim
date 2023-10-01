@@ -179,7 +179,7 @@ wk.register({
 opts.desc = "Toggle spell checking"
 map("n", "<leader>sp", ":setlocal spell! spelllang=en_gb<CR>", opts)
 opts.desc = "Show spell suggestion"
-map("n", "<leader>sf", "<cmd>Telescope spell_suggests<CR>", opts)
+map("n", "<leader>sf", "<cmd>Telescope spell_suggest<CR>", opts)
 
 opts.desc = "Show recent files"
 map("n", "<leader>t", "<cmd>Telescope frecency<CR>", opts)
