@@ -15,9 +15,9 @@ return {
 		"utilyre/barbecue.nvim",
 		lazy = true,
 		version = "*",
-		event = "BufEnter",
+		event = "LspAttach",
 		branch = "main",
-		dependencies = { "smiteshp/nvim-navic" },
+		dependencies = { { "smiteshp/nvim-navic", lazy = true, event = "VeryLazy" } },
 		config = function()
 			require("configs.lsp.barbecue")
 		end,
@@ -59,9 +59,9 @@ return {
 	},
 	{
 		-- Linter manager
-		"jose-elias-alvarez/null-ls.nvim",
+		"nvimtools/none-ls.nvim",
 		lazy = true,
-		event = "BufRead",
+		event = "VeryLazy",
 		config = function()
 			require("configs.lsp.null")
 		end,
@@ -75,6 +75,36 @@ return {
 			list = {
 				width = 0.5,
 			},
+		},
+	},
+	{
+		-- Inlay hints
+		"lvimuser/lsp-inlayhints.nvim",
+		lazy = true,
+		event = "LspAttach",
+		opts = {
+			inlay_hints = {
+				parameter_hints = {
+					show = false,
+				},
+				type_hints = {
+					show = true,
+					prefix = "\t",
+					separator = " ",
+					remove_colon_start = false,
+					remove_color_end = false,
+				},
+				highlight = "NonText",
+			},
+		},
+	},
+	{
+		-- Virtual text to show usage
+		"Wansmer/symbol-usage.nvim",
+		event = "BufReadPre",
+		opts = {
+			hl = { link = "StatusLineNC" },
+			vt_position = "above",
 		},
 	},
 }

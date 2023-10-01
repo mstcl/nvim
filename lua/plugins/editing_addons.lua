@@ -21,6 +21,7 @@ return {
 		lazy = true,
 		event = "InsertEnter",
 		dependencies = {
+			'jmbuhr/otter.nvim',
 			"ultisnips",
 			"quangnguyen30192/cmp-nvim-ultisnips",
 			"hrsh7th/cmp-nvim-lsp",
@@ -35,7 +36,7 @@ return {
 		-- Syntax aware comments & keybindings
 		"numToStr/Comment.nvim",
 		lazy = true,
-		event = "CursorMoved",
+		event = "VeryLazy",
 		opts = {},
 	},
 	{
@@ -53,6 +54,8 @@ return {
 	{
 		-- Plug and play automatically insert autopairs
 		"windwp/nvim-autopairs",
+		lazy = true,
+		event = "VeryLazy",
 		opts = {
 			fast_wrap = {
 				manual_position = false,
@@ -127,6 +130,7 @@ return {
 		-- Highlight brackets when inside block
 		"utilyre/sentiment.nvim",
 		version = "*",
+		lazy = true,
 		event = "VeryLazy",
 		opts = {
 			pairs = {
@@ -140,7 +144,7 @@ return {
 		-- Quick guessing indent for filetypes
 		"nmac427/guess-indent.nvim",
 		lazy = true,
-		event = "BufRead",
+		event = "VeryLazy",
 		opts = {
 			override_editorconfig = true,
 			auto_cmd = true,
@@ -150,7 +154,7 @@ return {
 		-- Force cursor to stay in place when doing certain visual motions
 		"gbprod/stay-in-place.nvim",
 		lazy = true,
-		event = "CursorMoved",
+		event = "VeryLazy",
 		opts = {},
 	},
 	{
@@ -170,7 +174,20 @@ return {
 		opts = {
 			show_on_start = true,
 			cursor_line_only = true,
-			prefix_string = " □ "
-		}
+			prefix_string = " □ ",
+			language_config = {
+				org = {
+					disabled = true
+				},
+				markdown = {
+					disabled = true
+				}
+			}
+		},
+	},
+	{
+		-- Automatically add f-strings
+		"chrisgrieser/nvim-puppeteer",
+		lazy = false,
 	},
 }

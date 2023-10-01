@@ -14,7 +14,7 @@ return {
 		-- Statusline
 		"nvimdev/galaxyline.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		event = {"VeryLazy"},
 		branch = "main",
 		config = function()
 			require("configs.ui.statusline")
@@ -57,8 +57,12 @@ return {
 		event = "VeryLazy",
 		lazy = true,
 		dependencies = {
-			"MunifTanjim/nui.nvim",
-			"rcarriga/nvim-notify",
+			{ "MunifTanjim/nui.nvim", lazy = true, event = "VeryLazy" },
+			{
+				"rcarriga/nvim-notify",
+				lazy = true,
+				event = "VeryLazy",
+			},
 		},
 		config = function()
 			require("configs.ui.noice")
@@ -86,20 +90,7 @@ return {
 		-- Highlight color blocks
 		"norcalli/nvim-colorizer.lua",
 		lazy = true,
-		ft = {
-			"html",
-			"css",
-			"sass",
-			"vim",
-			"lua",
-			"javascript",
-			"typescript",
-			"dosini",
-			"ini",
-			"conf",
-			"json",
-			"cfg",
-		},
+		event = "VeryLazy",
 		cmd = { "ColorizerToggle" },
 		config = function()
 			require("colorizer").setup()
@@ -111,7 +102,7 @@ return {
 		"kevinhwang91/nvim-ufo",
 		lazy = true,
 		event = "VeryLazy",
-		dependencies = { "kevinhwang91/promise-async", "neovim/nvim-lspconfig" },
+		dependencies = { "kevinhwang91/promise-async", lazy = true, event = "VeryLazy" },
 		config = function()
 			require("configs.ui.ufo")
 		end,
@@ -119,8 +110,10 @@ return {
 	{
 		-- Naively highlight word under cursor
 		"echasnovski/mini.cursorword",
-		event = "CursorMoved",
-		version = false,
+		-- "utsontungexpt/stcursorword",
+		lazy = true,
+		event = "VeryLazy",
 		opts = {},
+		version = false,
 	},
 }

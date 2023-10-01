@@ -5,7 +5,7 @@ return {
 		"lewis6991/gitsigns.nvim",
 		lazy = true,
 		event = "BufRead",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		dependencies = { { "nvim-lua/plenary.nvim", lazy = true, event = "VeryLazy" } },
 		config = function()
 			require("configs.sign.gitsigns")
 		end,
@@ -31,12 +31,14 @@ return {
 	{
 		-- Utility to hide numbers in foldcolumn
 		"luukvbaal/statuscol.nvim",
+		lazy = true,
+		event = "VeryLazy",
 		config = function()
 			local builtin = require("statuscol.builtin")
 			require("statuscol").setup({
 				segments = {
 					{ text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
-					{ text = { "%s" },                  click = "v:lua.ScSa" },
+					{ text = { "%s" }, click = "v:lua.ScSa" },
 					{
 						text = { builtin.lnumfunc, " " },
 						condition = { true, builtin.not_empty },
