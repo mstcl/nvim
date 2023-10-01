@@ -1,4 +1,4 @@
-local present, null_ls = pcall(require, "null-ls")
+local present, null_ls = pcall(require, "none-ls")
 local navic = require("nvim-navic")
 if not present then
 	return
