@@ -3,6 +3,8 @@ local navic = require("nvim-navic")
 if not present then
 	return
 end
+local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
 
 local handlers = {
 	["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" }),
@@ -12,27 +14,28 @@ local handlers = {
 	),
 }
 
-local function applyFoldsAndThenCloseAllFolds(bufnr, providerName)
+local function applyFoldsAndThenCloseAllFolds(providerName)
 	require("async")(function()
-		bufnr = bufnr or vim.api.nvim_get_current_buf()
+		local bufnr = vim.api.nvim_get_current_buf()
 		require("ufo").attach(bufnr)
-		local ok, ranges = pcall(await, require("ufo").getFolds(bufnr, providerName))
-		if ok and ranges then
-			ok = require("ufo").applyFolds(bufnr, ranges)
-		end
+		local ranges = await(require("ufo").getFolds(bufnr, providerName))
+		require("ufo").applyFolds(bufnr, ranges)
+		-- if ok then
+		-- 	require("ufo").closeAllFolds()
+		-- end
 	end)
 end
 
-local on_attach_fold_lsp = function(client, bufnr)
-	applyFoldsAndThenCloseAllFolds(bufnr, "lsp")
-	require("utils.mappings").lsp_keymaps(client, bufnr)
-	if client.server_capabilities.documentSymbolProvider then
-		navic.attach(client, bufnr)
-	end
-end
+local on_attach = function(client, bufnr)
+	local providerName
 
-local on_attach_fold_indent = function(client, bufnr)
-	applyFoldsAndThenCloseAllFolds(bufnr, "indent")
+	if client.server_capabilities.hoverProvider then
+		providerName = "lsp"
+	else
+		providerName = "indent"
+	end
+
+	applyFoldsAndThenCloseAllFolds(providerName)
 
 	local function buf_set_keymap(...)
 		vim.api.nvim_buf_set_keymap(bufnr, ...)
@@ -59,9 +62,18 @@ local on_attach_fold_indent = function(client, bufnr)
 	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = false })<CR>", opts)
 	opts.desc = "Previous diagnostic"
 	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = false })<CR>", opts)
+	local barbecue = augroup("barbecue", { clear = true })
 	if client.server_capabilities.documentSymbolProvider then
 		navic.attach(client, bufnr)
+		autocmd({ "WinResized", "BufWinEnter", "CursorHold", "InsertLeave" }, {
+			buffer = 0,
+			group = barbecue,
+			callback = function()
+				require("barbecue.ui").update()
+			end,
+		})
 	end
+	require("lsp-inlayhints").on_attach(client, bufnr)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -72,24 +84,11 @@ capabilities.textDocument.foldingRange = {
 }
 capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
-local servers_fold_indent = { "clangd", "bashls", "jedi_language_server" }
+local servers = { "clangd", "bashls", "jedi_language_server", "vimls", "cssls", "marksman" }
 
-local servers_fold_lsp = { "vimls", "cssls", "gopls", "marksman" }
-
-for _, server in ipairs(servers_fold_indent) do
+for _, server in ipairs(servers) do
 	lsp[server].setup({
-		on_attach = on_attach_fold_indent,
-		capabilities = capabilities,
-		handlers = handlers,
-		flags = {
-			debounce_text_changes = 150,
-		},
-	})
-end
-
-for _, server in ipairs(servers_fold_lsp) do
-	lsp[server].setup({
-		on_attach = on_attach_fold_lsp,
+		on_attach = on_attach,
 		capabilities = capabilities,
 		handlers = handlers,
 		flags = {
@@ -107,7 +106,7 @@ lsp.ruff_lsp.setup({
 })
 
 lsp.texlab.setup({
-	on_attach = on_attach_fold_lsp,
+	on_attach = on_attach,
 	capabilities = capabilities,
 	handlers = handlers,
 	flags = {
@@ -153,7 +152,7 @@ lsp.texlab.setup({
 })
 
 lsp.lua_ls.setup({
-	on_attach = on_attach_fold_lsp,
+	on_attach = on_attach,
 	capabilities = capabilities,
 	handlers = handlers,
 	flags = {
@@ -175,6 +174,28 @@ lsp.lua_ls.setup({
 			},
 			telemetry = {
 				enable = false,
+			},
+		},
+	},
+})
+
+lsp.gopls.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+	handlers = handlers,
+	flags = {
+		debounce_text_changes = 150,
+	},
+	settings = {
+		gopls = {
+			hints = {
+				assignVariableTypes = true,
+				compositeLiteralFields = true,
+				compositeLiteralTypes = true,
+				constantValues = true,
+				functionTypeParameters = true,
+				parameterNames = true,
+				rangeVariableTypes = true,
 			},
 		},
 	},
@@ -220,6 +241,9 @@ for i, kind in ipairs(kinds) do
 end
 
 vim.diagnostic.config({
+	inlay_hints = {
+		enabled = true,
+	},
 	virtual_text = {
 		spacing = 2,
 		prefix = "",
@@ -230,7 +254,8 @@ vim.diagnostic.config({
 				return string.format("! %s", diagnostic.message)
 			elseif diagnostic.severity == vim.diagnostic.severity.INFO then
 				return string.format("i %s", diagnostic.message)
-			else return string.format("? %s", diagnostic.message)
+			else
+				return string.format("? %s", diagnostic.message)
 			end
 		end,
 		suffix = " ",
