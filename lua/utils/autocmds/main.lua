@@ -28,6 +28,18 @@ autocmd({ "BufReadPost" }, {
 	command = "silent! normal! g`\"zv' zz",
 })
 
+local saveFold = augroup("saveFold", { clear = true })
+autocmd({ "BufWinLeave" }, {
+	pattern = "*.*",
+	group = saveFold,
+	command = "silent mkview",
+})
+autocmd({ "BufWinEnter" }, {
+	pattern = "*.*",
+	group = saveFold,
+	command = "silent! loadview",
+})
+
 local editing = augroup("editing", { clear = true })
 autocmd({ "BufEnter" }, {
 	pattern = "*",
@@ -86,7 +98,7 @@ autocmd({ "BufReadPost" }, {
 
 local mdoptions = augroup("mdoptions", { clear = true })
 autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = { "*.md", "*.txt", "*.tex" },
+	pattern = { "*.md", "*.txt", "*.tex", "*.org" },
 	group = mdoptions,
 	callback = function()
 		setlocal.list = false
@@ -107,6 +119,7 @@ autocmd({ "Filetype" }, {
 	pattern = "org",
 	group = org,
 	callback = function()
+		setlocal.expandtab = true
 		setlocal.list = false
 		setlocal.conceallevel = 2
 		setlocal.concealcursor = "nc"
@@ -148,15 +161,6 @@ autocmd({ "InsertLeave", "InsertEnter" }, {
 	group = showpaste,
 	callback = function()
 		call("ShowPaste", {})
-	end,
-})
-
-local barbecue = augroup("barbecue", { clear = true })
-autocmd({ "WinResized", "BufWinEnter", "CursorHold", "InsertLeave" }, {
-	pattern = { "*.lua", "*.py", "*.tex", "*.vim", "*.sh", "*.cpp" },
-	group = barbecue,
-	callback = function()
-		require("barbecue.ui").update()
 	end,
 })
 
