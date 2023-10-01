@@ -5,7 +5,7 @@ return {
 		"godlygeek/tabular",
 		lazy = true,
 		dependencies = { "vim-markdown" },
-		ft = { "markdown" },
+		cmd = { "Tabularize" }
 	},
 	{
 		-- Display wordcount under section header
@@ -24,15 +24,18 @@ return {
 		-- Add background to some blocks
 		"lukas-reineke/headlines.nvim",
 		lazy = true,
-		ft = { "markdown", "org" },
-		dependencies = "nvim-treesitter/nvim-treesitter",
+		event = "VeryLazy",
 		opts = {
 			markdown = {
 				headline_highlights = {},
 				fat_headlines = false,
 			},
 			org = {
-				headline_highlights = { "Headline", "Headline1", "Headline2" },
+				fat_headlines = true,
+				codeblock_highlight = "CodeBlock",
+				dash_highlight = "Dash",
+				dash_string = "-",
+				quote_highlight = "Quote",
 			},
 		},
 	},
@@ -40,6 +43,6 @@ return {
 		-- Add TOC
 		"mzlogin/vim-markdown-toc",
 		lazy = true,
-		ft = {"markdown"}
+		ft = { "markdown" },
 	},
 }

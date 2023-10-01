@@ -4,18 +4,18 @@ return {
 		-- Treesitter engine
 		"nvim-treesitter/nvim-treesitter",
 		lazy = true,
-		event = { "BufWinEnter" },
+		event = "VeryLazy",
 		build = ":TSUpdate",
 		config = function()
 			require("configs.syntax.treesitter")
 		end,
 		dependencies = {
-			"filNaj/tree-setter",
+			{ "filNaj/tree-setter", lazy = true, event = "VeryLazy" },
 			{
 				"nvim-treesitter/playground",
 				cmd = "TSPlaygroundToggle",
 			},
-			"JoosepAlviste/nvim-ts-context-commentstring",
+			{ "JoosepAlviste/nvim-ts-context-commentstring", lazy = true, event = "VeryLazy" },
 		},
 	},
 	{
@@ -57,7 +57,7 @@ return {
 		-- Orgmode syntax
 		"nvim-orgmode/orgmode",
 		lazy = true,
-		event = "VeryLazy",
+		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
 		config = function()
 			require("configs.syntax.orgmode")
 		end,
@@ -72,8 +72,9 @@ return {
 		-- Org bullet
 		"akinsho/org-bullets.nvim",
 		lazy = true,
-		ft = "org",
+		event = "VeryLazy",
 		opts = {
+			indent = true,
 			symbols = {
 				list = "•",
 				headlines = { "◎", "○", "●", "◌" },
@@ -85,4 +86,22 @@ return {
 			},
 		},
 	},
+	{
+		-- QUARTO setup
+		"quarto-dev/quarto-nvim",
+		lazy = true,
+		ft = 'quarto',
+		opts = {
+			lspFeatures = {
+				languages = {'python', 'bash', 'html'},
+			},
+			keymap = {
+				hover = "K",
+				definition = "<leader>qd",
+				type_definition = "<leader>qD",
+				rename = "<leader>r",
+				format = "<leader><space>"
+			}
+		}
+	}
 }

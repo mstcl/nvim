@@ -22,6 +22,7 @@ return {
 		-- Show debugging variable values as virtual text
 		"theHamsta/nvim-dap-virtual-text",
 		lazy = true,
+		event = "VeryLazy",
 		dependencies = "nvim-dap",
 		opts = {},
 	},
@@ -29,6 +30,7 @@ return {
 		-- Show available DAP information panels
 		"rcarriga/nvim-dap-ui",
 		lazy = true,
+		event = "VeryLazy",
 		dependencies = { "mfussenegger/nvim-dap" },
 	},
 }
