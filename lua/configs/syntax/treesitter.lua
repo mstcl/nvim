@@ -18,6 +18,7 @@ ts.setup({
 		"cmake",
 		"latex",
 		"lua",
+		"markdown_inline",
 		"bash",
 		"diff",
 		"dockerfile",
@@ -33,13 +34,14 @@ ts.setup({
 		"comment",
 		"org",
 		"rust",
+		"xml",
 		"go",
 	},
 	highlight = {
 		enable = true,
 		use_languagetree = true,
 		additional_vim_regex_highlighting = { "org" },
-		disable = { "latex", "markdown" },
+		disable = { "latex" },
 	},
 	autopairs = {
 		enable = true,
@@ -83,5 +85,4 @@ ts.setup({
 	},
 })
 
-vim.cmd("autocmd Filetype * silent! TSEnableAll rainbow")
-vim.cmd("autocmd VimEnter *.zsh silent! TSBufDisable highlight")
+require('utils.autocmds.treesitter')
