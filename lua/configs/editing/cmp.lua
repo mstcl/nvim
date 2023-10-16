@@ -82,8 +82,8 @@ cmp.setup({
 	cmp.setup.filetype({ "markdown" }, {
 		sources = {
 			{ name = "path" },
-			{ name = "ultisnips" },
-			{ name = "nvim_lsp" },
+			{ name = "ultisnips", priority = 9 },
+			{ name = "nvim_lsp",  priority = 8, group_index = 1 },
 			{
 				name = "buffer",
 				options = buffer_opts,
@@ -92,10 +92,10 @@ cmp.setup({
 	}),
 	cmp.setup.filetype({ "quarto" }, {
 		sources = {
-			{ name = "quarto" },
 			{ name = "path" },
-			{ name = "ultisnips" },
-			{ name = "nvim_lsp" },
+			{ name = "ultisnips",        priority = 9 },
+			{ name = "nvim_lsp",         priority = 8, group_index = 1 },
+			{ name = "pandoc_references" },
 			{
 				name = "buffer",
 				options = buffer_opts,
@@ -106,7 +106,7 @@ cmp.setup({
 		sources = {
 			{ name = "orgmode" },
 			{ name = "path" },
-			{ name = "ultisnips" },
+			{ name = "ultisnips", priority = 9 },
 			{ name = "nvim_lsp" },
 			{
 				name = "buffer",
@@ -127,8 +127,8 @@ cmp.setup({
 	sources = cmp.config.sources({
 		{ name = "ultisnips", priority = 9 },
 		{ name = "path" },
-		{ name = "nvim_lsp",  priority = 8,   group_index = 1 },
-		{ name = "buffer",    group_index = 2 },
+		{ name = "nvim_lsp",  priority = 8,    group_index = 1 },
+		{ name = "buffer",    group_index = 2, keyword_length = 5, max_item_count = 3 },
 	}),
 	mapping = cmp.mapping.preset.insert({
 		["<C-d>"] = cmp.mapping.scroll_docs(-4),
@@ -173,13 +173,6 @@ cmp.setup({
 			item.menu = "   (" .. item.kind .. ")"
 			item.kind = icon
 			item.abbr = string.sub(item.abbr, 1, 20)
-			--[[ item.abbr = item.abbr:sub(1, -2)
-			item.kind = string.format("%s %s", kind_icons[item.kind], item.kind)
-			item.menu = ({
-				buffer = "[﬘]",
-				nvim_lsp = "[]",
-				ultisnips = "[]",
-			})[entry.source.name] ]]
 			return item
 		end,
 	},
