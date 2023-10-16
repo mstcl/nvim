@@ -84,7 +84,7 @@ capabilities.textDocument.foldingRange = {
 }
 capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
-local servers = { "clangd", "bashls", "jedi_language_server", "vimls", "cssls", "marksman" }
+local servers = { "clangd", "bashls", "jedi_language_server", "vimls", "cssls" }
 
 for _, server in ipairs(servers) do
 	lsp[server].setup({
@@ -96,6 +96,13 @@ for _, server in ipairs(servers) do
 		},
 	})
 end
+
+lsp.marksman.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+	filetypes = { "markdown", "quarto" },
+	root_dir = require("lspconfig.util").root_pattern(".git", ".marksman.toml", "_quarto.yml"),
+})
 
 lsp.ruff_lsp.setup({
 	capabilities = capabilities,
