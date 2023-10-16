@@ -276,26 +276,17 @@ function M.lsp_keymaps(client, bufnr)
 		opts.desc = "Show floating diagnostic"
 		map("n", "<leader>qq", vim.diagnostic.open_float, opts)
 	end
-	if client.server_capabilities.codeActionProvider then
-		opts.desc = "Show code actions"
-		map({ "n", "v" }, "<leader>qc", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-	end
-	if client.server_capabilities.hoverProvider then
-		opts.desc = "Documentation"
-		bmap("n", "<C-K>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-	end
-	if client.server_capabilities.definitionProvider then
-		opts.desc = "Buffer declaration"
-		bmap("n", "<Leader>qD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-	end
-	if client.server_capabilities.documentFormattingProvider then
-		opts.desc = "Format buffer"
-		bmap("n", "<Leader><space>", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
-	end
-	if client.server_capabilities.renameProvider then
-		opts.desc = "Rename object"
-		bmap("n", "<Leader>r", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-	end
+	opts.desc = "Show code actions"
+	map({ "n", "v" }, "<leader>qc", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+	opts.desc = "Documentation"
+	bmap("n", "<C-K>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
+	opts.desc = "Buffer declaration"
+	bmap("n", "<Leader>qD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+	opts.desc = "Format buffer"
+	bmap("n", "<Leader><space>", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
+	bmap("v", "<Leader><space>", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
+	opts.desc = "Rename object"
+	bmap("n", "<Leader>r", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 	opts.desc = "Next diagnostic"
 	bmap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev({ wrap = false, float = true })<CR>", opts)
 	opts.desc = "Previous diagnostic"

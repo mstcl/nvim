@@ -11,7 +11,7 @@ return {
 		-- Display wordcount under section header
 		"dimfeld/section-wordcount.nvim",
 		lazy = true,
-		ft = { "markdown" },
+		ft = { "markdown" , "quarto"},
 		config = function()
 			require("section-wordcount").setup({
 				highlight = "NonText",
@@ -19,30 +19,5 @@ return {
 			})
 			require("section-wordcount").wordcounter({})
 		end,
-	},
-	{
-		-- Add background to some blocks
-		"lukas-reineke/headlines.nvim",
-		lazy = true,
-		event = "VeryLazy",
-		opts = {
-			markdown = {
-				headline_highlights = {},
-				fat_headlines = false,
-			},
-			org = {
-				fat_headlines = true,
-				codeblock_highlight = "CodeBlock",
-				dash_highlight = "Dash",
-				dash_string = "-",
-				quote_highlight = "Quote",
-			},
-		},
-	},
-	{
-		-- Add TOC
-		"mzlogin/vim-markdown-toc",
-		lazy = true,
-		ft = { "markdown" },
 	},
 }

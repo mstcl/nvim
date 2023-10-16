@@ -44,16 +44,6 @@ return {
 		ft = { "tex" },
 	},
 	{
-		-- Markdown syntax
-		"mstcl/vim-markdown",
-		lazy = true,
-		branch = "main",
-		ft = { "markdown" },
-		init = function()
-			require("configs.syntax.markdown")
-		end,
-	},
-	{
 		-- Orgmode syntax
 		"nvim-orgmode/orgmode",
 		lazy = true,
@@ -89,6 +79,7 @@ return {
 	{
 		-- QUARTO setup
 		"quarto-dev/quarto-nvim",
+		dev = false,
 		lazy = true,
 		ft = 'quarto',
 		opts = {

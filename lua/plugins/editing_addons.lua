@@ -21,12 +21,13 @@ return {
 		lazy = true,
 		event = "InsertEnter",
 		dependencies = {
-			'jmbuhr/otter.nvim',
-			"ultisnips",
-			"quangnguyen30192/cmp-nvim-ultisnips",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-buffer",
+			{"jmbuhr/otter.nvim", lazy = true, event = "VeryLazy"},
+			{"ultisnips", lazy = true, event = "VeryLazy"},
+			{"quangnguyen30192/cmp-nvim-ultisnips", lazy = true, event = "VeryLazy"},
+			{"hrsh7th/cmp-nvim-lsp", lazy = true, event = "VeryLazy"},
+			{"hrsh7th/cmp-path", lazy = true, event = "VeryLazy"},
+			{"hrsh7th/cmp-buffer", lazy = true, event = "VeryLazy"},
+			{ "jmbuhr/cmp-pandoc-references", lazy = true, event = "VeryLazy" },
 		},
 		config = function()
 			require("configs.editing.cmp")
@@ -177,12 +178,12 @@ return {
 			prefix_string = " □ ",
 			language_config = {
 				org = {
-					disabled = true
+					disabled = true,
 				},
 				markdown = {
-					disabled = true
-				}
-			}
+					disabled = true,
+				},
+			},
 		},
 	},
 	{

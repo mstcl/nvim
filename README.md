@@ -1,6 +1,6 @@
 # NeoBim
 
-__lckdscl's opinionated configuration of Neovim.__
+**lckdscl's opinionated configuration of Neovim.**
 
 <a href="https://dotfyle.com/mstcl/neobim"><img src="https://dotfyle.com/mstcl/neobim/badges/plugins?style=flat-square" /></a>
 <a href="https://dotfyle.com/mstcl/neobim"><img src="https://dotfyle.com/mstcl/neobim/badges/leaderkey?style=flat-square" /></a>
@@ -14,31 +14,37 @@ Requires [lazy.nvim](https://github.com/folke/lazy.nvim) as the plugin manager.
 
 ## Configured language servers
 
-- Python (jedi)
-- Lua (luals)
-- Tex (texlab)
-- Vim (vimls)
-- Bash (bashls)
-- C/C++ (clangd)
-- CSS/SCSS/LESS (cssls)
-- Markdown (marksman)
+-   Python (jedi)
+-   Lua (luals)
+-   Tex (texlab)
+-   Vim (vimls)
+-   Bash (bashls)
+-   C/C++ (clangd)
+-   CSS/SCSS/LESS (cssls)
+-   Markdown (marksman)
+-   Typst
 
 ## Other linters
 
-- prettierd
-- black
-- chktex
-- cppcheck
-- codespell
-- vint
-- revive
-- proselint
-- mypy
-- pylint
-- shellcheck
-- stylua
-- latexindent
-- gitsigns
+-   prettierd
+-   prettier
+-   black
+-   beautysh
+-   bibclean
+-   cbfmt
+-   chktex
+-   cppcheck
+-   codespell
+-   remark
+-   vint
+-   revive
+-   proselint
+-   mypy
+-   pylint
+-   shellcheck
+-   stylua
+-   latexindent
+-   gitsigns
 
 ## Navigating
 
@@ -70,17 +76,17 @@ lazygit. I typically zoxide into the directory anyway.
 ### After entering the editor
 
 I often find myself opening nvim before I know what I want to edit (my fingers
-  are faster than my brain sometimes). If I did this not in the working
+are faster than my brain sometimes). If I did this not in the working
 directory, the choices are (in order of priority):
 
-1. Use Frecency, which uses an algorithm to list you files you edit often. I
-   could use it as is (mapped to `<leader>t`) and start typing, but tags are very powerful. I have my config, nvim, projects, etc. declared in `./lua/configs/view/telescope.lua` as tags to use the algorithm on those 'workspaces'. To find my files with the ranking algorithm in my `nvim` configuration directory, I would do `<leader>t` then type `:nvim:` and then the fuzzy search query.
+1.  Use Frecency, which uses an algorithm to list you files you edit often. I
+    could use it as is (mapped to `<leader>t`) and start typing, but tags are very powerful. I have my config, nvim, projects, etc. declared in `./lua/configs/view/telescope.lua` as tags to use the algorithm on those 'workspaces'. To find my files with the ranking algorithm in my `nvim` configuration directory, I would do `<leader>t` then type `:nvim:` and then the fuzzy search query.
 
-2. If Frecency fails, use the telescope zoxide integration to move into that directory first, then use the built-in picker `find_files` to fuzzy search. Don't do `:e relative/path/to/file` here because `find_files` does depth traversal already.
+2.  If Frecency fails, use the telescope zoxide integration to move into that directory first, then use the built-in picker `find_files` to fuzzy search. Don't do `:e relative/path/to/file` here because `find_files` does depth traversal already.
 
-3. If this file isn't in a directory recognized by zoxide, then just use `find_files` straight away if I'm in `~/`. The `fd` command used follows ignore rules from `~/.config/fd/ignore`, so only files belong to this will be searched, although it is hopefully liberal enough to find most things.
+3.  If this file isn't in a directory recognized by zoxide, then just use `find_files` straight away if I'm in `~/`. The `fd` command used follows ignore rules from `~/.config/fd/ignore`, so only files belong to this will be searched, although it is hopefully liberal enough to find most things.
 
-4. Failing the above, result to tab complete with `:e /path/to/file`.
+4.  Failing the above, result to tab complete with `:e /path/to/file`.
 
 > What about oil.nvim and telescope file browser plugin?
 
