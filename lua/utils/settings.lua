@@ -86,10 +86,13 @@ set.scrolloff = 1
 vim.cmd([[set spell spelllang=en_gb]])
 set.spell = false
 set.encoding = "utf-8"
+set.spelloptions = "camel"
 
 set.list = true
 vim.cmd([[set fillchars+=eob:\ ,vert:│,foldopen:⏷,foldclose:▸,foldsep:│,fold:\ ,diff:╱]])
-vim.cmd([[set listchars=tab:\ \ ▸,extends:›,precedes:‹,nbsp:∩,eol:¶,trail:×,lead:\ ,space:·,multispace:···+]])
+vim.cmd(
+	[[set listchars=tab:\ \ ▸,extends:›,precedes:‹,nbsp:∩,eol:¶,trail:×,lead:\ ,space:·,multispace:···+]]
+)
 set.showbreak = "↳"
 
 set.completeopt = { "menu", "menuone", "noselect", "noinsert" }
