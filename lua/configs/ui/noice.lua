@@ -73,10 +73,18 @@ noice.setup({
 		{
 			filter = {
 				event = "msg_show",
+				kind = "lua_error",
+				find = "UfoFallbackException",
+			},
+			opts = { skip = true },
+		},
+		{
+			filter = {
+				event = "msg_show",
 				kind = "",
 				find = "[w]",
 			},
-			opts = { skip = true }
+			opts = { skip = true },
 		},
 		{
 			view = "split",
