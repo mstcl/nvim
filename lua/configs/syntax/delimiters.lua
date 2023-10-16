@@ -1,20 +1,20 @@
-local present, rainbow = pcall(require, "rainbow-delimiters")
+local present, rainbow = pcall(require, "rainbow-delimiters.setup")
 if not present then
 	return
 end
 
-require("rainbow-delimiters.setup")({
-	strategy = {
-		[""] = rainbow.strategy["global"],
-		latex = function()
-			if vim.fn.line("$") > 10000 then
-				return nil
-			elseif vim.fn.line("$") > 1000 then
-				return rainbow.strategy["global"]
-			end
-			return rainbow.strategy["local"]
-		end,
-	},
+rainbow.setup({
+	-- strategy = {
+	-- 	[""] = rainbow.strategy["global"],
+	-- 	latex = function()
+	-- 		if vim.fn.line("$") > 10000 then
+	-- 			return nil
+	-- 		elseif vim.fn.line("$") > 1000 then
+	-- 			return rainbow.strategy["global"]
+	-- 		end
+	-- 		return rainbow.strategy["local"]
+	-- 	end,
+	-- },
 	query = {
 		[""] = "rainbow-delimiters",
 		latex = "rainbow-blocks",
