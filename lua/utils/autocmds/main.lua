@@ -98,7 +98,7 @@ autocmd({ "BufReadPost" }, {
 
 local mdoptions = augroup("mdoptions", { clear = true })
 autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = { "*.md", "*.txt", "*.tex", "*.org" },
+	pattern = { "*.md", "*.txt", "*.tex", "*.org" , "*.qmd"},
 	group = mdoptions,
 	callback = function()
 		setlocal.list = false
