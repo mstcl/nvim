@@ -84,7 +84,14 @@ capabilities.textDocument.foldingRange = {
 }
 capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
-local servers = { "clangd", "bashls", "jedi_language_server", "vimls", "cssls" }
+local servers = {
+	"clangd",
+	"bashls",
+	"jedi_language_server",
+	"vimls",
+	"cssls",
+	"typst_lsp",
+}
 
 for _, server in ipairs(servers) do
 	lsp[server].setup({
