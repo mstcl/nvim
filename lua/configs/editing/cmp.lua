@@ -2,6 +2,10 @@ local present, cmp = pcall(require, "cmp")
 if not present then
 	return
 end
+local snip_status_ok, luasnip = pcall(require, "luasnip")
+if not snip_status_ok then
+	return
+end
 
 local kind_icons = {
 	Namespace = "ξ",
@@ -72,8 +76,12 @@ cmp.setup({
 	end,
 	snippet = {
 		expand = function(args)
-			vim.fn["UltiSnips#Anon"](args.body)
+			luasnip.lsp_expand(args.body)
 		end,
+	},
+	confirm_opts = {
+		behavior = cmp.ConfirmBehavior.Replace,
+		select = false,
 	},
 	preselect = cmp.PreselectMode.None,
 	completion = {
@@ -82,8 +90,8 @@ cmp.setup({
 	cmp.setup.filetype({ "markdown" }, {
 		sources = {
 			{ name = "path" },
-			{ name = "ultisnips", priority = 9 },
-			{ name = "nvim_lsp",  priority = 8, group_index = 1 },
+			{ name = "luasnip",  priority = 9 },
+			{ name = "nvim_lsp", priority = 8, group_index = 1 },
 			{
 				name = "buffer",
 				options = buffer_opts,
@@ -93,7 +101,7 @@ cmp.setup({
 	cmp.setup.filetype({ "quarto" }, {
 		sources = {
 			{ name = "path" },
-			{ name = "ultisnips",        priority = 9 },
+			{ name = "luasnip",          priority = 9 },
 			{ name = "nvim_lsp",         priority = 8, group_index = 1 },
 			{ name = "pandoc_references" },
 			{
@@ -106,7 +114,7 @@ cmp.setup({
 		sources = {
 			{ name = "orgmode" },
 			{ name = "path" },
-			{ name = "ultisnips", priority = 9 },
+			{ name = "luasnip", priority = 9 },
 			{ name = "nvim_lsp" },
 			{
 				name = "buffer",
@@ -116,19 +124,12 @@ cmp.setup({
 	}),
 	sorting = {
 		priority_weight = 1.0,
-		--[[ comparators = {
-            compare.locality,
-            compare.recently_used,
-            compare.score,
-            compare.offset,
-            compare.order,
-        } ]]
 	},
 	sources = cmp.config.sources({
-		{ name = "ultisnips", priority = 9 },
+		{ name = "luasnip",  priority = 9 },
 		{ name = "path" },
-		{ name = "nvim_lsp",  priority = 8,    group_index = 1 },
-		{ name = "buffer",    group_index = 2, keyword_length = 5, max_item_count = 3 },
+		{ name = "nvim_lsp", priority = 8,    group_index = 1 },
+		{ name = "buffer",   group_index = 2, keyword_length = 5, max_item_count = 3 },
 	}),
 	mapping = cmp.mapping.preset.insert({
 		["<C-d>"] = cmp.mapping.scroll_docs(-4),
@@ -136,8 +137,8 @@ cmp.setup({
 		["<C-e>"] = cmp.mapping.close(),
 		["<CR>"] = cmp.mapping.confirm({ select = true }),
 		["<C-i>"] = function(fallback)
-			if vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
-				press("<ESC>:call UltiSnips#JumpForwards()<CR>")
+			if luasnip.expand_or_jumpable() then
+				luasnip.expand_or_jump()
 			elseif cmp.visible() then
 				cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
 			elseif has_any_words_before() then
@@ -147,8 +148,8 @@ cmp.setup({
 			end
 		end,
 		["<Tab>"] = function(fallback)
-			if vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
-				press("<ESC>:call UltiSnips#JumpForwards()<CR>")
+			if luasnip.expand_or_jumpable() then
+				luasnip.expand_or_jump()
 			elseif cmp.visible() then
 				cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
 			else
@@ -156,8 +157,8 @@ cmp.setup({
 			end
 		end,
 		["<S-Tab>"] = function(fallback)
-			if vim.fn["UltiSnips#CanJumpBackwards"]() == 1 then
-				press("<ESC>:call UltiSnips#JumpBackwards()<CR>")
+			if luasnip.jumpable(-1) then
+				luasnip.jump(-1)
 			elseif cmp.visible() then
 				cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
 			else
@@ -180,7 +181,6 @@ cmp.setup({
 		completion = {
 			side_padding = 0,
 			scrollbar = false,
-			-- border = border "CmpBorder",
 		},
 		documentation = {
 			border = "single",
@@ -195,4 +195,3 @@ cmp.setup({
 })
 
 vim.g.cmp_toggle = true
-vim.cmd("let g:ultisnips_python_style = 'sphinx'")
