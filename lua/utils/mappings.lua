@@ -22,6 +22,14 @@ map("n", "<C-S>v", ":vs<CR>", opts)
 opts.desc = "Split horizontal"
 map("n", "<C-S>h", ":sp<CR>", opts)
 
+wk.register({
+	["<C-Bslash>"] = { name = "New terminal split" },
+})
+opts.desc = "Terminal split vertical"
+map("n", "<C-Bslash>v", ":ToggleTerm direction=vertical<CR>", opts)
+opts.desc = "Terminal split horizontal"
+map("n", "<C-Bslash>h", ":ToggleTerm direction=horizontal<CR>", opts)
+
 -- Normal-mode commands
 opts.desc = "Move lines up"
 map("n", "<A-j>", ":MoveLine(1)<CR>", opts)
@@ -129,6 +137,10 @@ map("n", "<leader>f", "<cmd>Telescope find_files path=%:p:h<CR>", opts)
 wk.register({
 	["<leader>g"] = { name = "Git commands" },
 })
+opts.desc = "Go to next git hunk"
+map("n", "]g", "<cmd>Gitsigns next_hunk<CR>", opts)
+opts.desc = "Go to previous git hunk"
+map("n", "[g", "<cmd>Gitsigns prev_hunk<CR>", opts)
 opts.desc = "Show git status"
 map("n", "<leader>gs", "<cmd>Telescope git_status<CR>", opts)
 opts.desc = "Show git commits (repository)"
@@ -136,7 +148,7 @@ map("n", "<leader>gb", "<cmd>Telescope git_bcommits<CR>", opts)
 opts.desc = "Show git commits (buffer)"
 map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>", opts)
 opts.desc = "Toggle gitsigns"
-map("n", "<leader>gl", "<cmd>Gitsigns toggle_signs<CR>", opts)
+map("n", "<leader>gi", "<cmd>Gitsigns toggle_signs<CR>", opts)
 opts.desc = "Preview git hunk"
 map("n", "<leader>gh", "<cmd>Gitsigns preview_hunk<CR>", opts)
 opts.desc = "Stage hunk"
@@ -145,6 +157,8 @@ map("v", "<leader>gS", function()
 	require("gitsigns").stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 end)
 map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+opts.desc = "Open lazygit"
+map("n", "<leader>gg", "<cmd>lua _lazygit_toggle()<CR>", opts)
 
 opts.desc = "Show history"
 map("n", "<leader>h", "<cmd>Telescope oldfiles<CR>", opts)
@@ -156,7 +170,7 @@ opts.desc = "Show last used Telescope picker"
 map("n", "<leader>j", "<cmd>Telescope resume<CR>", opts)
 
 opts.desc = "Show document code symbols (float)"
-map("n", "<leader>k", "<cmd>Telescope lsp_document_symbols<CR>", opts)
+map("n", "<leader>k", "<cmd>Telescope aerial<CR>", opts)
 
 opts.desc = "Toggle completion window (cmp)"
 map("n", "<leader>l", ":call ToggleCmp()<CR>", opts)
@@ -167,8 +181,8 @@ map("n", "<leader>m", "<cmd>Telescope keymaps<CR>", opts)
 opts.desc = "Show all Telescope pickers"
 map("n", "<leader>n", "<cmd>Telescope builtin<CR>", opts)
 
-opts.desc = "Show document code symbols (sidebar)"
-map("n", "<leader>o", "<cmd>SymbolsOutline<CR>", opts)
+opts.desc = "Toggle document code symbols (sidebar)"
+map("n", "<leader>o", "<cmd>AerialToggle<CR>", opts)
 
 opts.desc = "Show plugin list"
 map("n", "<leader>p", "<cmd>Telescope lazy<CR>", opts)
@@ -181,8 +195,15 @@ map("n", "<leader>sp", ":setlocal spell! spelllang=en_gb<CR>", opts)
 opts.desc = "Show spell suggestion"
 map("n", "<leader>sf", "<cmd>Telescope spell_suggest<CR>", opts)
 
+wk.register({
+	["<leader>t"] = { name = "Additional treesitter file explorers" },
+})
 opts.desc = "Show recent files"
-map("n", "<leader>t", "<cmd>Telescope frecency<CR>", opts)
+map("n", "<leader>tr", "<cmd>Telescope frecency<CR>", opts)
+opts.desc = "Browse projects"
+map("n", "<leader>tp", "<cmd>Telescope projects<CR>", opts)
+opts.desc = "Jump to directory with zoxide"
+map("n", "<leader>tz", "<cmd>Telescope zoxide list<CR>", opts)
 
 opts.desc = "Show undo tree"
 map("n", "<leader>u", "<cmd>Telescope undo<CR>", opts)
@@ -201,24 +222,15 @@ map("n", "<leader>w", ":call TrimWhiteSpace()<CR>", opts)
 opts.desc = "Show workspace diagnostic (trouble)"
 map("n", "<leader>x", "<cmd>Trouble workspace_diagnostics<CR>", opts)
 
-opts.desc = "Browse files in current directory"
-map("n", "<leader>y", "<cmd>Telescope file_browser path=%:p:h<CR>", opts)
 
 opts.desc = "Enter Zen mode"
 map("n", "<leader>zz", "<cmd>ZenMode<CR>", opts)
-opts.desc = "Jump to directory with zoxide"
-map("n", "<leader>zx", "<cmd>Telescope zoxide list<CR>", opts)
 
 opts.desc = "Live grep workspace"
 map("n", "<leader>/", "<cmd>Telescope live_grep<CR>", opts)
 
 opts.desc = "Live grep buffer"
 map("n", "<leader>\\", "<cmd>Telescope current_buffer_fuzzy_find<CR>", opts)
-
-opts.desc = "Go to next git hunk"
-map("n", "]p", "<cmd>Gitsigns next_hunk<CR>", opts)
-opts.desc = "Go to previous git hunk"
-map("n", "[p", "<cmd>Gitsigns prev_hunk<CR>", opts)
 
 opts.desc = "Go to previous buffer"
 map("n", "<Left>", "<cmd>BufferPrevious<CR>", opts)
@@ -292,5 +304,6 @@ function M.lsp_keymaps(client, bufnr)
 	opts.desc = "Previous diagnostic"
 	bmap("n", "]d", "<cmd>lua vim.diagnostic.goto_next({ wrap = false, float = true })<CR>", opts)
 end
+
 
 return M

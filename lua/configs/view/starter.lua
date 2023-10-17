@@ -18,7 +18,8 @@ local telescope = function()
 			{ action = "Telescope oldfiles", name = "History", section = "Actions" },
 			{ action = "Telescope frecency", name = "Frecency", section = "Actions" },
 			{ action = "Telescope find_files", name = "Files", section = "Actions" },
-			{ action = "Telescope file_browser", name = "Browser", section = "Actions" },
+			{ action = "Telescope zoxide list", name = "Zoxide", section = "Actions" },
+			{ action = "Telescope projects", name = "Projects", section = "Actions" },
 			{ action = "Telescope live_grep", name = "Live grep", section = "Actions" },
 		}
 	end

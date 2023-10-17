@@ -20,6 +20,7 @@ local disabled_ft = {
 	frecency = true,
 	oil = true,
 	i3config = true,
+	toml = true
 }
 
 local hl = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("ErrorMsg")), "fg", "gui")

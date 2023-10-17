@@ -157,19 +157,6 @@ telescope.setup({
 		["ui-select"] = {
 			layout_strategy = "center",
 		},
-		file_browser = {
-			layout_strategy = "flex",
-			disable_devicons = true,
-			layout_config = flex_layout,
-			dir_icon = "",
-			git_status = true,
-			respect_gitignore = false,
-			initial_mode = "normal",
-			hijack_netrw = false,
-			auto_depth = true,
-			hidden = true,
-			cwd_to_path = true,
-		},
 		fzf = {
 			fuzzy = true,
 			override_generic_sorter = true,
@@ -208,9 +195,9 @@ telescope.setup({
 
 telescope.load_extension("fzf")
 telescope.load_extension("zoxide")
-telescope.load_extension("file_browser")
 telescope.load_extension("frecency")
 telescope.load_extension("undo")
 telescope.load_extension("dap")
 telescope.load_extension("lazy")
 telescope.load_extension("ui-select")
+telescope.load_extension("aerial")

@@ -87,6 +87,30 @@ noice.setup({
 			opts = { skip = true },
 		},
 		{
+			filter = {
+				event = "msg_show",
+				kind = "",
+				find = "ago",
+			},
+			opts = { skip = true },
+		},
+		{
+			filter = {
+				event = "notify",
+				kind = "info",
+				find = "available",
+			},
+			opts = { skip = true },
+		},
+		{
+			filter = {
+				event = "msg_show",
+				kind = "",
+				find = "yanked",
+			},
+			opts = { skip = true },
+		},
+		{
 			view = "split",
 			filter = { event = "msg_show", min_height = 20 },
 		},

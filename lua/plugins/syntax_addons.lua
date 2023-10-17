@@ -10,12 +10,13 @@ return {
 			require("configs.syntax.treesitter")
 		end,
 		dependencies = {
-			{ "filNaj/tree-setter", lazy = true, event = "VeryLazy" },
+			{ "JoosepAlviste/nvim-ts-context-commentstring", lazy = true, event = "VeryLazy" },
+			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true, event = "VeryLazy" },
+			{ "filNaj/tree-setter",                          lazy = true, event = "VeryLazy" },
 			{
 				"nvim-treesitter/playground",
 				cmd = "TSPlaygroundToggle",
 			},
-			{ "JoosepAlviste/nvim-ts-context-commentstring", lazy = true, event = "VeryLazy" },
 		},
 	},
 	{
@@ -81,18 +82,18 @@ return {
 		"quarto-dev/quarto-nvim",
 		dev = false,
 		lazy = true,
-		ft = 'quarto',
+		ft = "quarto",
 		opts = {
 			lspFeatures = {
-				languages = {'python', 'bash', 'html'},
+				languages = { "python", "bash", "html" },
 			},
 			keymap = {
 				hover = "K",
 				definition = "<leader>qd",
 				type_definition = "<leader>qD",
 				rename = "<leader>r",
-				format = "<leader><space>"
-			}
-		}
-	}
+				format = "<leader><space>",
+			},
+		},
+	},
 }
