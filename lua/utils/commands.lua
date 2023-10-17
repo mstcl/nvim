@@ -4,3 +4,6 @@ create("WipeReg", "for i in range(34,122) | silent! call setreg(nr2char(i), []) 
 create("PeekClose", require("peek").close, {}) ]]
 create("E", "Oil --float", {})
 create("Explore", "Oil --float", {})
+create("CloseNotifications", function()
+  require("notify").dismiss({pending = true, silent = true})
+end, { desc = "Dismiss all notifications" })
