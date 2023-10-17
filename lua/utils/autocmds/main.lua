@@ -14,30 +14,31 @@ autocmd({ "ColorScheme" }, {
 	end,
 })
 
-local nvimcmp = augroup("nvimcmp", { clear = true })
-autocmd({ "BufWritePost" }, {
-	pattern = "*.snipppets",
-	group = nvimcmp,
-	command = "CmpUltisnipsReloadSnippets",
-})
-
 local stay = augroup("stay", { clear = true })
-autocmd({ "BufReadPost" }, {
-	pattern = "*",
-	group = stay,
-	command = "silent! normal! g`\"zv' zz",
-})
 
-local saveFold = augroup("saveFold", { clear = true })
-autocmd({ "BufWinLeave" }, {
-	pattern = "*.*",
-	group = saveFold,
-	command = "silent mkview",
+autocmd({ "BufWinLeave", "BufWritePost", "WinLeave" }, {
+	group = stay,
+	desc = "Save view with mkview for real files",
+	callback = function(args)
+		if vim.b[args.buf].view_activated then
+			vim.cmd.mkview({ mods = { emsg_silent = true } })
+		end
+	end,
 })
-autocmd({ "BufWinEnter" }, {
-	pattern = "*.*",
-	group = saveFold,
-	command = "silent! loadview",
+autocmd("BufWinEnter", {
+	desc = "Try to load file view if available and enable view saving for real files",
+	group = stay,
+	callback = function(args)
+		if not vim.b[args.buf].view_activated then
+			local filetype = vim.api.nvim_get_option_value("filetype", { buf = args.buf })
+			local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
+			local ignore_filetypes = { "gitcommit", "gitrebase", "svg", "hgcommit" }
+			if buftype == "" and filetype and filetype ~= "" and not vim.tbl_contains(ignore_filetypes, filetype) then
+				vim.b[args.buf].view_activated = true
+				vim.cmd.loadview({ mods = { emsg_silent = true } })
+			end
+		end
+	end,
 })
 
 local editing = augroup("editing", { clear = true })
@@ -49,6 +50,13 @@ autocmd({ "BufEnter" }, {
 		for _, val in ipairs(vals) do
 			setlocal.formatoptions:remove(val)
 		end
+	end,
+})
+autocmd("BufWritePre", {
+	desc = "Close all notifications on BufWritePre",
+	group = editing,
+	callback = function()
+		require("notify").dismiss({ pending = true, silent = true })
 	end,
 })
 
@@ -88,17 +96,10 @@ autocmd({ "BufReadPost" }, {
 		setlocal.filetype = "sh"
 	end,
 })
-autocmd({ "BufReadPost" }, {
-	pattern = "*.txt",
-	group = filetypes,
-	callback = function()
-		setlocal.filetype = "dokuwiki"
-	end,
-})
 
 local mdoptions = augroup("mdoptions", { clear = true })
 autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = { "*.md", "*.txt", "*.tex", "*.org" , "*.qmd"},
+	pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd" },
 	group = mdoptions,
 	callback = function()
 		setlocal.list = false
@@ -161,19 +162,6 @@ autocmd({ "InsertLeave", "InsertEnter" }, {
 	group = showpaste,
 	callback = function()
 		call("ShowPaste", {})
-	end,
-})
-
-local autochdir = augroup("autochdir", { clear = true })
-autocmd("BufWinEnter", {
-	group = autochdir,
-	pattern = "?*",
-	callback = function()
-		local ignoredFT = { "gitcommit", "DiffviewFileHistory", "" }
-		if not bo.modifiable or vim.tbl_contains(ignoredFT, bo.filetype) or not (vim.fn.expand("%:p"):find("^/")) then
-			return
-		end
-		cmd.cd(vim.fn.expand("%:p:h"))
 	end,
 })
 
