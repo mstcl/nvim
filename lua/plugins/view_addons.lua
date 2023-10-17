@@ -93,7 +93,6 @@ return {
 			"tsakirist/telescope-lazy.nvim",
 			"debugloop/telescope-undo.nvim",
 			"nvim-lua/plenary.nvim",
-			"nvim-telescope/telescope-file-browser.nvim",
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 				build = "make",

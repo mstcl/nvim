@@ -11,6 +11,7 @@ set.synmaxcol = 400
 set.hidden = true
 set.showmode = false
 set.showcmd = true
+set.cmdheight = 0
 set.lazyredraw = false
 set.ttyfast = true
 set.conceallevel = 2
@@ -40,8 +41,8 @@ set.whichwrap = set.whichwrap + "<>[]hl"
 set.scrolljump = 1
 set.wrapmargin = 0
 set.textwidth = 0
-set.breakindent = false
 set.linebreak = true
+set.virtualedit = "block"
 
 set.number = true
 set.relativenumber = true
@@ -55,6 +56,7 @@ set.ttimeoutlen = 10
 
 set.hlsearch = true
 set.ignorecase = true
+set.infercase = true
 set.incsearch = true
 set.smartcase = true
 
@@ -67,11 +69,13 @@ set.pumwidth = 15
 set.tabstop = 4
 set.shiftwidth = 4
 set.softtabstop = 4
-set.expandtab = false
+set.expandtab = true
 set.smarttab = true
 set.autoindent = true
 set.shiftround = true
-set.smartindent = true
+set.smartindent = false
+set.breakindent = true
+set.copyindent = true
 
 set.winblend = 0
 set.pumblend = 0
@@ -89,6 +93,7 @@ set.encoding = "utf-8"
 set.spelloptions = "camel"
 
 set.list = true
+set.selection = "old"
 vim.cmd([[set fillchars+=eob:\ ,vert:│,foldopen:⏷,foldclose:▸,foldsep:│,fold:\ ,diff:╱]])
 vim.cmd(
 	[[set listchars=tab:\ \ ▸,extends:›,precedes:‹,nbsp:∩,eol:¶,trail:×,lead:\ ,space:·,multispace:···+]]

@@ -23,13 +23,14 @@ return {
 		end,
 	},
 	{
-		-- Panel for viewing code symbols
-		"simrat39/symbols-outline.nvim",
-		lazy = true,
+		"stevearc/aerial.nvim",
+		event = "VeryLazy",
 		cmd = {
-			"SymbolsOutline",
-			"SymbolsOutlineOpen",
-			"SymbolsOutlineClose",
+			"AerialToggle",
+			"AerialOpen",
+			"AerialNavOpen",
+			"AerialInfo",
+			"AerialClose",
 		},
 		config = function()
 			require("configs.lsp.outline")
@@ -106,5 +107,17 @@ return {
 			hl = { link = "StatusLineNC" },
 			vt_position = "above",
 		},
+	},
+	{
+		--  Stop inactive lsp servers until the buffer recover the focus.
+		"hinell/lsp-timeout.nvim",
+		event = "LspAttach",
+		init = function()
+			vim.g["lsp-timeout-config"] = {
+				stopTimeout = 1000 * 60 * 10,
+				startTimeout = 2000,
+				silent = true,
+			}
+		end,
 	},
 }
