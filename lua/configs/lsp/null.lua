@@ -46,7 +46,10 @@ local sources = {
 		},
 	}),
 	null_ls.builtins.formatting.black,
-	null_ls.builtins.formatting.beautysh,
+	null_ls.builtins.formatting.beautysh.with({
+		command = "beautysh",
+		args = { "--indent-size=2", "$FILENAME" },
+	}),
 	null_ls.builtins.formatting.bibclean,
 	null_ls.builtins.formatting.remark.with({
 		filetypes = { "markdown", "quarto" },
