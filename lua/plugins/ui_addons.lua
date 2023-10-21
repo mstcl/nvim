@@ -14,7 +14,7 @@ return {
 		-- Statusline
 		"nvimdev/galaxyline.nvim",
 		lazy = true,
-		event = {"VeryLazy"},
+		event = { "VeryLazy" },
 		branch = "main",
 		config = function()
 			require("configs.ui.statusline")

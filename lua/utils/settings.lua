@@ -69,7 +69,7 @@ set.pumwidth = 15
 set.tabstop = 4
 set.shiftwidth = 4
 set.softtabstop = 4
-set.expandtab = true
+set.expandtab = false
 set.smarttab = true
 set.autoindent = true
 set.shiftround = true
@@ -94,10 +94,26 @@ set.spelloptions = "camel"
 
 set.list = true
 set.selection = "old"
-vim.cmd([[set fillchars+=eob:\ ,vert:│,foldopen:⏷,foldclose:▸,foldsep:│,fold:\ ,diff:╱]])
-vim.cmd(
-	[[set listchars=tab:\ \ ▸,extends:›,precedes:‹,nbsp:∩,eol:¶,trail:×,lead:\ ,space:·,multispace:···+]]
-)
+set.fillchars = {
+	eob = " ",
+	vert = "│",
+	foldopen = "▾",
+	foldclose = "▸",
+	foldsep = "│",
+	fold = " ",
+	diff = "╱",
+}
+set.listchars = {
+	tab = "  ▸",
+	extends = "›",
+	precedes = "‹",
+	nbsp = "∩",
+	eol = "¶",
+	trail = "×",
+	lead = " ",
+	space = "·",
+	multispace = "···+",
+}
 set.showbreak = "↳"
 
 set.completeopt = { "menu", "menuone", "noselect", "noinsert" }
