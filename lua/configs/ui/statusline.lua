@@ -1,5 +1,3 @@
--- :.config/nvim/lua/statusline.lua
--- vim:set ft=lua:
 local gl = require("galaxyline")
 local condition = require("galaxyline.condition")
 local gls = gl.section
@@ -162,6 +160,16 @@ gls.left[14] = {
     GitBranch = {
         provider = "GitBranch",
         condition = condition.check_git_workspace,
+        highlight = "GalaxyFgAlt2",
+    },
+}
+
+gls.mid[1] = {
+    FilePath = {
+        provider = function()
+            return vim.fn.getcwd()
+        end,
+        condition = condition.buffer_not_empty,
         highlight = "GalaxyFgAlt2",
     },
 }
