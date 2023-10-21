@@ -134,21 +134,20 @@ map("n", "<leader>ef", "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.in
 opts.desc = "Show files in current path"
 map("n", "<leader>f", "<cmd>Telescope find_files path=%:p:h<CR>", opts)
 
+-- Git commands
 wk.register({
-	["<leader>g"] = { name = "Git commands" },
+	["<leader>g"] = { name = "git commands" },
 })
 opts.desc = "Go to next git hunk"
 map("n", "]g", "<cmd>Gitsigns next_hunk<CR>", opts)
 opts.desc = "Go to previous git hunk"
 map("n", "[g", "<cmd>Gitsigns prev_hunk<CR>", opts)
-opts.desc = "Show git status"
+opts.desc = "Git status"
 map("n", "<leader>gs", "<cmd>Telescope git_status<CR>", opts)
-opts.desc = "Show git commits (repository)"
-map("n", "<leader>gb", "<cmd>Telescope git_bcommits<CR>", opts)
-opts.desc = "Show git commits (buffer)"
-map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>", opts)
-opts.desc = "Toggle gitsigns"
-map("n", "<leader>gi", "<cmd>Gitsigns toggle_signs<CR>", opts)
+opts.desc = "Git commits (repository)"
+map("n", "<leader>gC", "<cmd>Telescope git_commits<CR>", opts)
+opts.desc = "Git commits (buffer)"
+map("n", "<leader>gc", "<cmd>Telescope git_bcommits<CR>", opts)
 opts.desc = "Preview git hunk"
 map("n", "<leader>gh", "<cmd>Gitsigns preview_hunk<CR>", opts)
 opts.desc = "Stage hunk"
@@ -157,7 +156,7 @@ map("v", "<leader>gS", function()
 	require("gitsigns").stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 end)
 map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
-opts.desc = "Open lazygit"
+opts.desc = "Lazygit"
 map("n", "<leader>gg", "<cmd>lua _lazygit_toggle()<CR>", opts)
 
 opts.desc = "Show history"
