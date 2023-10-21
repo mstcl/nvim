@@ -2,7 +2,6 @@ local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 local call = vim.api.nvim_call_function
 local bo = vim.bo
-local cmd = vim.cmd
 local setlocal = vim.opt_local
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
@@ -97,6 +96,21 @@ autocmd({ "BufReadPost" }, {
 	end,
 })
 
+local org = augroup("org", { clear = true })
+
+autocmd({ "Filetype" }, {
+	pattern = "org",
+	group = org,
+	callback = function()
+		setlocal.expandtab = true
+		setlocal.list = false
+		setlocal.conceallevel = 2
+		setlocal.concealcursor = "nc"
+		setlocal.shiftwidth = 2
+		setlocal.foldlevel = 99
+	end,
+})
+
 local mdoptions = augroup("mdoptions", { clear = true })
 autocmd({ "BufNewFile", "BufRead" }, {
 	pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd" },
@@ -112,20 +126,6 @@ autocmd({ "BufNewFile", "BufRead" }, {
 	group = mdoptions,
 	callback = function()
 		call("MathAndLiquid", {})
-	end,
-})
-
-local org = augroup("org", { clear = true })
-autocmd({ "Filetype" }, {
-	pattern = "org",
-	group = org,
-	callback = function()
-		setlocal.expandtab = true
-		setlocal.list = false
-		setlocal.conceallevel = 2
-		setlocal.concealcursor = "nc"
-		setlocal.shiftwidth = 2
-		setlocal.foldlevel = 99
 	end,
 })
 
