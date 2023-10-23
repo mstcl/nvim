@@ -1,20 +1,27 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
-local call = vim.api.nvim_call_function
 local bo = vim.bo
-local setlocal = vim.opt_local
+local opt_local = vim.opt_local
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 autocmd({ "ColorScheme" }, {
 	pattern = "*",
-	callback = function()
-		call("SetupOrgColors", {})
-	end,
+	command = [[
+		hi link OrgAgendaScheduled HintMsg
+		hi link OrgDONE DiffAdd
+		hi link OrgTODO DiffDelete
+	]],
+})
+
+local trim = augroup("trim", { clear = true })
+autocmd({ "BufWritePre" }, {
+	pattern = { "*" },
+	group = trim,
+	command = [[%s/\s\+$//e]],
 })
 
 local stay = augroup("stay", { clear = true })
-
 autocmd({ "BufWinLeave", "BufWritePost", "WinLeave" }, {
 	group = stay,
 	desc = "Save view with mkview for real files",
@@ -47,7 +54,7 @@ autocmd({ "BufEnter" }, {
 	callback = function()
 		local vals = { "c", "r", "o" }
 		for _, val in ipairs(vals) do
-			setlocal.formatoptions:remove(val)
+			opt_local.formatoptions:remove(val)
 		end
 	end,
 })
@@ -71,28 +78,28 @@ autocmd({ "BufReadPost" }, {
 	pattern = "*.rasi",
 	group = filetypes,
 	callback = function()
-		setlocal.filetype = "css"
+		opt_local.filetype = "css"
 	end,
 })
 autocmd({ "BufReadPost" }, {
 	pattern = "*.ipynb",
 	group = filetypes,
 	callback = function()
-		setlocal.filetype = "python"
+		opt_local.filetype = "python"
 	end,
 })
 autocmd({ "BufReadPost" }, {
 	pattern = "*.conf",
 	group = filetypes,
 	callback = function()
-		setlocal.filetype = "config"
+		opt_local.filetype = "config"
 	end,
 })
 autocmd({ "BufReadPost" }, {
 	pattern = "*.sbat",
 	group = filetypes,
 	callback = function()
-		setlocal.filetype = "sh"
+		opt_local.filetype = "sh"
 	end,
 })
 
@@ -102,12 +109,12 @@ autocmd({ "Filetype" }, {
 	pattern = "org",
 	group = org,
 	callback = function()
-		setlocal.expandtab = true
-		setlocal.list = false
-		setlocal.conceallevel = 2
-		setlocal.concealcursor = "nc"
-		setlocal.shiftwidth = 2
-		setlocal.foldlevel = 99
+		opt_local.expandtab = true
+		opt_local.list = false
+		opt_local.conceallevel = 2
+		opt_local.concealcursor = "nc"
+		opt_local.shiftwidth = 2
+		opt_local.foldlevel = 99
 	end,
 })
 
@@ -116,17 +123,25 @@ autocmd({ "BufNewFile", "BufRead" }, {
 	pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd" },
 	group = mdoptions,
 	callback = function()
-		setlocal.list = false
-		setlocal.spell = true
-		map("i", "<C-L>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
+		opt_local.list = false
+		opt_local.spell = true
+		map("i", "<C-l>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
 	end,
 })
 autocmd({ "BufNewFile", "BufRead" }, {
 	pattern = { "*.md" },
 	group = mdoptions,
-	callback = function()
-		call("MathAndLiquid", {})
-	end,
+	command = [[
+		syn region math start=/\$\$/ end=/\$\$/
+		syn match math_block '\$[^$].\{-}\$'
+		syn match liquid '{%.*%}'
+		syn region highlight_block start='{% highlight .*%}' end='{%.*%}'
+		syn region highlight_block start='```' end='```'
+		hi link math Statement
+		hi link liquid Statement
+		hi link highlight_block Function
+		hi link math_block Function
+	]],
 })
 
 local starter = augroup("starter", { clear = true })
@@ -135,12 +150,12 @@ autocmd({ "VimEnter" }, {
 	group = starter,
 	callback = function()
 		if bo.filetype == "starter" then
-			setlocal.laststatus = 0
+			opt_local.laststatus = 0
 			autocmd({ "BufUnload" }, {
 				group = starter,
 				pattern = "<buffer>",
 				callback = function()
-					setlocal.laststatus = 3
+					opt_local.laststatus = 3
 				end,
 			})
 		end
@@ -161,7 +176,11 @@ autocmd({ "InsertLeave", "InsertEnter" }, {
 	pattern = "*",
 	group = showpaste,
 	callback = function()
-		call("ShowPaste", {})
+		if opt_local.paste then
+			opt_local.paste = false
+		else
+			opt_local.paste = true
+		end
 	end,
 })
 
