@@ -1,27 +1,13 @@
 -- Plugins that add extra functionality with keybindings or while editing
 return {
-	-- {
-	-- 	-- Snippet engine
-	-- 	"sirver/ultisnips",
-	-- 	lazy = true,
-	-- 	event = "InsertEnter",
-	-- 	init = function()
-	-- 		vim.g.UltiSnipsExpandTrigger = "<nop>"
-	-- 		vim.g.UltiSnipsJumpForwardTrigger = "<tab>"
-	-- 		vim.g.UltiSnipsJumpBackwardTrigger = "<s-tab>"
-	-- 		vim.g.UltiSnipsRemoveSelectModeMappings = 0
-	-- 	end,
-	-- 	config = function()
-	-- 		vim.cmd('let g:UltiSnipsSnippetDirectories=["~/.config/nvim/ultisnips"]')
-	-- 	end,
-	-- },
 	{
+		-- Snippet engine
 		"L3MON4D3/LuaSnip",
 		build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
 		dependencies = {
-			"rafamadriz/friendly-snippets",
-			"Zeioth/NormalSnippets",
-			"benfowler/telescope-luasnip.nvim",
+			{ "rafamadriz/friendly-snippets",     lazy = true, event = "VeryLazy" },
+			{ "Zeioth/NormalSnippets",            lazy = true, event = "VeryLazy" },
+			{ "benfowler/telescope-luasnip.nvim", lazy = true, event = "VeryLazy" },
 		},
 		lazy = true,
 		event = "InsertEnter",
@@ -58,17 +44,132 @@ return {
 		lazy = true,
 		event = "InsertEnter",
 		dependencies = {
-			{ "jmbuhr/otter.nvim",            lazy = true, event = "VeryLazy" },
-			-- { "ultisnips",                           lazy = true, event = "VeryLazy" },
-			{ "saadparwaiz1/cmp_luasnip",     lazy = true, event = "VeryLazy" },
-			-- { "quangnguyen30192/cmp-nvim-ultisnips", lazy = true, event = "VeryLazy" },
-			{ "hrsh7th/cmp-nvim-lsp",         lazy = true, event = "VeryLazy" },
-			{ "hrsh7th/cmp-path",             lazy = true, event = "VeryLazy" },
-			{ "hrsh7th/cmp-buffer",           lazy = true, event = "VeryLazy" },
-			{ "jmbuhr/cmp-pandoc-references", lazy = true, event = "VeryLazy" },
+			{ "jmbuhr/otter.nvim",        lazy = true, event = "VeryLazy" },
+			{ "saadparwaiz1/cmp_luasnip", lazy = true, event = "VeryLazy" },
+			{ "hrsh7th/cmp-nvim-lsp",     lazy = true, event = "VeryLazy" },
+			{ "hrsh7th/cmp-path",         lazy = true, event = "VeryLazy" },
+			{ "hrsh7th/cmp-buffer",       lazy = true, event = "VeryLazy" },
+			{
+				"aspeddro/cmp-pandoc.nvim",
+				lazy = true,
+				event = "VeryLazy",
+				opts = {
+					filetypes = { "pandoc", "markdown", "rmd", "quarto" },
+				},
+			},
 		},
 		config = function()
-			require("configs.editing.cmp")
+			local cmp_ok, cmp = pcall(require, "cmp")
+			if not cmp_ok then
+				return
+			end
+			local luasnip_ok, luasnip = pcall(require, "luasnip")
+			if not luasnip_ok then
+				return
+			end
+			cmp.setup({
+				enabled = function()
+					return vim.g.cmp_toggle
+				end,
+				snippet = {
+					expand = function(args)
+						luasnip.lsp_expand(args.body)
+					end,
+				},
+				confirm_opts = {
+					behavior = cmp.ConfirmBehavior.Replace,
+					select = false,
+				},
+				preselect = cmp.PreselectMode.Item,
+				completion = {
+					completeopt = "menu,menuone,noinsert",
+				},
+				sorting = {
+					priority_weight = 1.0,
+				},
+				sources = cmp.config.sources({
+					{ name = "luasnip",  priority = 9 },
+					{ name = "path" },
+					{ name = "nvim_lsp", priority = 8,    group_index = 1 },
+					{ name = "buffer",   group_index = 2, keyword_length = 5, max_item_count = 3 },
+				}),
+				mapping = cmp.mapping.preset.insert({
+					["<C-d>"] = cmp.mapping.scroll_docs(-4),
+					["<C-f>"] = cmp.mapping.scroll_docs(4),
+					["<C-e>"] = cmp.mapping.close(),
+					["<CR>"] = cmp.mapping.confirm({ select = true }),
+					["<Tab>"] = function(fallback)
+						if cmp.visible() then
+							cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+						elseif luasnip.expand_or_jumpable() then
+							luasnip.expand_or_jump()
+						else
+							fallback()
+						end
+					end,
+					["<S-Tab>"] = function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+						elseif luasnip.jumpable(-1) then
+							luasnip.jump(-1)
+						else
+							fallback()
+						end
+					end,
+				}),
+				formatting = {
+					fields = { "kind", "abbr", "menu" },
+					format = function(entry, item)
+						local icon = require("user_configs").lsp_kind_icons[item.kind]
+						icon = " " .. icon .. " "
+						item.menu = "   (" .. item.kind .. ")"
+						item.kind = icon
+						item.abbr = string.sub(item.abbr, 1, 20)
+						return item
+					end,
+				},
+				window = {
+					completion = {
+						side_padding = 0,
+						scrollbar = false,
+					},
+					documentation = {
+						border = "single",
+						winhighlight = "NormalFloat:CmpDocumentation,FloatBorder:CmpDocumentationBorder",
+						max_width = 120,
+						max_height = math.floor(vim.o.lines * 0.3),
+					},
+				},
+				experimental = {
+					ghost_text = true,
+					hl_group = "NonText"
+				},
+			})
+			cmp.setup.filetype({ "quarto, markdown" }, {
+				sources = {
+					{ name = "path" },
+					{ name = "luasnip",    priority = 8 },
+					{ name = "nvim_lsp",   priority = 7, group_index = 1 },
+					{ name = "cmp_pandoc", priority = 9 },
+					{
+						name = "buffer",
+						options = require("utils.misc").buffer_opts,
+					},
+				},
+			})
+			cmp.setup.filetype({ "org" }, {
+				sources = {
+					{ name = "orgmode" },
+					{ name = "path" },
+					{ name = "luasnip", priority = 9 },
+					{ name = "nvim_lsp" },
+					{
+						name = "buffer",
+						options = require("utils.misc").buffer_opts,
+					},
+				},
+			})
+			vim.g.cmp_toggle = true
 		end,
 	},
 	{
@@ -130,6 +231,9 @@ return {
 		"fedepujol/move.nvim",
 		lazy = true,
 		event = "VeryLazy",
+		config = function()
+			require("utils.mappings.movement")
+		end,
 	},
 	{
 		-- Jump around the buffer
@@ -174,13 +278,30 @@ return {
 		event = "VeryLazy",
 		lazy = true,
 		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"hrsh7th/nvim-cmp",
-			"L3MON4D3/LuaSnip",
+			{ "nvim-treesitter/nvim-treesitter", lazy = true, event = "VeryLazy" },
+			{ "hrsh7th/nvim-cmp",                lazy = true, event = "InsertEnter" },
+			{ "L3MON4D3/LuaSnip",                lazy = true, event = "VeryLazy" },
 		},
-		config = function()
-			require("configs.editing.tabout")
-		end,
+		opts = {
+			tabkey = "<Tab>",
+			backwards_tabkey = "<S-Tab>",
+			act_as_tab = true,
+			act_as_shift_tab = true,
+			default_tab = "<C-t>",
+			default_shift_tab = "<C-d>",
+			enable_backwards = true,
+			completion = true,
+			tabouts = {
+				{ open = "'", close = "'" },
+				{ open = '"', close = '"' },
+				{ open = "`", close = "`" },
+				{ open = "(", close = ")" },
+				{ open = "[", close = "]" },
+				{ open = "{", close = "}" },
+			},
+			ignore_beginning = true,
+			exclude = {},
+		},
 	},
 	{
 		-- Highlight brackets when inside block

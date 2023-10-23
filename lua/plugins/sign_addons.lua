@@ -6,18 +6,28 @@ return {
 		lazy = true,
 		event = "BufRead",
 		dependencies = { { "nvim-lua/plenary.nvim", lazy = true, event = "VeryLazy" } },
-		config = function()
-			require("configs.sign.gitsigns")
-		end,
-	},
-	{
-		-- Marks in signcolumn
-		"chentoast/marks.nvim",
-		lazy = true,
-		ft = "markdown",
-		config = function()
-			require("configs.sign.marks")
-		end,
+		opts = {
+			numhl = true,
+			linehl = false,
+			signcolumn = true,
+			watch_gitdir = {
+				interval = 1000,
+				follow_files = true,
+			},
+			signs = {
+				add = { hl = "DiffAdd", text = " ", numhl = "DiffAdd", linehl = "DiffAdd" },
+				change = { hl = "DiffChange", text = " ", numhl = "DiffChange", linehl = "DiffChange" },
+				delete = { hl = "DiffDelete", text = " ", numhl = "DiffDelete", linehl = "DiffDelete" },
+				topdelete = { hl = "DiffDelete", text = "‾", numhl = "DiffDelete", linehl = "DiffDelete" },
+				changedelete = { hl = "DiffChange", text = "~", numhl = "DiffChange", linehl = "DiffChange" },
+				untracked = { hl = "DiffAdd", text = "╎", numhl = "DiffAdd", linehl = "DiffAdd" },
+			},
+			current_line_blame = false,
+			sign_priority = 6,
+			update_debounce = 100,
+			status_formatter = nil,
+			word_diff = false,
+		}
 	},
 	{
 		-- Show signs for folded blocks
@@ -39,7 +49,7 @@ return {
 				relculright = true,
 				segments = {
 					{ text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
-					{ text = { "%s" }, click = "v:lua.ScSa" },
+					{ text = { "%s" },                  click = "v:lua.ScSa" },
 					{
 						text = { builtin.lnumfunc, " " },
 						condition = { true, builtin.not_empty },

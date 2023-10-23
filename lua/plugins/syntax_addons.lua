@@ -6,9 +6,115 @@ return {
 		lazy = true,
 		event = "VeryLazy",
 		build = ":TSUpdate",
-		config = function()
-			require("configs.syntax.treesitter")
+		init = function()
+			require("utils.autocmds.treesitter")
 		end,
+		opts = {
+			ensure_installed = require("user_configs").treesitter_sources,
+			highlight = {
+				enable = true,
+				use_languagetree = true,
+				additional_vim_regex_highlighting = { "org" },
+				disable = { "latex" },
+			},
+			autopairs = {
+				enable = true,
+			},
+			context_commentstring = {
+				enable = true,
+				enable_autocmd = false,
+			},
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "gnn",
+					node_incremental = "grn",
+					scope_incremental = "grc",
+					node_decremental = "grm",
+				},
+			},
+			indent = {
+				enable = true,
+			},
+			tree_setter = {
+				enable = true,
+			},
+			playground = {
+				enable = true,
+				disable = {},
+				updatetime = 25,
+				persist_queries = false,
+				keybindings = {
+					toggle_query_editor = "o",
+					toggle_hl_groups = "i",
+					toggle_injected_languages = "t",
+					toggle_anonymous_nodes = "a",
+					toggle_language_display = "I",
+					focus_language = "f",
+					unfocus_language = "F",
+					update = "R",
+					goto_node = "<cr>",
+					show_help = "?",
+				},
+			},
+			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true,
+					keymaps = {
+						["ak"] = { query = "@block.outer", desc = "around block" },
+						["ik"] = { query = "@block.inner", desc = "inside block" },
+						["ac"] = { query = "@class.outer", desc = "around class" },
+						["ic"] = { query = "@class.inner", desc = "inside class" },
+						["a?"] = { query = "@conditional.outer", desc = "around conditional" },
+						["i?"] = { query = "@conditional.inner", desc = "inside conditional" },
+						["af"] = { query = "@function.outer", desc = "around function " },
+						["if"] = { query = "@function.inner", desc = "inside function " },
+						["al"] = { query = "@loop.outer", desc = "around loop" },
+						["il"] = { query = "@loop.inner", desc = "inside loop" },
+						["aa"] = { query = "@parameter.outer", desc = "around argument" },
+						["ia"] = { query = "@parameter.inner", desc = "inside argument" },
+					},
+				},
+				move = {
+					enable = true,
+					set_jumps = true,
+					goto_next_start = {
+						["]k"] = { query = "@block.outer", desc = "Next block start" },
+						["]f"] = { query = "@function.outer", desc = "Next function start" },
+						["]a"] = { query = "@parameter.inner", desc = "Next parameter start" },
+					},
+					goto_next_end = {
+						["]K"] = { query = "@block.outer", desc = "Next block end" },
+						["]F"] = { query = "@function.outer", desc = "Next function end" },
+						["]A"] = { query = "@parameter.inner", desc = "Next parameter end" },
+					},
+					goto_previous_start = {
+						["[k"] = { query = "@block.outer", desc = "Previous block start" },
+						["[f"] = { query = "@function.outer", desc = "Previous function start" },
+						["[a"] = { query = "@parameter.inner", desc = "Previous parameter start" },
+					},
+					goto_previous_end = {
+						["[K"] = { query = "@block.outer", desc = "Previous block end" },
+						["[F"] = { query = "@function.outer", desc = "Previous function end" },
+						["[A"] = { query = "@parameter.inner", desc = "Previous parameter end" },
+					},
+				},
+				swap = {
+					enable = true,
+					swap_next = {
+						[">K"] = { query = "@block.outer", desc = "Swap next block" },
+						[">F"] = { query = "@function.outer", desc = "Swap next function" },
+						[">A"] = { query = "@parameter.inner", desc = "Swap next parameter" },
+					},
+					swap_previous = {
+						["<K"] = { query = "@block.outer", desc = "Swap previous block" },
+						["<F"] = { query = "@function.outer", desc = "Swap previous function" },
+						["<A"] = { query = "@parameter.inner", desc = "Swap previous parameter" },
+					},
+				},
+			},
+		},
 		dependencies = {
 			{ "JoosepAlviste/nvim-ts-context-commentstring", lazy = true, event = "VeryLazy" },
 			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true, event = "VeryLazy" },
@@ -35,7 +141,25 @@ return {
 		lazy = true,
 		event = { "BufWinEnter" },
 		config = function()
-			require("configs.syntax.delimiters")
+			local rainbow_ok, rainbow = pcall(require, "rainbow-delimiters.setup")
+			if not rainbow_ok then
+				return
+			end
+			rainbow.setup({
+				query = {
+					[""] = "rainbow-delimiters",
+					latex = "rainbow-blocks",
+					lua = "rainbow-blocks",
+				},
+				highlight = {
+					"TSRainbowRed",
+					"TSRainbowBlue",
+					"TSRainbowCyan",
+					"TSRainbowGreen",
+					"TSRainbowviolet",
+					"TSRainbowYellow",
+				},
+			})
 		end,
 	},
 	{
@@ -50,14 +174,18 @@ return {
 		lazy = true,
 		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
 		config = function()
-			require("configs.syntax.orgmode")
+			local org_ok, orgmode = pcall(require, "orgmode")
+			if not org_ok then
+				return
+			end
+
+			orgmode.setup({
+				org_agenda_files = { "~/sftpgo/orgzly/*", "~/sftpgo/shared/orgzly/*" },
+				win_split_mode = "float",
+				org_hide_emphasis_markers = true,
+			})
+			orgmode.setup_ts_grammar()
 		end,
-	},
-	{
-		-- Dokuwiki syntax
-		"nblock/vim-dokuwiki",
-		lazy = true,
-		ft = "dokuwiki",
 	},
 	{
 		-- Org bullet
