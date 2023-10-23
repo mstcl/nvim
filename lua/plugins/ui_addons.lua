@@ -1,4 +1,25 @@
 -- Plugins that modify UI
+local indent_scope_disabled_ft = {
+	plugin = true,
+	Outline = true,
+	Trouble = true,
+	[""] = true,
+	help = true,
+	toggleterm = true,
+	lazy = true,
+	TelescopePrompt = true,
+	alpha = true,
+	man = true,
+	checkhealth = true,
+	starter = true,
+	markdownpreview = true,
+	frecency = true,
+	oil = true,
+	i3config = true,
+	toml = true,
+}
+local indent_scope_hl = "#6a2a2a"
+
 return {
 	{
 		-- Colorscheme
@@ -8,6 +29,20 @@ return {
 		priority = 1000,
 		config = function()
 			vim.api.nvim_command("colorscheme dmg")
+			if require("user_configs").dap_enabled then
+				local dap_signs = require("user_configs").dap_signs
+				for type, icon in pairs(dap_signs) do
+					local hl = "Dap" .. type
+					vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+				end
+			end
+			if require("user_configs").lsp_enabled then
+				local lsp_signs = require("user_configs").lsp_signs
+				for type, icon in pairs(lsp_signs) do
+					local hl = "DiagnosticSign" .. type
+					vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+				end
+			end
 		end,
 	},
 	{
@@ -17,7 +52,7 @@ return {
 		event = { "VeryLazy" },
 		branch = "main",
 		config = function()
-			require("configs.ui.statusline")
+			require("utils.statusline")
 		end,
 	},
 	{
@@ -27,7 +62,37 @@ return {
 		event = "VeryLazy",
 		version = false,
 		config = function()
-			require("configs.ui.map")
+			local map_ok, map = pcall(require, "mini.map")
+			if not map_ok then
+				return
+			end
+			local git_integration = map.gen_integration.gitsigns({
+				add = "GitSignsAdd",
+				change = "GitSignsChange",
+				delete = "GitSignsDelete",
+			})
+			local diagnostic_integration = map.gen_integration.diagnostic({
+				error = "DiagnosticFloatingError",
+				warn = "DiagnosticFloatingWarn",
+				info = "DiagnosticFloatingInfo",
+				hint = "DiagnosticFloatingHint",
+			})
+			map.setup({
+				integrations = { diagnostic_integration, git_integration },
+				symbols = {
+					encode = map.gen_encode_symbols.dot("3x2"),
+					scroll_line = "▓",
+					scroll_view = "▒",
+				},
+				-- Window options
+				window = {
+					focusable = false,
+					side = "right",
+					show_integration_count = false,
+					width = 10,
+					winblend = 25,
+				},
+			})
 		end,
 	},
 	{
@@ -37,19 +102,80 @@ return {
 		event = "VeryLazy",
 		init = function()
 			vim.g.barbar_auto_setup = false
+			require("utils.mappings.buffer")
 		end,
-		config = function()
-			require("configs.ui.barbar")
-		end,
+		opts = {
+			animation = true,
+			auto_hide = true,
+			tabpages = true,
+			closable = true,
+			clickable = true,
+			focus_on_close = "left",
+			hide = { extensions = false, inactive = false },
+			highlight_inactive_file_icons = false,
+			exclude_name = { "python", "[dap-repl]" },
+			icons = {
+				buffer_index = false,
+				buffer_number = false,
+				button = "◇",
+				gitsigns = {
+					added = { enabled = false, icon = "+" },
+					changed = { enabled = false, icon = "~" },
+					deleted = { enabled = false, icon = "-" },
+				},
+				diagnostics = {
+					[vim.diagnostic.severity.ERROR] = { enabled = true, icon = "✗" },
+					[vim.diagnostic.severity.WARN] = { enabled = false },
+					[vim.diagnostic.severity.INFO] = { enabled = false },
+					[vim.diagnostic.severity.HINT] = { enabled = false, icon = "?" },
+				},
+				filetype = {
+					custom_colors = false,
+					enabled = false,
+				},
+				separator = { left = "│", right = "" },
+				modified = { button = "●" },
+				pinned = { button = "☀", filename = true },
+				current = { buffer_index = false },
+				inactive = { filetype = { enabled = false } },
+			},
+			insert_at_end = false,
+			maximum_padding = 0,
+			maximum_length = 10,
+			semantic_letters = true,
+			letters = "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP",
+			no_name_title = nil,
+		},
 	},
 	{
 		-- Add nice input dialogs to prompt
 		"stevearc/dressing.nvim",
 		lazy = true,
 		event = "VeryLazy",
-		config = function()
-			require("configs.ui.dressing")
-		end,
+		opts = {
+			input = {
+				default_prompt = "➤ ",
+				insert_only = true,
+				prompt_align = "left",
+				start_in_insert = true,
+				relative = "cursor",
+				border = "single",
+				prefer_width = 20,
+				max_width = nil,
+				min_width = 10,
+				get_config = nil,
+				win_options = {
+					winblend = 0,
+					winhighlight = "NormalFloat:TelescopeNormal,FloatBorder:TelescopeBorder,FloatTitle:Pmenu",
+				},
+			},
+			override = {
+				anchor = "SW",
+			},
+			select = {
+				enabled = false,
+			},
+		},
 	},
 	{
 		-- Revamped UI (notification etc.)
@@ -62,11 +188,152 @@ return {
 				"rcarriga/nvim-notify",
 				lazy = true,
 				event = "VeryLazy",
+				opts = {
+					fps = 144,
+					icons = {
+						DEBUG = "*",
+						ERROR = "✗",
+						INFO = "i",
+						TRACE = ">",
+						WARN = "!",
+					},
+					minimum_width = 40,
+					render = "compact",
+					top_down = false,
+				},
 			},
 		},
-		config = function()
-			require("configs.ui.noice")
-		end,
+		opts = {
+			lsp = {
+				progress = {
+					enabled = false,
+				},
+				override = {
+					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+					["vim.lsp.util.stylize_markdown"] = true,
+					["cmp.entry.get_documentation"] = true,
+				},
+			},
+			presets = {
+				bottom_search = true,
+				-- command_palette = true,
+				long_message_to_split = true,
+				inc_rename = false,
+				lsp_doc_border = false,
+			},
+			messages = {
+				view_search = false,
+			},
+			views = {
+				notify = {
+					border = {
+						style = "none",
+					},
+				},
+				cmdline_popup = {
+					position = {
+						row = 8,
+						col = "50%",
+					},
+					size = {
+						width = 60,
+						height = "auto",
+					},
+					border = {
+						style = "none",
+						padding = { 1, 2 },
+					},
+					filter_options = {},
+					win_options = {
+						winhighlight = { Normal = "Pmenu", FloatBorder = "Pmenu" },
+					},
+				},
+				popupmenu = {
+					relative = "editor",
+					position = {
+						row = 11,
+						col = "50%",
+					},
+					size = {
+						width = 60,
+						height = 10,
+					},
+					border = {
+						style = "none",
+						padding = { 1, 2 },
+					},
+					win_options = {
+						winhighlight = { Normal = "Pmenu", FloatBorder = "Pmenu" },
+					},
+				},
+			},
+			routes = {
+				{
+					filter = {
+						event = "msg_show",
+						kind = "lua_error",
+						find = "UfoFallbackException",
+					},
+					opts = { skip = true },
+				},
+				{
+					filter = {
+						event = "msg_show",
+						kind = "",
+						find = "[w]",
+					},
+					opts = { skip = true },
+				},
+				{
+					filter = {
+						event = "msg_show",
+						kind = "",
+						find = "ago",
+					},
+					opts = { skip = true },
+				},
+				{
+					filter = {
+						event = "notify",
+						kind = "info",
+						find = "available",
+					},
+					opts = { skip = true },
+				},
+				{
+					filter = {
+						event = "msg_show",
+						kind = "",
+						find = "yanked",
+					},
+					opts = { skip = true },
+				},
+				{
+					view = "split",
+					filter = { event = "msg_show", min_height = 20 },
+				},
+			},
+			cmdline = {
+				enabled = true,
+				format = {
+					cmdline = {
+						icon = "➤",
+					},
+					search_up = {
+						icon = "↑",
+					},
+					search_down = {
+						icon = "↓",
+					},
+					filter = {
+						icon = "⊞",
+					},
+					help = {
+						icon = "?",
+					},
+				},
+			},
+		},
 	},
 	{
 		-- Colorcolumn smart functionality
@@ -74,17 +341,56 @@ return {
 		lazy = true,
 		priority = 10,
 		event = "VeryLazy",
-		config = function()
-			require("configs.ui.multicolumn")
-		end,
+		opts = {
+			sets = {
+				lua = {
+					rulers = { 88 },
+					scope = "file",
+				},
+				default = {
+					rulers = { 88 },
+					full_column = true,
+				},
+				python = {
+					scope = "window",
+					rulers = { 88 },
+					to_line_end = true,
+				},
+				starter = {
+					rulers = { 9999 },
+				},
+				exclude_ft = { "markdown", "help", "netrw", "starter", "man" },
+			},
+		},
 	},
 	{
 		-- Show indent lines
 		"shellRaining/hlchunk.nvim",
-		event = { "UIEnter" },
-		config = function()
-			require("configs.ui.hlchunk")
-		end,
+		lazy = true,
+		event = "LspAttach",
+		opts = {
+			indent = {
+				exclude_filetypes = indent_scope_disabled_ft,
+			},
+			blank = {
+				enable = false,
+			},
+			line_num = {
+				enable = false,
+			},
+			chunk = {
+				use_treesitter = true,
+				style = indent_scope_hl,
+				chars = {
+					horizontal_line = "─",
+					vertical_line = "│",
+					left_top = "┌",
+					left_bottom = "└",
+					right_arrow = "─",
+				},
+				exclude_filetypes = indent_scope_disabled_ft,
+			},
+		},
 	},
 	{
 		-- Highlight color blocks
@@ -98,22 +404,55 @@ return {
 		end,
 	},
 	{
-		-- Folding customization using LSP and more
-		"kevinhwang91/nvim-ufo",
-		lazy = true,
-		event = "VeryLazy",
-		dependencies = { "kevinhwang91/promise-async", lazy = true, event = "VeryLazy" },
-		config = function()
-			require("configs.ui.ufo")
-		end,
-	},
-	{
 		-- Naively highlight word under cursor
 		"echasnovski/mini.cursorword",
-		-- "utsontungexpt/stcursorword",
 		lazy = true,
 		event = "VeryLazy",
 		opts = {},
 		version = false,
+	},
+	{
+		-- Folding customization using LSP and more
+		-- NOTE: don't lazy load this, it doesn't load up automatically
+		"kevinhwang91/nvim-ufo",
+		dependencies = { "kevinhwang91/promise-async", lazy = true, event = "VeryLazy" },
+		opts = {
+			open_fold_hl_timeout = 150,
+			close_fold_kinds = { "imports", "comment" },
+			preview = {
+				win_config = {
+					border = "single",
+					winhighlight = "Pmenu:Normal",
+					winblend = 0,
+				},
+				mappings = {
+					scrollU = "<C-u>",
+					scrollD = "<C-d>",
+					jumpTop = "[",
+					jumpBot = "]",
+				},
+			},
+			fold_virt_text_handler = require("utils.lsp").ufo_handler,
+			provider_selector = function(_, filetype, buftype)
+				local function handleFallbackException(bufnr, err, providerName)
+					if type(err) == "string" and err:match("UfoFallbackException") then
+						return require("ufo").getFolds(bufnr, providerName)
+					else
+						return require("promise").reject(err)
+					end
+				end
+				return (filetype == "" or buftype == "nofile") and "indent"
+					or function(bufnr)
+						return require("ufo")
+							.getFolds(bufnr, "lsp")
+							:catch(function(err)
+								return handleFallbackException(bufnr, err, "treesitter")
+							end)
+							:catch(function(err)
+								return handleFallbackException(bufnr, err, "indent")
+							end)
+					end
+			end,
+		},
 	},
 }

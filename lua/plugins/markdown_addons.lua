@@ -4,7 +4,6 @@ return {
 		-- Format tables in markdown files
 		"godlygeek/tabular",
 		lazy = true,
-		dependencies = { "vim-markdown" },
 		cmd = { "Tabularize" }
 	},
 	{
