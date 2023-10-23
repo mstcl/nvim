@@ -29,7 +29,7 @@ Requires [lazy.nvim](https://github.com/folke/lazy.nvim) as the plugin manager.
 -   prettierd
 -   prettier
 -   black
--   beautysh
+-   shfmt
 -   bibclean
 -   cbfmt
 -   chktex
