@@ -9,7 +9,7 @@ return {
 		lazy = true,
 		event = "BufRead",
 		dependencies = {
-			{ "cmp-nvim-lsp",          lazy = true, event = "VeryLazy" },
+			{ "cmp-nvim-lsp",          lazy = true, event = "InsertEnter" },
 			{ "kevinhwang91/nvim-ufo", lazy = true, event = "VeryLazy" },
 		},
 		config = function()
@@ -200,7 +200,7 @@ return {
 	{
 		-- Code symbol outline
 		"stevearc/aerial.nvim",
-		event = "VeryLazy",
+		event = "LspAttach",
 		cmd = {
 			"AerialToggle",
 			"AerialOpen",

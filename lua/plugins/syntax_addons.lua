@@ -129,7 +129,7 @@ return {
 		-- Highlight argument's definition and usage
 		"m-demare/hlargs.nvim",
 		lazy = true,
-		event = { "BufWinEnter" },
+		event = { "VeryLazy" },
 		opts = {
 			color = "#87591a",
 			hl_priority = 200,
@@ -139,7 +139,7 @@ return {
 		-- Highlight parenthesis
 		"HiPhish/rainbow-delimiters.nvim",
 		lazy = true,
-		event = { "BufWinEnter" },
+		event = { "VeryLazy" },
 		config = function()
 			local rainbow_ok, rainbow = pcall(require, "rainbow-delimiters.setup")
 			if not rainbow_ok then
