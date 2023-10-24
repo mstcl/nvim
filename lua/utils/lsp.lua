@@ -77,6 +77,7 @@ capabilities.textDocument.foldingRange = {
 }
 M.capabilities = capabilities
 
+
 for _, source in ipairs(fmt_sources) do
 	if source == "mdformat" then
 		table.insert(

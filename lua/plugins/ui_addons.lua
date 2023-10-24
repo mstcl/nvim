@@ -1,24 +1,4 @@
 -- Plugins that modify UI
-local indent_scope_disabled_ft = {
-	plugin = true,
-	Outline = true,
-	Trouble = true,
-	[""] = true,
-	help = true,
-	toggleterm = true,
-	lazy = true,
-	TelescopePrompt = true,
-	alpha = true,
-	man = true,
-	checkhealth = true,
-	starter = true,
-	markdownpreview = true,
-	frecency = true,
-	oil = true,
-	i3config = true,
-	toml = true,
-}
-local indent_scope_hl = "#6a2a2a"
 
 return {
 	{
@@ -93,6 +73,9 @@ return {
 					winblend = 25,
 				},
 			})
+			require("which-key").register({
+				["<C-M>m"] = { require("mini.map").toggle, "Toggle code minimap" },
+			})
 		end,
 	},
 	{
@@ -115,7 +98,7 @@ return {
 			highlight_inactive_file_icons = false,
 			exclude_name = { "python", "[dap-repl]" },
 			icons = {
-				buffer_index = false,
+				buffer_index = true,
 				buffer_number = false,
 				button = "◇",
 				gitsigns = {
@@ -136,7 +119,7 @@ return {
 				separator = { left = "│", right = "" },
 				modified = { button = "●" },
 				pinned = { button = "☀", filename = true },
-				current = { buffer_index = false },
+				current = { buffer_index = true },
 				inactive = { filetype = { enabled = false } },
 			},
 			insert_at_end = false,
@@ -359,6 +342,9 @@ return {
 				starter = {
 					rulers = { 9999 },
 				},
+				NeogitStatus = {
+					rulers = { 9999 },
+				},
 				exclude_ft = { "markdown", "help", "netrw", "starter", "man" },
 			},
 		},
@@ -370,7 +356,7 @@ return {
 		event = "LspAttach",
 		opts = {
 			indent = {
-				exclude_filetypes = indent_scope_disabled_ft,
+				exclude_filetypes = require("user_configs").indent_scope_disabled_ft,
 			},
 			blank = {
 				enable = false,
@@ -380,7 +366,7 @@ return {
 			},
 			chunk = {
 				use_treesitter = true,
-				style = indent_scope_hl,
+				style = require("user_configs").indent_scope_hl,
 				chars = {
 					horizontal_line = "─",
 					vertical_line = "│",
@@ -388,7 +374,7 @@ return {
 					left_bottom = "└",
 					right_arrow = "─",
 				},
-				exclude_filetypes = indent_scope_disabled_ft,
+				exclude_filetypes = require("user_configs").indent_scope_disabled_ft,
 			},
 		},
 	},

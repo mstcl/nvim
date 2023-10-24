@@ -184,17 +184,21 @@ autocmd({ "InsertLeave", "InsertEnter" }, {
 	end,
 })
 
-function _G.set_terminal_keymaps()
-	local opts_b = { buffer = 0 }
-	vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], opts_b)
-	vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts_b)
-end
-
 local toggleterm = augroup("toggleterm", { clear = true })
 autocmd({ "TermOpen" }, {
 	pattern = "term://*",
 	group = toggleterm,
 	callback = function()
-		set_terminal_keymaps()
+		require("utils.misc").set_terminal_keymaps()
+	end,
+})
+
+
+local neogit = augroup("neogit", { clear = true })
+autocmd({ "Filetype" }, {
+	pattern = "Neogit*",
+	group = neogit,
+	callback = function()
+		opt_local.list = false
 	end,
 })

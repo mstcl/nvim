@@ -374,9 +374,10 @@ return {
 		end,
 	},
 	{
-		-- Context at end of block
+		-- Context at end of block, outside parentheses
 		"code-biscuits/nvim-biscuits",
 		lazy = true,
+		cond = require("user_configs").edit_features.biscuits,
 		event = "VeryLazy",
 		opts = {
 			show_on_start = true,

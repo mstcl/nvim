@@ -2,6 +2,12 @@ local M = {}
 
 M.dap_enabled = true
 M.lsp_enabled = true
+M.lsp_features = {
+	show_usage = false
+}
+M.edit_features = {
+	biscuits = true
+}
 
 M.frecency_workspaces = {
 	["conf"] = "/home/lckdscl/.config",
@@ -33,6 +39,9 @@ M.treesitter_sources = {
 	"diff",
 	"dockerfile",
 	"gitignore",
+	"git_config",
+	"gitcommit",
+	"git_rebase",
 	"ini",
 	"passwd",
 	"php",
@@ -205,6 +214,7 @@ M.statusline_short_ft = {
 	"NvimTree",
 	"TelescopePrompt",
 	"Help",
+	"help",
 	"diff",
 	"undotree",
 	"netrw",
@@ -212,6 +222,33 @@ M.statusline_short_ft = {
 	"Outline",
 	"quickfix",
 	"toggleterm",
+	"NeogitStatus"
 }
+
+M.indent_scope_disabled_ft = {
+	plugin = true,
+	Outline = true,
+	Trouble = true,
+	[""] = true,
+	help = true,
+	toggleterm = true,
+	lazy = true,
+	TelescopePrompt = true,
+	alpha = true,
+	man = true,
+	checkhealth = true,
+	starter = true,
+	markdownpreview = true,
+	frecency = true,
+	oil = true,
+	i3config = true,
+	toml = true,
+	typst = true,
+	config = true,
+	NeogitStatus = true,
+	NeogitCommitView = true,
+	NeogitLogView = true,
+}
+M.indent_scope_hl = "#630e49"
 
 return M

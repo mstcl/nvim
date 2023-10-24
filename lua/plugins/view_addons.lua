@@ -197,7 +197,8 @@ return {
 			if not starter_ok then
 				return
 			end
-			local plugins_gen = io.popen('echo "$(find ~/.local/share/nvim/lazy -maxdepth 1 -type d | wc -l) - 1" | bc')
+			local plugins_gen =
+				io.popen('echo "$(find ~/.local/share/nvim/lazy -maxdepth 1 -type d | wc -l ) - 1" | bc | tr -d "\n"')
 			local plugins = plugins_gen:read("*a")
 			plugins_gen:close()
 			local org_agenda = function()
@@ -242,8 +243,8 @@ return {
 					starter.gen_hook.adding_bullet(),
 					starter.gen_hook.aligning("center", "center"),
 				},
-				footer = "Total number of plugins: " .. plugins,
-				header = require("user_configs").starter_ascii .. greetings(),
+				footer = "",
+				header = require("user_configs").starter_ascii .. greetings() .. " Loaded " .. plugins .. " plugins.",
 			})
 		end,
 	},
@@ -411,12 +412,15 @@ return {
 	{
 		"NeogitOrg/neogit",
 		lazy = true,
-		event = "VeryLazy",
+		cmd = "Neogit",
+		dependencies = {
+			{"nvim-telescope/telescope.nvim", lazy = true, cmd = "Telescope"}
+		},
 		opts = {
-			integrations = {
-				telescope = true,
-				diffview = true,
-			},
+			-- integrations = {
+			-- 	telescope = true,
+			-- 	diffview = true,
+			-- },
 			signs = {
 				hunk = { "", "" },
 				item = { "▸", "▾" },
