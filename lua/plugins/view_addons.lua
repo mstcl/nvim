@@ -408,4 +408,20 @@ return {
 			},
 		},
 	},
+	{
+		"NeogitOrg/neogit",
+		lazy = true,
+		event = "VeryLazy",
+		opts = {
+			integrations = {
+				telescope = true,
+				diffview = true,
+			},
+			signs = {
+				hunk = { "", "" },
+				item = { "▸", "▾" },
+				section = { "▸", "▾" },
+			},
+		},
+	},
 }
