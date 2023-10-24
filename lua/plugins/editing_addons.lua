@@ -356,9 +356,22 @@ return {
 		"nguyenvukhang/nvim-toggler",
 		lazy = true,
 		event = "VeryLazy",
-		opts = {
-			remove_default_keybinds = true,
-		},
+		config = function()
+			local wk_ok, wk = pcall(require, "which-key")
+			if not wk_ok then
+				return
+			end
+			local tog_ok, tog = pcall(require, "nvim-toggler")
+			if not tog_ok then
+				return
+			end
+			wk.register({
+				["<C-B>"] = { require("nvim-toggler").toggle, "Invert boolean" },
+			})
+			tog.setup({
+				remove_default_keybinds = true,
+			})
+		end,
 	},
 	{
 		-- Context at end of block
