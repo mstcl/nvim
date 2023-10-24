@@ -151,7 +151,7 @@ return {
 		-- Add nice input dialogs to prompt
 		"stevearc/dressing.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		event = "LspAttach",
 		opts = {
 			input = {
 				default_prompt = "➤ ",
