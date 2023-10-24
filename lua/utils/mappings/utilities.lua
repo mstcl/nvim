@@ -16,7 +16,6 @@ wk.register({
 		end,
 		"Terminal",
 	},
-	["<C-B>"] = { require("nvim-toggler").toggle, "Invert boolean" },
 	["<BS>"] = {
 		function()
 			exec("Noice dismiss")
@@ -37,6 +36,12 @@ wk.register({
 			end
 		end,
 		"Cycle number mode",
+	},
+	["<C-R>"] = {
+		function()
+			exec("RooterToggle")
+		end,
+		"Toggle autochdir or root dir",
 	},
 	["<C-P>"] = {
 		function()

@@ -79,7 +79,6 @@ wk.register({
 		end,
 		"Toggle cursorline",
 	},
-	["<C-M>m"] = { require("mini.map").toggle, "Toggle code minimap" },
 	["<C-M>f"] = {
 		function()
 			if winopt.foldcolumn == "1" then
@@ -90,23 +89,4 @@ wk.register({
 		end,
 		"Toggle foldcolumn",
 	},
-	["<C-M>d"] = { name = "Diff commands" },
-	["<C-M>do"] = {
-		function ()
-			exec("DiffviewOpen")
-		end,
-		"Diff mode open"
-	},
-	["<C-M>dc"] = {
-		function ()
-			exec("DiffviewClose")
-		end,
-		"Diff mode close"
-	},
-	["<C-M>df"] = {
-		function ()
-			exec("DiffviewFileHistory")
-		end,
-		"Diff history mode"
-	}
 })

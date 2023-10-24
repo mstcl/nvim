@@ -74,6 +74,7 @@ function M.setup(client, bufnr)
 				vim.lsp.buf.code_action,
 				"Pick code actions",
 				mode = { "n", "v" },
+				buffer = bufnr,
 			},
 		})
 	end
@@ -94,6 +95,7 @@ function M.setup(client, bufnr)
 				vim.lsp.buf.format,
 				"Format code",
 				mode = { "n", "v" },
+				buffer = bufnr,
 			},
 		})
 	end
