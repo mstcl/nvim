@@ -88,10 +88,15 @@ return {
 					priority_weight = 1.0,
 				},
 				sources = cmp.config.sources({
-					{ name = "luasnip",  priority = 9 },
-					{ name = "path" },
-					{ name = "nvim_lsp", priority = 8,    group_index = 1 },
-					{ name = "buffer",   group_index = 2, keyword_length = 5, max_item_count = 3 },
+					{ name = "luasnip",   priority = 9 },
+					{ name = "async_path" },
+					{ name = "nvim_lsp",  priority = 8, group_index = 1 },
+					{
+						name = "buffer",
+						group_index = 2,
+						keyword_length = 5,
+						max_item_count = 3,
+					},
 				}),
 				mapping = cmp.mapping.preset.insert({
 					["<C-d>"] = cmp.mapping.scroll_docs(-4),
@@ -142,12 +147,24 @@ return {
 				},
 				experimental = {
 					ghost_text = true,
-					hl_group = "NonText"
+					hl_group = "NonText",
 				},
 			})
-			cmp.setup.filetype({ "quarto, markdown" }, {
+			cmp.setup.filetype({ "markdown" }, {
 				sources = {
-					{ name = "path" },
+					{ name = "async_path" },
+					{ name = "luasnip",    priority = 8 },
+					{ name = "nvim_lsp",   priority = 7, group_index = 1 },
+					{ name = "cmp_pandoc", priority = 9 },
+					{
+						name = "buffer",
+						options = require("utils.misc").buffer_opts,
+					},
+				},
+			})
+			cmp.setup.filetype({ "quarto" }, {
+				sources = {
+					{ name = "async_path" },
 					{ name = "luasnip",    priority = 8 },
 					{ name = "nvim_lsp",   priority = 7, group_index = 1 },
 					{ name = "cmp_pandoc", priority = 9 },
@@ -160,8 +177,8 @@ return {
 			cmp.setup.filetype({ "org" }, {
 				sources = {
 					{ name = "orgmode" },
-					{ name = "path" },
-					{ name = "luasnip", priority = 9 },
+					{ name = "async_path" },
+					{ name = "luasnip",   priority = 9 },
 					{ name = "nvim_lsp" },
 					{
 						name = "buffer",
