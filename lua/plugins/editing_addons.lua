@@ -5,9 +5,9 @@ return {
 		"L3MON4D3/LuaSnip",
 		build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
 		dependencies = {
-			{ "rafamadriz/friendly-snippets",     lazy = true, event = "VeryLazy" },
-			{ "Zeioth/NormalSnippets",            lazy = true, event = "VeryLazy" },
-			{ "benfowler/telescope-luasnip.nvim", lazy = true, event = "VeryLazy" },
+			{ "rafamadriz/friendly-snippets",     lazy = true, event = "InsertEnter" },
+			{ "Zeioth/NormalSnippets",            lazy = true, event = "InsertEnter" },
+			{ "benfowler/telescope-luasnip.nvim", lazy = true, event = "InsertEnter" },
 		},
 		lazy = true,
 		event = "InsertEnter",
@@ -44,15 +44,15 @@ return {
 		lazy = true,
 		event = "InsertEnter",
 		dependencies = {
-			{ "jmbuhr/otter.nvim",        lazy = true, event = "VeryLazy" },
-			{ "saadparwaiz1/cmp_luasnip", lazy = true, event = "VeryLazy" },
-			{ "hrsh7th/cmp-nvim-lsp",     lazy = true, event = "VeryLazy" },
-			{ "hrsh7th/cmp-path",         lazy = true, event = "VeryLazy" },
-			{ "hrsh7th/cmp-buffer",       lazy = true, event = "VeryLazy" },
+			{ "jmbuhr/otter.nvim",         lazy = true, event = "InsertEnter" },
+			{ "saadparwaiz1/cmp_luasnip",  lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/cmp-nvim-lsp",      lazy = true, event = "InsertEnter" },
+			{ "FelipeLema/cmp-async-path", lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/cmp-buffer",        lazy = true, event = "InsertEnter" },
 			{
 				"aspeddro/cmp-pandoc.nvim",
 				lazy = true,
-				event = "VeryLazy",
+				event = "InsertEnter",
 				opts = {
 					filetypes = { "pandoc", "markdown", "rmd", "quarto" },
 				},
@@ -201,7 +201,7 @@ return {
 		-- Plug and play automatically insert autopairs
 		"windwp/nvim-autopairs",
 		lazy = true,
-		event = "VeryLazy",
+		event = "InsertEnter",
 		opts = {
 			check_ts = true,
 			ts_config = { java = false },
@@ -275,12 +275,12 @@ return {
 	{
 		-- Tab out of parentheses
 		"abecodes/tabout.nvim",
-		event = "VeryLazy",
+		event = "InsertEnter",
 		lazy = true,
 		dependencies = {
-			{ "nvim-treesitter/nvim-treesitter", lazy = true, event = "VeryLazy" },
-			{ "hrsh7th/nvim-cmp",                lazy = true, event = "InsertEnter" },
-			{ "L3MON4D3/LuaSnip",                lazy = true, event = "VeryLazy" },
+			-- { "nvim-treesitter/nvim-treesitter", lazy = true, event = "VeryLazy" },
+			{ "hrsh7th/nvim-cmp", lazy = true, event = "InsertEnter" },
+			{ "L3MON4D3/LuaSnip", lazy = true, event = "InsertEnter" },
 		},
 		opts = {
 			tabkey = "<Tab>",

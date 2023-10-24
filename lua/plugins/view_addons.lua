@@ -3,8 +3,8 @@ return {
 	{
 		-- Terminal panel
 		"akinsho/toggleterm.nvim",
-		event = "VeryLazy",
 		lazy = true,
+		cmd = "ToggleTerm",
 		config = function()
 			local term_ok, toggleterm = pcall(require, "toggleterm")
 			if not term_ok then
