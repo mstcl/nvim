@@ -36,12 +36,6 @@ wk.register({
 		end,
 		"Preview hunk",
 	},
-	["<leader>gg"] = {
-		function()
-			_lazygit_toggle()
-		end,
-		"Lazygit",
-	},
 	["ih"] = {
 		":<C-U>Gitsigns select_hunk<CR>",
 		"Select hunk (operation)",
@@ -58,6 +52,12 @@ wk.register({
 			exec("Gitsigns prev_hunk")
 		end,
 		"Previous git hunk",
+	},
+	["<leader>gg"] = {
+		function()
+			exec("Neogit kind=auto")
+		end,
+		"Neogit",
 	},
 })
 wk.register({
