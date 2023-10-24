@@ -415,6 +415,8 @@ return {
 		-- Folding customization using LSP and more
 		-- NOTE: don't lazy load this, it doesn't load up automatically
 		"kevinhwang91/nvim-ufo",
+		lazy = true,
+		event = "VeryLazy",
 		dependencies = { "kevinhwang91/promise-async", lazy = true, event = "VeryLazy" },
 		opts = {
 			open_fold_hl_timeout = 150,
