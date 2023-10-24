@@ -22,6 +22,14 @@ return {
 				return
 			end
 			for _, server in ipairs(require("user_configs").lsp_sources) do
+				if server == "typst_lsp" then
+					lsp[server].setup({
+						settings = {
+							exportPdf = "onSave",
+							experimentalFormatterMode = "On",
+						},
+					})
+				end
 				if server == "gopls" then
 					lsp[server].setup({
 						on_attach = on_attach,
