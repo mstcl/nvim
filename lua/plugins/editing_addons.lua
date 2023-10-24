@@ -368,32 +368,21 @@ return {
 		lazy = false,
 	},
 	{
-		-- Smart project root autochdir
-		"Zeioth/project.nvim",
+		-- 	-- Smart rooter, replaces autochdir
+		"notjedi/nvim-rooter.lua",
 		lazy = true,
 		event = "VeryLazy",
-		cmd = "ProjectRoot",
 		opts = {
-			patterns = {
+			manual = false,
+			exclude_filetypes = { "quarto", "markdown", "org"},
+			rooter_patterns = {
 				".git",
-				"_darcs",
 				".hg",
-				".bzr",
+				"project.json",
 				".svn",
-				"Makefile",
-				"package.json",
-				".solution",
+				"pyproject.toml",
+				"README.md",
 			},
-			exclude_dirs = {
-				"~/",
-			},
-			silent_chdir = true,
-			manual_mode = false,
-			exclude_filetype_chdir = { "" },
-			exclude_buftype_chdir = { "nofile", "terminal" },
 		},
-		config = function(_, opts)
-			require("project_nvim").setup(opts)
-		end,
 	},
 }
