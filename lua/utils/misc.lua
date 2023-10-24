@@ -104,5 +104,11 @@ function M.statusline_vi_mode()
 	vim.api.nvim_command("hi GalaxyViMode gui=bold guifg=#f5f5f5 guibg=" .. mode_color[vim.fn.mode()])
 	return "  " .. alias[vim_mode] .. " "
 end
+function M.set_terminal_keymaps()
+	local opts_b = { silent = true, buffer = 0 }
+	vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], opts_b)
+	vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts_b)
+	vim.keymap.set("t", "<C-Bslash>", [[<C-\><C-n>:ToggleTerm<CR>]], opts_b)
+end
 
 return M

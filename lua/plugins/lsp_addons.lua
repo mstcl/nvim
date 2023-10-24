@@ -186,14 +186,14 @@ return {
 					modified = bg_fg,
 					dirname = bg_fg,
 				},
-				show_dirname = false,
+				show_dirname = true,
 				show_basename = true,
 				symbols = {
 					separator = "⟫",
 					ellipsis = "…",
-					modified = "✗",
+					modified = "●",
 				},
-				show_modified = false,
+				show_modified = true,
 				kinds = require("user_configs").lsp_kind_icons,
 			})
 			local barbecue_update = augroup("barbecue", { clear = true })
@@ -259,8 +259,8 @@ return {
 		lazy = true,
 		event = "LspAttach",
 		opts = {
-			fold_open = "▸",
-			fold_closed = "▼",
+			fold_open = "▾",
+			fold_close = "▸",
 			mode = "workspace_diagnostics",
 			padding = false,
 			use_diagnostic_signs = true,
@@ -322,6 +322,7 @@ return {
 	{
 		-- Virtual text to show usage
 		"Wansmer/symbol-usage.nvim",
+		cond = require("user_configs").lsp_features.show_usage,
 		event = "BufReadPre",
 		opts = {
 			hl = { link = "StatusLineNC" },

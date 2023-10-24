@@ -224,4 +224,12 @@ return {
 			},
 		},
 	},
+	{
+		"kaarmu/typst.vim",
+		lazy = true,
+		ft = "typst",
+		config = function()
+			vim.g.typst_pdf_viewer = "sioyek"
+		end,
+	},
 }
