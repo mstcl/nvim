@@ -1,8 +1,11 @@
+local cond = require("user_configs").lsp_enabled
+
 -- Plugins that add debugging into nvim
 return {
 	{
 		-- Python debugger
 		"mfussenegger/nvim-dap-python",
+		cond = cond,
 		lazy = true,
 		ft = "python",
 		config = function()
@@ -12,6 +15,7 @@ return {
 	{
 		-- General debugging engine
 		"mfussenegger/nvim-dap",
+		cond = cond,
 		lazy = true,
 		ft = "python",
 		config = function()
@@ -25,6 +29,7 @@ return {
 	{
 		-- Show debugging variable values as virtual text
 		"theHamsta/nvim-dap-virtual-text",
+		cond = cond,
 		lazy = true,
 		event = "VeryLazy",
 		dependencies = { "mfussenegger/nvim-dap", lazy = true, ft = "python" },
@@ -44,6 +49,7 @@ return {
 	{
 		-- Show available DAP information panels
 		"rcarriga/nvim-dap-ui",
+		cond = cond,
 		lazy = true,
 		event = "VeryLazy",
 		dependencies = { "mfussenegger/nvim-dap", lazy = true, ft = "python" },

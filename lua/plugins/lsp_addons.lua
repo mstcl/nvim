@@ -1,11 +1,13 @@
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
+local cond = require("user_configs").lsp_enabled
 
 -- Plugins that add to nvim LSP functionalities
 return {
 	{
 		-- Configure LSP
 		"neovim/nvim-lspconfig",
+		cond = cond,
 		lazy = true,
 		event = "BufRead",
 		dependencies = {
@@ -160,6 +162,7 @@ return {
 	{
 		-- Breadcrumb bar
 		"utilyre/barbecue.nvim",
+		cond = cond,
 		lazy = true,
 		version = "*",
 		event = "LspAttach",
@@ -208,6 +211,7 @@ return {
 	{
 		-- Code symbol outline
 		"stevearc/aerial.nvim",
+		cond = cond,
 		event = "LspAttach",
 		cmd = {
 			"AerialToggle",
@@ -248,6 +252,7 @@ return {
 	{
 		-- Easy texlab configuration
 		"f3fora/nvim-texlabconfig",
+		cond = cond,
 		lazy = true,
 		opts = {},
 		ft = { "tex", "bib" },
@@ -256,6 +261,7 @@ return {
 	{
 		-- Diagnostic list
 		"folke/trouble.nvim",
+		cond = cond,
 		lazy = true,
 		event = "LspAttach",
 		opts = {
@@ -270,6 +276,7 @@ return {
 	{
 		-- Linter manager
 		"nvimtools/none-ls.nvim",
+		cond = cond,
 		lazy = true,
 		event = "VeryLazy",
 		dependencies = { "kevinhwang91/nvim-ufo", lazy = true, event = "VeryLazy" },
@@ -287,6 +294,7 @@ return {
 	{
 		-- Window for previewing LSP locations
 		"dnlhc/glance.nvim",
+		cond = cond,
 		lazy = true,
 		event = "LspAttach",
 		opts = {
@@ -301,6 +309,7 @@ return {
 	{
 		-- Inlay hints
 		"lvimuser/lsp-inlayhints.nvim",
+		cond = cond,
 		lazy = true,
 		event = "LspAttach",
 		opts = {
@@ -322,7 +331,7 @@ return {
 	{
 		-- Virtual text to show usage
 		"Wansmer/symbol-usage.nvim",
-		cond = require("user_configs").lsp_features.show_usage,
+		cond = require("user_configs").lsp_features.show_usage and cond,
 		event = "BufReadPre",
 		opts = {
 			hl = { link = "StatusLineNC" },
@@ -332,6 +341,7 @@ return {
 	{
 		--  Stop inactive lsp servers until the buffer recover the focus.
 		"hinell/lsp-timeout.nvim",
+		cond = cond,
 		event = "LspAttach",
 		init = function()
 			vim.g["lsp-timeout-config"] = {
