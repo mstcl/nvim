@@ -103,26 +103,12 @@ autocmd({ "BufReadPost" }, {
 	end,
 })
 
-local org = augroup("org", { clear = true })
-
-autocmd({ "Filetype" }, {
-	pattern = "org",
-	group = org,
-	callback = function()
-		opt_local.expandtab = true
-		opt_local.list = false
-		opt_local.conceallevel = 2
-		opt_local.concealcursor = "nc"
-		opt_local.shiftwidth = 2
-		opt_local.foldlevel = 99
-	end,
-})
-
 local mdoptions = augroup("mdoptions", { clear = true })
 autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd" },
+	pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd", "*.typ" },
 	group = mdoptions,
 	callback = function()
+		vim.b.minicursorword_disable = true
 		opt_local.list = false
 		opt_local.spell = true
 		map("i", "<C-l>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
