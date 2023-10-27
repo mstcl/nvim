@@ -3,10 +3,10 @@ local M = {}
 M.dap_enabled = true
 M.lsp_enabled = true
 M.lsp_features = {
-	show_usage = false
+	show_usage = false,
 }
 M.edit_features = {
-	biscuits = true
+	biscuits = true,
 }
 
 M.frecency_workspaces = {
@@ -222,7 +222,7 @@ M.statusline_short_ft = {
 	"Outline",
 	"quickfix",
 	"toggleterm",
-	"NeogitStatus"
+	"NeogitStatus",
 }
 
 M.indent_scope_disabled_ft = {

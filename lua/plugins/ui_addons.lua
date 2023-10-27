@@ -1,5 +1,4 @@
 -- Plugins that modify UI
-
 return {
 	{
 		-- Colorscheme
