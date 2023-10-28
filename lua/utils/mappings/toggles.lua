@@ -13,12 +13,6 @@ wk.register({
 		end,
 		"Toggle Zen mode",
 	},
-	["<C-M>w"] = {
-		function()
-			exec("Trouble workspace_diagnostics")
-		end,
-		"Toggle workspace diagnostic quickfix list",
-	},
 	["<C-M>t"] = {
 		function()
 			exec("TSBufToggle highlight")
@@ -36,12 +30,6 @@ wk.register({
 			exec("setlocal spell! spelllang=en_gb")
 		end,
 		"Toggle spell checking",
-	},
-	["<C-M>c"] = {
-		function()
-			exec("AerialToggle!")
-		end,
-		"Toggle sidebar document code symbols",
 	},
 	["<C-M>a"] = {
 		function()
