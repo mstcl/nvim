@@ -103,10 +103,10 @@ autocmd({ "BufReadPost" }, {
 	end,
 })
 
-local mdoptions = augroup("mdoptions", { clear = true })
+local text_opts = augroup("text_opts", { clear = true })
 autocmd({ "BufNewFile", "BufRead" }, {
 	pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd", "*.typ" },
-	group = mdoptions,
+	group = text_opts,
 	callback = function()
 		vim.b.minicursorword_disable = true
 		opt_local.list = false
@@ -114,21 +114,21 @@ autocmd({ "BufNewFile", "BufRead" }, {
 		map("i", "<C-l>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
 	end,
 })
-autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = { "*.md" },
-	group = mdoptions,
-	command = [[
-		syn region math start=/\$\$/ end=/\$\$/
-		syn match math_block '\$[^$].\{-}\$'
-		syn match liquid '{%.*%}'
-		syn region highlight_block start='{% highlight .*%}' end='{%.*%}'
-		syn region highlight_block start='```' end='```'
-		hi link math Statement
-		hi link liquid Statement
-		hi link highlight_block Function
-		hi link math_block Function
-	]],
-})
+-- autocmd({ "BufNewFile", "BufRead" }, {
+-- 	pattern = { "*.md" },
+-- 	group = mdoptions,
+-- 	command = [[
+-- 		syn region math start=/\$\$/ end=/\$\$/
+-- 		syn match math_block '\$[^$].\{-}\$'
+-- 		syn match liquid '{%.*%}'
+-- 		syn region highlight_block start='{% highlight .*%}' end='{%.*%}'
+-- 		syn region highlight_block start='```' end='```'
+-- 		hi link math Statement
+-- 		hi link liquid Statement
+-- 		hi link highlight_block Function
+-- 		hi link math_block Function
+-- 	]],
+-- })
 
 local starter = augroup("starter", { clear = true })
 autocmd({ "VimEnter" }, {
