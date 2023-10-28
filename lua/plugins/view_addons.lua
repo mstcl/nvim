@@ -383,22 +383,33 @@ return {
 			telescope.load_extension("zoxide")
 			telescope.load_extension("frecency")
 			telescope.load_extension("undo")
-			telescope.load_extension("dap")
+			if require("user_configs").dap_enabled then
+				telescope.load_extension("dap")
+			end
 			telescope.load_extension("lazy")
 			telescope.load_extension("ui-select")
-			telescope.load_extension("aerial")
+			if require("user_configs").lsp_enabled then
+				telescope.load_extension("aerial")
+			end
 		end,
 		dependencies = {
-			"nvim-telescope/telescope-ui-select.nvim",
-			"nvim-telescope/telescope-dap.nvim",
-			"tsakirist/telescope-lazy.nvim",
-			"debugloop/telescope-undo.nvim",
-			"nvim-lua/plenary.nvim",
+			{ "nvim-telescope/telescope-ui-select.nvim", lazy = true, event = "VeryLazy" },
+			{
+				"nvim-telescope/telescope-dap.nvim",
+				cond = require("user_configs").dap_enabled,
+				lazy = true,
+				event = "VeryLazy",
+			},
+			{ "tsakirist/telescope-lazy.nvim",           lazy = true, event = "VeryLazy" },
+			{ "debugloop/telescope-undo.nvim",           lazy = true, event = "VeryLazy" },
+			{ "nvim-lua/plenary.nvim",                   lazy = true, event = "VeryLazy" },
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 				build = "make",
+				lazy = true,
+				event = "VeryLazy",
 			},
-			"jvgrootveld/telescope-zoxide",
+			{ "jvgrootveld/telescope-zoxide", lazy = true, event = "VeryLazy" },
 			{
 				"rudism/telescope-dict.nvim",
 				ft = { "markdown", "tex" },
@@ -406,6 +417,8 @@ return {
 			{
 				"nvim-telescope/telescope-frecency.nvim",
 				commit = "fbda5d91d6e787f5977787fa4a81da5c8e22160a",
+				lazy = true,
+				event = "VeryLazy",
 			},
 		},
 	},
@@ -414,7 +427,7 @@ return {
 		lazy = true,
 		cmd = "Neogit",
 		dependencies = {
-			{"nvim-telescope/telescope.nvim", lazy = true, cmd = "Telescope"}
+			{ "nvim-telescope/telescope.nvim", lazy = true, cmd = "Telescope" },
 		},
 		opts = {
 			-- integrations = {
