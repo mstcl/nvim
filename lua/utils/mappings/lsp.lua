@@ -10,6 +10,24 @@ local M = {}
 function M.setup(client, bufnr)
 	wk.register({
 		["<leader>q"] = { name = "LSP commands" },
+		["<leader>c"] = {
+			function()
+				exec("Telescope aerial")
+			end,
+			"Pick document code symbols",
+		},
+		["<C-M>c"] = {
+			function()
+				exec("AerialToggle!")
+			end,
+			"Toggle sidebar document code symbols",
+		},
+		["<C-M>w"] = {
+			function()
+				exec("Trouble workspace_diagnostics")
+			end,
+			"Toggle workspace diagnostic quickfix list",
+		},
 	})
 
 	if client.server_capabilities.definitionProvider then

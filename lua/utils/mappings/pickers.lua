@@ -17,12 +17,6 @@ wk.register({
 		end,
 		"Pick last used picker",
 	},
-	["<leader>c"] = {
-		function()
-			exec("Telescope aerial")
-		end,
-		"Pick document code symbols",
-	},
 	["<leader>m"] = {
 		function()
 			exec("Telescope commands")
