@@ -31,6 +31,12 @@ wk.register({
 		end,
 		"Toggle spell checking",
 	},
+	["<C-M>r"] = {
+		function()
+			exec("RooterToggle")
+		end,
+		"Toggle autochdir or root dir",
+	},
 	["<C-M>a"] = {
 		function()
 			if vim.g.cmp_toggle then

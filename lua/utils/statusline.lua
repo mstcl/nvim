@@ -1,293 +1,350 @@
-local gl = require("galaxyline")
-local noice = require("noice")
-local condition = require("galaxyline.condition")
-local buffer = require("galaxyline.provider_buffer")
-local vcs = require("galaxyline.provider_vcs")
-local gls = gl.section
-local vi_mode = require("utils.misc").statusline_vi_mode
-
-gl.short_line_list = require("user_configs").statusline_short_ft
-
-gls.left[1] = {
-	ViMode = {
-		provider = require("utils.misc").statusline_vi_mode,
-		highlight = "GalaxyFg",
-	},
+local noice_ok, noice = pcall(require, "noice")
+if not noice_ok then
+	return
+end
+local diag = vim.diagnostic
+local vi_mode_colors = {
+	normal = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("TelescopeSelection", true).foreground)),
+	insert = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Statement", true).foreground)),
+	visual = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Constant", true).foreground)),
+	cmd = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Identifier", true).foreground)),
+	replace = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Exception", true).foreground)),
+	term = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Warning", true).foreground)),
+	fg = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("GalaxyFg", true).background)),
+	fg_alt = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("GalaxyFgAlt2", true).foreground)),
+	bg_alt = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("GalaxyFgAlt2", true).background)),
+}
+local get_branch = function()
+	local git_dir = vim.fn.finddir(".git", ".;")
+	if git_dir ~= "" then
+		local head_file = io.open(git_dir .. "/HEAD", "r")
+		if head_file then
+			local content = head_file:read("*all")
+			head_file:close()
+			return content:match("ref: refs/heads/(.-)%s*$")
+		end
+		return ""
+	end
+	return ""
+end
+local utils = require("sttusline.utils")
+local mode = require("sttusline.components.mode")
+local pos_cursor = require("sttusline.components.pos-cursor")
+local indentation = require("sttusline.component").new()
+local git_branch = require("sttusline.component").new()
+local git_diff = require("sttusline.component").new()
+local empty = require("sttusline.component").new()
+local lsps_formatters = require("sttusline.component"):new()
+local filetype = require("sttusline.component"):new()
+local cwd = require("sttusline.component"):new()
+local macro = require("sttusline.component"):new()
+local diagnostics = require("sttusline.component").new()
+local diagnostics_color = {
+	ERROR = "GalaxyRed",
+	WARN = "GalaxyOrange",
+	HINT = "GalaxyBlue",
+	INFO = "GalaxyMagenta",
 }
 
--- gls.left[2] = {
--- 	FileName = {
--- 		provider = function()
--- 			return fileinfo.get_current_file_name("●", "✗")
--- 		end,
--- 		condition = condition.buffer_not_empty,
--- 		highlight = "GalaxyFgAlt",
--- 		icon = " ",
--- 	},
--- }
+mode.set_config({
+	modes = {
+		["n"] = { "NVM", "STTUSLINE_NORMAL_MODE" },
+		["no"] = { "NVM (no)", "STTUSLINE_NORMAL_MODE" },
+		["nov"] = { "NVM (nov)", "STTUSLINE_NORMAL_MODE" },
+		["noV"] = { "NVM (noV)", "STTUSLINE_NORMAL_MODE" },
+		["noCTRL-V"] = { "NVM", "STTUSLINE_NORMAL_MODE" },
+		["niI"] = { "NVIM i", "STTUSLINE_NORMAL_MODE" },
+		["niR"] = { "NVIM r", "STTUSLINE_NORMAL_MODE" },
+		["niV"] = { "NVIM v", "STTUSLINE_NORMAL_MODE" },
 
-gls.left[2] = {
-	FileFormat = {
-		provider = function()
-			return buffer.get_buffer_filetype()
-		end,
-		highlight = "GalaxyFgAlt",
-		icon = "  ",
-		separator_highlight = "GalaxyFgAlt",
-		separator = " ",
+		["nt"] = { "TRM", "STTUSLINE_NTERMINAL_MODE" },
+		["ntT"] = { "TRM (ntT)", "STTUSLINE_NTERMINAL_MODE" },
+
+		["v"] = { "VIS", "STTUSLINE_VISUAL_MODE" },
+		["vs"] = { "V-CH (Ctrl O)", "STTUSLINE_VISUAL_MODE" },
+		["V"] = { "V-LN", "STTUSLINE_VISUAL_MODE" },
+		["Vs"] = { "V-LN", "STTUSLINE_VISUAL_MODE" },
+		["�"] = { "V-BK", "STTUSLINE_VISUAL_MODE" },
+
+		["i"] = { "INS", "STTUSLINE_INSERT_MODE" },
+		["ic"] = { "INS (completion)", "STTUSLINE_INSERT_MODE" },
+		["ix"] = { "INS completion", "STTUSLINE_INSERT_MODE" },
+
+		["t"] = { "TRM", "STTUSLINE_TERMINAL_MODE" },
+		["!"] = { "SHL", "STTUSLINE_TERMINAL_MODE" },
+
+		["R"] = { "RPL", "STTUSLINE_REPLACE_MODE" },
+		["Rc"] = { "RPL (Rc)", "STTUSLINE_REPLACE_MODE" },
+		["Rx"] = { "RPL (Rx)", "STTUSLINE_REPLACE_MODE" },
+		["Rv"] = { "V-RP", "STTUSLINE_REPLACE_MODE" },
+		["Rvc"] = { "V-RP (Rvc)", "STTUSLINE_REPLACE_MODE" },
+		["Rvx"] = { "V-RP (Rvx)", "STTUSLINE_REPLACE_MODE" },
+
+		["s"] = { "SLC", "STTUSLINE_SELECT_MODE" },
+		["S"] = { "S-LN", "STTUSLINE_SELECT_MODE" },
+		["�"] = { "S-BK", "STTUSLINE_SELECT_MODE" },
+
+		["c"] = { "CMD", "STTUSLINE_COMMAND_MODE" },
+		["cv"] = { "CMD", "STTUSLINE_COMMAND_MODE" },
+		["ce"] = { "CMD", "STTUSLINE_COMMAND_MODE" },
+
+		["r"] = { "PRM", "STTUSLINE_CONFIRM_MODE" },
+		["rm"] = { "MRE", "STTUSLINE_CONFIRM_MODE" },
+		["r?"] = { "CNF", "STTUSLINE_CONFIRM_MODE" },
+		["x"] = { "CNF", "STTUSLINE_CONFIRM_MODE" },
 	},
-}
-
--- gls.left[3] = {
--- 	GitTag = {
--- 		provider = function()
--- 			return "GIT "
--- 		end,
--- 		condition = condition.check_git_workspace,
--- 		highlight = "GalaxyFgAlt2I",
--- 		separator_highlight = "GalaxyFgAlt2I",
--- 		icon = " "
--- 	}
--- }
-
--- gls.left[7] = {
--- 	BranchSpace = {
--- 		provider = function()
--- 			return " "
--- 		end,
--- 		highlight = "GalaxyFgAlt2",
--- 	},
--- }
-
-gls.left[4] = {
-	GitBranch = {
-		provider = function()
-			if vcs.get_git_branch() == nil then
-				return ""
-			else
-				return "[" .. vcs.get_git_branch() .. "]"
-			end
-		end,
-		condition = condition.check_git_workspace,
-		highlight = "GalaxyFgAlt2",
-		icon = " ",
-		-- separator_highlight = "GalaxyFgAlt2",
-		-- separator = " ",
+	mode_colors = {
+		["STTUSLINE_NORMAL_MODE"] = { fg = vi_mode_colors.fg, bg = vi_mode_colors.normal },
+		["STTUSLINE_INSERT_MODE"] = { fg = vi_mode_colors.fg, bg = vi_mode_colors.insert },
+		["STTUSLINE_VISUAL_MODE"] = { fg = vi_mode_colors.fg, bg = vi_mode_colors.visual },
+		["STTUSLINE_NTERMINAL_MODE"] = { fg = vi_mode_colors.fg, bg = vi_mode_colors.term },
+		["STTUSLINE_TERMINAL_MODE"] = { fg = vi_mode_colors.fg, bg = vi_mode_colors.term },
+		["STTUSLINE_REPLACE_MODE"] = { fg = vi_mode_colors.fg, bg = vi_mode_colors.replace },
+		["STTUSLINE_SELECT_MODE"] = { fg = vi_mode_colors.fg, bg = vi_mode_colors.cmd },
+		["STTUSLINE_COMMAND_MODE"] = { fg = vi_mode_colors.fg, bg = vi_mode_colors.cmd },
+		["STTUSLINE_CONFIRM_MODE"] = { fg = vi_mode_colors.fg, bg = vi_mode_colors.cmd },
 	},
-}
+})
 
-gls.left[5] = {
-	DiffAdd = {
-		provider = "DiffAdd",
-		icon = "  +",
-		highlight = "GalaxyGreen",
-		separator_highlight = "GalaxyFgAlt2",
-		separator = "",
-	},
-}
+macro.set_event({ "BufEnter" })
+macro.set_user_event({})
+macro.set_timing(true)
+macro.set_lazy(false)
+macro.set_config({})
+macro.set_padding(0)
+macro.set_colors({ fg = vi_mode_colors.term, bg = vi_mode_colors.bg_alt })
+macro.set_condition(noice.api.statusline.mode.has)
+macro.set_update(noice.api.statusline.mode.get)
 
-gls.left[6] = {
-	DiffModified = {
-		provider = "DiffModified",
-		icon = "  ~",
-		highlight = "GalaxyMagenta",
-		separator_highlight = "GalaxyFgAlt2",
-		separator = "",
-	},
-}
+filetype.set_event({ "BufEnter" })
+filetype.set_user_event({ "VeryLazy" })
+filetype.set_timing(false)
+filetype.set_lazy(true)
+filetype.set_config({})
+filetype.set_padding(0)
+filetype.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
+filetype.set_update(function()
+	return "[" .. vim.bo.filetype .. "]"
+end)
 
-gls.left[7] = {
-	DiffRemove = {
-		provider = vcs.diff_remove,
-		icon = "  -",
-		highlight = "GalaxyRed",
-		separator_highlight = "GalaxyFgAlt2",
-		separator = "",
-	},
-}
+cwd.set_event({ "BufEnter" })
+cwd.set_user_event({})
+cwd.set_timing(true)
+cwd.set_lazy(false)
+cwd.set_config({})
+cwd.set_padding(0)
+cwd.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
+cwd.set_update(function()
+	return "[" .. vim.fn.getcwd() .. "]"
+end)
 
-gls.left[8] = {
-	Extra1 = {
-		provider = function()
-			if vcs.diff_remove() == nil and vcs.diff_add() == nil and vcs.diff_modified() == nil then
-				return ""
-			else
-				return " "
-			end
-		end,
-		separator_highlight = "GalaxyFgAlt2",
-		highlight = "GalaxyFgAlt2",
-		-- condition = condition.check_git_workspace,
-		-- separator = " ",
-	},
-}
+git_branch.set_event({ "BufEnter" })
+git_branch.set_padding(0)
+git_branch.set_user_event({ "VeryLazy", "GitSignsUpdate" })
+git_branch.set_condition(function()
+	return vim.api.nvim_buf_get_option(0, "buflisted")
+end)
+git_branch.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
+git_branch.set_update(function()
+	local branch = get_branch()
+	if branch == "" then
+		return ""
+	end
+	return "[" .. branch .. "]"
+end)
 
-gls.left[12] = {
-	LspTag = {
-		provider = function()
-			if condition.check_git_workspace() then
-				return ""
-			else
-				return " "
-			end
-		end,
-		highlight = "GalaxyFgAlt2",
-	},
-}
+empty.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
+empty.set_event({ "BufEnter" })
+empty.set_user_event({ "VeryLazy" })
+empty.set_timing(false)
+empty.set_lazy(true)
+empty.set_padding(0)
+empty.set_update(function()
+	return " "
+end)
 
-gls.left[13] = {
-	LspClient = {
-		provider = function()
-			local bufnr = vim.api.nvim_get_current_buf()
-			local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
-			if next(clients) == nil then
-				return "[No client detected]"
-			end
-			local clients_str = "["
-			local first = true
-			local padding = ""
-			for _, client in ipairs(clients) do
-				if not first then
-					padding = " "
+lsps_formatters.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
+lsps_formatters.set_event({ "LspAttach", "LspDetach", "BufWritePost", "BufEnter", "VimResized" })
+lsps_formatters.set_user_event({})
+lsps_formatters.set_condition(function()
+	return vim.o.columns > 70
+end)
+lsps_formatters.set_padding(0)
+lsps_formatters.set_update(function()
+	local buf_clients = vim.lsp.buf_get_clients()
+	if not buf_clients or #buf_clients == 0 then
+		return ""
+	end
+	local server_names = {}
+	for _, client in pairs(buf_clients) do
+		local client_name = client.name
+		if client_name ~= "null-ls" and client_name ~= "copilot" then
+			table.insert(server_names, client_name)
+		end
+	end
+	if package.loaded["null-ls"] then
+		local has_null_ls, null_ls = pcall(require, "null-ls")
+		if has_null_ls then
+			local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
+			local null_ls_methods = {
+				null_ls.methods.DIAGNOSTICS,
+				null_ls.methods.DIAGNOSTICS_ON_OPEN,
+				null_ls.methods.DIAGNOSTICS_ON_SAVE,
+				null_ls.methods.FORMATTING,
+			}
+			local get_null_ls_sources = function(methods, name_only)
+				local sources = require("null-ls.sources")
+				local available_sources = sources.get_available(buf_ft)
+				methods = type(methods) == "table" and methods or { methods }
+				if #methods == 0 then
+					if name_only then
+						return vim.tbl_map(function(source)
+							return source.name
+						end, available_sources)
+					end
+					return available_sources
 				end
-				clients_str = clients_str .. padding .. client.name
-				if first then
-					first = false
+				local source_results = {}
+				for _, source in ipairs(available_sources) do
+					for _, method in ipairs(methods) do
+						if source.methods[method] then
+							if name_only then
+								table.insert(source_results, source.name)
+							else
+								table.insert(source_results, source)
+							end
+							break
+						end
+					end
+				end
+				return source_results
+			end
+			local null_ls_builtins = get_null_ls_sources(null_ls_methods, true)
+			vim.list_extend(server_names, null_ls_builtins)
+		end
+	end
+
+	if package.loaded["conform"] then
+		local has_conform, conform = pcall(require, "conform")
+		if has_conform then
+			vim.list_extend(
+				server_names,
+				vim.tbl_map(function(formatter)
+					return formatter.name
+				end, conform.list_formatters(0))
+			)
+		end
+	end
+
+	return "[" .. table.concat(vim.fn.uniq(server_names), ", ") .. "]"
+end)
+
+pos_cursor.set_colors({ bg = vi_mode_colors.fg_alt, fg = vi_mode_colors.bg_alt })
+
+indentation.set_event({ "BufEnter" })
+indentation.set_user_event({ "VeryLazy" })
+indentation.set_timing(false)
+indentation.set_lazy(true)
+indentation.set_config({})
+indentation.set_padding(0)
+indentation.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
+indentation.set_update(function()
+	local indent_mode = "TAB"
+	if vim.o.expandtab then
+		indent_mode = "SHIFT"
+	end
+	return "[" .. indent_mode .. ": " .. vim.o.shiftwidth .. "]"
+end)
+
+diagnostics.set_event({
+	"DiagnosticChanged",
+})
+diagnostics.set_user_event({})
+diagnostics.set_condition(function()
+	local ft = vim.api.nvim_buf_get_option(0, "filetype")
+	return ft ~= "lazy"
+end)
+diagnostics.set_update(function()
+	local result = {}
+	local icons = {
+		ERROR = require("user_configs").lsp_vt_signs[1],
+		WARN = require("user_configs").lsp_vt_signs[2],
+		INFO = require("user_configs").lsp_vt_signs[3],
+		HINT = require("user_configs").lsp_vt_signs[4],
+	}
+	local order = { "ERROR", "WARN", "INFO", "HINT" }
+
+	for _, key in ipairs(order) do
+		local count = #diag.get(0, { severity = diag.severity[key] })
+		if count > 0 then
+			local color = diagnostics_color[key]
+			if color then
+				if utils.is_color(color) or type(color) == "table" then
+					table.insert(result, utils.add_highlight_name(icons[key] .. count, "STTUSLINE_DIAGNOSTICS_" .. key))
+				else
+					table.insert(result, utils.add_highlight_name(icons[key] .. count, color))
 				end
 			end
-			return clients_str .. "]"
-		end,
-		highlight = "GalaxyFgAlt2",
-		-- icon = " ",
-		-- separator_highlight = "GalaxyFgAlt2",
-		-- separator = " ",
-	},
-}
+		end
+	end
 
-gls.left[14] = {
-	DiagnosticError = {
-		provider = "DiagnosticError",
-		icon = "  ✗",
-		highlight = "GalaxyRed",
-	},
-}
+	return #result > 0 and table.concat(result, " ") or ""
+end)
 
-gls.left[15] = {
-	DiagnosticWarn = {
-		provider = "DiagnosticWarn",
-		icon = "  !",
-		highlight = "GalaxyOrange",
-		-- separator_highlight = "GalaxyFgAlt2",
-		-- separator = " ",
-	},
-}
+git_diff.set_event({ "BufWritePost", "VimResized", "BufEnter" })
+git_diff.set_user_event({ "GitSignsUpdate" })
+git_diff.set_update(function()
+	local git_status = vim.b.gitsigns_status_dict
+	local order = { "added", "changed", "removed" }
+	local icons = {
+		added = "+",
+		changed = "~",
+		removed = "-",
+	}
+	local diff_colors = {
+		added = "GalaxyGreen",
+		changed = "GalaxyMagenta",
+		removed = "GalaxyRed",
+	}
+	local result = {}
+	for _, v in ipairs(order) do
+		if git_status[v] and git_status[v] > 0 then
+			local color = diff_colors[v]
 
-gls.left[16] = {
-	DiagnosticHint = {
-		provider = "DiagnosticHint",
-		icon = "  ?",
-		highlight = "GalaxyBlue",
-		-- separator_highlight = "GalaxyFgAlt2",
-		-- separator = " ",
-	},
-}
-
-gls.left[17] = {
-	DiagnosticInfo = {
-		provider = "DiagnosticInfo",
-		icon = "  i",
-		highlight = "GalaxyMagenta",
-		-- separator_highlight = "GalaxyFgAlt2",
-		-- separator = " ",
-	},
-}
-
-gls.mid[18] = {
-	Macro = {
-		provider = noice.api.statusline.mode.get,
-		condition = noice.api.status.mode.has(),
-		highlight = "GalaxyFgAlt2",
-		-- icon = "  ",
-	},
-}
-
--- gls.right[1] = {
--- 	CwdTag = {
--- 		provider = function()
--- 			return " CWD "
--- 		end,
--- 		highlight = "GalaxyFgAlt2I",
--- 		icon = " "
--- 	}
--- }
-
-gls.right[1] = {
-	VimOpts = {
-		provider = function()
-			local indent_mode = "TAB"
-			if vim.o.expandtab then
-				indent_mode = "SHIFT"
+			if color then
+				if utils.is_color(color) or type(color) == "table" then
+					table.insert(
+						result,
+						utils.add_highlight_name(icons[v] .. git_status[v], "STTUSLINE_GIT_DIFF_" .. v)
+					)
+				else
+					table.insert(result, utils.add_highlight_name(icons[v] .. git_status[v], color))
+				end
 			end
-			return "[" .. indent_mode .. ": " .. vim.o.shiftwidth .. "]"
-		end,
-		highlight = "GalaxyFgAlt2",
-		-- separator = " ",
-		-- separator_highlight = "GalaxyFgAlt2",
-	},
-}
+		end
+	end
 
-gls.right[2] = {
-	FilePath = {
-		provider = function()
-			return "[" .. vim.fn.getcwd() .. "]"
-		end,
-		condition = condition.buffer_not_empty,
-		highlight = "GalaxyFgAlt2",
-		-- separator = " ",
-		-- separator_highlight = "GalaxyFgAlt2",
-	},
-}
+	return #result > 0 and table.concat(result, " ") or ""
+end)
+git_diff.set_condition(function()
+	return vim.b.gitsigns_status_dict ~= nil and vim.o.columns > 70
+end)
 
--- gls.right[3] = {
--- 	PaddingRight = {
--- 		provider = function ()
--- 			return " "
--- 		end,
--- 		highlight = "GalaxyFgAlt2",
--- 	}
--- }
+local M = {}
 
-gls.mid[1] = {
-	Search = {
-		provider = noice.api.statusline.search.get,
-		condition = noice.api.statusline.search.has(),
-		highlight = "GalaxyFgAlt2",
-		separator = " ",
-		separator_highlight = "GalaxyFgAlt2",
-	},
-}
+M.components = {
+		mode,
+		pos_cursor,
+		empty,
+		git_branch,
+		git_diff,
+		lsps_formatters,
+		diagnostics,
+		macro,
+		"%=",
+		indentation,
+		filetype,
+		cwd,
+	}
 
-gls.mid[3] = {
-	Whitespace = {
-		provider = "WhiteSpace",
-		highlight = "GalaxyFgAlt2",
-		-- icon = "⇆ ",
-		separator = " ",
-		separator_highlight = "GalaxyFgAlt2",
-	},
-}
-
-gls.short_line_left[1] = {
-	ViMode = {
-		provider = vi_mode,
-		highlight = "GalaxyFg",
-	},
-}
-
-gls.short_line_left[3] = {
-	BufferType = {
-		provider = "FileTypeName",
-		icon = "  ",
-		highlight = "GalaxyFgAlt2",
-	},
-}
+return M

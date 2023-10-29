@@ -37,12 +37,6 @@ wk.register({
 		end,
 		"Cycle number mode",
 	},
-	["<C-R>"] = {
-		function()
-			exec("RooterToggle")
-		end,
-		"Toggle autochdir or root dir",
-	},
 	["<C-P>"] = {
 		function()
 			exec("WhichKey")

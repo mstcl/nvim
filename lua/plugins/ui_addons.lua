@@ -24,13 +24,20 @@ return {
 		end,
 	},
 	{
-		-- Statusline
-		"nvimdev/galaxyline.nvim",
+		"sontungexpt/sttusline",
 		lazy = true,
-		event = { "VeryLazy" },
-		branch = "main",
+		event = "BufRead",
 		config = function()
-			require("utils.statusline")
+			require("sttusline").setup({
+				laststatus = 3,
+				components = require("utils.statusline").components,
+				disabled = {
+					filetypes = require("user_configs").statusline_short_ft,
+					buftypes = {
+						"terminal",
+					},
+				},
+			})
 		end,
 	},
 	{
@@ -80,14 +87,14 @@ return {
 		-- Tabline and bufferline
 		"romgrk/barbar.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufRead",
 		init = function()
 			vim.g.barbar_auto_setup = false
 			require("utils.mappings.buffer")
 		end,
 		opts = {
 			animation = true,
-			auto_hide = true,
+			auto_hide = false,
 			tabpages = true,
 			closable = true,
 			clickable = true,
@@ -114,15 +121,15 @@ return {
 					custom_colors = false,
 					enabled = false,
 				},
-				separator = { left = "│", right = "" },
+				separator = { left = ",", right = "" },
 				modified = { button = "●" },
 				pinned = { button = "☀", filename = true },
-				current = { buffer_index = true },
-				inactive = { filetype = { enabled = false } },
+				current = { buffer_index = true, filename = true },
+				inactive = { filename = true },
 			},
 			insert_at_end = false,
 			maximum_padding = 0,
-			maximum_length = 10,
+			maximum_length = 30,
 			semantic_letters = true,
 			letters = "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP",
 			no_name_title = nil,
@@ -154,7 +161,17 @@ return {
 				anchor = "SW",
 			},
 			select = {
-				enabled = false,
+				-- enabled = false,
+				backend = "builtin",
+				builtin = {
+					border = "single",
+					win_options = {
+						cursorline = false,
+						cursorlineopt = "number",
+						winblend = 0,
+						winhighlight = "NormalFloat:TelescopeNormal,FloatBorder:TelescopeBorder,FloatTitle:Pmenu",
+					},
+				},
 			},
 		},
 	},
