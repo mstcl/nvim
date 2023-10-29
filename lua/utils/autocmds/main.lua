@@ -114,21 +114,6 @@ autocmd({ "BufNewFile", "BufRead" }, {
 		map("i", "<C-l>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
 	end,
 })
--- autocmd({ "BufNewFile", "BufRead" }, {
--- 	pattern = { "*.md" },
--- 	group = mdoptions,
--- 	command = [[
--- 		syn region math start=/\$\$/ end=/\$\$/
--- 		syn match math_block '\$[^$].\{-}\$'
--- 		syn match liquid '{%.*%}'
--- 		syn region highlight_block start='{% highlight .*%}' end='{%.*%}'
--- 		syn region highlight_block start='```' end='```'
--- 		hi link math Statement
--- 		hi link liquid Statement
--- 		hi link highlight_block Function
--- 		hi link math_block Function
--- 	]],
--- })
 
 local starter = augroup("starter", { clear = true })
 autocmd({ "VimEnter" }, {
@@ -137,11 +122,13 @@ autocmd({ "VimEnter" }, {
 	callback = function()
 		if bo.filetype == "starter" then
 			opt_local.laststatus = 0
+			vim.o.showtabline = 0
 			autocmd({ "BufUnload" }, {
 				group = starter,
 				pattern = "<buffer>",
 				callback = function()
 					opt_local.laststatus = 3
+					vim.o.showtabline = 2
 				end,
 			})
 		end
@@ -178,7 +165,6 @@ autocmd({ "TermOpen" }, {
 		require("utils.misc").set_terminal_keymaps()
 	end,
 })
-
 
 local neogit = augroup("neogit", { clear = true })
 autocmd({ "Filetype" }, {

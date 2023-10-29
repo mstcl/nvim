@@ -399,13 +399,13 @@ return {
 		lazy = false,
 	},
 	{
-		-- 	-- Smart rooter, replaces autochdir
+		-- Smart rooter, replaces autochdir
 		"notjedi/nvim-rooter.lua",
 		lazy = true,
 		event = "VeryLazy",
 		opts = {
 			manual = false,
-			exclude_filetypes = { "quarto", "markdown", "org"},
+			exclude_filetypes = { "quarto", "markdown", "org" },
 			rooter_patterns = {
 				".git",
 				".hg",

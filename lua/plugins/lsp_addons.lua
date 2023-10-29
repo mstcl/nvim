@@ -162,7 +162,7 @@ return {
 	{
 		-- Breadcrumb bar
 		"utilyre/barbecue.nvim",
-		cond = cond,
+		cond = require("user_configs").lsp_features.show_breadcrumbs and cond,
 		lazy = true,
 		version = "*",
 		event = "LspAttach",
@@ -173,29 +173,31 @@ return {
 			if not present then
 				return
 			end
-			local bg = require("utils.misc").barbecue_theme["bg"]
-			local fg = require("utils.misc").barbecue_theme["fg"]
-			local mg = require("utils.misc").barbecue_theme["mg"]
-			local bg_fg = { bg = bg, fg = fg }
-			local bg_mg = { bg = bg, fg = mg }
+			local colors = require("utils.misc").barbecue_theme
+			local bg_fg = { bg = colors["bg"], fg = colors["fg"] }
+			local bg_mg = { bg = colors["bg"], fg = colors["mg"] }
+			local bg_hl = { bg = colors["bg"], fg = colors["hl"] }
+			local bg_bl = { bg = colors["bg"], fg = colors["bl"] }
 			barbecue.setup({
 				create_autocmd = false,
 				theme = {
 					normal = bg_fg,
 					context = bg_fg,
-					basename = bg_fg,
+					basename = bg_hl,
 					ellipsis = bg_mg,
 					separator = bg_mg,
-					modified = bg_fg,
-					dirname = bg_fg,
+					modified = bg_hl,
+					dirname = bg_bl,
 				},
-				show_dirname = true,
-				show_basename = true,
+				show_dirname = false,
+				show_basename = false,
 				symbols = {
 					separator = "⟫",
 					ellipsis = "…",
 					modified = "●",
 				},
+				exclude_filetypes = { "netrw", "toggleterm" },
+				exclude_buftypes = { "terminal" },
 				show_modified = true,
 				kinds = require("user_configs").lsp_kind_icons,
 			})

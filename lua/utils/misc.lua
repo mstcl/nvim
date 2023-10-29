@@ -50,60 +50,10 @@ M.barbecue_theme = {
 	["bg"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("WinBar", true).background)),
 	["mg"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Whitespace", true).foreground)),
 	["fg"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Operator", true).foreground)),
+	["hl"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Include", true).foreground)),
+	["bl"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Function", true).foreground)),
 }
 
-local vi_mode_colors = {
-	normal = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("TelescopeSelection", true).foreground)),
-	insert = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Statement", true).foreground)),
-	visual = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Constant", true).foreground)),
-	cmd = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Identifier", true).foreground)),
-	replace = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Exception", true).foreground)),
-	term = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Warning", true).foreground)),
-}
-function M.statusline_vi_mode()
-	local alias = {
-		n = "NVM",
-		i = "INS",
-		c = "CMD",
-		V = "VIS",
-		[""] = "VIS",
-		v = "VIS",
-		["r?"] = ":CONFIRM",
-		rm = "--MORE",
-		R = "REP",
-		Rv = "VIR",
-		s = "SEL",
-		S = "SEL",
-		r = "HIT-ENTER",
-		[""] = "SEL",
-		t = "TERM",
-		["!"] = "SHELL",
-	}
-	local mode_color = {
-		n = vi_mode_colors.normal,
-		i = vi_mode_colors.insert,
-		c = vi_mode_colors.cmd,
-		V = vi_mode_colors.visual,
-		[""] = vi_mode_colors.visual,
-		v = vi_mode_colors.visual,
-		["r?"] = vi_mode_colors.visual,
-		rm = vi_mode_colors.visual,
-		R = vi_mode_colors.replace,
-		Rv = vi_mode_colors.replace,
-		s = vi_mode_colors.replace,
-		S = vi_mode_colors.replace,
-		r = vi_mode_colors.replace,
-		[""] = vi_mode_colors.replace,
-		t = vi_mode_colors.term,
-		["!"] = vi_mode_colors.replace,
-		ic = vi_mode_colors.insert,
-		cv = vi_mode_colors.replace,
-		ce = vi_mode_colors.replace,
-	}
-	local vim_mode = vim.fn.mode()
-	vim.api.nvim_command("hi GalaxyViMode gui=bold guifg=#f5f5f5 guibg=" .. mode_color[vim.fn.mode()])
-	return "  " .. alias[vim_mode] .. " "
-end
 function M.set_terminal_keymaps()
 	local opts_b = { silent = true, buffer = 0 }
 	vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], opts_b)

@@ -10,8 +10,6 @@ return {
 			if not term_ok then
 				return
 			end
-			local Terminal = require("toggleterm.terminal").Terminal
-
 			toggleterm.setup({
 				winbar = {
 					enabled = false,
@@ -32,30 +30,12 @@ return {
 					Normal = {
 						link = "Floaterm",
 					},
+					Statusline = {
+						link = "Statusline",
+					},
 				},
 				direction = "vertical",
 			})
-			local lazygit = Terminal:new({
-				cmd = "lazygit",
-				dir = "git_dir",
-				direction = "float",
-				float_opts = {
-					border = "single",
-				},
-				on_open = function(term)
-					vim.cmd("startinsert!")
-					vim.api.nvim_buf_set_keymap(
-						term.bufnr,
-						"n",
-						"q",
-						"<cmd>close<CR>",
-						{ noremap = true, silent = true }
-					)
-				end,
-			})
-			function _lazygit_toggle()
-				lazygit:toggle()
-			end
 		end,
 	},
 	{
@@ -350,9 +330,6 @@ return {
 					},
 				},
 				extensions = {
-					["ui-select"] = {
-						layout_strategy = "center",
-					},
 					fzf = {
 						fuzzy = true,
 						override_generic_sorter = true,
@@ -387,22 +364,21 @@ return {
 				telescope.load_extension("dap")
 			end
 			telescope.load_extension("lazy")
-			telescope.load_extension("ui-select")
 			if require("user_configs").lsp_enabled then
 				telescope.load_extension("aerial")
 			end
 		end,
 		dependencies = {
-			{ "nvim-telescope/telescope-ui-select.nvim", lazy = true, event = "VeryLazy" },
+			-- { "nvim-telescope/telescope-ui-select.nvim", lazy = true, event = "VeryLazy" },
 			{
 				"nvim-telescope/telescope-dap.nvim",
 				cond = require("user_configs").dap_enabled,
 				lazy = true,
 				event = "VeryLazy",
 			},
-			{ "tsakirist/telescope-lazy.nvim",           lazy = true, event = "VeryLazy" },
-			{ "debugloop/telescope-undo.nvim",           lazy = true, event = "VeryLazy" },
-			{ "nvim-lua/plenary.nvim",                   lazy = true, event = "VeryLazy" },
+			{ "tsakirist/telescope-lazy.nvim", lazy = true, event = "VeryLazy" },
+			{ "debugloop/telescope-undo.nvim", lazy = true, event = "VeryLazy" },
+			{ "nvim-lua/plenary.nvim",         lazy = true, event = "VeryLazy" },
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 				build = "make",
