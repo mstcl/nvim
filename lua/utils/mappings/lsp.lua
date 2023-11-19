@@ -10,6 +10,12 @@ local M = {}
 function M.setup(client, bufnr)
 	wk.register({
 		["<leader>q"] = { name = "LSP commands" },
+		["<leader>qw"] = {
+			function()
+				exec("Trouble workspace_diagnostics")
+			end,
+			"Toggle workspace diagnostic quickfix list",
+		},
 		["<leader>c"] = {
 			function()
 				exec("Telescope aerial")
@@ -21,12 +27,6 @@ function M.setup(client, bufnr)
 				exec("AerialToggle!")
 			end,
 			"Toggle sidebar document code symbols",
-		},
-		["<C-M>w"] = {
-			function()
-				exec("Trouble workspace_diagnostics")
-			end,
-			"Toggle workspace diagnostic quickfix list",
 		},
 	})
 
@@ -146,14 +146,14 @@ function M.setup(client, bufnr)
 	wk.register({
 		["[d"] = {
 			function()
-				vim.diagnostic.goto_prev({ wrap = false, float = true })
+				vim.diagnostic.goto_prev({ wrap = false, float = false })
 			end,
 			"Previous diagnostic",
 			buffer = bufnr,
 		},
 		["]d"] = {
 			function()
-				vim.diagnostic.goto_next({ wrap = false, float = true })
+				vim.diagnostic.goto_next({ wrap = false, float = false })
 			end,
 			"Next diagnostic",
 			buffer = bufnr,
