@@ -29,6 +29,7 @@ return {
 		event = "BufRead",
 		config = function()
 			require("sttusline").setup({
+				statusline_color = "StatusLine",
 				laststatus = 3,
 				components = require("utils.statusline").components,
 				disabled = {
@@ -220,7 +221,7 @@ return {
 				lsp_doc_border = false,
 			},
 			messages = {
-				view_search = false,
+				view_search = "virtualtext",
 			},
 			views = {
 				notify = {
@@ -329,6 +330,9 @@ return {
 					help = {
 						icon = "?",
 					},
+					lua = {
+						icon = "@",
+					},
 				},
 			},
 		},
@@ -408,7 +412,20 @@ return {
 		-- Naively highlight word under cursor
 		"echasnovski/mini.cursorword",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufRead",
+		init = function()
+			_G.cursorword_blocklist = function()
+				local curword = vim.fn.expand("<cword>")
+				local filetype = vim.bo.filetype
+				local blocklist = {}
+				if filetype == "lua" then
+					blocklist = { "local", "require", "true", "false", "--" }
+				end
+				vim.b.minicursorword_disable = vim.tbl_contains(blocklist, curword)
+			end
+
+			vim.cmd("au CursorMoved * lua _G.cursorword_blocklist()")
+		end,
 		opts = {},
 		version = false,
 	},
