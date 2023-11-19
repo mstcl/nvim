@@ -7,7 +7,7 @@ return {
 		event = "BufRead",
 		dependencies = { { "nvim-lua/plenary.nvim", lazy = true, event = "VeryLazy" } },
 		opts = {
-			numhl = true,
+			numhl = false,
 			linehl = false,
 			signcolumn = true,
 			watch_gitdir = {
@@ -15,19 +15,19 @@ return {
 				follow_files = true,
 			},
 			signs = {
-				add = { hl = "DiffAdd", text = " ", numhl = "DiffAdd", linehl = "DiffAdd" },
-				change = { hl = "DiffChange", text = " ", numhl = "DiffChange", linehl = "DiffChange" },
-				delete = { hl = "DiffDelete", text = " ", numhl = "DiffDelete", linehl = "DiffDelete" },
+				add = { hl = "DiffAdd", text = "+", numhl = "DiffAdd", linehl = "DiffAdd" },
+				change = { hl = "DiffChange", text = "~", numhl = "DiffChange", linehl = "DiffChange" },
+				delete = { hl = "DiffDelete", text = "‾", numhl = "DiffDelete", linehl = "DiffDelete" },
 				topdelete = { hl = "DiffDelete", text = "‾", numhl = "DiffDelete", linehl = "DiffDelete" },
 				changedelete = { hl = "DiffChange", text = "~", numhl = "DiffChange", linehl = "DiffChange" },
-				untracked = { hl = "DiffAdd", text = "╎", numhl = "DiffAdd", linehl = "DiffAdd" },
+				untracked = { hl = "DiffAdd", text = "=", numhl = "DiffAdd", linehl = "DiffAdd" },
 			},
 			current_line_blame = false,
 			sign_priority = 6,
 			update_debounce = 100,
 			status_formatter = nil,
 			word_diff = false,
-		}
+		},
 	},
 	{
 		-- Show signs for folded blocks
@@ -42,16 +42,31 @@ return {
 		-- Utility to tweak statuscolumn
 		"luukvbaal/statuscol.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufRead",
 		config = function()
 			local builtin = require("statuscol.builtin")
 			require("statuscol").setup({
 				relculright = true,
+				ft_ignore = { "help", "starter" },
 				segments = {
-					{ text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
-					{ text = { "%s" },                  click = "v:lua.ScSa" },
 					{
-						text = { builtin.lnumfunc, " " },
+						text = {
+							builtin.foldfunc,
+						},
+						click = "v:lua.ScFa",
+					},
+					{
+						sign = {
+							name = { ".*" },
+							text = { ".*" },
+							colwidth = 1,
+							maxwidth = 2,
+							auto = true,
+						},
+						click = "v:lua.ScSa",
+					},
+					{
+						text = { " ", builtin.lnumfunc, " " },
 						condition = { true, builtin.not_empty },
 						click = "v:lua.ScLa",
 					},
