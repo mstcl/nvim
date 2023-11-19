@@ -10,15 +10,21 @@ local opts = { noremap = true, silent = true }
 map("n", "Q", "", opts)
 map("n", "gQ", "", opts)
 
--- General
+-- General and groups
 wk.register({
 	["<leader>"] = { name = "Leader commands (pickers & LSP)" },
 	["<space>"] = { ":", "Command", mode = { "n", "v" } },
+	["<leader>o"] = { name = "Org mode actions" },
+	["["] = { name = "Previous" },
+	["]"] = { name = "Next" },
+	["z"] = { name = "Folds, spelling & align" },
+	["g"] = { name = "Comment, case & navigation" },
 })
 
 -- Window splitting
 wk.register({
-	["<C-S>"] = { name = "Split windows" }, ["<C-S>v"] = {
+	["<C-S>"] = { name = "Split windows" },
+	["<C-S>v"] = {
 		function()
 			exec("vs")
 		end,
@@ -34,23 +40,23 @@ wk.register({
 
 -- Searching
 wk.register({
-	["n"] = {"nzz", "Search: previous result"},
-	["N"] = {"Nzz", "Search: next result"},
-	["*"] = {"*zz", "Search: matching forward (word)"},
-	["#"] = {"#zz", "Search: matching backward (word)"},
-	["g*"] = {"g*zz", "Search: matching backward"},
-	["g#"] = {"g#zz", "Search: matching backward"},
+	["n"] = { "nzz", "Search: previous result" },
+	["N"] = { "Nzz", "Search: next result" },
+	["*"] = { "*zz", "Search: matching forward (word)" },
+	["#"] = { "#zz", "Search: matching backward (word)" },
+	["g*"] = { "g*zz", "Search: matching backward" },
+	["g#"] = { "g#zz", "Search: matching backward" },
 })
 
 -- Indenting
 wk.register({
-	["<"] = { "<gv", "Unindent", mode = "x"},
-	[">"] = { ">gv", "Indent", mode = "x"}
+	["<"] = { "<gv", "Unindent", mode = "x" },
+	[">"] = { ">gv", "Indent", mode = "x" },
 })
 
 -- Folding
 wk.register({
-	["zR"] = { require("ufo").openAllFolds, "Open all folds"},
-	["zM"] = { require("ufo").closeAllFolds, "Close all folds"},
-	["<Tab>"] = { "za", "Toggle current fold"}
+	["zR"] = { require("ufo").openAllFolds, "Open all folds" },
+	["zM"] = { require("ufo").closeAllFolds, "Close all folds" },
+	["<Tab>"] = { "za", "Toggle current fold" },
 })
