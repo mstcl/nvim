@@ -150,7 +150,7 @@ return {
 				["<leader>"] = ",",
 				["<c-w>"] = "<C-W>",
 			},
-			ignore_missing = true,
+			ignore_missing = false,
 			icons = {
 				breadcrumb = "▸",
 				separator = "⟫",
