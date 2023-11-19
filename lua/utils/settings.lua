@@ -35,7 +35,7 @@ set.termguicolors = true
 set.background = "light"
 set.modeline = true
 set.cursorline = true
-set.cursorlineopt = "number"
+-- set.cursorlineopt = "number"
 set.hidden = true
 set.showmode = false
 set.showcmd = true
@@ -67,8 +67,9 @@ set.foldnestmax = 6
 set.foldenable = true
 set.foldlevelstart = 99
 set.foldlevel = 99
-set.foldcolumn = "1"
+set.foldcolumn = "auto:1"
 
+set.signcolumn = "auto:1"
 set.splitbelow = true
 set.splitright = true
 set.colorcolumn = "88"
@@ -142,7 +143,7 @@ vim.diagnostic.config({
 		spacing = 2,
 		prefix = "",
 		format = function(diagnostic)
-			return string.format(vt_signs[diagnostic.severity] .. " %s", diagnostic.message)
+			return string.format(vt_signs[diagnostic.severity] .. ": %s", diagnostic.message)
 		end,
 		suffix = " ",
 	},
@@ -162,3 +163,13 @@ vim.diagnostic.config({
 	},
 	severity_sort = true,
 })
+
+vim.cmd([[
+sign define DiagnosticSignError text=
+sign define DiagnosticSignWarn text=
+sign define DiagnosticSignInfo text=
+sign define DiagnosticSignHint text=
+sign define DiagnosticSignWarn text=
+sign define DiagnosticSignInfo text=
+sign define DiagnosticSignHint text=
+]])
