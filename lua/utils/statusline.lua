@@ -11,6 +11,7 @@ local vi_mode_colors = {
 	replace = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Exception", true).foreground)),
 	term = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Warning", true).foreground)),
 	fg = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("GalaxyFg", true).background)),
+	accent = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Keyword", true).foreground)),
 	fg_alt = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("GalaxyFgAlt2", true).foreground)),
 	bg_alt = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("GalaxyFgAlt2", true).background)),
 }
@@ -31,19 +32,21 @@ local utils = require("sttusline.utils")
 local mode = require("sttusline.components.mode")
 local pos_cursor = require("sttusline.components.pos-cursor")
 local indentation = require("sttusline.component").new()
+local fileformat = require("sttusline.component").new()
 local git_branch = require("sttusline.component").new()
 local git_diff = require("sttusline.component").new()
 local empty = require("sttusline.component").new()
 local lsps_formatters = require("sttusline.component"):new()
 local filetype = require("sttusline.component"):new()
 local cwd = require("sttusline.component"):new()
+local path = require("sttusline.component"):new()
 local macro = require("sttusline.component"):new()
 local diagnostics = require("sttusline.component").new()
 local diagnostics_color = {
-	ERROR = "GalaxyRed",
-	WARN = "GalaxyOrange",
-	HINT = "GalaxyBlue",
-	INFO = "GalaxyMagenta",
+	ERROR = "GalaxyOrange",
+	WARN = "GalaxyYellow",
+	HINT = "GalaxyRed",
+	INFO = "GalaxyBlue",
 }
 
 mode.set_config({
@@ -105,6 +108,7 @@ mode.set_config({
 		["STTUSLINE_CONFIRM_MODE"] = { fg = vi_mode_colors.fg, bg = vi_mode_colors.cmd },
 	},
 })
+mode.set_padding(1)
 
 macro.set_event({ "BufEnter" })
 macro.set_user_event({})
@@ -121,10 +125,10 @@ filetype.set_user_event({ "VeryLazy" })
 filetype.set_timing(false)
 filetype.set_lazy(true)
 filetype.set_config({})
-filetype.set_padding(0)
+filetype.set_padding({ left = 1 })
 filetype.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
 filetype.set_update(function()
-	return "[" .. vim.bo.filetype .. "]"
+	return vim.bo.filetype .. " │"
 end)
 
 cwd.set_event({ "BufEnter" })
@@ -135,7 +139,18 @@ cwd.set_config({})
 cwd.set_padding(0)
 cwd.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
 cwd.set_update(function()
-	return "[" .. vim.fn.getcwd() .. "]"
+	return vim.fn.pathshorten(vim.fn.getcwd(), 3) .. " │"
+end)
+
+path.set_event({ "BufEnter" })
+path.set_user_event({})
+path.set_timing(true)
+path.set_lazy(false)
+path.set_config({})
+path.set_padding(1)
+path.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
+path.set_update(function()
+	return vim.fn.pathshorten(vim.fn.expand("%:h"), 3)
 end)
 
 git_branch.set_event({ "BufEnter" })
@@ -147,10 +162,13 @@ end)
 git_branch.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
 git_branch.set_update(function()
 	local branch = get_branch()
+	local result = ""
 	if branch == "" then
-		return ""
+		result = "n/a "
+	else
+		result = branch .. " │"
 	end
-	return "[" .. branch .. "]"
+	return result
 end)
 
 empty.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
@@ -236,10 +254,21 @@ lsps_formatters.set_update(function()
 		end
 	end
 
-	return "[" .. table.concat(vim.fn.uniq(server_names), ", ") .. "]"
+	return "│ " .. table.concat(vim.fn.uniq(server_names), ", ") .. " │"
 end)
 
-pos_cursor.set_colors({ bg = vi_mode_colors.fg_alt, fg = vi_mode_colors.bg_alt })
+pos_cursor.set_colors({ bg = vi_mode_colors.accent, fg = vi_mode_colors.fg })
+
+fileformat.set_event({ "BufEnter" })
+fileformat.set_user_event({ "VeryLazy" })
+fileformat.set_timing(false)
+fileformat.set_lazy(true)
+fileformat.set_config({})
+fileformat.set_padding(1)
+fileformat.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
+fileformat.set_update(function()
+	return vim.o.fileformat .. " │"
+end)
 
 indentation.set_event({ "BufEnter" })
 indentation.set_user_event({ "VeryLazy" })
@@ -249,11 +278,11 @@ indentation.set_config({})
 indentation.set_padding(0)
 indentation.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
 indentation.set_update(function()
-	local indent_mode = "TAB"
+	local indent_mode = "tab"
 	if vim.o.expandtab then
-		indent_mode = "SHIFT"
+		indent_mode = "shift"
 	end
-	return "[" .. indent_mode .. ": " .. vim.o.shiftwidth .. "]"
+	return indent_mode .. ": " .. vim.o.shiftwidth .. " │"
 end)
 
 diagnostics.set_event({
@@ -264,13 +293,14 @@ diagnostics.set_condition(function()
 	local ft = vim.api.nvim_buf_get_option(0, "filetype")
 	return ft ~= "lazy"
 end)
+diagnostics.set_padding(1)
 diagnostics.set_update(function()
 	local result = {}
 	local icons = {
-		ERROR = require("user_configs").lsp_vt_signs[1],
-		WARN = require("user_configs").lsp_vt_signs[2],
-		INFO = require("user_configs").lsp_vt_signs[3],
-		HINT = require("user_configs").lsp_vt_signs[4],
+		ERROR = require("user_configs").lsp_signs["Error"],
+		WARN = require("user_configs").lsp_signs["Warn"],
+		INFO = require("user_configs").lsp_signs["Info"],
+		HINT = require("user_configs").lsp_signs["Hint"],
 	}
 	local order = { "ERROR", "WARN", "INFO", "HINT" }
 
@@ -293,9 +323,12 @@ end)
 
 git_diff.set_event({ "BufWritePost", "VimResized", "BufEnter" })
 git_diff.set_user_event({ "GitSignsUpdate" })
+git_diff.set_padding(1)
+git_diff.set_colors({ fg = vi_mode_colors.fg_alt, bg = vi_mode_colors.bg_alt })
 git_diff.set_update(function()
 	local git_status = vim.b.gitsigns_status_dict
 	local order = { "added", "changed", "removed" }
+	local result = {}
 	local icons = {
 		added = "+",
 		changed = "~",
@@ -306,45 +339,51 @@ git_diff.set_update(function()
 		changed = "GalaxyMagenta",
 		removed = "GalaxyRed",
 	}
-	local result = {}
-	for _, v in ipairs(order) do
-		if git_status[v] and git_status[v] > 0 then
-			local color = diff_colors[v]
+	if git_status == nil then
+		return "n/a"
+	elseif git_status["added"] == 0 and git_status["changed"] == 0 and git_status["removed"] == 0 then
+		return "clean"
+	else
+		for _, v in ipairs(order) do
+			if git_status[v] and git_status[v] > 0 then
+				local color = diff_colors[v]
 
-			if color then
-				if utils.is_color(color) or type(color) == "table" then
-					table.insert(
-						result,
-						utils.add_highlight_name(icons[v] .. git_status[v], "STTUSLINE_GIT_DIFF_" .. v)
-					)
-				else
-					table.insert(result, utils.add_highlight_name(icons[v] .. git_status[v], color))
+				if color then
+					if utils.is_color(color) or type(color) == "table" then
+						table.insert(
+							result,
+							utils.add_highlight_name(icons[v] .. git_status[v], "STTUSLINE_GIT_DIFF_" .. v)
+						)
+					else
+						table.insert(result, utils.add_highlight_name(icons[v] .. git_status[v], color))
+					end
 				end
 			end
 		end
+		return #result > 0 and table.concat(result, " ") or ""
 	end
-
-	return #result > 0 and table.concat(result, " ") or ""
 end)
 git_diff.set_condition(function()
-	return vim.b.gitsigns_status_dict ~= nil and vim.o.columns > 70
+	return vim.o.columns > 70
 end)
 
 local M = {}
 
 M.components = {
-		mode,
-		pos_cursor,
-		empty,
-		git_branch,
-		git_diff,
-		lsps_formatters,
-		diagnostics,
-		macro,
-		"%=",
-		indentation,
-		filetype,
-		cwd,
-	}
+	mode,
+	pos_cursor,
+	empty,
+	git_branch,
+	git_diff,
+	lsps_formatters,
+	diagnostics,
+	macro,
+	"%=",
+	fileformat,
+	indentation,
+	filetype,
+	cwd,
+	path,
+}
 
 return M
