@@ -25,10 +25,6 @@ return {
 				autopairs = {
 					enable = true,
 				},
-				context_commentstring = {
-					enable = true,
-					enable_autocmd = false,
-				},
 				incremental_selection = {
 					enable = true,
 					keymaps = {
@@ -122,7 +118,15 @@ return {
 			})
 		end,
 		dependencies = {
-			{ "JoosepAlviste/nvim-ts-context-commentstring", lazy = true, event = "VeryLazy" },
+			{
+				"JoosepAlviste/nvim-ts-context-commentstring",
+				lazy = true,
+				event = "VeryLazy",
+				config = function()
+					require('ts_context_commentstring').setup({})
+					vim.g.skip_ts_context_commentstring_module = true
+				end,
+			},
 			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true, event = "VeryLazy" },
 			{ "filNaj/tree-setter",                          lazy = true, event = "VeryLazy" },
 			{
