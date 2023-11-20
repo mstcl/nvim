@@ -8,7 +8,7 @@ local winopt = vim.wo
 wk.register({
 	["<C-Bslash>"] = {
 		function()
-			if vim.api.nvim_win_get_width(0) >= 200 then
+			if vim.api.nvim_win_get_width(0) >= 150 then
 				exec("ToggleTerm direction=vertical")
 			else
 				exec("ToggleTerm direction=horizontal")
