@@ -24,130 +24,6 @@ return {
 				return
 			end
 			for _, server in ipairs(require("user_configs").lsp_sources) do
-				if server == "typst_lsp" then
-					lsp[server].setup({
-						settings = {
-							exportPdf = "onSave",
-							experimentalFormatterMode = "On",
-						},
-					})
-				end
-				if server == "gopls" then
-					lsp[server].setup({
-						on_attach = on_attach,
-						capabilities = capabilities,
-						handlers = handlers,
-						flags = {
-							debounce_text_changes = 150,
-						},
-						settings = {
-							gopls = {
-								hints = {
-									assignVariableTypes = true,
-									compositeLiteralFields = true,
-									compositeLiteralTypes = true,
-									constantValues = true,
-									functionTypeParameters = true,
-									parameterNames = true,
-									rangeVariableTypes = true,
-								},
-							},
-						},
-					})
-				end
-				if server == "lua_ls" then
-					lsp[server].setup({
-						on_attach = on_attach,
-						capabilities = capabilities,
-						handlers = handlers,
-						flags = {
-							debounce_text_changes = 150,
-						},
-						cmd = { "/usr/bin/lua-language-server", "-E", "/usr/share/lua-language-server/main.lua" },
-						settings = {
-							Lua = {
-								runtime = {
-									version = "LuaJIT",
-									path = "/usr/bin/luajit",
-								},
-								diagnostics = {
-									globals = { "vim" },
-								},
-								workspace = {
-									library = vim.api.nvim_get_runtime_file("", true),
-									checkThirdParty = false,
-								},
-								telemetry = {
-									enable = false,
-								},
-							},
-						},
-					})
-				end
-				if server == "texlab" then
-					lsp[server].setup({
-						on_attach = on_attach,
-						capabilities = capabilities,
-						handlers = handlers,
-						flags = {
-							debounce_text_changes = 150,
-						},
-						cmd = { "texlab" },
-						filetypes = { "tex", "bib" },
-						settings = {
-							texlab = {
-								auxDirectory = ".",
-								bibtexFormatter = "texlab",
-								build = {
-									args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f", "-shell-escape" },
-									executable = "latexmk",
-									forwardSearchAfter = true,
-									onSave = true,
-								},
-								chktex = {
-									onEdit = true,
-									onOpenAndSave = true,
-								},
-								diagnosticsDelay = 300,
-								formatterLineLength = 80,
-								forwardSearch = {
-									executable = "sioyek",
-									args = {
-										"--reuse-window",
-										"--inverse-search",
-										[[nvim-texlabconfig -file %1 -line %2]],
-										"--forward-search-file",
-										"%f",
-										"--forward-search-line",
-										"%l",
-										"%p",
-									},
-								},
-								latexFormatter = "latexindent",
-								latexindent = {
-									modifyLineBreaks = false,
-								},
-							},
-						},
-					})
-				end
-				if server == "marksman" then
-					lsp[server].setup({
-						on_attach = on_attach,
-						capabilities = capabilities,
-						filetypes = { "markdown", "quarto" },
-						root_dir = require("lspconfig.util").root_pattern(".git", ".marksman.toml", "_quarto.yml"),
-					})
-				end
-				if server == "ruff_lsp" then
-					lsp[server].setup({
-						capabilities = capabilities,
-						handlers = handlers,
-						flags = {
-							debounce_text_changes = 150,
-						},
-					})
-				end
 				lsp[server].setup({
 					on_attach = on_attach,
 					capabilities = capabilities,
@@ -157,6 +33,109 @@ return {
 					},
 				})
 			end
+			lsp.typst_lsp.setup({
+				settings = {
+					exportPdf = "onSave",
+					experimentalFormatterMode = "On",
+				},
+			})
+			lsp.gopls.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				handlers = handlers,
+				flags = {
+					debounce_text_changes = 150,
+				},
+				settings = {
+					gopls = {
+						hints = {
+							assignVariableTypes = true,
+							compositeLiteralFields = true,
+							compositeLiteralTypes = true,
+							constantValues = true,
+							functionTypeParameters = true,
+							parameterNames = true,
+							rangeVariableTypes = true,
+						},
+					},
+				},
+			})
+			lsp.lua_ls.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				handlers = handlers,
+				flags = {
+					debounce_text_changes = 150,
+				},
+				cmd = { "/usr/bin/lua-language-server", "-E", "/usr/share/lua-language-server/main.lua" },
+				settings = {
+					Lua = {
+						runtime = {
+							version = "LuaJIT",
+							path = "/usr/bin/luajit",
+						},
+						diagnostics = {
+							globals = { "vim" },
+						},
+						workspace = {
+							library = vim.api.nvim_get_runtime_file("", true),
+							checkThirdParty = false,
+						},
+						telemetry = {
+							enable = false,
+						},
+					},
+				},
+			})
+			lsp.texlab.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				handlers = handlers,
+				flags = {
+					debounce_text_changes = 150,
+				},
+				cmd = { "texlab" },
+				filetypes = { "tex", "bib" },
+				settings = {
+					texlab = {
+						auxDirectory = ".",
+						bibtexFormatter = "texlab",
+						build = {
+							args = { "-interaction=nonstopmode", "-synctex=1", "%f" },
+							executable = "pdflatex",
+							forwardSearchAfter = true,
+							onSave = true,
+						},
+						chktex = {
+							onEdit = true,
+							onOpenAndSave = true,
+						},
+						diagnosticsDelay = 300,
+						formatterLineLength = 80,
+						forwardSearch = {
+							executable = "zathura",
+							args = {
+								"--synctex-forward",
+								"%l:1:%f",
+								"%p",
+							},
+						},
+					},
+				},
+			})
+			lsp.marksman.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				filetypes = { "markdown", "quarto" },
+				root_dir = require("lspconfig.util").root_pattern(".git", ".marksman.toml", "_quarto.yml"),
+			})
+			lsp.ruff_lsp.setup({
+				capabilities = capabilities,
+				handlers = handlers,
+				flags = {
+					debounce_text_changes = 150,
+				},
+			})
 		end,
 	},
 	{
@@ -250,15 +229,6 @@ return {
 				["]]"] = false,
 			},
 		},
-	},
-	{
-		-- Easy texlab configuration
-		"f3fora/nvim-texlabconfig",
-		cond = cond,
-		lazy = true,
-		opts = {},
-		ft = { "tex", "bib" },
-		build = "go build",
 	},
 	{
 		-- Diagnostic list
