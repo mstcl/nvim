@@ -2,6 +2,7 @@ local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 local bo = vim.bo
 local opt_local = vim.opt_local
+local winopt = vim.wo
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
@@ -172,5 +173,7 @@ autocmd({ "Filetype" }, {
 	group = neogit,
 	callback = function()
 		opt_local.list = false
+		winopt.foldcolumn = "0"
+		winopt.relativenumber = true
 	end,
 })
