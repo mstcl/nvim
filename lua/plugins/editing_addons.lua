@@ -405,7 +405,7 @@ return {
 		event = "VeryLazy",
 		opts = {
 			manual = false,
-			exclude_filetypes = { "quarto", "markdown", "org" },
+			exclude_filetypes = { "quarto", "markdown", "org", "tex", "bib" },
 			rooter_patterns = {
 				".git",
 				".hg",
