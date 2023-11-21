@@ -47,7 +47,7 @@ return {
 			local builtin = require("statuscol.builtin")
 			require("statuscol").setup({
 				relculright = true,
-				ft_ignore = { "help", "starter", "Neogit*" },
+				ft_ignore = { "help", "starter", "Neogit*", "aerial" },
 				segments = {
 					{
 						text = {

@@ -5,8 +5,8 @@ return {
 		"L3MON4D3/LuaSnip",
 		build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
 		dependencies = {
-			{ "rafamadriz/friendly-snippets",     lazy = true, event = "InsertEnter" },
-			{ "Zeioth/NormalSnippets",            lazy = true, event = "InsertEnter" },
+			{ "rafamadriz/friendly-snippets", lazy = true, event = "InsertEnter" },
+			{ "Zeioth/NormalSnippets", lazy = true, event = "InsertEnter" },
 			{ "benfowler/telescope-luasnip.nvim", lazy = true, event = "InsertEnter" },
 		},
 		lazy = true,
@@ -23,19 +23,25 @@ return {
 			vim.tbl_map(function(type)
 				require("luasnip.loaders.from_" .. type).lazy_load()
 			end, { "vscode", "snipmate", "lua" })
-			require("luasnip").filetype_extend("typescript", { "tsdoc" })
-			require("luasnip").filetype_extend("javascript", { "jsdoc" })
-			require("luasnip").filetype_extend("lua", { "luadoc" })
-			require("luasnip").filetype_extend("python", { "pydoc" })
-			require("luasnip").filetype_extend("rust", { "rustdoc" })
-			require("luasnip").filetype_extend("cs", { "csharpdoc" })
-			require("luasnip").filetype_extend("java", { "javadoc" })
-			require("luasnip").filetype_extend("c", { "cdoc" })
-			require("luasnip").filetype_extend("cpp", { "cppdoc" })
-			require("luasnip").filetype_extend("php", { "phpdoc" })
-			require("luasnip").filetype_extend("kotlin", { "kdoc" })
-			require("luasnip").filetype_extend("ruby", { "rdoc" })
-			require("luasnip").filetype_extend("sh", { "shelldoc" })
+			local luasnip_ok, luasnip = pcall(require, "luasnip")
+			if not luasnip_ok then
+				return
+			end
+			luasnip.filetype_extend("typescript", { "tsdoc" })
+			luasnip.filetype_extend("javascript", { "jsdoc" })
+			luasnip.filetype_extend("lua", { "luadoc" })
+			luasnip.filetype_extend("python", { "pydoc" })
+			luasnip.filetype_extend("rust", { "rustdoc" })
+			luasnip.filetype_extend("cs", { "csharpdoc" })
+			luasnip.filetype_extend("java", { "javadoc" })
+			luasnip.filetype_extend("c", { "cdoc" })
+			luasnip.filetype_extend("cpp", { "cppdoc" })
+			luasnip.filetype_extend("php", { "phpdoc" })
+			luasnip.filetype_extend("kotlin", { "kdoc" })
+			luasnip.filetype_extend("ruby", { "rdoc" })
+			luasnip.filetype_extend("sh", { "shelldoc" })
+			luasnip.filetype_extend("quarto", { "markdown" })
+			luasnip.filetype_extend("rmarkdown", { "markdown" })
 		end,
 	},
 	{
@@ -44,11 +50,11 @@ return {
 		lazy = true,
 		event = "InsertEnter",
 		dependencies = {
-			{ "jmbuhr/otter.nvim",         lazy = true, event = "InsertEnter" },
-			{ "saadparwaiz1/cmp_luasnip",  lazy = true, event = "InsertEnter" },
-			{ "hrsh7th/cmp-nvim-lsp",      lazy = true, event = "InsertEnter" },
+			{ "saadparwaiz1/cmp_luasnip", lazy = true, event = "InsertEnter" },
+			{ "kdheepak/cmp-latex-symbols", lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/cmp-nvim-lsp", lazy = true, event = "InsertEnter" },
 			{ "FelipeLema/cmp-async-path", lazy = true, event = "InsertEnter" },
-			{ "hrsh7th/cmp-buffer",        lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/cmp-buffer", lazy = true, event = "InsertEnter" },
 			{
 				"aspeddro/cmp-pandoc.nvim",
 				lazy = true,
@@ -88,12 +94,11 @@ return {
 					priority_weight = 1.0,
 				},
 				sources = cmp.config.sources({
-					{ name = "luasnip",   priority = 9 },
+					{ name = "luasnip", priority = 9 },
 					{ name = "async_path" },
-					{ name = "nvim_lsp",  priority = 8, group_index = 1 },
+					{ name = "nvim_lsp", priority = 7, group_index = 1 },
 					{
 						name = "buffer",
-						group_index = 2,
 						keyword_length = 5,
 						max_item_count = 3,
 					},
@@ -152,37 +157,60 @@ return {
 			})
 			cmp.setup.filetype({ "markdown" }, {
 				sources = {
+					{ name = "latex_symbols", priority = 6 },
+					{ name = "otter" },
 					{ name = "async_path" },
-					{ name = "luasnip",    priority = 8 },
-					{ name = "nvim_lsp",   priority = 7, group_index = 1 },
+					{ name = "luasnip", priority = 8, max_item_count = 3 },
+					{ name = "nvim_lsp", priority = 7, group_index = 1 },
 					{ name = "cmp_pandoc", priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
+						keyword_length = 5,
+						max_item_count = 3,
 					},
 				},
 			})
 			cmp.setup.filetype({ "quarto" }, {
 				sources = {
+					{ name = "latex_symbols", priority = 6 },
+					{ name = "otter" },
 					{ name = "async_path" },
-					{ name = "luasnip",    priority = 8 },
-					{ name = "nvim_lsp",   priority = 7, group_index = 1 },
+					{ name = "luasnip", priority = 8, max_item_count = 3 },
+					{ name = "nvim_lsp", priority = 7, group_index = 1 },
 					{ name = "cmp_pandoc", priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
+						keyword_length = 5,
+						max_item_count = 3,
 					},
 				},
 			})
 			cmp.setup.filetype({ "org" }, {
 				sources = {
-					{ name = "orgmode" },
+					{ name = "orgmode", priority = 10 },
 					{ name = "async_path" },
-					{ name = "luasnip",   priority = 9 },
-					{ name = "nvim_lsp" },
+					{ name = "luasnip", priority = 8, max_item_count = 3 },
+					{ name = "nvim_lsp", priority = 7, group_index = 1 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
+						keyword_length = 5,
+						max_item_count = 3,
+					},
+				},
+			})
+			cmp.setup.filetype({ "tex" }, {
+				sources = {
+					{ name = "nvim_lsp", priority = 10 },
+					{ name = "async_path" },
+					{ name = "luasnip", priority = 8, max_item_count = 3 },
+					{
+						name = "buffer",
+						options = require("utils.misc").buffer_opts,
+						keyword_length = 5,
+						max_item_count = 3,
 					},
 				},
 			})
@@ -352,26 +380,19 @@ return {
 		opts = {},
 	},
 	{
-		-- Invert toggler
-		"nguyenvukhang/nvim-toggler",
+		-- Toggling booleans and more
+		"nat-418/boole.nvim",
 		lazy = true,
 		event = "VeryLazy",
-		config = function()
-			local wk_ok, wk = pcall(require, "which-key")
-			if not wk_ok then
-				return
-			end
-			local tog_ok, tog = pcall(require, "nvim-toggler")
-			if not tog_ok then
-				return
-			end
-			wk.register({
-				["<C-B>"] = { require("nvim-toggler").toggle, "Invert boolean" },
-			})
-			tog.setup({
-				remove_default_keybinds = true,
-			})
-		end,
+		opts = {
+			mappings = {
+				increment = "<C-A>",
+				decrement = "<C-X>",
+			},
+			allow_caps_additions = {
+				{ "true", "false" },
+			},
+		},
 	},
 	{
 		-- Context at end of block, outside parentheses

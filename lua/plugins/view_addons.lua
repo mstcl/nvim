@@ -417,4 +417,19 @@ return {
 			},
 		},
 	},
+	{
+		-- Tips on launch
+		"TobinPalmer/Tip.nvim",
+		lazy = true,
+		cond = require("user_configs").tip_enabled,
+		event = "VimEnter",
+		init = function()
+			-- Default config
+			--- @type Tip.config
+			require("tip").setup({
+				title = "Tip!",
+				url = "https://vtip.43z.one",
+			})
+		end,
+	},
 }
