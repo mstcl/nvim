@@ -1,4 +1,5 @@
 -- Plugins to extend syntax, either natively or with treesitter
+local cond = require("user_configs").lsp_enabled
 return {
 	{
 		-- Treesitter engine
@@ -123,12 +124,12 @@ return {
 				lazy = true,
 				event = "VeryLazy",
 				config = function()
-					require('ts_context_commentstring').setup({})
+					require("ts_context_commentstring").setup({})
 					vim.g.skip_ts_context_commentstring_module = true
 				end,
 			},
 			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true, event = "VeryLazy" },
-			{ "filNaj/tree-setter",                          lazy = true, event = "VeryLazy" },
+			{ "filNaj/tree-setter", lazy = true, event = "VeryLazy" },
 			{
 				"nvim-treesitter/playground",
 				cmd = "TSPlaygroundToggle",
@@ -221,12 +222,29 @@ return {
 		dev = false,
 		lazy = true,
 		ft = "quarto",
+		dependencies = {
+			"jmbuhr/otter.nvim",
+			lazy = true,
+			cond = cond,
+			dependencies = { "neovim/nvim-lspconfig", lazy = true, event = "BufRead" },
+			event = "InsertEnter",
+			opts = {
+				lsp = {
+					hover = {
+						border = "single",
+					},
+				},
+				buffers = {
+					set_filetype = true,
+				},
+			},
+		},
 		opts = {
 			lspFeatures = {
-				languages = { "python", "bash", "html" },
+				languages = { "python", "bash", "html", "lua" },
 			},
 			keymap = {
-				hover = "K",
+				hover = "<C-K>",
 				definition = "<leader>qd",
 				type_definition = "<leader>qD",
 				rename = "<leader>r",
