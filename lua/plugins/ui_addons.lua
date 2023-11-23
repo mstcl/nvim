@@ -215,7 +215,6 @@ return {
 			},
 			presets = {
 				bottom_search = true,
-				-- command_palette = true,
 				long_message_to_split = true,
 				inc_rename = false,
 				lsp_doc_border = false,
@@ -227,42 +226,6 @@ return {
 				notify = {
 					border = {
 						style = "none",
-					},
-				},
-				cmdline_popup = {
-					position = {
-						row = 8,
-						col = "50%",
-					},
-					size = {
-						width = 60,
-						height = "auto",
-					},
-					border = {
-						style = "none",
-						padding = { 1, 2 },
-					},
-					filter_options = {},
-					win_options = {
-						winhighlight = { Normal = "Pmenu", FloatBorder = "Pmenu" },
-					},
-				},
-				popupmenu = {
-					relative = "editor",
-					position = {
-						row = 11,
-						col = "50%",
-					},
-					size = {
-						width = 60,
-						height = 10,
-					},
-					border = {
-						style = "none",
-						padding = { 1, 2 },
-					},
-					win_options = {
-						winhighlight = { Normal = "Pmenu", FloatBorder = "Pmenu" },
 					},
 				},
 			},
@@ -314,18 +277,19 @@ return {
 			},
 			cmdline = {
 				enabled = true,
+				view = "cmdline",
 				format = {
 					cmdline = {
-						icon = "➤",
+						icon = ":",
 					},
 					search_up = {
-						icon = "↑",
+						icon = "/",
 					},
 					search_down = {
-						icon = "↓",
+						icon = "/",
 					},
 					filter = {
-						icon = "⊞",
+						icon = "*",
 					},
 					help = {
 						icon = "?",
