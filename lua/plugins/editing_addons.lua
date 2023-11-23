@@ -5,8 +5,8 @@ return {
 		"L3MON4D3/LuaSnip",
 		build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
 		dependencies = {
-			{ "rafamadriz/friendly-snippets", lazy = true, event = "InsertEnter" },
-			{ "Zeioth/NormalSnippets", lazy = true, event = "InsertEnter" },
+			{ "rafamadriz/friendly-snippets",     lazy = true, event = "InsertEnter" },
+			{ "Zeioth/NormalSnippets",            lazy = true, event = "InsertEnter" },
 			{ "benfowler/telescope-luasnip.nvim", lazy = true, event = "InsertEnter" },
 		},
 		lazy = true,
@@ -50,11 +50,11 @@ return {
 		lazy = true,
 		event = "InsertEnter",
 		dependencies = {
-			{ "saadparwaiz1/cmp_luasnip", lazy = true, event = "InsertEnter" },
+			{ "saadparwaiz1/cmp_luasnip",   lazy = true, event = "InsertEnter" },
 			{ "kdheepak/cmp-latex-symbols", lazy = true, event = "InsertEnter" },
-			{ "hrsh7th/cmp-nvim-lsp", lazy = true, event = "InsertEnter" },
-			{ "FelipeLema/cmp-async-path", lazy = true, event = "InsertEnter" },
-			{ "hrsh7th/cmp-buffer", lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/cmp-nvim-lsp",       lazy = true, event = "InsertEnter" },
+			{ "FelipeLema/cmp-async-path",  lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/cmp-buffer",         lazy = true, event = "InsertEnter" },
 			{
 				"aspeddro/cmp-pandoc.nvim",
 				lazy = true,
@@ -73,6 +73,8 @@ return {
 			if not luasnip_ok then
 				return
 			end
+			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 			cmp.setup({
 				enabled = function()
 					return vim.g.cmp_toggle
@@ -94,9 +96,9 @@ return {
 					priority_weight = 1.0,
 				},
 				sources = cmp.config.sources({
-					{ name = "luasnip", priority = 9 },
+					{ name = "luasnip",   priority = 9 },
 					{ name = "async_path" },
-					{ name = "nvim_lsp", priority = 7, group_index = 1 },
+					{ name = "nvim_lsp",  priority = 7, group_index = 1 },
 					{
 						name = "buffer",
 						keyword_length = 5,
@@ -160,9 +162,9 @@ return {
 					{ name = "latex_symbols", priority = 6 },
 					{ name = "otter" },
 					{ name = "async_path" },
-					{ name = "luasnip", priority = 8, max_item_count = 3 },
-					{ name = "nvim_lsp", priority = 7, group_index = 1 },
-					{ name = "cmp_pandoc", priority = 9 },
+					{ name = "luasnip",       priority = 8, max_item_count = 3 },
+					{ name = "nvim_lsp",      priority = 7, group_index = 1 },
+					{ name = "cmp_pandoc",    priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -176,9 +178,9 @@ return {
 					{ name = "latex_symbols", priority = 6 },
 					{ name = "otter" },
 					{ name = "async_path" },
-					{ name = "luasnip", priority = 8, max_item_count = 3 },
-					{ name = "nvim_lsp", priority = 7, group_index = 1 },
-					{ name = "cmp_pandoc", priority = 9 },
+					{ name = "luasnip",       priority = 8, max_item_count = 3 },
+					{ name = "nvim_lsp",      priority = 7, group_index = 1 },
+					{ name = "cmp_pandoc",    priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -189,10 +191,10 @@ return {
 			})
 			cmp.setup.filetype({ "org" }, {
 				sources = {
-					{ name = "orgmode", priority = 10 },
+					{ name = "orgmode",   priority = 10 },
 					{ name = "async_path" },
-					{ name = "luasnip", priority = 8, max_item_count = 3 },
-					{ name = "nvim_lsp", priority = 7, group_index = 1 },
+					{ name = "luasnip",   priority = 8, max_item_count = 3 },
+					{ name = "nvim_lsp",  priority = 7, group_index = 1 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -203,9 +205,9 @@ return {
 			})
 			cmp.setup.filetype({ "tex" }, {
 				sources = {
-					{ name = "nvim_lsp", priority = 10 },
+					{ name = "nvim_lsp",  priority = 10 },
 					{ name = "async_path" },
-					{ name = "luasnip", priority = 8, max_item_count = 3 },
+					{ name = "luasnip",   priority = 8, max_item_count = 3 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
