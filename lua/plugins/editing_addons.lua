@@ -291,6 +291,17 @@ return {
 			prompt = {
 				prefix = { { "◆", "FlashPromptIcon" } },
 			},
+			modes = {
+				char = {
+					multi_line = false,
+				}
+			},
+			label = {
+				rainbow = {
+					enabled = true,
+					shade = 9,
+				}
+			}
 		},
 		keys = {
 			{
