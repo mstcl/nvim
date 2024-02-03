@@ -375,7 +375,7 @@ M.components = {
 	empty,
 	git_branch,
 	git_diff,
-	lsps_formatters,
+	-- lsps_formatters,
 	diagnostics,
 	macro,
 	"%=",

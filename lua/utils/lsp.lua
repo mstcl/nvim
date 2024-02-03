@@ -14,25 +14,7 @@ local hover_sources = require("user_configs").null_hover_sources
 local diagnostics_sources = require("user_configs").null_diagnostics_sources
 local code_action_sources = require("user_configs").null_code_action_sources
 
-local function applyFoldsAndThenCloseAllFolds(providerName)
-	require("async")(function()
-		local bufnr = vim.api.nvim_get_current_buf()
-		ufo.attach(bufnr)
-		local ranges = await(ufo.getFolds(bufnr, providerName))
-		ufo.applyFolds(bufnr, ranges)
-		-- if ok then
-		-- 	require("ufo").closeAllFolds()
-		-- end
-	end)
-end
 function M.on_attach(client, bufnr)
-	local providerName
-	if client.server_capabilities.hoverProvider then
-		providerName = "lsp"
-	else
-		providerName = "indent"
-	end
-	applyFoldsAndThenCloseAllFolds(providerName)
 	require("utils.mappings.lsp").setup(client, bufnr)
 	require("lsp-inlayhints").on_attach(client, bufnr)
 end
@@ -68,15 +50,6 @@ M.handlers = {
 	["textDocument/hover"] = vl.with(vl.handlers.hover, { border = "single" }),
 	["textDocument/publishDiagnostics"] = vl.with(vl.diagnostic.on_publish_diagnostics, { update_in_insert = false }),
 }
-
-local capabilities = vl.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities.textDocument.foldingRange = {
-	dynamicRegistration = false,
-	lineFoldingOnly = true,
-}
-M.capabilities = capabilities
-
 
 for _, source in ipairs(fmt_sources) do
 	if source == "mdformat" then

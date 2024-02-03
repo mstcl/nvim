@@ -48,12 +48,6 @@ wk.register({
 		end,
 		"Recent files",
 	},
-	["<leader>ep"] = {
-		function()
-			exec("Telescope projects")
-		end,
-		"Projects",
-	},
 	["<leader>ez"] = {
 		function()
 			exec("Telescope zoxide list")

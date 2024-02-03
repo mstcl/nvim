@@ -104,6 +104,24 @@ autocmd({ "BufReadPost" }, {
 	end,
 })
 
+autocmd({ "BufReadPost", "BufNewFile" }, {
+	pattern = "*/homelab/*.yml",
+	group = filetypes,
+	callback = function()
+		opt_local.filetype = "yaml.ansible"
+		opt_local.indentkeys = opt_local.indentkeys - "0#"
+	end,
+})
+
+autocmd({ "BufReadPost", "BufNewFile" }, {
+	pattern = "*/docker-compose.yml",
+	group = filetypes,
+	callback = function()
+		opt_local.filetype = "yaml"
+		opt_local.indentkeys = opt_local.indentkeys - "0#"
+	end,
+})
+
 local text_opts = augroup("text_opts", { clear = true })
 autocmd({ "BufNewFile", "BufRead" }, {
 	pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd", "*.typ" },
