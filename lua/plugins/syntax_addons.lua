@@ -21,7 +21,7 @@ return {
 					enable = true,
 					use_languagetree = true,
 					additional_vim_regex_highlighting = { "org" },
-					disable = { "latex" },
+					disable = { "latex", "yaml" },
 				},
 				autopairs = {
 					enable = true,
@@ -37,6 +37,7 @@ return {
 				},
 				indent = {
 					enable = true,
+					disable = { "yaml" },
 				},
 				tree_setter = {
 					enable = true,
@@ -129,7 +130,7 @@ return {
 				end,
 			},
 			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true, event = "VeryLazy" },
-			{ "filNaj/tree-setter", lazy = true, event = "VeryLazy" },
+			{ "filNaj/tree-setter",                          lazy = true, event = "VeryLazy" },
 			{
 				"nvim-treesitter/playground",
 				cmd = "TSPlaygroundToggle",
@@ -193,6 +194,8 @@ return {
 			orgmode.setup({
 				org_agenda_files = { "~/sftpgo/orgzly/*", "~/sftpgo/shared/orgzly/*" },
 				win_split_mode = "float",
+				win_border = "single",
+				org_highlight_latex_and_related = "entities",
 				org_hide_emphasis_markers = true,
 			})
 			orgmode.setup_ts_grammar()
@@ -259,5 +262,10 @@ return {
 		config = function()
 			vim.g.typst_pdf_viewer = "sioyek"
 		end,
+	},
+	{
+		"pearofducks/ansible-vim",
+		lazy = true,
+		event = "VeryLazy",
 	},
 }

@@ -240,6 +240,14 @@ return {
 				},
 				{
 					filter = {
+						event = "notify",
+						kind = "info",
+						find = "hlchunk",
+					},
+					opts = { skip = true },
+				},
+				{
+					filter = {
 						event = "msg_show",
 						kind = "",
 						find = "[w]",

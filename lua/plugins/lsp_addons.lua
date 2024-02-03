@@ -17,8 +17,13 @@ return {
 		config = function()
 			local on_attach = require("utils.lsp").on_attach
 			local handlers = require("utils.lsp").handlers
-			local capabilities = require("utils.lsp").capabilities
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+			capabilities.textDocument.completion.completionItem.snippetSupport = true
+			capabilities.textDocument.foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true,
+			}
 			local lsp_ok, lsp = pcall(require, "lspconfig")
 			if not lsp_ok then
 				return
@@ -33,6 +38,51 @@ return {
 					},
 				})
 			end
+			lsp.yamlls.setup = {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				filetypes = { "yaml", "yml", "yaml.ansible" },
+				settings = {
+					yaml = {
+						format = {
+							enable = true,
+							singleQuote = true,
+							printWidth = 120,
+						},
+						hover = true,
+						completion = true,
+						validate = true,
+						schemas = {
+							["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
+								"docker-compose*.y*ml",
+							},
+							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-requirements-schema.json"] = {
+								"requirements.yml",
+							},
+							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-meta-schema.json"] = {
+								"meta/main.yml",
+							},
+							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-vars-schema.json"] = {
+								"vars/*.yml",
+								"defaults/*.yml",
+								"host_vars/*.yml",
+								"group_vars/*.yml",
+							},
+							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-tasks-schema.json"] = {
+								"tasks/*.yml",
+								"handlers/*.yml",
+							},
+							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-playbook-schema.json"] = {
+								"homelab/*.yml",
+							},
+						},
+						schemaStore = {
+							enable = true,
+							url = "https://www.schemastore.org/json",
+						},
+					},
+				},
+			}
 			lsp.typst_lsp.setup({
 				settings = {
 					exportPdf = "onSave",
@@ -251,7 +301,7 @@ return {
 		cond = cond,
 		lazy = true,
 		event = "VeryLazy",
-		dependencies = { "kevinhwang91/nvim-ufo", lazy = true, event = "VeryLazy" },
+		-- dependencies = { "kevinhwang91/nvim-ufo", lazy = true, event = "VeryLazy" },
 		config = function()
 			local null_ok, null_ls = pcall(require, "null-ls")
 			if not null_ok then
