@@ -42,6 +42,9 @@ return {
 			luasnip.filetype_extend("sh", { "shelldoc" })
 			luasnip.filetype_extend("quarto", { "markdown" })
 			luasnip.filetype_extend("rmarkdown", { "markdown" })
+			require("luasnip.loaders.from_vscode").lazy_load({
+				paths = { vim.fn.stdpath("config") .. "/snippets" },
+			})
 		end,
 	},
 	{
@@ -95,16 +98,6 @@ return {
 				sorting = {
 					priority_weight = 1.0,
 				},
-				sources = cmp.config.sources({
-					{ name = "luasnip",   priority = 9 },
-					{ name = "async_path" },
-					{ name = "nvim_lsp",  priority = 7, group_index = 1 },
-					{
-						name = "buffer",
-						keyword_length = 5,
-						max_item_count = 3,
-					},
-				}),
 				mapping = cmp.mapping.preset.insert({
 					["<C-d>"] = cmp.mapping.scroll_docs(-4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -156,15 +149,49 @@ return {
 					ghost_text = true,
 					hl_group = "NonText",
 				},
+				sources = cmp.config.sources({
+					{
+						name = "luasnip",
+						priority = 9,
+						max_item_count = 3,
+					},
+					{
+						name = "async_path",
+						max_item_count = 4,
+					},
+					{
+						name = "nvim_lsp",
+						priority = 7,
+						group_index = 1,
+						max_item_count = 5,
+					},
+					{
+						name = "buffer",
+						keyword_length = 5,
+						max_item_count = 2,
+					},
+				}),
 			})
 			cmp.setup.filetype({ "markdown" }, {
 				sources = {
 					{ name = "latex_symbols", priority = 6 },
 					{ name = "otter" },
-					{ name = "async_path" },
-					{ name = "luasnip",       priority = 8, max_item_count = 3 },
-					{ name = "nvim_lsp",      priority = 7, group_index = 1 },
-					{ name = "cmp_pandoc",    priority = 9 },
+					{
+						name = "async_path",
+						max_item_count = 4,
+					},
+					{
+						name = "luasnip",
+						priority = 8,
+						max_item_count = 3,
+					},
+					{
+						name = "nvim_lsp",
+						priority = 7,
+						group_index = 1,
+						max_item_count = 5,
+					},
+					{ name = "cmp_pandoc", priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -177,10 +204,22 @@ return {
 				sources = {
 					{ name = "latex_symbols", priority = 6 },
 					{ name = "otter" },
-					{ name = "async_path" },
-					{ name = "luasnip",       priority = 8, max_item_count = 3 },
-					{ name = "nvim_lsp",      priority = 7, group_index = 1 },
-					{ name = "cmp_pandoc",    priority = 9 },
+					{
+						name = "async_path",
+						max_item_count = 4,
+					},
+					{
+						name = "luasnip",
+						priority = 8,
+						max_item_count = 3,
+					},
+					{
+						name = "nvim_lsp",
+						priority = 7,
+						group_index = 1,
+						max_item_count = 5,
+					},
+					{ name = "cmp_pandoc", priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -191,10 +230,22 @@ return {
 			})
 			cmp.setup.filetype({ "org" }, {
 				sources = {
-					{ name = "orgmode",   priority = 10 },
-					{ name = "async_path" },
-					{ name = "luasnip",   priority = 8, max_item_count = 3 },
-					{ name = "nvim_lsp",  priority = 7, group_index = 1 },
+					{ name = "orgmode", priority = 10 },
+					{
+						name = "async_path",
+						max_item_count = 4,
+					},
+					{
+						name = "luasnip",
+						priority = 8,
+						max_item_count = 3,
+					},
+					{
+						name = "nvim_lsp",
+						priority = 7,
+						group_index = 1,
+						max_item_count = 5,
+					},
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -205,9 +256,20 @@ return {
 			})
 			cmp.setup.filetype({ "tex" }, {
 				sources = {
-					{ name = "nvim_lsp",  priority = 10 },
-					{ name = "async_path" },
-					{ name = "luasnip",   priority = 8, max_item_count = 3 },
+					{
+						name = "nvim_lsp",
+						priority = 10,
+						max_item_count = 5,
+					},
+					{
+						name = "async_path",
+						max_item_count = 4,
+					},
+					{
+						name = "luasnip",
+						priority = 8,
+						max_item_count = 3,
+					},
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -294,14 +356,14 @@ return {
 			modes = {
 				char = {
 					multi_line = false,
-				}
+				},
 			},
 			label = {
 				rainbow = {
 					enabled = true,
 					shade = 9,
-				}
-			}
+				},
+			},
 		},
 		keys = {
 			{
