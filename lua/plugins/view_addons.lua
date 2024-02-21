@@ -158,6 +158,7 @@ return {
 			triggers_blacklist = {
 				i = { "j", "k" },
 				v = { "j", "k" },
+				n = { "d", "y" },
 			},
 		},
 	},

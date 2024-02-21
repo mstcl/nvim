@@ -54,7 +54,7 @@ return {
 						validate = true,
 						schemas = {
 							["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
-								"docker-compose*.y*ml",
+								"docker-compose*",
 							},
 							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-requirements-schema.json"] = {
 								"requirements.yml",
@@ -73,7 +73,7 @@ return {
 								"handlers/*.yml",
 							},
 							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-playbook-schema.json"] = {
-								"homelab/*.yml",
+								"playbooks/*.yml",
 							},
 						},
 						schemaStore = {
@@ -359,18 +359,5 @@ return {
 			hl = { link = "StatusLineNC" },
 			vt_position = "above",
 		},
-	},
-	{
-		--  Stop inactive lsp servers until the buffer recover the focus.
-		"hinell/lsp-timeout.nvim",
-		cond = cond,
-		event = "LspAttach",
-		init = function()
-			vim.g["lsp-timeout-config"] = {
-				stopTimeout = 1000 * 60 * 10,
-				startTimeout = 2000,
-				silent = true,
-			}
-		end,
 	},
 }

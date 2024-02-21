@@ -447,4 +447,11 @@ return {
 			end,
 		},
 	},
+	{
+		-- Cursorline mode decoration
+		'mvllow/modes.nvim',
+		opts = {
+			set_number = false,
+		}
+	}
 }
