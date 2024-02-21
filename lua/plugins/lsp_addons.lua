@@ -1,9 +1,26 @@
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 local cond = require("user_configs").lsp_enabled
+local sources = require("user_configs").lsp_sources
 
 -- Plugins that add to nvim LSP functionalities
 return {
+	{
+		-- Code tool forge with lspconfig integration
+		"williamboman/mason-lspconfig.nvim",
+		lazy = true,
+		event = "BufRead",
+		dependencies = {
+			"williamboman/mason.nvim",
+			lazy = true,
+			event = "BufRead",
+			opts = {}
+		},
+		cond = cond,
+		opts = {
+			ensure_installed = sources,
+		},
+	},
 	{
 		-- Configure LSP
 		"neovim/nvim-lspconfig",
@@ -11,8 +28,9 @@ return {
 		lazy = true,
 		event = "BufRead",
 		dependencies = {
-			{ "cmp-nvim-lsp",          lazy = true, event = "InsertEnter" },
-			{ "kevinhwang91/nvim-ufo", lazy = true, event = "VeryLazy" },
+			{ "cmp-nvim-lsp",            lazy = true, event = "InsertEnter" },
+			{ "kevinhwang91/nvim-ufo",   lazy = true, event = "VeryLazy" },
+			{ "williamboman/mason.nvim", lazy = true, event = "BufRead" },
 		},
 		config = function()
 			local on_attach = require("utils.lsp").on_attach
@@ -28,7 +46,7 @@ return {
 			if not lsp_ok then
 				return
 			end
-			for _, server in ipairs(require("user_configs").lsp_sources) do
+			for _, server in ipairs(sources) do
 				lsp[server].setup({
 					on_attach = on_attach,
 					capabilities = capabilities,

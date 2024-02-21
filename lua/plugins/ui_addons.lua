@@ -232,6 +232,9 @@ return {
 					position = {
 						row = -1
 					},
+					border = {
+						style = "none"
+					}
 				},
 			},
 			routes = {

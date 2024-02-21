@@ -59,13 +59,6 @@ autocmd({ "BufEnter" }, {
 		end
 	end,
 })
-autocmd("BufWritePre", {
-	desc = "Close all notifications on BufWritePre",
-	group = editing,
-	callback = function()
-		require("notify").dismiss({ pending = true, silent = true })
-	end,
-})
 
 local highlight_yank = augroup("highlight_yank", { clear = true })
 autocmd({ "TextYankPost" }, {
