@@ -183,24 +183,21 @@ return {
 		lazy = true,
 		dependencies = {
 			{ "MunifTanjim/nui.nvim", lazy = true, event = "VeryLazy" },
-			{
-				"rcarriga/nvim-notify",
-				lazy = true,
-				event = "VeryLazy",
-				opts = {
-					fps = 144,
-					icons = {
-						DEBUG = "*",
-						ERROR = "✗",
-						INFO = "i",
-						TRACE = ">",
-						WARN = "!",
-					},
-					minimum_width = 40,
-					render = "compact",
-					top_down = false,
-				},
-			},
+			-- {
+			-- 	"rcarriga/nvim-notify",
+			-- 	lazy = true,
+			-- 	event = "VeryLazy",
+			-- 	opts = {
+			-- 		fps = 144,
+
+			-- 		minimum_width = 20,
+			-- 		max_width = 40,
+			-- 		-- max_height = 2,
+			-- 		render = "wrapped-compact",
+			-- 		top_down = false,
+			-- 		timeout = 2000,
+			-- 	},
+			-- },
 		},
 		opts = {
 			lsp = {
@@ -226,6 +223,14 @@ return {
 				notify = {
 					border = {
 						style = "none",
+					},
+				},
+				mini = {
+					win_options = {
+						winblend = 40
+					},
+					position = {
+						row = -1
 					},
 				},
 			},
@@ -304,6 +309,15 @@ return {
 					},
 					lua = {
 						icon = "@",
+					},
+				},
+			},
+			format = {
+				level = {
+					icons = {
+						error = "✗",
+						info = "i",
+						warn = "!",
 					},
 				},
 			},
@@ -449,9 +463,9 @@ return {
 	},
 	{
 		-- Cursorline mode decoration
-		'mvllow/modes.nvim',
+		"mvllow/modes.nvim",
 		opts = {
 			set_number = false,
-		}
-	}
+		},
+	},
 }
