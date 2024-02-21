@@ -365,6 +365,7 @@ return {
 				telescope.load_extension("dap")
 			end
 			telescope.load_extension("lazy")
+			telescope.load_extension("noice")
 			if require("user_configs").lsp_enabled then
 				telescope.load_extension("aerial")
 			end
