@@ -412,6 +412,9 @@ return {
 			-- 	telescope = true,
 			-- 	diffview = true,
 			-- },
+			commit_editor = {
+				kind = "vsplit",
+			},
 			signs = {
 				hunk = { "", "" },
 				item = { "▸", "▾" },
