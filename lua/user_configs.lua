@@ -4,9 +4,11 @@ M.dap_enabled = true
 M.lsp_enabled = true
 M.lsp_features = {
 	show_usage = false,
+	show_breadcrumbs = false,
 }
+M.tip_enabled = false
 M.edit_features = {
-	biscuits = true,
+	biscuits = false,
 }
 
 M.frecency_workspaces = {
@@ -58,63 +60,63 @@ M.treesitter_sources = {
 }
 
 M.dap_signs = {
-	Breakpoint = " ⚑",
-	BreakpointCondition = " ⚑",
-	LogPoint = " ★",
-	Stopped = " ☛",
-	BreakpointRejected = " ☒",
+	Breakpoint = "⚑",
+	BreakpointCondition = "⚑",
+	LogPoint = "★",
+	Stopped = "☛",
+	BreakpointRejected = "☒",
 }
 
-M.lsp_signs = { Error = "━━", Warn = "━━", Hint = "■", Info = "■" }
+M.lsp_signs = { Error = "*", Warn = "!", Hint = "?", Info = "i" }
 
 M.lsp_vt_signs = {
-	[1] = "✗", -- ERROR
-	[2] = "!", -- WARN
-	[3] = "i", -- INFO
-	[4] = "?", -- HINT
+	[1] = "E", -- ERROR
+	[2] = "W", -- WARN
+	[3] = "I", -- INFO
+	[4] = "H", -- HINT
 }
 
 M.lsp_kind_icons = {
-	Array = "☷",
-	Boolean = "◕",
-	Calendar = "◪",
-	Class = "⁐",
+	Array = "※",
+	Boolean = "B",
+	Calendar = "C",
+	Class = "@",
 	Collapsed = "▶",
 	Color = "%",
-	Constructor = "☂",
+	Constructor = "#",
 	Constant = "π",
-	Copilot = "★",
+	Copilot = "*",
 	Enum = "ζ",
 	EnumMember = "@",
 	Event = "!",
-	Field = "⊟",
-	File = "⊡",
+	Field = "—",
+	File = "•",
 	Folder = "+",
-	Function = "ƒ",
-	Interface = "♺",
+	Function = "f",
+	Interface = "†",
 	Key = "*",
-	Keyword = "★",
-	Method = "ƒ",
-	Module = "◫",
+	Keyword = "*",
+	Method = "f",
+	Module = "M",
 	Namespace = "ξ",
-	Null = "∅",
+	Null = "Ø",
 	Number = "#",
-	Object = "☁",
+	Object = "ß",
 	Operator = "⁑",
-	Package = "◫",
+	Package = "P",
 	Property = "✓",
-	Reference = "⇒",
-	Snippet = "★",
+	Reference = "→",
+	Snippet = "*",
 	String = "T",
-	Struct = "◧",
-	Table = "☷",
+	Struct = "@",
+	Table = "※",
 	Tag = "#",
-	TypeParameter = "⊞",
+	TypeParameter = ":",
 	Variable = "Ψ",
-	Text = "☰",
+	Text = "T",
 	Unit = "$",
 	Value = "λ",
-	Watch = "◔",
+	Watch = "W",
 }
 
 M.lsp_sources = {

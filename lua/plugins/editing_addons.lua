@@ -341,6 +341,11 @@ return {
 		lazy = true,
 		event = "VeryLazy",
 		config = function()
+			require("move").setup({
+				char = {
+					enable = true,
+				},
+			})
 			require("utils.mappings.movement")
 		end,
 	},
@@ -398,7 +403,6 @@ return {
 		event = "InsertEnter",
 		lazy = true,
 		dependencies = {
-			-- { "nvim-treesitter/nvim-treesitter", lazy = true, event = "VeryLazy" },
 			{ "hrsh7th/nvim-cmp", lazy = true, event = "InsertEnter" },
 			{ "L3MON4D3/LuaSnip", lazy = true, event = "InsertEnter" },
 		},
@@ -418,6 +422,9 @@ return {
 				{ open = "(", close = ")" },
 				{ open = "[", close = "]" },
 				{ open = "{", close = "}" },
+				{ open = "<", close = ">" },
+				{ open = "$", close = "$" },
+				{ open = "%", close = "%" },
 			},
 			ignore_beginning = true,
 			exclude = {},
@@ -511,5 +518,10 @@ return {
 				"README.md",
 			},
 		},
+	},
+	{
+		-- Better word movement
+		"chrisgrieser/nvim-spider",
+		lazy = true,
 	},
 }

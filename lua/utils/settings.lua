@@ -148,7 +148,7 @@ vim.diagnostic.config({
 		suffix = " ",
 	},
 	signs = true,
-	underline = true,
+	underline = false,
 	update_in_insert = false,
 	float = {
 		header = false,

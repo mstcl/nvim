@@ -105,7 +105,15 @@ autocmd({ "BufReadPost" }, {
 })
 
 autocmd({ "BufReadPost", "BufNewFile" }, {
-	pattern = "*/homelab/*.yml",
+	pattern = "*.yml",
+	group = filetypes,
+	callback = function()
+		vim.b.minicursorword_disable = true
+	end,
+})
+
+autocmd({ "BufReadPost", "BufNewFile" }, {
+	pattern = "*/littlelab/*.yml",
 	group = filetypes,
 	callback = function()
 		opt_local.filetype = "yaml.ansible"
