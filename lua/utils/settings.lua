@@ -69,7 +69,7 @@ set.foldlevelstart = 99
 set.foldlevel = 99
 set.foldcolumn = "auto:1"
 
-set.signcolumn = "auto:1"
+set.signcolumn = "yes:1"
 set.splitbelow = true
 set.splitright = true
 set.colorcolumn = "88"
@@ -143,11 +143,11 @@ vim.diagnostic.config({
 		spacing = 2,
 		prefix = "",
 		format = function(diagnostic)
-			return string.format(vt_signs[diagnostic.severity] .. ": %s", diagnostic.message)
+			return string.format(vt_signs[diagnostic.severity])
 		end,
 		suffix = " ",
 	},
-	signs = true,
+	signs = true, -- only for the colored number column
 	underline = false,
 	update_in_insert = false,
 	float = {

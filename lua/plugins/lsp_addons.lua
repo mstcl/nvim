@@ -6,19 +6,21 @@ local sources = require("user_configs").lsp_sources
 -- Plugins that add to nvim LSP functionalities
 return {
 	{
-		-- Code tool forge with lspconfig integration
+		-- Code tools forge
+		"williamboman/mason.nvim",
+		lazy = true,
+		event = { "BufReadPre", "BufNewFile" },
+		cond = cond,
+		opts = {},
+	},
+	{
+		-- Bridge nvim-lspconfig and mason
 		"williamboman/mason-lspconfig.nvim",
 		lazy = true,
-		event = "BufRead",
-		dependencies = {
-			"williamboman/mason.nvim",
-			lazy = true,
-			event = "BufRead",
-			opts = {}
-		},
+		event = { "BufReadPre", "BufNewFile" },
 		cond = cond,
 		opts = {
-			ensure_installed = sources,
+			automatic_installation = true,
 		},
 	},
 	{
@@ -28,9 +30,8 @@ return {
 		lazy = true,
 		event = "BufRead",
 		dependencies = {
-			{ "cmp-nvim-lsp",            lazy = true, event = "InsertEnter" },
-			{ "kevinhwang91/nvim-ufo",   lazy = true, event = "VeryLazy" },
-			{ "williamboman/mason.nvim", lazy = true, event = "BufRead" },
+			{ "cmp-nvim-lsp",          lazy = true, event = "InsertEnter" },
+			{ "kevinhwang91/nvim-ufo" },
 		},
 		config = function()
 			local on_attach = require("utils.lsp").on_attach
@@ -135,7 +136,11 @@ return {
 				flags = {
 					debounce_text_changes = 150,
 				},
-				cmd = { "/usr/bin/lua-language-server", "-E", "/usr/share/lua-language-server/main.lua" },
+				cmd = {
+					"/home/lckdscl/.local/share/nvim/mason/packages/lua-language-server/libexec/bin/lua-language-server",
+					"-E",
+					"/home/lckdscl/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua",
+				},
 				settings = {
 					Lua = {
 						runtime = {
@@ -173,10 +178,6 @@ return {
 							executable = "pdflatex",
 							forwardSearchAfter = true,
 							onSave = true,
-						},
-						chktex = {
-							onEdit = true,
-							onOpenAndSave = true,
 						},
 						diagnosticsDelay = 300,
 						formatterLineLength = 80,
@@ -314,12 +315,21 @@ return {
 		},
 	},
 	{
+		-- Bridge none-ls and mason
+		"jay-babu/mason-null-ls.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		cond = cond,
+		opts = {
+			ensure_installed = nil,
+			automatic_installation = true,
+		},
+	},
+	{
 		-- Linter manager
 		"nvimtools/none-ls.nvim",
 		cond = cond,
 		lazy = true,
 		event = "VeryLazy",
-		-- dependencies = { "kevinhwang91/nvim-ufo", lazy = true, event = "VeryLazy" },
 		config = function()
 			local null_ok, null_ls = pcall(require, "null-ls")
 			if not null_ok then

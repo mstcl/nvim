@@ -5,12 +5,12 @@ return {
 		"L3MON4D3/LuaSnip",
 		build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
 		dependencies = {
-			{ "rafamadriz/friendly-snippets",     lazy = true, event = "InsertEnter" },
-			{ "Zeioth/NormalSnippets",            lazy = true, event = "InsertEnter" },
+			{ "rafamadriz/friendly-snippets", lazy = true, event = "InsertEnter" },
+			{ "Zeioth/NormalSnippets", lazy = true, event = "InsertEnter" },
 			{ "benfowler/telescope-luasnip.nvim", lazy = true, event = "InsertEnter" },
 		},
 		lazy = true,
-		event = "InsertEnter",
+		event = 'ModeChanged *:[iRss\x13vV\x16]*',
 		opts = {
 			history = true,
 			delete_check_events = "TextChanged",
@@ -53,11 +53,11 @@ return {
 		lazy = true,
 		event = "InsertEnter",
 		dependencies = {
-			{ "saadparwaiz1/cmp_luasnip",   lazy = true, event = "InsertEnter" },
+			{ "saadparwaiz1/cmp_luasnip", lazy = true, event = "InsertEnter" },
 			{ "kdheepak/cmp-latex-symbols", lazy = true, event = "InsertEnter" },
-			{ "hrsh7th/cmp-nvim-lsp",       lazy = true, event = "InsertEnter" },
-			{ "FelipeLema/cmp-async-path",  lazy = true, event = "InsertEnter" },
-			{ "hrsh7th/cmp-buffer",         lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/cmp-nvim-lsp", lazy = true, event = "InsertEnter" },
+			{ "FelipeLema/cmp-async-path", lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/cmp-buffer", lazy = true, event = "InsertEnter" },
 			{
 				"aspeddro/cmp-pandoc.nvim",
 				lazy = true,
@@ -285,7 +285,10 @@ return {
 		-- Syntax aware comments & keybindings
 		"numToStr/Comment.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		keys = {
+			{ "gc", mode = { "n", "x" } },
+			{ "gb", mode = { "n", "x" } },
+		},
 		opts = {
 			opts = function()
 				local commentstring_avail, commentstring =
@@ -310,7 +313,7 @@ return {
 		-- Plug and play automatically insert autopairs
 		"windwp/nvim-autopairs",
 		lazy = true,
-		event = "InsertEnter",
+		event = { "InsertEnter", "CmdlineEnter" },
 		opts = {
 			check_ts = true,
 			ts_config = { java = false },
@@ -332,14 +335,20 @@ return {
 		-- Add motions to surround objects with brackets etc.
 		"kylechui/nvim-surround",
 		lazy = true,
-		event = "VeryLazy",
+		keys = {
+			"ys",
+			"ds",
+			"cs",
+			{ "S", mode = "x" },
+			{ "<C-g>s", mode = "i" },
+		},
 		opts = {},
 	},
 	{
 		-- Keybindings to move lines and blocks
 		"fedepujol/move.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufRead",
 		config = function()
 			require("move").setup({
 				char = {
@@ -522,6 +531,7 @@ return {
 	{
 		-- Better word movement
 		"chrisgrieser/nvim-spider",
-		lazy = true,
+		lazy = false,
+		event = "BufRead"
 	},
 }

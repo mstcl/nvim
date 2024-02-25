@@ -45,7 +45,9 @@ return {
 		-- Add a sidebar map
 		"echasnovski/mini.map",
 		lazy = true,
-		event = "VeryLazy",
+		keys = {
+			{ "<C-M>m", mode = "n" },
+		},
 		version = false,
 		config = function()
 			local map_ok, map = pcall(require, "mini.map")
@@ -388,14 +390,21 @@ return {
 	},
 	{
 		-- Highlight color blocks
-		"norcalli/nvim-colorizer.lua",
+		"NvChad/nvim-colorizer.lua",
 		lazy = true,
-		event = "VeryLazy",
+		event = { 'BufNew', 'BufRead' },
 		cmd = { "ColorizerToggle" },
-		config = function()
-			require("colorizer").setup()
-			vim.cmd("ColorizerAttachToBuffer")
-		end,
+		opts = {
+			user_default_options = {
+				names = false,
+				rgb_fun = true,
+				hsl_fn = true,
+			}
+		}
+		-- config = function()
+		-- 	require("colorizer").setup()
+		-- 	vim.cmd("ColorizerAttachToBuffer")
+		-- end,
 	},
 	{
 		-- Naively highlight word under cursor
@@ -423,7 +432,7 @@ return {
 		-- NOTE: don't lazy load this, it doesn't load up automatically
 		"kevinhwang91/nvim-ufo",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufReadPre",
 		dependencies = { "kevinhwang91/promise-async", lazy = true, event = "VeryLazy" },
 		opts = {
 			open_fold_hl_timeout = 150,
@@ -470,5 +479,12 @@ return {
 		opts = {
 			set_number = false,
 		},
+	},
+	{
+		-- Tabs and buffer
+		"tiagovla/scope.nvim",
+		lazy = true,
+		event = "BufRead",
+		opts = {}
 	},
 }

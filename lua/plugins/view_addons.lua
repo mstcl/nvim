@@ -82,7 +82,10 @@ return {
 	{
 		-- Utility to align text by delimiters
 		"echasnovski/mini.align",
-		event = "VeryLazy",
+		keys = {
+			{ "ga", mode = "v" },
+			{ "gA", mode = "v" },
+		},
 		version = false,
 		lazy = true,
 		opts = {},
@@ -100,6 +103,30 @@ return {
 	{
 		-- Buffer-like file browser
 		"stevearc/oil.nvim",
+		cmd = "Oil",
+		init = function()
+			vim.g.loaded_netrw = 1
+			vim.g.loaded_netrwPlugin = 1
+			vim.api.nvim_create_autocmd("BufWinEnter", {
+				nested = true,
+				callback = function(info)
+					local path = info.file
+					if path == "" then
+						return
+					end
+					local stat = require("luv").fs_stat(path)
+					if stat and stat.type == "directory" then
+						vim.api.nvim_del_autocmd(info.id)
+						require("oil")
+						vim.cmd.edit({
+							bang = true,
+							mods = { keepjumps = true },
+						})
+						return true
+					end
+				end,
+			})
+		end,
 		opts = {
 			default_file_explorer = true,
 			keymaps = {
@@ -118,10 +145,20 @@ return {
 				["<C-h>"] = "actions.toggle_hidden",
 			},
 			columns = {
-				"permissions",
-				"size",
+				{
+					"type",
+					icons = {
+						directory = "d",
+						fifo = "p",
+						file = "-",
+						link = "l",
+						socket = "s",
+					},
+				},
+				{ "permissions" },
+				{ "size",       highlight = "Special" },
+				{ "mtime",      highlight = "Number" },
 			},
-			delete_to_trash = true,
 			float = {
 				padding = 4,
 				border = "single",
@@ -132,6 +169,17 @@ return {
 			progress = {
 				border = "single",
 			},
+			win_options = {
+				number = false,
+				relativenumber = false,
+				signcolumn = "no",
+				foldcolumn = "0",
+				statuscolumn = "",
+			},
+			cleanup_delay_ms = false,
+			delete_to_trash = true,
+			skip_confirm_for_simple_edits = true,
+			prompt_save_on_select_new_entry = true,
 		},
 	},
 	{
@@ -178,27 +226,14 @@ return {
 			if not starter_ok then
 				return
 			end
-			local plugins_gen =
-				io.popen('echo "$(find ~/.local/share/nvim/lazy -maxdepth 1 -type d | wc -l ) - 1" | bc | tr -d "\n"')
-			local plugins = plugins_gen:read("*a")
-			plugins_gen:close()
 			local org_agenda = function()
 				require("orgmode").action("agenda.prompt")
 			end
-			local telescope = function()
+			local quick = function()
 				return function()
 					return {
-						{ action = org_agenda, name = "Agenda",      section = "Quick actions" },
-						{ action = "WhichKey", name = "Keymappings", section = "Quick actions" },
-					}
-				end
-			end
-			local plugin_actions = function()
-				return function()
-					return {
-						{ action = "Lazy show",   name = "Overview", section = "Plugins" },
-						{ action = "Lazy check",  name = "Fetch",    section = "Plugins" },
-						{ action = "Lazy update", name = "Update",   section = "Plugins" },
+						{ action = org_agenda,   name = "Agenda",        section = "Quick actions" },
+						{ action = "Lazy check", name = "Fetch plugins", section = "Quick actions" },
 					}
 				end
 			end
@@ -216,8 +251,7 @@ return {
 				items = {
 					starter.sections.recent_files(5, true, false),
 					starter.sections.recent_files(3, false, false),
-					telescope(),
-					plugin_actions(),
+					quick(),
 					starter.sections.builtin_actions(),
 				},
 				content_hooks = {
@@ -225,7 +259,7 @@ return {
 					starter.gen_hook.aligning("center", "center"),
 				},
 				footer = "",
-				header = require("user_configs").starter_ascii .. greetings() .. " Loaded " .. plugins .. " plugins.",
+				header = require("user_configs").starter_ascii .. greetings(),
 			})
 		end,
 	},

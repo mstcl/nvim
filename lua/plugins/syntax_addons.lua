@@ -5,7 +5,22 @@ return {
 		-- Treesitter engine
 		"nvim-treesitter/nvim-treesitter",
 		lazy = true,
-		event = "VeryLazy",
+		cmd = {
+			"TSInstall",
+			"TSInstallSync",
+			"TSInstallInfo",
+			"TSUninstall",
+			"TSUpdate",
+			"TSUpdateSync",
+			"TSBufEnable",
+			"TSBufToggle",
+			"TSEnable",
+			"TSToggle",
+			"TSModuleInfo",
+			"TSEditQuery",
+			"TSEditQueryUserAfter",
+		},
+		event = "FileType",
 		build = ":TSUpdate",
 		init = function()
 			require("utils.autocmds.treesitter")
@@ -17,6 +32,7 @@ return {
 			end
 			ts.setup({
 				ensure_installed = require("user_configs").treesitter_sources,
+				sync_install = false,
 				highlight = {
 					enable = true,
 					use_languagetree = true,
@@ -29,10 +45,10 @@ return {
 				incremental_selection = {
 					enable = true,
 					keymaps = {
-						init_selection = "gnn",
-						node_incremental = "grn",
-						scope_incremental = "grc",
-						node_decremental = "grm",
+						init_selection = false,
+						node_incremental = "an",
+						scope_incremental = "aN",
+						node_decremental = "in",
 					},
 				},
 				indent = {
@@ -105,11 +121,11 @@ return {
 					},
 					swap = {
 						enable = true,
-						swap_next = {
-							[">K"] = { query = "@block.outer", desc = "Swap next block" },
-							[">F"] = { query = "@function.outer", desc = "Swap next function" },
-							[">A"] = { query = "@parameter.inner", desc = "Swap next parameter" },
-						},
+							swap_next = {
+								[">K"] = { query = "@block.outer", desc = "Swap next block" },
+								[">F"] = { query = "@function.outer", desc = "Swap next function" },
+								[">A"] = { query = "@parameter.inner", desc = "Swap next parameter" },
+							},
 						swap_previous = {
 							["<K"] = { query = "@block.outer", desc = "Swap previous block" },
 							["<F"] = { query = "@function.outer", desc = "Swap previous function" },
@@ -123,14 +139,14 @@ return {
 			{
 				"JoosepAlviste/nvim-ts-context-commentstring",
 				lazy = true,
-				event = "VeryLazy",
+				event = "FileType",
 				config = function()
 					require("ts_context_commentstring").setup({})
 					vim.g.skip_ts_context_commentstring_module = true
 				end,
 			},
-			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true, event = "VeryLazy" },
-			{ "filNaj/tree-setter",                          lazy = true, event = "VeryLazy" },
+			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true, event = "FileType" },
+			{ "filNaj/tree-setter", lazy = true, event = "FileType" },
 			{
 				"nvim-treesitter/playground",
 				cmd = "TSPlaygroundToggle",
@@ -256,14 +272,16 @@ return {
 		},
 	},
 	{
+		-- Typst syntax
 		"kaarmu/typst.vim",
 		lazy = true,
-		ft = "typst",
+		event = "FileType",
 		config = function()
 			vim.g.typst_pdf_viewer = "sioyek"
 		end,
 	},
 	{
+		-- Ansible syntax
 		"pearofducks/ansible-vim",
 		lazy = true,
 		event = "VeryLazy",
