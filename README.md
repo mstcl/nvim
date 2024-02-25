@@ -1,22 +1,43 @@
-# NeoBim
+# nvim
 
 **lckdscl's opinionated configuration of Neovim.**
 
-<a href="https://dotfyle.com/mstcl/neobim"><img src="https://dotfyle.com/mstcl/neobim/badges/plugins?style=flat-square" /></a>
-<a href="https://dotfyle.com/mstcl/neobim"><img src="https://dotfyle.com/mstcl/neobim/badges/leaderkey?style=flat-square" /></a>
-<a href="https://dotfyle.com/mstcl/neobim"><img src="https://dotfyle.com/mstcl/neobim/badges/plugin-manager?style=flat-square" /></a>
-
 ![preview](pics/preview.png)
 
-## Plugin manager
+## Features
 
-Requires [lazy.nvim](https://github.com/folke/lazy.nvim) as the plugin manager.
+- An actual IDE with ~40 ms start-up time.
 
-## Configuration
+## Get started
 
-There are some configurations that are easily edited in `user_configs.lua`.
-Follow the comments in there.
+### Cloning
 
-Also, the configuration is to be used with my
-[colorscheme](https://github.com/mstcl/dmg). Shit might break otherwise but you
-can probably fix it.
+```sh
+$ git clone https://github.com/mstcl/nvim
+$ cd nvim
+```
+
+### Configuration
+
+```sh
+$ git checkout -B prod
+```
+
+Read through what's available to configure in `host_vars/localhost.yml` and
+edit it.
+
+### Installing
+
+When you're happy:
+
+```sh
+$ ansible-playbook main.yml
+```
+
+## Updating
+
+```sh
+$ git checkout master; git pull origin master; git checkout prod; git merge master
+```
+
+Work through conflicts if needed.

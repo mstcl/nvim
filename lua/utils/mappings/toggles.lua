@@ -39,10 +39,12 @@ wk.register({
 	},
 	["<C-M>a"] = {
 		function()
-			if vim.g.cmp_toggle then
-				vim.g.cmp_toggle = false
-			else
-				vim.g.cmp_toggle = true
+			if require("user_configs").edit_features.completion then
+				if vim.g.cmp_toggle then
+					vim.g.cmp_toggle = false
+				else
+					vim.g.cmp_toggle = true
+				end
 			end
 		end,
 		"Toggle auto-completion window",

@@ -1,0 +1,191 @@
+local M = {}
+
+M.dap_enabled = {{ dap_enabled | string |lower }}
+M.lsp_enabled = {{ lsp_enabled | string |lower }}
+M.lsp_features = {
+	breadcrumbs = {{ lsp_features.breadcrumbs | string |lower }},
+	usage = {{ lsp_features.usage | string |lower }},
+	inlay_hints = {{ lsp_features.inlay_hints | string |lower }},
+}
+M.func_features = {
+	tip = {{ func_features.tip | string |lower }}
+}
+M.edit_features = {
+	biscuits = {{ edit_features.biscuits | string |lower }},
+	completion = {{ edit_features.completion | string |lower }},
+	escape = {{ edit_features.escape | string |lower }},
+	move = {{ edit_features.move | string |lower }},
+	flash = {{ edit_features.flash | string |lower }},
+	spider = {{ edit_features.spider | string |lower }},
+	rooter = {{ edit_features.rooter | string |lower }},
+}
+
+M.ui_features = {
+	modes = {{ ui_features.modes | string |lower }},
+	scope = {{ ui_features.scope | string |lower }},
+	cursorword = {{ ui_features.cursorword | string |lower }},
+	indent_lines = {{ ui_features.indent_lines | string |lower }},
+}
+
+M.syntax_features = {
+	typst = {{ syntax_features.typst | string |lower }},
+	ansible = {{ syntax_features.ansible | string |lower }},
+	quarto = {{ syntax_features.quarto | string |lower }},
+	org = {{ syntax_features.org | string |lower }},
+	tex = {{ syntax_features.tex | string |lower }},
+	rainbow = {{ syntax_features.rainbow | string |lower }},
+	hlargs = {{ syntax_features.hlargs | string |lower }},
+	markdown = {{ syntax_features.markdown | string |lower }},
+}
+
+M.frecency_workspaces = {
+{% if frecency_workspaces is defined and frecency_workspaces | length > 0 %}
+{% for item in frecency_workspaces %}
+{% for key, value in item.items() %}
+	["{{ key }}"] = vim.fn.expand("{{ value }}"),
+{% endfor %}
+{% endfor %}
+{% endif %}
+}
+
+M.treesitter_sources = {
+{% if treesitter_sources is defined and treesitter_sources | length > 0 %}
+{% for item in treesitter_sources %}
+	"{{ item }}",
+{% endfor %}
+{% endif %}
+}
+
+M.dap_signs = {
+{% if dap_signs is defined and dap_signs | length > 0 %}
+{% for item in dap_signs %}
+{% for key, value in item.items() %}
+      {{ key }} = "{{ value }}",
+{% endfor %}
+{% endfor %}
+{% endif %}
+}
+
+M.lsp_signs = {
+{% if lsp_signs is defined and lsp_signs | length > 0 %}
+{% for item in lsp_signs %}
+{% for key, value in item.items() %}
+      {{ key }} = "{{ value }}",
+{% endfor %}
+{% endfor %}
+{% endif %}
+}
+
+M.lsp_vt_signs = {
+	[1] = "ERROR", -- ERROR
+	[2] = "WARN", -- WARN
+	[3] = "INFO", -- INFO
+	[4] = "HINT", -- HINT
+}
+
+M.lsp_kind_icons = {
+{% if lsp_kind_icons is defined and lsp_kind_icons | length > 0 %}
+{% for item in lsp_kind_icons %}
+{% for key, value in item.items() %}
+      {{ key }} = "{{ value }}",
+{% endfor %}
+{% endfor %}
+{% endif %}
+}
+
+M.lsp_sources = {
+{% if lsp_sources is defined and lsp_sources | length > 0 %}
+{% for item in lsp_sources %}
+	"{{ item }}",
+{% endfor %}
+{% endif %}
+}
+
+M.null_formatting_sources = {
+{% if null_formatting_sources is defined and null_formatting_sources | length > 0 %}
+{% for item in null_formatting_sources %}
+	"{{ item }}",
+{% endfor %}
+{% endif %}
+}
+
+M.null_hover_sources = {
+{% if null_hover_sources is defined and null_hover_sources | length > 0 %}
+{% for item in null_hover_sources %}
+	"{{ item }}",
+{% endfor %}
+{% endif %}
+}
+
+M.null_diagnostics_sources = {
+{% if null_diagnostics_sources is defined and null_diagnostics_sources | length > 0 %}
+{% for item in null_diagnostics_sources %}
+	"{{ item }}",
+{% endfor %}
+{% endif %}
+}
+
+M.null_code_action_sources = {
+{% if null_code_actions_sources is defined and null_code_actions_sources | length > 0 %}
+{% for item in null_code_actions_sources %}
+	"{{ item }}",
+{% endfor %}
+{% endif %}
+}
+
+M.telescope_find_ignore = {
+	"fd",
+	"--type",
+	"file",
+	"--strip-cwd-prefix",
+	"--follow",
+{% if fd_ignore_patterns is defined and fd_ignore_patterns | length > 0 %}
+{% for item in fd_ignore_patterns %}
+	"--exclude",
+	"{{ item }}",
+{% endfor %}
+{% endif %}
+}
+
+M.starter_ascii = "{{ starter_ascii }}"
+
+M.statusline_short_ft = {
+	"lazy",
+	"Trouble",
+	"LuaTree",
+	"dapui_scopes",
+	"dapui_breakpoints",
+	"dapui_repl",
+	"vista",
+	"qf",
+	"dbui",
+	"startify",
+	"",
+	"floaterm",
+	"DiffviewFileHistoryPanel",
+	"DiffviewFiles",
+	"alpha",
+	"man",
+	"term",
+	"nerdtree",
+	"dashboard",
+	"Packer",
+	"NvimTree",
+	"TelescopePrompt",
+	"Help",
+	"help",
+	"diff",
+	"undotree",
+	"netrw",
+	"plug",
+	"Outline",
+	"quickfix",
+	"toggleterm",
+	"NeogitStatus",
+	"NeogitPopup",
+	"NeogitCommitView",
+	"NeogitLogView",
+	"DressingSelect"
+}
+
+return M

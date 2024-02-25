@@ -145,7 +145,6 @@ return {
 		event = "LspAttach",
 		opts = {
 			input = {
-				default_prompt = "➤ ",
 				insert_only = true,
 				prompt_align = "left",
 				start_in_insert = true,
@@ -185,21 +184,6 @@ return {
 		lazy = true,
 		dependencies = {
 			{ "MunifTanjim/nui.nvim", lazy = true, event = "VeryLazy" },
-			-- {
-			-- 	"rcarriga/nvim-notify",
-			-- 	lazy = true,
-			-- 	event = "VeryLazy",
-			-- 	opts = {
-			-- 		fps = 144,
-
-			-- 		minimum_width = 20,
-			-- 		max_width = 40,
-			-- 		-- max_height = 2,
-			-- 		render = "wrapped-compact",
-			-- 		top_down = false,
-			-- 		timeout = 2000,
-			-- 	},
-			-- },
 		},
 		opts = {
 			lsp = {
@@ -363,6 +347,7 @@ return {
 		-- Show indent lines
 		"shellRaining/hlchunk.nvim",
 		lazy = true,
+		cond = require("user_configs").ui_features.indent_lines,
 		event = "LspAttach",
 		opts = {
 			indent = {
@@ -375,16 +360,7 @@ return {
 				enable = false,
 			},
 			chunk = {
-				use_treesitter = true,
-				style = require("user_configs").indent_scope_hl,
-				chars = {
-					horizontal_line = "─",
-					vertical_line = "│",
-					left_top = "┌",
-					left_bottom = "└",
-					right_arrow = "─",
-				},
-				exclude_filetypes = require("user_configs").indent_scope_disabled_ft,
+				enable = false,
 			},
 		},
 	},
@@ -401,16 +377,13 @@ return {
 				hsl_fn = true,
 			}
 		}
-		-- config = function()
-		-- 	require("colorizer").setup()
-		-- 	vim.cmd("ColorizerAttachToBuffer")
-		-- end,
 	},
 	{
 		-- Naively highlight word under cursor
 		"echasnovski/mini.cursorword",
 		lazy = true,
 		event = "BufRead",
+		cond = require("user_configs").ui_features.cursorword,
 		init = function()
 			_G.cursorword_blocklist = function()
 				local curword = vim.fn.expand("<cword>")
@@ -421,7 +394,6 @@ return {
 				end
 				vim.b.minicursorword_disable = vim.tbl_contains(blocklist, curword)
 			end
-
 			vim.cmd("au CursorMoved * lua _G.cursorword_blocklist()")
 		end,
 		opts = {},
@@ -429,10 +401,9 @@ return {
 	},
 	{
 		-- Folding customization using LSP and more
-		-- NOTE: don't lazy load this, it doesn't load up automatically
 		"kevinhwang91/nvim-ufo",
 		lazy = true,
-		event = "BufReadPre",
+		event = "VeryLazy",
 		dependencies = { "kevinhwang91/promise-async", lazy = true, event = "VeryLazy" },
 		opts = {
 			open_fold_hl_timeout = 150,
@@ -476,6 +447,7 @@ return {
 	{
 		-- Cursorline mode decoration
 		"mvllow/modes.nvim",
+		cond = require("user_configs").ui_features.modes,
 		opts = {
 			set_number = false,
 		},
@@ -483,6 +455,7 @@ return {
 	{
 		-- Tabs and buffer
 		"tiagovla/scope.nvim",
+		cond = require("user_configs").ui_features.scope,
 		lazy = true,
 		event = "BufRead",
 		opts = {}

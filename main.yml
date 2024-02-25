@@ -1,0 +1,54 @@
+# :vim: set ft=yaml.ansible:
+---
+- name: Install and configure nvim
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Download packages
+      ansible.builtin.package:
+        name:
+          - "{{ 'neovim' if stable_release else 'neovim-nightly' }}"
+          - curl
+          - python-pynvim
+          - python
+          - python-pip
+          - "{{ 'neovim-remote' if remote_addon else omit }}"
+          - fd
+          - ripgrep
+        state: present
+
+    - name: Grab mdformat tools
+      tags: packages
+      when: "'mdformat' in null_formatting_sources"
+      ansible.builtin.pip:
+        name:
+          - mdformat-beautysh
+          - mdformat-black
+          - mdformat_footnote
+          - mdformat_frontmatter
+          - mdformat-gfm
+          - mdformat_myst
+          - mdformat_tables
+          - mdformat-toc
+        state: present
+        virtualenv: "/home/{{ current_user }}/.local/share/nvim/mason/packages/mdformat/venv"
+
+    - name: Template configuration
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/user_configs.lua.j2"
+        dest: "{{ playbook_dir }}/lua/user_configs.lua"
+        mode: "0644"
+
+    - name: Template additional addons
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/user_addons.lua.j2"
+        dest: "{{ playbook_dir }}/lua/plugins/user_addons.lua"
+        mode: "0644"
+
+    - name: Make symbolic to ~/.config
+      ansible.builtin.file:
+        src: "{{ playbook_dir }}"
+        dest: "/home/{{ current_user }}/.config/nvim"
+        state: link

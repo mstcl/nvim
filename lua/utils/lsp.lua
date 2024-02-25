@@ -16,7 +16,9 @@ local code_action_sources = require("user_configs").null_code_action_sources
 
 function M.on_attach(client, bufnr)
 	require("utils.mappings.lsp").setup(client, bufnr)
-	require("lsp-inlayhints").on_attach(client, bufnr)
+	if require('user_configs').lsp_features.inlay_hints then
+		require("lsp-inlayhints").on_attach(client, bufnr)
+	end
 end
 
 function M.ufo_handler(virtText, lnum, endLnum, width, truncate)

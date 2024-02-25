@@ -69,7 +69,7 @@ set.foldlevelstart = 99
 set.foldlevel = 99
 set.foldcolumn = "auto:1"
 
-set.signcolumn = "yes:1"
+set.signcolumn = "auto:1"
 set.splitbelow = true
 set.splitright = true
 set.colorcolumn = "88"
