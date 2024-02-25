@@ -13,7 +13,7 @@
 ### Cloning
 
 ```sh
-$ git clone https://github.com/mstcl/nvim
+$ git clone -b master https://github.com/mstcl/nvim
 $ cd nvim
 ```
 
