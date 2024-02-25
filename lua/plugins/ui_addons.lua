@@ -2,7 +2,8 @@
 return {
 	{
 		-- Colorscheme
-		"mstcl/dmg",
+		dir = "/hades/projects/dmg/",
+		name = "dmg",
 		lazy = false,
 		priority = 1000,
 		config = function()
