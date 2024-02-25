@@ -298,6 +298,7 @@ return {
 						"--line-number",
 						"--column",
 						"--smart-case",
+						"--trim",
 					},
 					borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 					prompt_prefix = " ➤ ",
@@ -405,7 +406,6 @@ return {
 			end
 		end,
 		dependencies = {
-			-- { "nvim-telescope/telescope-ui-select.nvim", lazy = true, event = "VeryLazy" },
 			{
 				"nvim-telescope/telescope-dap.nvim",
 				cond = require("user_configs").dap_enabled,
@@ -460,7 +460,7 @@ return {
 		-- Tips on launch
 		"TobinPalmer/Tip.nvim",
 		lazy = true,
-		cond = require("user_configs").tip_enabled,
+		cond = require("user_configs").func_features.tip,
 		event = "VimEnter",
 		init = function()
 			-- Default config

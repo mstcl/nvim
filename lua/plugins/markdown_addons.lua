@@ -4,6 +4,7 @@ return {
 		-- Format tables in markdown files
 		"godlygeek/tabular",
 		lazy = true,
+		cond = require("user_configs").syntax_features.markdown,
 		cmd = { "Tabularize" }
 	},
 	{
@@ -11,6 +12,7 @@ return {
 		"dimfeld/section-wordcount.nvim",
 		lazy = true,
 		ft = { "markdown" , "quarto"},
+		cond = require("user_configs").syntax_features.markdown,
 		config = function()
 			require("section-wordcount").setup({
 				highlight = "NonText",

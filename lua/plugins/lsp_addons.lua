@@ -1,6 +1,7 @@
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 local cond = require("user_configs").lsp_enabled
+local cond2 = require("user_configs").lsp_features
 local sources = require("user_configs").lsp_sources
 
 -- Plugins that add to nvim LSP functionalities
@@ -30,14 +31,21 @@ return {
 		lazy = true,
 		event = "BufRead",
 		dependencies = {
-			{ "cmp-nvim-lsp",          lazy = true, event = "InsertEnter" },
+			{
+				"cmp-nvim-lsp",
+				lazy = true,
+				event = "InsertEnter",
+				cond = require("user_configs").edit_features.completion,
+			},
 			{ "kevinhwang91/nvim-ufo" },
 		},
 		config = function()
 			local on_attach = require("utils.lsp").on_attach
 			local handlers = require("utils.lsp").handlers
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+			if require("user_configs").edit_features.completion then
+				capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+			end
 			capabilities.textDocument.completion.completionItem.snippetSupport = true
 			capabilities.textDocument.foldingRange = {
 				dynamicRegistration = false,
@@ -137,9 +145,9 @@ return {
 					debounce_text_changes = 150,
 				},
 				cmd = {
-					"/home/lckdscl/.local/share/nvim/mason/packages/lua-language-server/libexec/bin/lua-language-server",
+					vim.fn.expand("$HOME/.local/share/nvim/mason/packages/lua-language-server/libexec/bin/lua-language-server"),
 					"-E",
-					"/home/lckdscl/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua",
+					vim.fn.expand("$HOME/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua"),
 				},
 				settings = {
 					Lua = {
@@ -210,7 +218,7 @@ return {
 	{
 		-- Breadcrumb bar
 		"utilyre/barbecue.nvim",
-		cond = require("user_configs").lsp_features.show_breadcrumbs and cond,
+		cond = cond2.breadcrumbs and cond,
 		lazy = true,
 		version = "*",
 		event = "LspAttach",
@@ -359,7 +367,7 @@ return {
 	{
 		-- Inlay hints
 		"lvimuser/lsp-inlayhints.nvim",
-		cond = cond,
+		cond = cond2.inlay_hints and cond,
 		lazy = true,
 		event = "LspAttach",
 		opts = {
@@ -381,7 +389,8 @@ return {
 	{
 		-- Virtual text to show usage
 		"Wansmer/symbol-usage.nvim",
-		cond = require("user_configs").lsp_features.show_usage and cond,
+		cond = cond2.usage and cond,
+		lazy = true,
 		event = "BufReadPre",
 		opts = {
 			hl = { link = "StatusLineNC" },

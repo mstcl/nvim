@@ -158,6 +158,7 @@ return {
 		"m-demare/hlargs.nvim",
 		lazy = true,
 		event = { "VeryLazy" },
+		cond = require("user_configs").syntax_features.hlargs,
 		opts = {
 			color = "#87591a",
 			hl_priority = 200,
@@ -168,6 +169,7 @@ return {
 		"HiPhish/rainbow-delimiters.nvim",
 		lazy = true,
 		event = { "VeryLazy" },
+		cond = require("user_configs").syntax_features.rainbow,
 		config = function()
 			local rainbow_ok, rainbow = pcall(require, "rainbow-delimiters.setup")
 			if not rainbow_ok then
@@ -194,12 +196,14 @@ return {
 		-- Concealing in tex
 		"KeitaNakamura/tex-conceal.vim",
 		lazy = true,
+		cond = require("user_configs").syntax_features.tex,
 		ft = { "tex" },
 	},
 	{
 		-- Orgmode syntax
 		"nvim-orgmode/orgmode",
 		lazy = true,
+		cond = require("user_configs").syntax_features.org,
 		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
 		config = function()
 			local org_ok, orgmode = pcall(require, "orgmode")
@@ -221,7 +225,8 @@ return {
 		-- Org bullet
 		"akinsho/org-bullets.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		cond = require("user_configs").syntax_features.org,
+		event = "FileType",
 		opts = {
 			indent = true,
 			symbols = {
@@ -240,6 +245,7 @@ return {
 		"quarto-dev/quarto-nvim",
 		dev = false,
 		lazy = true,
+		cond = require("user_configs").syntax_features.quarto,
 		ft = "quarto",
 		dependencies = {
 			"jmbuhr/otter.nvim",
@@ -275,6 +281,7 @@ return {
 		-- Typst syntax
 		"kaarmu/typst.vim",
 		lazy = true,
+		cond = require("user_configs").syntax_features.typst,
 		event = "FileType",
 		config = function()
 			vim.g.typst_pdf_viewer = "sioyek"
@@ -283,6 +290,7 @@ return {
 	{
 		-- Ansible syntax
 		"pearofducks/ansible-vim",
+		cond = require("user_configs").syntax_features.ansible,
 		lazy = true,
 		event = "VeryLazy",
 	},

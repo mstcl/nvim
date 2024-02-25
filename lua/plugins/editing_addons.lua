@@ -1,16 +1,19 @@
+local cond = require("user_configs").edit_features
+
 -- Plugins that add extra functionality with keybindings or while editing
 return {
 	{
 		-- Snippet engine
 		"L3MON4D3/LuaSnip",
+		cond = cond.completion,
 		build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
 		dependencies = {
-			{ "rafamadriz/friendly-snippets", lazy = true, event = "InsertEnter" },
-			{ "Zeioth/NormalSnippets", lazy = true, event = "InsertEnter" },
+			{ "rafamadriz/friendly-snippets",     lazy = true, event = "InsertEnter" },
+			{ "Zeioth/NormalSnippets",            lazy = true, event = "InsertEnter" },
 			{ "benfowler/telescope-luasnip.nvim", lazy = true, event = "InsertEnter" },
 		},
 		lazy = true,
-		event = 'ModeChanged *:[iRss\x13vV\x16]*',
+		event = "ModeChanged *:[iRss\x13vV\x16]*",
 		opts = {
 			history = true,
 			delete_check_events = "TextChanged",
@@ -50,14 +53,15 @@ return {
 	{
 		-- Autocompletion menu & plugins
 		"hrsh7th/nvim-cmp",
+		cond = cond.completion,
 		lazy = true,
 		event = "InsertEnter",
 		dependencies = {
-			{ "saadparwaiz1/cmp_luasnip", lazy = true, event = "InsertEnter" },
+			{ "saadparwaiz1/cmp_luasnip",   lazy = true, event = "InsertEnter" },
 			{ "kdheepak/cmp-latex-symbols", lazy = true, event = "InsertEnter" },
-			{ "hrsh7th/cmp-nvim-lsp", lazy = true, event = "InsertEnter" },
-			{ "FelipeLema/cmp-async-path", lazy = true, event = "InsertEnter" },
-			{ "hrsh7th/cmp-buffer", lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/cmp-nvim-lsp",       lazy = true, event = "InsertEnter" },
+			{ "FelipeLema/cmp-async-path",  lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/cmp-buffer",         lazy = true, event = "InsertEnter" },
 			{
 				"aspeddro/cmp-pandoc.nvim",
 				lazy = true,
@@ -300,6 +304,7 @@ return {
 	{
 		-- Allows mapping custom escape keys without ruining typing experience.
 		"max397574/better-escape.nvim",
+		cond = cond.escape,
 		lazy = true,
 		event = "InsertCharPre",
 		opts = {
@@ -339,7 +344,7 @@ return {
 			"ys",
 			"ds",
 			"cs",
-			{ "S", mode = "x" },
+			{ "S",      mode = "x" },
 			{ "<C-g>s", mode = "i" },
 		},
 		opts = {},
@@ -347,6 +352,7 @@ return {
 	{
 		-- Keybindings to move lines and blocks
 		"fedepujol/move.nvim",
+		cond = cond.move,
 		lazy = true,
 		event = "BufRead",
 		config = function()
@@ -361,11 +367,17 @@ return {
 	{
 		-- Jump around the buffer
 		"folke/flash.nvim",
-		event = "VeryLazy",
+		cond = cond.flash,
+		lazy = true,
+		keys = {
+			{ "s", mode = { "n", "x", "o" } },
+			{ "R", mode = { "n", "x", "o" } },
+			{ "r", mode = { "o" } },
+		},
 		---@type Flash.Config
 		opts = {
 			prompt = {
-				prefix = { { "◆", "FlashPromptIcon" } },
+				prefix = { { "Flash", "FlashPromptIcon" } },
 			},
 			modes = {
 				char = {
@@ -488,8 +500,8 @@ return {
 	{
 		-- Context at end of block, outside parentheses
 		"code-biscuits/nvim-biscuits",
+		cond = cond.biscuits,
 		lazy = true,
-		cond = require("user_configs").edit_features.biscuits,
 		event = "VeryLazy",
 		opts = {
 			show_on_start = true,
@@ -515,6 +527,7 @@ return {
 		"notjedi/nvim-rooter.lua",
 		lazy = true,
 		event = "VeryLazy",
+		cond = cond.rooter,
 		opts = {
 			manual = false,
 			exclude_filetypes = { "quarto", "markdown", "org", "tex", "bib" },
@@ -531,7 +544,12 @@ return {
 	{
 		-- Better word movement
 		"chrisgrieser/nvim-spider",
-		lazy = false,
-		event = "BufRead"
+		lazy = true,
+		cond = cond.spider,
+		keys = {
+			{ "e", mode = { "n" } },
+			{ "b", mode = { "n" } },
+			{ "w", mode = { "n" } },
+		},
 	},
 }

@@ -1,3 +1,4 @@
 spell
 .luarc.json
 lazy-lock.json
+lua/user_configs.lua

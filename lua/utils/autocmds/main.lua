@@ -128,14 +128,6 @@ augroup("highlight_yank", {
 }, {
 	{ "BufReadPost", "BufNewFile" },
 	{
-		pattern = "*.yml",
-		callback = function()
-			vim.b.minicursorword_disable = true
-		end,
-	},
-}, {
-	{ "BufReadPost", "BufNewFile" },
-	{
 		pattern = "*/*lab/*.yml",
 		callback = function()
 			opt_local.filetype = "yaml.ansible"
@@ -159,7 +151,6 @@ augroup("text_opts", {
 		desc = "Enable spellcheck and spell correction on certain filetypes",
 		pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd", "*.typ" },
 		callback = function()
-			vim.b.minicursorword_disable = true
 			opt_local.list = false
 			opt_local.spell = true
 			map("i", "<C-l>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
@@ -194,7 +185,9 @@ augroup("telescope", {
 		desc = "Turn off completion for telescope buffers",
 		pattern = "TelescopePrompt",
 		callback = function()
-			require("cmp").setup.buffer({ completion = { autocomplete = false } })
+			if require("user_configs").edit_features.completion then
+				require("cmp").setup.buffer({ completion = { autocomplete = false } })
+			end
 		end,
 	},
 })
