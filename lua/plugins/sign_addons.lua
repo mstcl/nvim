@@ -4,7 +4,7 @@ return {
 		-- Git status in signcolumn
 		"lewis6991/gitsigns.nvim",
 		lazy = true,
-		event = "BufRead",
+		event = "BufReadPre",
 		dependencies = { { "nvim-lua/plenary.nvim", lazy = true, event = "VeryLazy" } },
 		opts = {
 			numhl = false,

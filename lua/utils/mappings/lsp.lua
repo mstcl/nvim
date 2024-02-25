@@ -146,14 +146,14 @@ function M.setup(client, bufnr)
 	wk.register({
 		["[d"] = {
 			function()
-				vim.diagnostic.goto_prev({ wrap = false, float = false })
+				vim.diagnostic.goto_prev({ wrap = false, float = true })
 			end,
 			"Previous diagnostic",
 			buffer = bufnr,
 		},
 		["]d"] = {
 			function()
-				vim.diagnostic.goto_next({ wrap = false, float = false })
+				vim.diagnostic.goto_next({ wrap = false, float = true })
 			end,
 			"Next diagnostic",
 			buffer = bufnr,

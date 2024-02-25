@@ -51,7 +51,7 @@ return {
 		"rcarriga/nvim-dap-ui",
 		cond = cond,
 		lazy = true,
-		event = "VeryLazy",
+		ft = "python",
 		dependencies = { "mfussenegger/nvim-dap", lazy = true, ft = "python" },
 		opts = {
 			icons = { expanded = "▾", collapsed = "▸" },
