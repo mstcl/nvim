@@ -43,7 +43,11 @@ set.cmdheight = 0
 set.lazyredraw = false
 set.ttyfast = true
 set.conceallevel = 2
-set.showtabline = 2
+if require("user_configs").ui_features.tabline then
+	set.showtabline = 2
+else
+	set.showtabline = 0
+end
 set.laststatus = 3
 set.ruler = false
 set.winblend = 0
@@ -140,7 +144,7 @@ vim.diagnostic.config({
 	},
 	virtual_text = {
 		enabled = true,
-		spacing = 2,
+		spacing = 4,
 		prefix = "",
 		format = function(diagnostic)
 			return string.format(vt_signs[diagnostic.severity])

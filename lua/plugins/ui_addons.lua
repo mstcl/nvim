@@ -90,6 +90,7 @@ return {
 		-- Tabline and bufferline
 		"romgrk/barbar.nvim",
 		lazy = true,
+		cond = require('user_configs').ui_features.tabline,
 		event = "BufRead",
 		init = function()
 			vim.g.barbar_auto_setup = false
@@ -213,14 +214,14 @@ return {
 				},
 				mini = {
 					win_options = {
-						winblend = 40
+						winblend = 40,
 					},
 					position = {
-						row = -1
+						row = -1,
 					},
 					border = {
-						style = "none"
-					}
+						style = "none",
+					},
 				},
 			},
 			routes = {
@@ -368,15 +369,15 @@ return {
 		-- Highlight color blocks
 		"NvChad/nvim-colorizer.lua",
 		lazy = true,
-		event = { 'BufNew', 'BufRead' },
+		event = { "BufNew", "BufRead" },
 		cmd = { "ColorizerToggle" },
 		opts = {
 			user_default_options = {
 				names = false,
 				rgb_fun = true,
 				hsl_fn = true,
-			}
-		}
+			},
+		},
 	},
 	{
 		-- Naively highlight word under cursor
@@ -458,6 +459,19 @@ return {
 		cond = require("user_configs").ui_features.scope,
 		lazy = true,
 		event = "BufRead",
-		opts = {}
+		opts = {},
+	},
+	{
+		"b0o/incline.nvim",
+		lazy = true,
+		event = "VeryLazy",
+		opts = {
+			window = {
+				margin = {
+					horizontal = 0,
+					vertical = 0,
+				},
+			},
+		},
 	},
 }
