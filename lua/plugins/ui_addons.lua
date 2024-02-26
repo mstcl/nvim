@@ -90,11 +90,10 @@ return {
 		-- Tabline and bufferline
 		"romgrk/barbar.nvim",
 		lazy = true,
-		cond = require('user_configs').ui_features.tabline,
+		cond = require("user_configs").ui_features.tabline,
 		event = "BufRead",
 		init = function()
 			vim.g.barbar_auto_setup = false
-			require("utils.mappings.buffer")
 		end,
 		opts = {
 			animation = true,
@@ -472,6 +471,17 @@ return {
 					vertical = 0,
 				},
 			},
+		},
+	},
+	{
+		"otavioschwanck/arrow.nvim",
+		opts = {
+			separate_by_branch = true,
+			window = {
+				border = 'single',
+			},
+			show_icons = false,
+			leader_key = ";",
 		},
 	},
 }
