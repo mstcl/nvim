@@ -3,7 +3,7 @@
 - name: Install and configure nvim
   hosts: localhost
   connection: local
-  gather_facts: false
+  gather_facts: true
 
   tasks:
     - name: Download packages
@@ -15,26 +15,9 @@
           - python-pynvim
           - python
           - python-pip
-          - "{{ 'neovim-remote' if remote_addon else '' }}"
           - fd
           - ripgrep
         state: present
-
-    - name: Grab mdformat tools
-      tags: packages
-      when: "'mdformat' in null_formatting_sources"
-      ansible.builtin.pip:
-        name:
-          - mdformat-beautysh
-          - mdformat-black
-          - mdformat_footnote
-          - mdformat_frontmatter
-          - mdformat-gfm
-          - mdformat_myst
-          - mdformat_tables
-          - mdformat-toc
-        state: present
-        virtualenv: "/home/{{ current_user }}/.local/share/nvim/mason/packages/mdformat/venv"
 
     - name: Template configuration
       ansible.builtin.template:
@@ -53,3 +36,25 @@
         src: "{{ playbook_dir }}"
         dest: "/home/{{ current_user }}/.config/nvim"
         state: link
+
+    - name: Print message
+      ansible.builtin.debug:
+        msg: "Launching neovim, exit when everything has been installed."
+
+    - name: Launch neovim remote
+      ansible.builtin.command: "{{ lookup('env', 'TERM') }} --command nvim"
+      changed_when: false
+
+    - name: Grab mdformat tools
+      when: "'mdformat' in null_formatting_sources"
+      ansible.builtin.pip:
+        name:
+          - mdformat-black
+          - mdformat_footnote
+          - mdformat_frontmatter
+          - mdformat-gfm
+          - mdformat_myst
+          - mdformat_tables
+          - mdformat-toc
+        state: present
+        virtualenv: "/home/{{ current_user }}/.local/share/nvim/mason/packages/mdformat/venv"
