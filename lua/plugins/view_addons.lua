@@ -471,4 +471,13 @@ return {
 			})
 		end,
 	},
+	{
+		-- Discard inactive buffers
+		"chrisgrieser/nvim-early-retirement",
+		lazy = true,
+		event = "VeryLazy",
+		opts = {
+			notificationOnAutoClose = true,
+		},
+	},
 }
