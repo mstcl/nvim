@@ -356,6 +356,11 @@ return {
 		lazy = true,
 		event = "BufRead",
 		config = function()
+			require("move").setup({
+				char = {
+					enable = true,
+				},
+			})
 			require("utils.mappings.movement")
 		end,
 	},
