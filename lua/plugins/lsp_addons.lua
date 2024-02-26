@@ -25,8 +25,11 @@ return {
 	{
 		-- Bridge nvim-lspconfig and mason
 		"williamboman/mason-lspconfig.nvim",
-		lazy = true,
+		lazy = false,
 		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			{"williamboman/mason.nvim"}
+		},
 		cond = cond,
 		opts = {
 			automatic_installation = true,
@@ -46,6 +49,7 @@ return {
 				cond = require("user_configs").edit_features.completion,
 			},
 			{ "kevinhwang91/nvim-ufo" },
+			{ "williamboman/mason-lspconfig.nvim" },
 		},
 		config = function()
 			local on_attach = require("utils.lsp").on_attach
