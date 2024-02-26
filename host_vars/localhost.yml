@@ -2,7 +2,6 @@
 ---
 current_user: "{{ lookup('env', 'USER') }}"
 stable_release: true # use neovim stable
-remote_addon: true # install neovim-remote to do some cool remote magic
 
 # ~~ (0) FEATURE CONFIGURATION ~~
 
