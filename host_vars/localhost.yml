@@ -159,6 +159,7 @@ lsp_kind_icons: # set the symbols for LSP kinds (appear in various places)
 # These will be automatically installed by mason
 # See: (https://github.com/mason-org/mason-registry/tree/main/packages)
 lsp_sources:
+  - "ansible-language-server"
   - "clangd"
   - "bashls"
   - "jedi_language_server"
