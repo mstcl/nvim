@@ -40,12 +40,12 @@ wk.register({
 
 -- Searching
 wk.register({
-	["n"] = { "nzz", "Search: previous result" },
-	["N"] = { "Nzz", "Search: next result" },
-	["*"] = { "*zz", "Search: matching forward (word)" },
-	["#"] = { "#zz", "Search: matching backward (word)" },
-	["g*"] = { "g*zz", "Search: matching backward" },
-	["g#"] = { "g#zz", "Search: matching backward" },
+	["n"] = { "nzz", "Search previous result" },
+	["N"] = { "Nzz", "Search next result" },
+	["*"] = { "*zz", "Search matching forward (word)" },
+	["#"] = { "#zz", "Search matching backward (word)" },
+	["g*"] = { "g*zz", "Search matching backward" },
+	["g#"] = { "g#zz", "Search matching backward" },
 })
 
 -- Indenting
