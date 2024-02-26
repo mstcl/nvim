@@ -68,6 +68,9 @@ return {
 				return
 			end
 			for _, server in ipairs(sources) do
+				if server == "ansible-language-server" then
+					server = "ansiblels"
+				end
 				lsp[server].setup({
 					on_attach = on_attach,
 					capabilities = capabilities,
