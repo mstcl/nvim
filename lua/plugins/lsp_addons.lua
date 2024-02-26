@@ -25,7 +25,7 @@ return {
 	{
 		-- Bridge nvim-lspconfig and mason
 		"williamboman/mason-lspconfig.nvim",
-		lazy = false,
+		lazy = true,
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			{"williamboman/mason.nvim"}
