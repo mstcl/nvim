@@ -11,6 +11,14 @@ return {
 		"williamboman/mason.nvim",
 		lazy = true,
 		event = { "BufReadPre", "BufNewFile" },
+		cmd = {
+			"MasonInstall",
+			"MasonUpdate",
+			"Mason",
+			"MasonUninstall",
+			"MasonUninstallAll",
+			"MasonLog",
+		},
 		cond = cond,
 		opts = {},
 	},
@@ -145,7 +153,9 @@ return {
 					debounce_text_changes = 150,
 				},
 				cmd = {
-					vim.fn.expand("$HOME/.local/share/nvim/mason/packages/lua-language-server/libexec/bin/lua-language-server"),
+					vim.fn.expand(
+						"$HOME/.local/share/nvim/mason/packages/lua-language-server/libexec/bin/lua-language-server"
+					),
 					"-E",
 					vim.fn.expand("$HOME/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua"),
 				},
