@@ -32,6 +32,7 @@ return {
 		},
 		cond = cond,
 		opts = {
+			ensure_installed = sources,
 			automatic_installation = true,
 		},
 	},
