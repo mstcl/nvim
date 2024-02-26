@@ -21,6 +21,7 @@ ui_features:
   scope: true # only display buffers for under a given tab scope
   cursorword: true # highlight words that match current word under cursor
   indent_lines: true # show fancy indent lines
+  tabline: true # display a bar at the top showing opened buffers
 
 edit_features:
   biscuits: false # show the current scope level at the end of the scope.
