@@ -171,7 +171,9 @@ augroup("starter", {
 					pattern = "<buffer>",
 					callback = function()
 						opt_local.laststatus = 3
-						vim.o.showtabline = 2
+						if require("user_configs").ui_features.tabline then
+							vim.o.showtabline = 2
+						end
 					end,
 				})
 			end

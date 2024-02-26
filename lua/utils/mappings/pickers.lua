@@ -79,3 +79,13 @@ wk.register({
 		"Pick live grep buffer results",
 	},
 })
+if not require("user_configs").ui_features.tabline then
+	wk.register({
+		["<leader>b"] = {
+			function()
+				exec("Telescope buffers")
+			end,
+			"Pick buffers",
+		},
+	})
+end
