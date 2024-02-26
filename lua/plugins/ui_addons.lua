@@ -476,6 +476,10 @@ return {
 	},
 	{
 		"otavioschwanck/arrow.nvim",
+		lazy = true,
+		keys = {
+			{ ";", mode = "n" },
+		},
 		opts = {
 			separate_by_branch = true,
 			window = {
