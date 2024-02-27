@@ -154,3 +154,8 @@ fd_ignore_patterns: []
 # Put the ascii in single quotes, all on one line (linebreak \n)
 # Here is a cat
 starter_ascii: '  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n'
+
+# Configure orgmode agenda files (can use globbing)
+org_agenda_files:
+  - "$HOME/sftpgo/notes/*"
+  - "$HOME/sftpgo/shared/notes/*"

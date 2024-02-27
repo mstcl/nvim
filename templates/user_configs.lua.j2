@@ -150,6 +150,14 @@ M.telescope_find_ignore = {
 
 M.starter_ascii = "{{ starter_ascii }}"
 
+M.org_agenda_files = {
+{% if org_agenda_files is defined and org_agenda_files | length > 0 %}
+{% for item in org_agenda_files %}
+	"{{ item }}",
+{% endfor %}
+{% endif %}
+}
+
 M.statusline_short_ft = {
 	"lazy",
 	"Trouble",
