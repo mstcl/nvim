@@ -156,6 +156,5 @@ fd_ignore_patterns: []
 starter_ascii: '  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n'
 
 # Configure orgmode agenda files (can use globbing)
-org_agenda_files:
-  - "$HOME/sftpgo/notes/*"
-  - "$HOME/sftpgo/shared/notes/*"
+# Expects a list
+org_agenda_files: []
