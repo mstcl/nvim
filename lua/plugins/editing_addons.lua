@@ -133,7 +133,7 @@ return {
 						icon = " " .. icon .. " "
 						item.menu = "   (" .. item.kind .. ")"
 						item.kind = icon
-						item.abbr = string.sub(item.abbr, 1, 20)
+						item.abbr = string.sub(item.abbr, 1, 30)
 						return item
 					end,
 				},

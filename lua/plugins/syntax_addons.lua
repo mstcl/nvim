@@ -212,8 +212,8 @@ return {
 			end
 
 			orgmode.setup({
-				org_agenda_files = { "~/sftpgo/orgzly/*", "~/sftpgo/shared/orgzly/*" },
-				win_split_mode = "float",
+				org_agenda_files = require("user_configs").org_agenda_files,
+				win_split_mode = "vsplit",
 				win_border = "single",
 				org_highlight_latex_and_related = "entities",
 				org_hide_emphasis_markers = true,
