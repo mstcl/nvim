@@ -222,3 +222,8 @@ fd_ignore_patterns:
 # Configure the dashboard ascii
 # Put the ascii in single quotes, all on one line (linebreak \n)
 starter_ascii: '  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n'
+
+# Configure orgmode agenda files (can use globbing)
+org_agenda_files:
+  - "$HOME/sftpgo/notes/*"
+  - "$HOME/sftpgo/shared/notes/*"
