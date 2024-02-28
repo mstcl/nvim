@@ -121,11 +121,11 @@ return {
 					},
 					swap = {
 						enable = true,
-							swap_next = {
-								[">K"] = { query = "@block.outer", desc = "Swap next block" },
-								[">F"] = { query = "@function.outer", desc = "Swap next function" },
-								[">A"] = { query = "@parameter.inner", desc = "Swap next parameter" },
-							},
+						swap_next = {
+							[">K"] = { query = "@block.outer", desc = "Swap next block" },
+							[">F"] = { query = "@function.outer", desc = "Swap next function" },
+							[">A"] = { query = "@parameter.inner", desc = "Swap next parameter" },
+						},
 						swap_previous = {
 							["<K"] = { query = "@block.outer", desc = "Swap previous block" },
 							["<F"] = { query = "@function.outer", desc = "Swap previous function" },
@@ -146,7 +146,7 @@ return {
 				end,
 			},
 			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true, event = "FileType" },
-			{ "filNaj/tree-setter", lazy = true, event = "FileType" },
+			{ "filNaj/tree-setter",                          lazy = true, event = "FileType" },
 			{
 				"nvim-treesitter/playground",
 				cmd = "TSPlaygroundToggle",

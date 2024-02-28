@@ -17,19 +17,6 @@ local function augroup(group, ...)
 	end
 end
 
-augroup("ColorschemeOverride", {
-	"ColorScheme",
-	{
-		desc = "Override for current colorscheme",
-		pattern = "*",
-		command = [[
-		hi link OrgAgendaScheduled HintMsg
-		hi link OrgDONE DiffAdd
-		hi link OrgTODO DiffDelete
-	]],
-	},
-})
-
 augroup("trim", {
 	"BufWritePre",
 	{
