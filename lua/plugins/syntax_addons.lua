@@ -217,6 +217,8 @@ return {
 				win_border = "single",
 				org_highlight_latex_and_related = "entities",
 				org_hide_emphasis_markers = true,
+				org_capture_templates = { t = { description = "Task", template = "* TODO %?\n  %u" } },
+				org_default_notes_file = "~/sftpgo/notes/Main.org"
 			})
 			orgmode.setup_ts_grammar()
 		end,
