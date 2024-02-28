@@ -41,6 +41,16 @@
       ansible.builtin.debug:
         msg: "Launching neovim, exit when everything has been installed."
 
+    - name: Print message
+      when: "'pylint' in null_diagnostics_sources"
+      ansible.builtin.debug:
+        msg: "Manually run `:MasonInstall pylint`."
+
+    - name: Print message
+      when: "'mdformat' in null_formatting_sources"
+      ansible.builtin.debug:
+        msg: "Manually run `:MasonInstall mdformat`."
+
     - name: Launch neovim remote
       ansible.builtin.command: "{{ lookup('env', 'TERM') }} --command nvim"
       changed_when: false
@@ -58,3 +68,11 @@
           - mdformat-toc
         state: present
         virtualenv: "/home/{{ current_user }}/.local/share/nvim/mason/packages/mdformat/venv"
+
+    - name: Grab pylint-venv
+      when: "'pylint' in null_diagnostics_sources"
+      ansible.builtin.pip:
+        name:
+          - pylint-venv
+        state: present
+        virtualenv: "/home/{{ current_user }}/.local/share/nvim/mason/packages/pylint/venv"
