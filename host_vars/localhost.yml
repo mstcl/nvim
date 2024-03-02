@@ -135,7 +135,7 @@ lsp_kind_icons: # set the symbols for LSP kinds (appear in various places)
   - Method: "f"
   - Module: "M"
   - Namespace: "ξ"
-  - 'Null': "Ø"
+  - "Null": "Ø"
   - Number: "#"
   - Object: "ß"
   - Operator: "⁑"
@@ -183,7 +183,6 @@ lsp_sources:
 
 null_formatting_sources:
   - "prettierd"
-  - "black"
   - "shfmt"
   - "mdformat"
   - "stylua"
@@ -204,7 +203,6 @@ null_diagnostics_sources:
   - "vint"
   - "ansiblelint"
   - "mypy"
-  - "pylint"
   - "golangci_lint"
 
 # !~~ (5d) CODE ACTIONS SOURCES ~~!
