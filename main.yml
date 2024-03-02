@@ -59,7 +59,6 @@
       when: "'mdformat' in null_formatting_sources"
       ansible.builtin.pip:
         name:
-          - mdformat-black
           - mdformat_footnote
           - mdformat_frontmatter
           - mdformat-gfm
