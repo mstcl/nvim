@@ -76,6 +76,15 @@ for _, source in ipairs(hover_sources) do
 	table.insert(null_sources, null_ls.builtins.hover[source])
 end
 for _, source in ipairs(diagnostics_sources) do
+	if source == "commitlint" then
+		table.insert(
+			null_sources,
+			null_ls.builtins.diagnostics[source].with({
+				filetypes = { "NeogitCommitMessage", "gitcommit" },
+				env = { NODE_PATH = vim.fn.expand("~/.local/share/nvim/mason/packages/commitlint/node_modules"), },
+			})
+		)
+	end
 	if source == "proselint" then
 		table.insert(
 			null_sources,
