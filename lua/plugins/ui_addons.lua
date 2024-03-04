@@ -367,17 +367,13 @@ return {
 	},
 	{
 		-- Highlight color blocks
-		"NvChad/nvim-colorizer.lua",
+		"brenoprata10/nvim-highlight-colors",
 		lazy = true,
 		event = { "BufNew", "BufRead" },
-		cmd = { "ColorizerToggle" },
+		cmd = { "HighlightColors" },
 		opts = {
-			user_default_options = {
-				names = false,
-				rgb_fun = true,
-				hsl_fn = true,
-			},
-		},
+			enable_named_colors = false,
+		}
 	},
 	{
 		-- Naively highlight word under cursor
