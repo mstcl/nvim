@@ -94,6 +94,7 @@ treesitter_sources:
   - "comment"
   - "org"
   - "rust"
+  - "norg"
   - "xml"
   - "go"
 
