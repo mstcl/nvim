@@ -197,6 +197,7 @@ null_hover_sources:
 # !~~ (5c) HOVER SOURCES ~~!
 
 null_diagnostics_sources:
+  - "hadolint"
   - "commitlint"
   - "cppcheck"
   - "codespell"
