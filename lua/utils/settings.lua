@@ -8,9 +8,6 @@ vim.g.loaded_node_provider = false
 vim.g.loaded_perl_provider = false
 
 -- Globals
-vim.g.mapleader = ","
-vim.g.maplocalleader = ",."
-
 vim.g["vimsyn_embed"] = "l"
 vim.g["tex_flavor"] = "latex"
 vim.g["tex_fold_enabled"] = "1"
