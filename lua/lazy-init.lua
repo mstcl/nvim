@@ -28,7 +28,6 @@ require("lazy").setup("plugins", {
 		size = { width = 0.8, height = 0.8 },
 		wrap = true,
 		border = "none",
-		title = "Lazy",
 		title_pos = "center", ---@type "center" | "left" | "right"
 		pills = true, ---@type boolean
 		icons = {
