@@ -370,7 +370,7 @@ return {
 		lazy = true,
 		build = "luarocks --local install magick --lua-version=5.1",
 		ft = { "markdown", "org", "ipynb", "quarto" },
-		cond = vim.fn.expand("$SSH_CLIENT") ~= "" and require("user_configs").syntax_features.quarto,
+		cond = vim.fn.expand("$SSH_CLIENT") == "",
 		opts = {
 			integrations = {
 				markdown = {
