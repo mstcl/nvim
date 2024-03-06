@@ -13,12 +13,24 @@
         name:
           - "{{ 'neovim' if stable_release else 'neovim-nightly' }}"
           - curl
-          - python-pynvim
           - python
           - python-pip
           - fd
           - ripgrep
         state: present
+
+    - name: Install python dependencies for neovim
+      ansible.builtin.pip:
+        requirements: "{{ playbook_dir }}/requirements.txt"
+        state: present
+        virtualenv: "{{ playbook_dir }}/.venv"
+
+    - name: Install python dependencies for neovim
+      when: syntax_features.quarto
+      ansible.builtin.pip:
+        requirements: "{{ playbook_dir }}/requirements_python_stack.txt"
+        state: present
+        virtualenv: "{{ playbook_dir }}/.venv"
 
     - name: Template configuration
       ansible.builtin.template:

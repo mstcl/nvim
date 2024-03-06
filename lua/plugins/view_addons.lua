@@ -382,6 +382,7 @@ return {
 						prompt_title = "Zoxide",
 					},
 					frecency = {
+						auto_validate = false,
 						use_sqlite = false,
 						layout_strategy = "flex",
 						layout_config = flex_layout,
@@ -428,7 +429,6 @@ return {
 			},
 			{
 				"nvim-telescope/telescope-frecency.nvim",
-				commit = "fbda5d91d6e787f5977787fa4a81da5c8e22160a",
 				lazy = true,
 				event = "VeryLazy",
 			},
@@ -442,10 +442,6 @@ return {
 			{ "nvim-telescope/telescope.nvim", lazy = true, cmd = "Telescope" },
 		},
 		opts = {
-			-- integrations = {
-			-- 	telescope = true,
-			-- 	diffview = true,
-			-- },
 			commit_editor = {
 				kind = "vsplit",
 			},

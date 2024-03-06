@@ -1,0 +1,11 @@
+pnglatex
+jupyter_client
+pillow
+ipython
+ipykernel
+jupyter_console
+nbformat
+nbclient
+pyyaml
+jupytext
+jupyter-cache
