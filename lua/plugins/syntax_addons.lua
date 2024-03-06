@@ -2,6 +2,11 @@
 local cond = require("user_configs").lsp_enabled
 return {
 	{
+		-- Filetype alternative
+		"BasileusErwin/filetype.nvim",
+		lazy = false,
+	},
+	{
 		-- Treesitter engine
 		"nvim-treesitter/nvim-treesitter",
 		lazy = true,
@@ -226,7 +231,7 @@ return {
 		"akinsho/org-bullets.nvim",
 		lazy = true,
 		cond = require("user_configs").syntax_features.org,
-		event = "FileType",
+		-- event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
 		opts = {
 			indent = true,
 			symbols = {
@@ -268,12 +273,21 @@ return {
 			lspFeatures = {
 				languages = { "python", "bash", "html", "lua" },
 			},
+			chunks = "all",
+			diagnostics = {
+				enabled = true,
+				trigger = { "BufWritePost" },
+			},
 			keymap = {
 				hover = "<C-K>",
 				definition = "<leader>qd",
 				type_definition = "<leader>qD",
 				rename = "<leader>r",
 				format = "<leader><space>",
+			},
+			codeRunner = {
+				enabled = true,
+				default_method = "molten",
 			},
 		},
 	},
@@ -293,5 +307,98 @@ return {
 		cond = require("user_configs").syntax_features.ansible,
 		lazy = true,
 		event = "VeryLazy",
+	},
+	{
+		-- Python notebooks
+		"benlubas/molten-nvim",
+		lazy = true,
+		ft = { "markdown", "quarto" },
+		version = "^1.0.0",
+		build = ":UpdateRemotePlugins",
+		cond = require("user_configs").syntax_features.quarto,
+		init = function()
+			vim.g.molten_image_provider = "image.nvim"
+			vim.g.molten_wrap_output = true
+			vim.g.molten_virt_lines_off_by_1 = true
+			vim.g.molten_output_win_max_height = 20
+			local imb = function(e)
+				vim.schedule(function()
+					local kernels = vim.fn.MoltenAvailableKernels()
+					local try_kernel_name = function()
+						local metadata = vim.json.decode(io.open(e.file, "r"):read("a"))["metadata"]
+						return metadata.kernelspec.name
+					end
+					local ok, kernel_name = pcall(try_kernel_name)
+					if not ok or not vim.tbl_contains(kernels, kernel_name) then
+						kernel_name = nil
+						local venv = os.getenv("VIRTUAL_ENV")
+						if venv ~= nil then
+							kernel_name = string.match(venv, "/.+/(.+)")
+						end
+					end
+					if kernel_name ~= nil and vim.tbl_contains(kernels, kernel_name) then
+						vim.cmd(("MoltenInit %s"):format(kernel_name))
+					end
+					vim.cmd("MoltenImportOutput")
+				end)
+			end
+			vim.api.nvim_create_autocmd("BufAdd", {
+				pattern = { "*.ipynb" },
+				callback = imb,
+			})
+			vim.api.nvim_create_autocmd("BufEnter", {
+				pattern = { "*.ipynb" },
+				callback = function(e)
+					if vim.api.nvim_get_vvar("vim_did_enter") ~= 1 then
+						imb(e)
+					end
+				end,
+			})
+			vim.api.nvim_create_autocmd("BufWritePost", {
+				pattern = { "*.ipynb" },
+				callback = function()
+					if require("molten.status").initialized() == "Molten" then
+						vim.cmd("MoltenExportOutput!")
+					end
+				end,
+			})
+		end,
+	},
+	{
+		-- Display images inside
+		"3rd/image.nvim",
+		lazy = true,
+		build = "luarocks --local install magick --lua-version=5.1",
+		ft = { "markdown", "org", "ipynb", "quarto" },
+		cond = vim.fn.expand("$SSH_CLIENT") ~= "" and require("user_configs").syntax_features.quarto,
+		opts = {
+			integrations = {
+				markdown = {
+					filetypes = { "markdown", "vimwiki", "quarto" },
+				},
+				neorg = {
+					filetypes = { "org" },
+				},
+			},
+			backend = "ueberzug",
+			max_width = 100,
+			max_height = 12,
+			max_height_window_percentage = math.huge,
+			max_width_window_percentage = math.huge,
+			window_overlap_clear_enabled = true,
+			window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
+		},
+	},
+	{
+		-- Convert ipython notebooks to something sane
+		"GCBallesteros/jupytext.nvim",
+		lazy = true,
+		event = { "BufReadPre", "BufEnter *.ipynb", "BufWinEnter *.ipynb" },
+		cond = require("user_configs").syntax_features.quarto,
+		opts = {
+			style = "quarto",
+			output_extension = "qmd",
+			force_ft = "quarto",
+		},
 	},
 }
