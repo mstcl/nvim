@@ -5,8 +5,8 @@ stable_release: true # use neovim stable
 
 # ~~ (0) FEATURE CONFIGURATION ~~
 
-dap_enabled: true # enable dap core, which is nvim dap, dap ui and python dap
-lsp_enabled: true # enable lsp core, which is mason, lspconfig, none-ls
+dap_enabled: false # enable dap core, which is nvim dap, dap ui and python dap
+lsp_enabled: false # enable lsp core, which is mason, lspconfig, none-ls
 
 lsp_features:
   breadcrumbs: false # show a bar at the top (winbar) with the current scope's symbols.
@@ -21,7 +21,7 @@ ui_features:
   scope: true # only display buffers for under a given tab scope
   cursorword: true # highlight words that match current word under cursor
   indent_lines: true # show fancy indent lines
-  tabline: true # display a bar at the top showing opened buffers
+  tabline: false # display a bar at the top showing opened buffers
 
 edit_features:
   biscuits: false # show the current scope level at the end of the scope.
