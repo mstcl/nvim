@@ -231,7 +231,7 @@ return {
 		"akinsho/org-bullets.nvim",
 		lazy = true,
 		cond = require("user_configs").syntax_features.org,
-		-- event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
+		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
 		opts = {
 			indent = true,
 			symbols = {
