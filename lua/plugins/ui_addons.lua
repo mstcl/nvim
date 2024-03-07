@@ -24,6 +24,7 @@ return {
 		end,
 	},
 	{
+		-- Statusline
 		"sontungexpt/sttusline",
 		lazy = true,
 		event = "BufRead",
@@ -457,6 +458,7 @@ return {
 		opts = {},
 	},
 	{
+		-- Winbar/bufferline alternative
 		"b0o/incline.nvim",
 		lazy = true,
 		event = "VeryLazy",
