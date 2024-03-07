@@ -293,13 +293,7 @@ return {
 			{ "gc", mode = { "n", "x" } },
 			{ "gb", mode = { "n", "x" } },
 		},
-		opts = {
-			opts = function()
-				local commentstring_avail, commentstring =
-					pcall(require, "ts_context_commentstring.integrations.comment_nvim")
-				return commentstring_avail and commentstring and { pre_hook = commentstring.create_pre_hook() } or {}
-			end,
-		},
+		opts = {},
 	},
 	{
 		-- Allows mapping custom escape keys without ruining typing experience.
@@ -486,7 +480,10 @@ return {
 		-- Toggling booleans and more
 		"nat-418/boole.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		keys = {
+			{ "<C-A>", mode = { "n" } },
+			{ "<C-X>", mode = { "n" } },
+		},
 		opts = {
 			mappings = {
 				increment = "<C-A>",

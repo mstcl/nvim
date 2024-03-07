@@ -141,21 +141,7 @@ return {
 			})
 		end,
 		dependencies = {
-			{
-				"JoosepAlviste/nvim-ts-context-commentstring",
-				lazy = true,
-				event = "FileType",
-				config = function()
-					require("ts_context_commentstring").setup({})
-					vim.g.skip_ts_context_commentstring_module = true
-				end,
-			},
 			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true, event = "FileType" },
-			{ "filNaj/tree-setter",                          lazy = true, event = "FileType" },
-			{
-				"nvim-treesitter/playground",
-				cmd = "TSPlaygroundToggle",
-			},
 		},
 	},
 	{
@@ -253,13 +239,13 @@ return {
 		dev = false,
 		lazy = true,
 		cond = require("user_configs").syntax_features.quarto,
-		ft = "quarto",
+		ft = { "quarto" },
 		dependencies = {
 			"jmbuhr/otter.nvim",
 			lazy = true,
 			cond = cond,
 			dependencies = { "neovim/nvim-lspconfig", lazy = true, event = "BufRead" },
-			event = "InsertEnter",
+			ft = { "quarto", "markdown" },
 			opts = {
 				lsp = {
 					hover = {
@@ -314,7 +300,7 @@ return {
 		-- Python notebooks
 		"benlubas/molten-nvim",
 		lazy = true,
-		ft = { "markdown", "quarto" },
+		ft = "quarto",
 		version = "^1.0.0",
 		build = ":UpdateRemotePlugins",
 		cond = require("user_configs").syntax_features.quarto,

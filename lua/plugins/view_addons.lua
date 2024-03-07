@@ -233,7 +233,7 @@ return {
 				return function()
 					return {
 						{ action = org_agenda, name = "Agenda", section = "Quick actions" },
-						{ action = "Lazy check", name = "Fetch plugins", section = "Quick actions" },
+						{ action = "Lazy show", name = "Plugins", section = "Quick actions" },
 					}
 				end
 			end
