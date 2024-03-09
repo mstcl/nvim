@@ -203,6 +203,11 @@ return {
 			end
 
 			orgmode.setup({
+				mappings = {
+					org = {
+						org_return = false,
+					},
+				},
 				org_agenda_files = require("user_configs").org_agenda_files,
 				win_split_mode = "vsplit",
 				win_border = "single",
@@ -264,13 +269,6 @@ return {
 				enabled = true,
 				trigger = { "BufWritePost" },
 			},
-			keymap = {
-				hover = "<C-K>",
-				definition = "<leader>qd",
-				type_definition = "<leader>qD",
-				rename = "<leader>r",
-				format = "<leader><space>",
-			},
 			codeRunner = {
 				enabled = true,
 				default_method = "molten",
@@ -305,8 +303,16 @@ return {
 		init = function()
 			vim.g.molten_image_provider = "image.nvim"
 			vim.g.molten_wrap_output = true
+			vim.g.molten_auto_open_output = false
 			vim.g.molten_virt_lines_off_by_1 = true
+			vim.g.molten_output_virt_lines = true
+			vim.g.molten_virt_text_output = true
+			vim.g.molten_virt_text_max_lines = 10
+			vim.g.molten_output_crop_border = 10
+			vim.g.molten_output_win_style = "minimal"
+			vim.g.molten_output_win_cover_gutter = false
 			vim.g.molten_output_win_max_height = 20
+			vim.g.molten_output_win_border = "none"
 			local imb = function(e)
 				vim.schedule(function()
 					local kernels = vim.fn.MoltenAvailableKernels()
@@ -356,7 +362,7 @@ return {
 		lazy = true,
 		build = "luarocks --local install magick --lua-version=5.1",
 		ft = { "markdown", "org", "ipynb", "quarto" },
-		cond = vim.fn.expand("$SSH_CLIENT") == "",
+		cond = vim.fn.expand("$SSH_CLIENT") == "$SSH_CLIENT",
 		opts = {
 			integrations = {
 				markdown = {
@@ -378,8 +384,8 @@ return {
 	{
 		-- Convert ipython notebooks to something sane
 		"GCBallesteros/jupytext.nvim",
-		lazy = true,
-		event = { "BufReadPre", "BufEnter *.ipynb", "BufWinEnter *.ipynb" },
+		lazy = false,
+		event = { "FileType" },
 		cond = require("user_configs").syntax_features.quarto,
 		opts = {
 			style = "quarto",
