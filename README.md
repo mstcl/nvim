@@ -1,6 +1,6 @@
 # nvim
 
-**lckdscl's opinionated configuration of Neovim.**
+**My opinionated neovim configuration.**
 
 ![preview](pics/preview.png)
 
