@@ -42,9 +42,9 @@ return {
 		-- Utility to tweak statuscolumn
 		"luukvbaal/statuscol.nvim",
 		lazy = false,
-		config = function()
+		opts = function()
 			local builtin = require("statuscol.builtin")
-			require("statuscol").setup({
+			return {
 				relculright = true,
 				ft_ignore = { "help", "starter", "Neogit*", "aerial", "lazy", "TelescopePrompt" },
 				segments = {
@@ -69,8 +69,11 @@ return {
 						condition = { true, builtin.not_empty },
 						click = "v:lua.ScLa",
 					},
-				},
-			})
+				}
+			}
+		end,
+		config = function(_, opts)
+			require("statuscol").setup(opts)
 		end,
 	},
 }

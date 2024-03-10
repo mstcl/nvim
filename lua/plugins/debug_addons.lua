@@ -9,7 +9,7 @@ return {
 		lazy = true,
 		ft = "python",
 		config = function()
-			require("dap-python").setup("/usr/bin/python3", { justMyCode = false })
+			require("dap-python").setup()
 		end,
 	},
 	{
