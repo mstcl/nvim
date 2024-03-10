@@ -196,24 +196,25 @@ return {
 		lazy = true,
 		cond = require("user_configs").syntax_features.org,
 		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
+		opts = {
+			mappings = {
+				org = {
+					org_return = false,
+				},
+			},
+			org_agenda_files = require("user_configs").org_agenda_files,
+			win_split_mode = "vsplit",
+			win_border = "single",
+			org_highlight_latex_and_related = "entities",
+			org_hide_emphasis_markers = true,
+		},
 		config = function()
 			local org_ok, orgmode = pcall(require, "orgmode")
 			if not org_ok then
 				return
 			end
 
-			orgmode.setup({
-				mappings = {
-					org = {
-						org_return = false,
-					},
-				},
-				org_agenda_files = require("user_configs").org_agenda_files,
-				win_split_mode = "vsplit",
-				win_border = "single",
-				org_highlight_latex_and_related = "entities",
-				org_hide_emphasis_markers = true,
-			})
+			orgmode.setup({ opts })
 			orgmode.setup_ts_grammar()
 		end,
 	},

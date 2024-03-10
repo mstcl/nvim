@@ -1,5 +1,13 @@
 local M = {}
 
+M.dev_plugins = {
+{% if dev_plugins is defined and dev_plugins | length > 0 %}
+{% for item in dev_plugins %}
+	"{{ item }}",
+{% endfor %}
+{% endif %}
+}
+
 M.dap_enabled = {{ dap_enabled | string |lower }}
 M.lsp_enabled = {{ lsp_enabled | string |lower }}
 M.lsp_features = {

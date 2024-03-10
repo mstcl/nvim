@@ -549,4 +549,20 @@ return {
 			{ "w", mode = { "n" } },
 		},
 	},
+	{
+		"chrishrb/gx.nvim",
+		keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
+		cmd = { "Browse" },
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			open_browser_app = "xdg-open",
+			handlers = {
+				plugin = true,
+				github = true,
+				brewfile = true,
+				package_json = true,
+				search = true,
+			},
+		},
+	},
 }
