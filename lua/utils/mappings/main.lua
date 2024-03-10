@@ -4,11 +4,10 @@ local wk_ok, wk = pcall(require, "which-key")
 if not wk_ok then
 	return
 end
-local opts = { noremap = true, silent = true }
 
 -- Remove mappings
-map("n", "Q", "", opts)
-map("n", "gQ", "", opts)
+map("n", "Q", "")
+map("n", "gQ", "")
 
 -- General and groups
 wk.register({

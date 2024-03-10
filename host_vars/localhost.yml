@@ -228,3 +228,7 @@ starter_ascii: '  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n'
 org_agenda_files:
   - "~/sftpgo/notes/*"
   - "~/sftpgo/shared/notes/*"
+
+# Plugins to load locally from ~/projects
+dev_plugins:
+  - dmg
