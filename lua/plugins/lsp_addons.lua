@@ -28,7 +28,7 @@ return {
 		lazy = true,
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
-			{"williamboman/mason.nvim"}
+			{ "williamboman/mason.nvim" },
 		},
 		cond = cond,
 		opts = {
@@ -239,17 +239,13 @@ return {
 		event = "LspAttach",
 		branch = "main",
 		dependencies = { { "smiteshp/nvim-navic", lazy = true, event = "VeryLazy" } },
-		config = function()
-			local present, barbecue = pcall(require, "barbecue")
-			if not present then
-				return
-			end
+		opts = function()
 			local colors = require("utils.misc").barbecue_theme
 			local bg_fg = { bg = colors["bg"], fg = colors["fg"] }
 			local bg_mg = { bg = colors["bg"], fg = colors["mg"] }
 			local bg_hl = { bg = colors["bg"], fg = colors["hl"] }
 			local bg_bl = { bg = colors["bg"], fg = colors["bl"] }
-			barbecue.setup({
+			return {
 				create_autocmd = false,
 				theme = {
 					normal = bg_fg,
@@ -271,10 +267,12 @@ return {
 				exclude_buftypes = { "terminal" },
 				show_modified = true,
 				kinds = require("user_configs").lsp_kind_icons,
-			})
-			local barbecue_update = augroup("barbecue", { clear = true })
+			}
+		end,
+		config = function(_, opts)
+			require("barbecue").setup(opts)
 			autocmd({ "WinResized", "BufWinEnter", "CursorHold", "InsertLeave" }, {
-				group = barbecue_update,
+				group = augroup("barbecue", { clear = true }),
 				callback = function()
 					require("barbecue.ui").update()
 				end,
@@ -353,15 +351,14 @@ return {
 		cond = cond,
 		lazy = true,
 		event = "VeryLazy",
-		config = function()
-			local null_ok, null_ls = pcall(require, "null-ls")
-			if not null_ok then
-				return
-			end
-			null_ls.setup({
+		opts = function()
+			return {
 				sources = require("utils.lsp").null_sources,
 				on_attach = require("utils.lsp").on_attach,
-			})
+			}
+		end,
+		config = function(_, opts)
+			require("null-ls").setup(opts)
 		end,
 	},
 	{

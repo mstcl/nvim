@@ -25,7 +25,7 @@ return {
 			order = order,
 		},
 		padding = 1,
-		colors = { "StatuslineAlt" },
+		colors = "StatuslineAlt",
 		condition = function()
 			return vim.b.gitsigns_status_dict ~= nil and vim.o.columns > 70
 		end,
