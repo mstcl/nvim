@@ -27,7 +27,7 @@ return {
 		-- Statusline
 		"sontungexpt/sttusline",
 		lazy = true,
-		event = "BufRead",
+		event = { "BufReadPre", "BufNewFile" },
 		config = function()
 			require("sttusline").setup({
 				statusline_color = "StatusLine",
@@ -373,7 +373,7 @@ return {
 		cmd = { "HighlightColors" },
 		opts = {
 			enable_named_colors = false,
-		}
+		},
 	},
 	{
 		-- Naively highlight word under cursor
@@ -480,7 +480,7 @@ return {
 		opts = {
 			separate_by_branch = true,
 			window = {
-				border = 'single',
+				border = "single",
 			},
 			show_icons = false,
 			leader_key = ";",

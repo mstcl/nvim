@@ -156,8 +156,8 @@ return {
 					},
 				},
 				{ "permissions" },
-				{ "size", highlight = "Special" },
-				{ "mtime", highlight = "Number" },
+				{ "size",       highlight = "Special" },
+				{ "mtime",      highlight = "Number" },
 			},
 			float = {
 				padding = 4,
@@ -232,7 +232,7 @@ return {
 			local quick = function()
 				return function()
 					return {
-						{ action = org_agenda, name = "Agenda", section = "Quick actions" },
+						{ action = org_agenda,  name = "Agenda",  section = "Quick actions" },
 						{ action = "Lazy show", name = "Plugins", section = "Quick actions" },
 					}
 				end
@@ -415,7 +415,7 @@ return {
 			},
 			{ "tsakirist/telescope-lazy.nvim", lazy = true, event = "VeryLazy" },
 			{ "debugloop/telescope-undo.nvim", lazy = true, event = "VeryLazy" },
-			{ "nvim-lua/plenary.nvim", lazy = true, event = "VeryLazy" },
+			{ "nvim-lua/plenary.nvim",         lazy = true, event = "VeryLazy" },
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 				build = "make",
