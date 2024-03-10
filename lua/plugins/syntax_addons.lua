@@ -208,13 +208,13 @@ return {
 			org_highlight_latex_and_related = "entities",
 			org_hide_emphasis_markers = true,
 		},
-		config = function()
+		config = function(_, opts)
 			local org_ok, orgmode = pcall(require, "orgmode")
 			if not org_ok then
 				return
 			end
 
-			orgmode.setup({ opts })
+			orgmode.setup(opts)
 			orgmode.setup_ts_grammar()
 		end,
 	},
