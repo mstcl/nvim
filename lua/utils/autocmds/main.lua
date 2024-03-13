@@ -148,16 +148,18 @@ augroup("text_opts", {
 augroup("starter", {
 	{ "VimEnter" },
 	{
-		desc = "Skip showing the start screen on certain conditions",
+		desc = "Starter autocmds",
 		pattern = "*",
 		callback = function()
 			if bo.filetype == "starter" then
 				opt_local.laststatus = 0
 				vim.o.showtabline = 0
+				vim.o.statuscolumn = ""
 				autocmd({ "BufUnload" }, {
 					pattern = "<buffer>",
 					callback = function()
 						opt_local.laststatus = 3
+						vim.o.statuscolumn = "%!v:lua.StatusCol()"
 						if require("user_configs").ui_features.tabline then
 							vim.o.showtabline = 2
 						end

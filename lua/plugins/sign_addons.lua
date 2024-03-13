@@ -41,13 +41,12 @@ return {
 	{
 		-- Utility to tweak statuscolumn
 		"luukvbaal/statuscol.nvim",
-		lazy = true,
-		event = "BufRead",
-		config = function()
+		lazy = false,
+		opts = function()
 			local builtin = require("statuscol.builtin")
-			require("statuscol").setup({
+			return {
 				relculright = true,
-				ft_ignore = { "help", "starter", "Neogit*", "aerial" },
+				ft_ignore = { "help", "starter", "Neogit*", "aerial", "lazy", "TelescopePrompt" },
 				segments = {
 					{
 						text = {
@@ -70,8 +69,11 @@ return {
 						condition = { true, builtin.not_empty },
 						click = "v:lua.ScLa",
 					},
-				},
-			})
+				}
+			}
+		end,
+		config = function(_, opts)
+			require("statuscol").setup(opts)
 		end,
 	},
 }

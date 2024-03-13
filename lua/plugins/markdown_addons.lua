@@ -13,11 +13,12 @@ return {
 		lazy = true,
 		ft = { "markdown" , "quarto"},
 		cond = require("user_configs").syntax_features.markdown,
-		config = function()
-			require("section-wordcount").setup({
-				highlight = "NonText",
-				virt_text_pos = "eol",
-			})
+		opts = {
+			highlight = "NonText",
+			virt_text_pos = "eol",
+		},
+		config = function(_, opts)
+			require("section-wordcount").setup(opts)
 			require("section-wordcount").wordcounter({})
 		end,
 	},

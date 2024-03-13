@@ -24,21 +24,40 @@ return {
 		end,
 	},
 	{
+		-- Statusline
 		"sontungexpt/sttusline",
 		lazy = true,
-		event = "BufRead",
-		config = function()
-			require("sttusline").setup({
+		event = { "BufReadPre", "BufNewFile" },
+		branch = "table_version",
+		opts = function()
+			return {
 				statusline_color = "StatusLine",
 				laststatus = 3,
-				components = require("utils.statusline").components,
+				components = {
+					require("statusline.mode"),
+					require("statusline.pos_cursor"),
+					require("statusline.empty"),
+					require("statusline.git_branch"),
+					require("statusline.git_diff"),
+					require("statusline.diagnostics"),
+					require("statusline.macro"),
+					"%=",
+					require("statusline.fileformat"),
+					require("statusline.indentation"),
+					require("statusline.filetype"),
+					require("statusline.cwd"),
+					require("statusline.path"),
+				},
 				disabled = {
 					filetypes = require("user_configs").statusline_short_ft,
 					buftypes = {
 						"terminal",
 					},
 				},
-			})
+			}
+		end,
+		config = function(_, opts)
+			require("sttusline").setup(opts)
 		end,
 	},
 	{
@@ -49,7 +68,7 @@ return {
 			{ "<C-M>m", mode = "n" },
 		},
 		version = false,
-		config = function()
+		opts = function()
 			local map_ok, map = pcall(require, "mini.map")
 			if not map_ok then
 				return
@@ -65,14 +84,13 @@ return {
 				info = "DiagnosticFloatingInfo",
 				hint = "DiagnosticFloatingHint",
 			})
-			map.setup({
+			return {
 				integrations = { diagnostic_integration, git_integration },
 				symbols = {
 					encode = map.gen_encode_symbols.dot("3x2"),
 					scroll_line = "▓",
 					scroll_view = "▒",
 				},
-				-- Window options
 				window = {
 					focusable = false,
 					side = "right",
@@ -80,7 +98,10 @@ return {
 					width = 10,
 					winblend = 25,
 				},
-			})
+			}
+		end,
+		config = function(_, opts)
+			require("mini.map").setup(opts)
 			require("which-key").register({
 				["<C-M>m"] = { require("mini.map").toggle, "Toggle code minimap" },
 			})
@@ -372,7 +393,7 @@ return {
 		cmd = { "HighlightColors" },
 		opts = {
 			enable_named_colors = false,
-		}
+		},
 	},
 	{
 		-- Naively highlight word under cursor
@@ -457,6 +478,7 @@ return {
 		opts = {},
 	},
 	{
+		-- Winbar/bufferline alternative
 		"b0o/incline.nvim",
 		lazy = true,
 		event = "VeryLazy",
@@ -478,7 +500,7 @@ return {
 		opts = {
 			separate_by_branch = true,
 			window = {
-				border = 'single',
+				border = "single",
 			},
 			show_icons = false,
 			leader_key = ";",

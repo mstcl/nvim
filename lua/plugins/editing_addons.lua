@@ -71,7 +71,7 @@ return {
 				},
 			},
 		},
-		config = function()
+		opts = function()
 			local cmp_ok, cmp = pcall(require, "cmp")
 			if not cmp_ok then
 				return
@@ -80,9 +80,7 @@ return {
 			if not luasnip_ok then
 				return
 			end
-			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-			cmp.setup({
+			return {
 				enabled = function()
 					return vim.g.cmp_toggle
 				end,
@@ -154,14 +152,17 @@ return {
 					hl_group = "NonText",
 				},
 				sources = cmp.config.sources({
-					{
-						name = "luasnip",
-						priority = 9,
-						max_item_count = 3,
-					},
+					{ name = "latex_symbols", priority = 2 },
+					{ name = "otter" },
+					{ name = "orgmode" },
 					{
 						name = "async_path",
 						max_item_count = 4,
+					},
+					{
+						name = "luasnip",
+						priority = 8,
+						max_item_count = 3,
 					},
 					{
 						name = "nvim_lsp",
@@ -169,119 +170,21 @@ return {
 						group_index = 1,
 						max_item_count = 5,
 					},
+					{ name = "cmp_pandoc", priority = 9 },
 					{
 						name = "buffer",
+						options = require("utils.misc").buffer_opts,
 						keyword_length = 5,
 						max_item_count = 2,
 					},
 				}),
-			})
-			cmp.setup.filetype({ "markdown" }, {
-				sources = {
-					{ name = "latex_symbols", priority = 6 },
-					{ name = "otter" },
-					{
-						name = "async_path",
-						max_item_count = 4,
-					},
-					{
-						name = "luasnip",
-						priority = 8,
-						max_item_count = 3,
-					},
-					{
-						name = "nvim_lsp",
-						priority = 7,
-						group_index = 1,
-						max_item_count = 5,
-					},
-					{ name = "cmp_pandoc", priority = 9 },
-					{
-						name = "buffer",
-						options = require("utils.misc").buffer_opts,
-						keyword_length = 5,
-						max_item_count = 3,
-					},
-				},
-			})
-			cmp.setup.filetype({ "quarto" }, {
-				sources = {
-					{ name = "latex_symbols", priority = 6 },
-					{ name = "otter" },
-					{
-						name = "async_path",
-						max_item_count = 4,
-					},
-					{
-						name = "luasnip",
-						priority = 8,
-						max_item_count = 3,
-					},
-					{
-						name = "nvim_lsp",
-						priority = 7,
-						group_index = 1,
-						max_item_count = 5,
-					},
-					{ name = "cmp_pandoc", priority = 9 },
-					{
-						name = "buffer",
-						options = require("utils.misc").buffer_opts,
-						keyword_length = 5,
-						max_item_count = 3,
-					},
-				},
-			})
-			cmp.setup.filetype({ "org" }, {
-				sources = {
-					{ name = "orgmode", priority = 10 },
-					{
-						name = "async_path",
-						max_item_count = 4,
-					},
-					{
-						name = "luasnip",
-						priority = 8,
-						max_item_count = 3,
-					},
-					{
-						name = "nvim_lsp",
-						priority = 7,
-						group_index = 1,
-						max_item_count = 5,
-					},
-					{
-						name = "buffer",
-						options = require("utils.misc").buffer_opts,
-						keyword_length = 5,
-						max_item_count = 3,
-					},
-				},
-			})
-			cmp.setup.filetype({ "tex" }, {
-				sources = {
-					{
-						name = "nvim_lsp",
-						priority = 10,
-						max_item_count = 5,
-					},
-					{
-						name = "async_path",
-						max_item_count = 4,
-					},
-					{
-						name = "luasnip",
-						priority = 8,
-						max_item_count = 3,
-					},
-					{
-						name = "buffer",
-						options = require("utils.misc").buffer_opts,
-						keyword_length = 5,
-						max_item_count = 3,
-					},
-				},
-			})
+			}
+		end,
+		config = function(_, opts)
+			local cmp = require("cmp")
+			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+			cmp.setup(opts)
 			vim.g.cmp_toggle = true
 		end,
 	},
@@ -293,13 +196,7 @@ return {
 			{ "gc", mode = { "n", "x" } },
 			{ "gb", mode = { "n", "x" } },
 		},
-		opts = {
-			opts = function()
-				local commentstring_avail, commentstring =
-					pcall(require, "ts_context_commentstring.integrations.comment_nvim")
-				return commentstring_avail and commentstring and { pre_hook = commentstring.create_pre_hook() } or {}
-			end,
-		},
+		opts = {},
 	},
 	{
 		-- Allows mapping custom escape keys without ruining typing experience.
@@ -355,12 +252,13 @@ return {
 		cond = cond.move,
 		lazy = true,
 		event = "BufRead",
-		config = function()
-			require("move").setup({
-				char = {
-					enable = true,
-				},
-			})
+		opts = {
+			char = {
+				enable = true,
+			},
+		},
+		config = function(_, opts)
+			require("move").setup(opts)
 			require("utils.mappings.movement")
 		end,
 	},
@@ -486,7 +384,10 @@ return {
 		-- Toggling booleans and more
 		"nat-418/boole.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		keys = {
+			{ "<C-A>", mode = { "n" } },
+			{ "<C-X>", mode = { "n" } },
+		},
 		opts = {
 			mappings = {
 				increment = "<C-A>",
@@ -550,6 +451,22 @@ return {
 			{ "e", mode = { "n" } },
 			{ "b", mode = { "n" } },
 			{ "w", mode = { "n" } },
+		},
+	},
+	{
+		"chrishrb/gx.nvim",
+		keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
+		cmd = { "Browse" },
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			open_browser_app = "xdg-open",
+			handlers = {
+				plugin = true,
+				github = true,
+				brewfile = true,
+				package_json = true,
+				search = true,
+			},
 		},
 	},
 }

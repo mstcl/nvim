@@ -1,10 +1,13 @@
 local set = vim.opt
 local vt_signs = require("user_configs").lsp_vt_signs
 
--- Globals
-vim.g.mapleader = ","
-vim.g.maplocalleader = ",."
+-- Providers for nvim
+vim.g.python3_host_prog = vim.fn.expand("$HOME/.config/nvim/.venv/bin/python")
+vim.g.loaded_ruby_provider = false
+vim.g.loaded_node_provider = false
+vim.g.loaded_perl_provider = false
 
+-- Globals
 vim.g["vimsyn_embed"] = "l"
 vim.g["tex_flavor"] = "latex"
 vim.g["tex_fold_enabled"] = "1"

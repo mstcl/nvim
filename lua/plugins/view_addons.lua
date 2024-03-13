@@ -5,38 +5,32 @@ return {
 		"akinsho/toggleterm.nvim",
 		lazy = true,
 		cmd = "ToggleTerm",
-		config = function()
-			local term_ok, toggleterm = pcall(require, "toggleterm")
-			if not term_ok then
-				return
-			end
-			toggleterm.setup({
-				winbar = {
-					enabled = false,
+		opts = {
+			winbar = {
+				enabled = false,
+			},
+			size = function(term)
+				if term.direction == "horizontal" then
+					return 15
+				elseif term.direction == "vertical" then
+					return vim.o.columns * 0.4
+				end
+			end,
+			hide_numbers = true,
+			shade_filetypes = {},
+			autochdir = false,
+			shade_terminals = false,
+			shading_factor = "1",
+			highlights = {
+				Normal = {
+					link = "Floaterm",
 				},
-				size = function(term)
-					if term.direction == "horizontal" then
-						return 15
-					elseif term.direction == "vertical" then
-						return vim.o.columns * 0.4
-					end
-				end,
-				hide_numbers = true,
-				shade_filetypes = {},
-				autochdir = false,
-				shade_terminals = false,
-				shading_factor = "1",
-				highlights = {
-					Normal = {
-						link = "Floaterm",
-					},
-					Statusline = {
-						link = "Statusline",
-					},
+				Statusline = {
+					link = "Statusline",
 				},
-				direction = "vertical",
-			})
-		end,
+			},
+			direction = "vertical",
+		},
 	},
 	{
 		-- Distraction-free editing mode
@@ -156,8 +150,8 @@ return {
 					},
 				},
 				{ "permissions" },
-				{ "size", highlight = "Special" },
-				{ "mtime", highlight = "Number" },
+				{ "size",       highlight = "Special" },
+				{ "mtime",      highlight = "Number" },
 			},
 			float = {
 				padding = 4,
@@ -221,7 +215,7 @@ return {
 		end,
 		priority = 100,
 		version = false,
-		config = function()
+		opts = function()
 			local starter_ok, starter = pcall(require, "mini.starter")
 			if not starter_ok then
 				return
@@ -232,8 +226,8 @@ return {
 			local quick = function()
 				return function()
 					return {
-						{ action = org_agenda, name = "Agenda", section = "Quick actions" },
-						{ action = "Lazy check", name = "Fetch plugins", section = "Quick actions" },
+						{ action = org_agenda,  name = "Agenda",  section = "Quick actions" },
+						{ action = "Lazy show", name = "Plugins", section = "Quick actions" },
 					}
 				end
 			end
@@ -246,8 +240,7 @@ return {
 
 				return ("Good %s, %s."):format(day_part, username)
 			end
-
-			starter.setup({
+			return {
 				items = {
 					starter.sections.recent_files(5, true, false),
 					starter.sections.recent_files(3, false, false),
@@ -260,7 +253,10 @@ return {
 				},
 				footer = "",
 				header = require("user_configs").starter_ascii .. greetings(),
-			})
+			}
+		end,
+		config = function(_, opts)
+			require("mini.starter").setup(opts)
 		end,
 	},
 	{
@@ -271,15 +267,10 @@ return {
 		init = function()
 			require("utils.mappings.pickers")
 		end,
-		config = function()
-			local telescope_ok, telescope = pcall(require, "telescope")
-			if not telescope_ok then
-				return
-			end
+		opts = function()
 			local flex_layout = require("utils.misc").telescope_flex_layout
 			local picker_configs = require("utils.misc").telescope_picker_configs
-
-			telescope.setup({
+			return {
 				defaults = {
 					use_less = false,
 					initial_mode = "insert",
@@ -392,7 +383,11 @@ return {
 						workspaces = require("user_configs").frecency_workspaces,
 					},
 				},
-			})
+			}
+		end,
+		config = function(_, opts)
+			local telescope = require("telescope")
+			telescope.setup(opts)
 			telescope.load_extension("fzf")
 			telescope.load_extension("zoxide")
 			telescope.load_extension("frecency")
@@ -415,7 +410,7 @@ return {
 			},
 			{ "tsakirist/telescope-lazy.nvim", lazy = true, event = "VeryLazy" },
 			{ "debugloop/telescope-undo.nvim", lazy = true, event = "VeryLazy" },
-			{ "nvim-lua/plenary.nvim", lazy = true, event = "VeryLazy" },
+			{ "nvim-lua/plenary.nvim",         lazy = true, event = "VeryLazy" },
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 				build = "make",
