@@ -157,7 +157,9 @@ starter_ascii: '  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n'
 
 # Configure orgmode agenda files (can use globbing)
 # Expects a list
-org_agenda_files: []
+org_agenda_files:
+  - "$HOME/sftpgo/notes/*"
+  - "$HOME/sftpgo/shared/notes/*"
 
 # Plugins to load locally from ~/projects
 dev_plugins: []
