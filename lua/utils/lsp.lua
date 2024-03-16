@@ -16,7 +16,7 @@ local code_action_sources = require("user_configs").null_code_action_sources
 
 function M.on_attach(client, bufnr)
 	require("utils.mappings.lsp").setup(client, bufnr)
-	if require('user_configs').lsp_features.inlay_hints then
+	if require("user_configs").lsp_features.inlay_hints then
 		require("lsp-inlayhints").on_attach(client, bufnr)
 	end
 end
@@ -81,7 +81,8 @@ for _, source in ipairs(diagnostics_sources) do
 			null_sources,
 			null_ls.builtins.diagnostics[source].with({
 				filetypes = { "NeogitCommitMessage", "gitcommit" },
-				env = { NODE_PATH = vim.fn.expand("~/.local/share/nvim/mason/packages/commitlint/node_modules"), },
+				env = { NODE_PATH = vim.fn.expand("$HOME/.local/share/nvim/mason/packages/commitlint/node_modules") },
+				extra_args = { "--extends", "@commitlint/config-conventional" },
 			})
 		)
 	end
