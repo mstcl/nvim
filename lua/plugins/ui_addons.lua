@@ -483,6 +483,9 @@ return {
 		lazy = true,
 		event = "VeryLazy",
 		opts = {
+			hide = {
+				cursorline = true,
+			},
 			window = {
 				margin = {
 					horizontal = 0,
