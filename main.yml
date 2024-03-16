@@ -43,6 +43,7 @@
         src: "{{ playbook_dir }}/templates/user_addons.lua.j2"
         dest: "{{ playbook_dir }}/lua/plugins/user_addons.lua"
         mode: "0644"
+        force: false
 
     - name: Make symbolic to ~/.config
       ansible.builtin.file:
