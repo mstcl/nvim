@@ -64,26 +64,3 @@ wk.register({
 		mode = "v"
 	},
 })
-wk.register({
-	["w"] = {
-		function ()
-			exec("lua require('spider').motion('w')")
-		end,
-		"Spider-w",
-		mode = { "n", "o", "x" },
-	},
-	["e"] = {
-		function ()
-			exec("lua require('spider').motion('e')")
-		end,
-		"Spider-e",
-		mode = { "n", "o", "x" },
-	},
-	["b"] = {
-		function ()
-			exec("lua require('spider').motion('b')")
-		end,
-		"Spider-b",
-		mode = { "n", "o", "x" },
-	},
-})
