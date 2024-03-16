@@ -2,11 +2,6 @@
 local cond = require("user_configs").lsp_enabled
 return {
 	{
-		-- Filetype alternative
-		"BasileusErwin/filetype.nvim",
-		lazy = false,
-	},
-	{
 		-- Treesitter engine
 		"nvim-treesitter/nvim-treesitter",
 		version = false,

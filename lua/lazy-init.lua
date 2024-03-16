@@ -11,7 +11,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 
 vim.opt.runtimepath:prepend(lazypath)
-require("lazy").setup("plugins", {
+require("lazy").setup({
+	spec = {
+		{ import = "plugins" },
+		{ import = "plugins.user_addons" },
+	},
 	default = { lazy = true },
 	dev = {
 		---@type string | fun(plugin: LazyPlugin): string directory where you store your local plugin projects
