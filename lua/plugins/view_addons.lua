@@ -5,6 +5,19 @@ return {
 		"akinsho/toggleterm.nvim",
 		lazy = true,
 		cmd = "ToggleTerm",
+		keys = {
+			{
+				"<C-Bslash>",
+				function()
+					if vim.api.nvim_win_get_width(0) >= 150 then
+						exec("ToggleTerm direction=vertical")
+					else
+						exec("ToggleTerm direction=horizontal")
+					end
+				end,
+				desc = "Terminal",
+			},
+		},
 		opts = {
 			winbar = {
 				enabled = false,
@@ -36,8 +49,15 @@ return {
 		-- Distraction-free editing mode
 		"folke/zen-mode.nvim",
 		lazy = true,
-		dependencies = { "twilight.nvim", lazy = true, cmd = "Twilight" },
+		keys = {
+			{
+				"<C-M>z",
+				"<cmd>ZenMode<cr>",
+				desc = "Toggle Zen Mode",
+			},
+		},
 		cmd = "ZenMode",
+		dependencies = { "twilight.nvim", lazy = true, cmd = "Twilight" },
 		opts = {
 			window = {
 				backdrop = 1,
@@ -180,15 +200,22 @@ return {
 		-- Keymapping cheatsheet
 		"folke/which-key.nvim",
 		event = "VeryLazy",
+		keys = {
+			{
+				"<C-P>",
+				"<cmd>WhichKey<cr>",
+				desc = "List all keymaps",
+			},
+		},
 		opts = {
 			key_labels = {
 				["<space>"] = "␣",
 				["<cr>"] = "↵",
 				["<tab>"] = "↹",
-				["<Left>"] = "◀",
-				["<Right>"] = "▶",
-				["<Up>"] = "▲",
-				["<Down>"] = "▼",
+				["<Left>"] = "←",
+				["<Right>"] = "→",
+				["<Up>"] = "↑",
+				["<Down>"] = "↓",
 				["<leader>"] = ",",
 				["<c-w>"] = "<C-W>",
 			},
@@ -225,10 +252,13 @@ return {
 			end
 			local quick = function()
 				return function()
-					return {
-						{ action = org_agenda,  name = "Agenda",  section = "Quick actions" },
+					local quick_tbl = {
 						{ action = "Lazy show", name = "Plugins", section = "Quick actions" },
 					}
+					if require("user_configs").syntax_features.org then
+						table.insert(quick_tbl, { action = org_agenda, name = "Agenda", section = "Quick actions" })
+					end
+					return quick_tbl
 				end
 			end
 			local greetings = function()
@@ -240,12 +270,24 @@ return {
 
 				return ("Good %s, %s."):format(day_part, username)
 			end
+			local footer = function()
+				local stats = require("lazy").stats()
+				return "Loaded " .. stats.loaded .. "/" .. stats.count .. " plugins"
+			end
+			local version = function()
+				local versioninfo = vim.version() or {}
+				local major = versioninfo.major or ""
+				local minor = versioninfo.minor or ""
+				local patch = versioninfo.patch or ""
+				local prerelease = versioninfo.api_prerelease and "-dev" or ""
+				local version = ("NVIM v%s.%s.%s%s"):format(major, minor, patch, prerelease)
+				return version
+			end
 			return {
 				items = {
 					starter.sections.recent_files(5, true, false),
 					starter.sections.recent_files(3, false, false),
 					quick(),
-					starter.sections.builtin_actions(),
 				},
 				content_hooks = {
 					starter.gen_hook.adding_bullet(),
@@ -263,10 +305,88 @@ return {
 		-- Multipurpose panel, mainly for navigation
 		"nvim-telescope/telescope.nvim",
 		lazy = true,
-		cmd = "Telescope",
-		init = function()
-			require("utils.mappings.pickers")
-		end,
+		keys = {
+			{
+				"<leader>h",
+				"<cmd>Telescope oldfiles<cr>",
+				desc = "Telescope history",
+			},
+			{
+				"<leader>l",
+				"<cmd>Telescope resume<cr>",
+				desc = "Telescope resume",
+			},
+			{
+				"<leader>t",
+				"<cmd>Telescope builtin<cr>",
+				desc = "Telescope builtin",
+			},
+			{
+				"<leader>t",
+				"<cmd>Telescope builtin<cr>",
+				desc = "Telescope builtin",
+			},
+			{
+				"<leader>b",
+				"<cmd>Telescope buffers<cr>",
+				desc = "Telescope buffers",
+			},
+			{
+				"<leader>p",
+				"<cmd>Telescope lazy<cr>",
+				desc = "Telescope packages",
+			},
+			{
+				"<leader>f",
+				"<cmd>Telescope find_files <CR>path=%:p:h<cr>",
+				desc = "Telescope find files",
+			},
+			{
+				"<leader>er",
+				"<cmd>Telescope frecency<cr>",
+				desc = "Telescope frecency",
+			},
+			{
+				"<leader>ez",
+				"<cmd>Telescope zoxide list<cr>",
+				desc = "Telescope zoxide",
+			},
+			{
+				"<leader>n",
+				"<cmd>Telescope noice<cr>",
+				desc = "Telescope notifications",
+			},
+			{
+				"<leader>u",
+				"<cmd>Telescope undo<cr>",
+				desc = "Telescope undo tree",
+			},
+			{
+				"<leader>gC",
+				"<cmd>Telescope git_bcommits<cr>",
+				desc = "Telescope buffer git commits",
+			},
+			{
+				"<leader>gc",
+				"<cmd>Telescope git_commits<cr>",
+				desc = "Telescope git commits",
+			},
+			{
+				"<leader>gs",
+				"<cmd>Telescope git_status<cr>",
+				desc = "Telescope git status",
+			},
+			{
+				"<leader>/",
+				"<cmd>Telescope live_grep<cr>",
+				desc = "Telescope grep workspace",
+			},
+			{
+				"<leader><bslash>",
+				"<cmd>Telescope current_buffer_fuzzy_find<cr>",
+				desc = "Telescope grep buffer",
+			},
+		},
 		opts = function()
 			local flex_layout = require("utils.misc").telescope_flex_layout
 			local picker_configs = require("utils.misc").telescope_picker_configs
@@ -433,6 +553,13 @@ return {
 		"NeogitOrg/neogit",
 		lazy = true,
 		cmd = "Neogit",
+		keys = {
+			{
+				"<leader>gg",
+				"<cmd>Neogit kind=auto<cr>",
+				desc = "Neogit",
+			},
+		},
 		dependencies = {
 			{ "nvim-telescope/telescope.nvim", lazy = true, cmd = "Telescope" },
 		},
