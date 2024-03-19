@@ -1,4 +1,5 @@
-local cond = require("user_configs").lsp_enabled
+local cond = require("user_configs").dap_enabled
+local dap_ok, dap = pcall(require, "dap")
 
 -- Plugins that add debugging into nvim
 return {
@@ -18,21 +19,55 @@ return {
 		cond = cond,
 		lazy = true,
 		ft = "python",
-		config = function()
-			local dap_ok, dap = pcall(require, "dap")
-			if not dap_ok then
-				return
-			end
-			dap.defaults.fallback.terminal_win_cmd = "10split new"
-		end,
+		keys = {
+			{
+				"<leader>dp",
+				"<cmd>Telescope dap commands<cr>",
+				desc = "Pick dap commands",
+			},
+			{
+				"<leader>dv",
+				"<cmd>Telescope dap variables<cr>",
+				desc = "Pick dap variables",
+			},
+			{
+				"<leader>dc",
+				"<cmd>DapContinue<cr>",
+				desc = "Debug: Continue",
+			},
+			{
+				"<leader>do",
+				"<cmd>DapStepOver<cr>",
+				desc = "Debug: Step over",
+			},
+			{
+				"<leader>dO",
+				"<cmd>DapStepOut<cr>",
+				desc = "Debug: Step out",
+			},
+			{
+				"<leader>di",
+				"<cmd>DapStepIn<cr>",
+				desc = "Debug: Step into",
+			},
+			{
+				"<leader>db",
+				"<cmd>DapToggleBreakpoint<cr>",
+				desc = "Debug: breakpoint toggle",
+			},
+			{
+				"<C-M>d",
+				"<cmd>lua require('dapui').toggle()<cr>",
+				desc = "Toggle DAP ui",
+			},
+		},
 	},
 	{
 		-- Show debugging variable values as virtual text
 		"theHamsta/nvim-dap-virtual-text",
 		cond = cond,
 		lazy = true,
-		event = "VeryLazy",
-		dependencies = { "mfussenegger/nvim-dap", lazy = true, ft = "python" },
+		dependencies = { "mfussenegger/nvim-dap" },
 		opts = {
 			enabled = true,
 			enabled_commands = true,
@@ -52,7 +87,16 @@ return {
 		cond = cond,
 		lazy = true,
 		ft = "python",
-		dependencies = { "mfussenegger/nvim-dap", lazy = true, ft = "python" },
+		dependencies = {
+			"mfussenegger/nvim-dap",
+			"nvim-neotest/nvim-nio",
+		},
+		keys = {
+			{
+				"<C-M>d",
+				desc = "Toggle DAP ui",
+			},
+		},
 		opts = {
 			icons = { expanded = "▾", collapsed = "▸" },
 			mappings = {
