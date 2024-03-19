@@ -5,6 +5,47 @@ return {
 		"lewis6991/gitsigns.nvim",
 		lazy = true,
 		event = "BufReadPre",
+		keys = {
+			{
+				"<C-M>g",
+				"<cmd>Gitsigns toggle_signs<cr>",
+				desc = "Toggle gitsigns",
+			},
+			{
+				"ih",
+				":<C-U>Gitsigns select_hunk<CR>",
+				desc = "Select hunk",
+				mode = { "o", "x" },
+			},
+			{
+				"[g",
+				"<cmd>Gitsigns prev_hunk<cr>",
+				desc = "Previous hunk",
+			},
+			{
+				"]g",
+				"<cmd>Gitsigns next_hunk<cr>",
+				desc = "Next hunk",
+			},
+			{
+				"<leader>gh",
+				"<cmd>Gitsigns preview_hunk<cr>",
+				desc = "Preview hunk",
+			},
+			{
+				"<leader>gS",
+				"<cmd>Gitsigns stage_hunk<cr>",
+				desc = "Stage hunk",
+			},
+			{
+				"<leader>gS",
+				function()
+					require("gitsigns").stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+				end,
+				desc = "Stage hunk",
+				mode = { "v" },
+			},
+		},
 		dependencies = { { "nvim-lua/plenary.nvim", lazy = true, event = "VeryLazy" } },
 		opts = {
 			numhl = false,
@@ -69,7 +110,7 @@ return {
 						condition = { true, builtin.not_empty },
 						click = "v:lua.ScLa",
 					},
-				}
+				},
 			}
 		end,
 		config = function(_, opts)

@@ -6,78 +6,8 @@ end
 
 local M = {}
 
--- LSP
+-- LSP mappings for native LSP
 function M.setup(client, bufnr)
-	wk.register({
-		["<leader>q"] = { name = "LSP commands" },
-		["<leader>qw"] = {
-			function()
-				exec("Trouble workspace_diagnostics")
-			end,
-			"Toggle workspace diagnostic quickfix list",
-		},
-		["<leader>c"] = {
-			function()
-				exec("Telescope aerial")
-			end,
-			"Pick document code symbols",
-		},
-		["<C-M>c"] = {
-			function()
-				exec("AerialToggle!")
-			end,
-			"Toggle sidebar document code symbols",
-		},
-	})
-
-	if client.server_capabilities.definitionProvider then
-		wk.register({
-			["<leader>qd"] = {
-				function()
-					exec("Glance definitions")
-				end,
-				"LSP definitions",
-			},
-			buffer = bufnr,
-		})
-	end
-
-	if client.server_capabilities.referencesProvider then
-		wk.register({
-			["<leader>qr"] = {
-				function()
-					exec("Glance references")
-				end,
-				"LSP references",
-				buffer = bufnr,
-			},
-		})
-	end
-
-	if client.server_capabilities.implementationProvider then
-		wk.register({
-			["<leader>qi"] = {
-				function()
-					exec("Glance implementations")
-				end,
-				"Implementations",
-				buffer = bufnr,
-			},
-		})
-	end
-
-	if client.server_capabilities.typeDefinitionProvider then
-		wk.register({
-			["<leader>qt"] = {
-				function()
-					exec("Glance type_definitions")
-				end,
-				"Type definitions",
-				buffer = bufnr,
-			},
-		})
-	end
-
 	wk.register({
 		["<C-Q>"] = {
 			vim.diagnostic.open_float,

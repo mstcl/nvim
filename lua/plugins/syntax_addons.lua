@@ -6,6 +6,13 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
 		lazy = true,
+		keys = {
+			{
+				"<C-M>t",
+				"<cmd>TSBufToggle highlight<cr>",
+				desc = "Toggle treesitter highlighting",
+			},
+		},
 		cmd = {
 			"TSInstall",
 			"TSInstallSync",
