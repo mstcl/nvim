@@ -283,7 +283,18 @@ return {
 		-- Code symbol outline
 		"stevearc/aerial.nvim",
 		cond = cond,
-		event = "LspAttach",
+		keys = {
+			{
+				"<C-M>c",
+				"<cmd>AerialToggle!<cr>",
+				desc = "Toggle sidebar document code symbols",
+			},
+			{
+				"<leader>c",
+				"<cmd>Telescope aerial<cr>",
+				desc = "Pick document code symbols",
+			},
+		},
 		cmd = {
 			"AerialToggle",
 			"AerialOpen",
@@ -325,7 +336,13 @@ return {
 		"folke/trouble.nvim",
 		cond = cond,
 		lazy = true,
-		event = "LspAttach",
+		keys = {
+			{
+				"<C-M>q",
+				"<cmd>Trouble workspace_diagnostics<cr>",
+				desc = "Toggle workspace diagnostic qf",
+			},
+		},
 		opts = {
 			fold_open = "▾",
 			fold_close = "▸",
@@ -366,7 +383,28 @@ return {
 		"dnlhc/glance.nvim",
 		cond = cond,
 		lazy = true,
-		event = "LspAttach",
+		keys = {
+			{
+				"<leader>qd",
+				"<cmd>Glance definitions<cr>",
+				desc = "LSP definitions (Glance)",
+			},
+			{
+				"<leader>qr",
+				"<cmd>Glance references<cr>",
+				desc = "LSP references (Glance)",
+			},
+			{
+				"<leader>qi",
+				"<cmd>Glance implementations<cr>",
+				desc = "LSP Implementation (Glance)",
+			},
+			{
+				"<leader>qt",
+				"<cmd>Glance type_definitions<cr>",
+				desc = "LSP type definitions (Glance)",
+			},
+		},
 		opts = {
 			zindex = 9999,
 			detached = true,
