@@ -56,6 +56,21 @@ return {
 		cond = cond.completion,
 		lazy = true,
 		event = "InsertEnter",
+		keys = {
+			{
+				"<C-M>a",
+				function()
+					if require("user_configs").edit_features.completion then
+						if vim.g.cmp_toggle then
+							vim.g.cmp_toggle = false
+						else
+							vim.g.cmp_toggle = true
+						end
+					end
+				end,
+				desc = "Toggle auto-completion window",
+			},
+		},
 		dependencies = {
 			{ "saadparwaiz1/cmp_luasnip",   lazy = true, event = "InsertEnter" },
 			{ "kdheepak/cmp-latex-symbols", lazy = true, event = "InsertEnter" },
@@ -251,7 +266,18 @@ return {
 		"fedepujol/move.nvim",
 		cond = cond.move,
 		lazy = true,
-		event = "BufRead",
+		keys = {
+			{ "<A-j>", "<cmd>MoveBlock(1)<cr>",   mode = "v", desc = "Move block down" },
+			{ "<A-k>", "<cmd>MoveBlock(-1)<cr>",  mode = "v", desc = "Move block up" },
+			{ "<A-h>", "<cmd>MoveHBlocK(-1)<cr>", mode = "v", desc = "Move block left" },
+			{ "<A-l>", "<cmd>MoveHBlock(1)<cr>",  mode = "v", desc = "Move block right" },
+			{ "<A-j>", "<cmd>MoveLine(1)<cr>",    mode = "n", desc = "Move line up" },
+			{ "<A-k>", "<cmd>MoveLine(-1)<cr>",   mode = "n", desc = "Move line down" },
+			{ "<A-h>", "<cmd>MoveHChar(-1)<cr>",  mode = "n", desc = "Move char left" },
+			{ "<A-l>", "<cmd>MoveHChar(1)<cr>",   mode = "n", desc = "Move char right" },
+			{ "<A-f>", "<cmd>MoveWord(1)<cr>",    mode = "n", desc = "Move word forward" },
+			{ "<A-b>", "<cmd>MoveWord(-1)<cr>",   mode = "n", desc = "Move word backward" },
+		},
 		opts = {
 			char = {
 				enable = true,
@@ -259,7 +285,6 @@ return {
 		},
 		config = function(_, opts)
 			require("move").setup(opts)
-			require("utils.mappings.movement")
 		end,
 	},
 	{
@@ -354,7 +379,7 @@ return {
 		"utilyre/sentiment.nvim",
 		version = "*",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufRead",
 		opts = {
 			pairs = {
 				{ "(", ")" },
@@ -367,7 +392,7 @@ return {
 		-- Quick guessing indent for filetypes
 		"nmac427/guess-indent.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufReadPost",
 		opts = {
 			override_editorconfig = true,
 			auto_cmd = true,
@@ -377,7 +402,32 @@ return {
 		-- Force cursor to stay in place when doing certain visual motions
 		"gbprod/stay-in-place.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		keys = {
+			{
+				"==",
+				mode = { "n" },
+			},
+			{
+				"<<",
+				mode = { "n" },
+			},
+			{
+				">>",
+				mode = { "n" },
+			},
+			{
+				"=",
+				mode = { "v" },
+			},
+			{
+				"<",
+				mode = { "v" },
+			},
+			{
+				">",
+				mode = { "v" },
+			},
+		},
 		opts = {},
 	},
 	{
@@ -385,8 +435,16 @@ return {
 		"nat-418/boole.nvim",
 		lazy = true,
 		keys = {
-			{ "<C-A>", mode = { "n" } },
-			{ "<C-X>", mode = { "n" } },
+			{
+				"<C-A>",
+				mode = { "n" },
+				desc = "Increment",
+			},
+			{
+				"<C-X>",
+				mode = { "n" },
+				desc = "Decrement",
+			},
 		},
 		opts = {
 			mappings = {
@@ -421,13 +479,21 @@ return {
 	{
 		-- Automatically add f-strings
 		"chrisgrieser/nvim-puppeteer",
-		lazy = false,
+		lazy = true,
+		ft = { "python", "typescript", "javascript" },
 	},
 	{
 		-- Smart rooter, replaces autochdir
 		"notjedi/nvim-rooter.lua",
 		lazy = true,
 		event = "VeryLazy",
+		keys = {
+			{
+				"<C-M>r",
+				"<cmd>RooterToggle<cr>",
+				desc = "Toggle between autochdir 🡘 root dir",
+			},
+		},
 		cond = cond.rooter,
 		opts = {
 			manual = false,
@@ -448,9 +514,9 @@ return {
 		lazy = true,
 		cond = cond.spider,
 		keys = {
-			{ "e", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x"} },
-			{ "b", "<cmd>lua require('spider').motion('b')<CR>", mode = { "n", "o", "x"} },
-			{ "w", "<cmd>lua require('spider').motion('w')<CR>", mode = { "n", "o", "x"} },
+			{ "e", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x" } },
+			{ "b", "<cmd>lua require('spider').motion('b')<CR>", mode = { "n", "o", "x" } },
+			{ "w", "<cmd>lua require('spider').motion('w')<CR>", mode = { "n", "o", "x" } },
 		},
 	},
 	{

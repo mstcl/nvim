@@ -1,3 +1,18 @@
+local autocmd = vim.api.nvim_create_autocmd
+local groupid = vim.api.nvim_create_augroup
+local opt_local = vim.opt_local
+local wo = vim.wo
+---@param group string
+---@vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
+---@return nil
+local function augroup(group, ...)
+	local id = groupid(group, { clear = true })
+	for _, a in ipairs({ ... }) do
+		a[2].group = id
+		autocmd(unpack(a))
+	end
+end
+
 -- Plugins to extend syntax, either natively or with treesitter
 local cond = require("user_configs").lsp_enabled
 return {
@@ -6,6 +21,13 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
 		lazy = true,
+		keys = {
+			{
+				"<C-M>t",
+				"<cmd>TSBufToggle highlight<cr>",
+				desc = "Toggle treesitter highlighting",
+			},
+		},
 		cmd = {
 			"TSInstall",
 			"TSInstallSync",
@@ -21,13 +43,19 @@ return {
 			"TSEditQuery",
 			"TSEditQueryUserAfter",
 		},
-		event = { "VeryLazy", "BufReadPost", "BufNewFile", "BufWritePre" },
+		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
 		build = ":TSUpdate",
 		dependencies = {
 			{ "nvim-treesitter/nvim-treesitter-textobjects" },
 		},
 		init = function(plugin)
-			require("utils.autocmds.treesitter")
+			augroup("Treesitter", {
+				{ "VimEnter" },
+				{
+					pattern = "*.zsh",
+					command = "silent! TSBufDisable highlight",
+				},
+			})
 			require("lazy.core.loader").add_to_rtp(plugin)
 			require("nvim-treesitter.query_predicates")
 		end,
@@ -154,7 +182,29 @@ return {
 		-- Highlight argument's definition and usage
 		"m-demare/hlargs.nvim",
 		lazy = true,
-		event = { "VeryLazy" },
+		ft = {
+			"c",
+			"cpp",
+			"c_sharp",
+			"go",
+			"java",
+			"javascript",
+			"jsx",
+			"julia",
+			"kotlin",
+			"lua",
+			"nix",
+			"php",
+			"python",
+			"r",
+			"ruby",
+			"rust",
+			"solidity",
+			"tsx",
+			"typescript",
+			"vim",
+			"zig",
+		},
 		cond = require("user_configs").syntax_features.hlargs,
 		opts = {
 			color = "#87591a",
@@ -165,7 +215,7 @@ return {
 		-- Highlight parenthesis
 		"HiPhish/rainbow-delimiters.nvim",
 		lazy = true,
-		event = { "VeryLazy" },
+		event = { "BufRead" },
 		cond = require("user_configs").syntax_features.rainbow,
 		opts = {
 			query = {
@@ -251,7 +301,7 @@ return {
 			"jmbuhr/otter.nvim",
 			lazy = true,
 			cond = cond,
-			dependencies = { "neovim/nvim-lspconfig", lazy = true, event = "BufRead" },
+			dependencies = { "neovim/nvim-lspconfig" },
 			ft = { "quarto", "markdown" },
 			opts = {
 				lsp = {
@@ -294,7 +344,11 @@ return {
 		"pearofducks/ansible-vim",
 		cond = require("user_configs").syntax_features.ansible,
 		lazy = true,
-		event = "VeryLazy",
+		ft = "yaml.ansible",
+		config = function()
+			vim.g.ansible_unindent_after_newline = true
+			vim.g.ansible_extra_keywords_highlight = true
+		end,
 	},
 	{
 		-- Python notebooks

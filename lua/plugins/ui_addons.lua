@@ -65,7 +65,13 @@ return {
 		"echasnovski/mini.map",
 		lazy = true,
 		keys = {
-			{ "<C-M>m", mode = "n" },
+			{
+				"<C-M>m",
+				function()
+					require("mini.map").toggle()
+				end,
+				desc = "Toggle code minimap",
+			},
 		},
 		version = false,
 		opts = function()
@@ -102,9 +108,6 @@ return {
 		end,
 		config = function(_, opts)
 			require("mini.map").setup(opts)
-			require("which-key").register({
-				["<C-M>m"] = { require("mini.map").toggle, "Toggle code minimap" },
-			})
 		end,
 	},
 	{
@@ -113,6 +116,98 @@ return {
 		lazy = true,
 		cond = require("user_configs").ui_features.tabline,
 		event = "BufRead",
+		keys = {
+			{
+				"<Left>",
+				"<cmd>BufferPrevious",
+				desc = "Buffer previous",
+			},
+			{
+				"<Right>",
+				"<cmd>BufferNext<cr>",
+				desc = "Buffer next",
+			},
+			{
+				"<leader><Left>",
+				"<cmd>BufferMovePrevious<cr>",
+				desc = "Move buffer backward",
+			},
+			{
+				"<leader><Right>",
+				"<cmd>BufferMoveNext<cr>",
+				desc = "Move buffer forward",
+			},
+			{
+				"<leader>`",
+				"<cmd>BufferFirst<cr>",
+				desc = "Buffer first",
+			},
+			{
+				"<leader>-",
+				"<cmd>BufferLast<cr>",
+				desc = "Buffer last",
+			},
+			{
+				"<leader>1",
+				"<cmd>BufferGoto 1<cr>",
+				desc = "Buffer 1",
+			},
+			{
+				"<leader>2",
+				"<cmd>BufferGoto 2<cr>",
+				desc = "Buffer 2",
+			},
+			{
+				"<leader>3",
+				"<cmd>BufferGoto 3<cr>",
+				desc = "Buffer 3",
+			},
+			{
+				"<leader>4",
+				"<cmd>BufferGoto 4<cr>",
+				desc = "Buffer 4",
+			},
+			{
+				"<leader>5",
+				"<cmd>BufferGoto 5<cr>",
+				desc = "Buffer 5",
+			},
+			{
+				"<leader>6",
+				"<cmd>BufferGoto 6<cr>",
+				desc = "Buffer 6",
+			},
+			{
+				"<leader>7",
+				"<cmd>BufferGoto 7<cr>",
+				desc = "Buffer 7",
+			},
+			{
+				"<leader>8",
+				"<cmd>BufferGoto 8<cr>",
+				desc = "Buffer 8",
+			},
+			{
+				"<leader>9",
+				"<cmd>BufferGoto 9<cr>",
+				desc = "Buffer 9",
+			},
+			{
+				"<Up>",
+				"<cmd>BufferPin<cr>",
+				desc = "Buffer pin",
+			},
+			{
+				"<Down>",
+				"<cmd>BufferClose<cr>",
+				desc = "Buffer close",
+			},
+			{
+				"<leader>b",
+				"<cmd>BufferPick<cr>",
+				desc = "Pick buffer",
+			},
+		},
 		init = function()
 			vim.g.barbar_auto_setup = false
 		end,
@@ -201,11 +296,16 @@ return {
 	{
 		-- Revamped UI (notification etc.)
 		"folke/noice.nvim",
-		event = "VeryLazy",
-		lazy = true,
-		dependencies = {
-			{ "MunifTanjim/nui.nvim", lazy = true, event = "VeryLazy" },
+		event = { "BufReadPre", "CmdlineEnter" },
+		keys = {
+			{
+				"<BS>",
+				"<cmd>Noice dismiss<cr>",
+				desc = "Dismiss notification",
+			},
 		},
+		lazy = true,
+		dependencies = { { "MunifTanjim/nui.nvim" } },
 		opts = {
 			lsp = {
 				progress = {
@@ -338,20 +438,20 @@ return {
 		"fmbarina/multicolumn.nvim",
 		lazy = true,
 		priority = 10,
-		event = "VeryLazy",
+		event = "BufReadPre",
 		opts = {
 			sets = {
 				lua = {
-					rulers = { 88 },
+					rulers = { 80 },
 					scope = "file",
 				},
 				default = {
-					rulers = { 88 },
+					rulers = { 80 },
 					full_column = true,
 				},
 				python = {
 					scope = "window",
-					rulers = { 88 },
+					rulers = { 80 },
 					to_line_end = true,
 				},
 				starter = {
@@ -360,7 +460,7 @@ return {
 				NeogitStatus = {
 					rulers = { 9999 },
 				},
-				exclude_ft = { "markdown", "help", "netrw", "starter", "man" },
+				exclude_ft = { "help", "netrw", "starter", "man" },
 			},
 		},
 	},
@@ -389,8 +489,15 @@ return {
 		-- Highlight color blocks
 		"brenoprata10/nvim-highlight-colors",
 		lazy = true,
-		event = { "BufNew", "BufRead" },
+		event = { "BufRead" },
 		cmd = { "HighlightColors" },
+		keys = {
+			{
+				"<C-M>h",
+				"<cmd>HighlightColors Toggle<cr>",
+				desc = "Toggle highlighting colours",
+			},
+		},
 		opts = {
 			enable_named_colors = false,
 		},
@@ -420,11 +527,14 @@ return {
 		-- Folding customization using LSP and more
 		"kevinhwang91/nvim-ufo",
 		lazy = true,
-		event = "VeryLazy",
-		dependencies = { "kevinhwang91/promise-async", lazy = true, event = "VeryLazy" },
+		event = "BufReadPre",
+		dependencies = { "kevinhwang91/promise-async" },
 		opts = {
 			open_fold_hl_timeout = 150,
-			close_fold_kinds = { "imports", "comment" },
+			close_fold_kinds_ft = {
+				default = { "imports", "comment" },
+				json = { "array" },
+			},
 			preview = {
 				win_config = {
 					border = "single",
@@ -439,32 +549,14 @@ return {
 				},
 			},
 			fold_virt_text_handler = require("utils.lsp").ufo_handler,
-			provider_selector = function(_, filetype, buftype)
-				local function handleFallbackException(bufnr, err, providerName)
-					if type(err) == "string" and err:match("UfoFallbackException") then
-						return require("ufo").getFolds(bufnr, providerName)
-					else
-						return require("promise").reject(err)
-					end
-				end
-				return (filetype == "" or buftype == "nofile") and "indent"
-					or function(bufnr)
-						return require("ufo")
-							.getFolds(bufnr, "lsp")
-							:catch(function(err)
-								return handleFallbackException(bufnr, err, "treesitter")
-							end)
-							:catch(function(err)
-								return handleFallbackException(bufnr, err, "indent")
-							end)
-					end
-			end,
 		},
 	},
 	{
 		-- Cursorline mode decoration
 		"mvllow/modes.nvim",
 		cond = require("user_configs").ui_features.modes,
+		lazy = true,
+		event = "BufReadPre",
 		opts = {
 			set_number = false,
 		},
@@ -481,7 +573,7 @@ return {
 		-- Winbar/bufferline alternative
 		"b0o/incline.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufReadPost",
 		opts = {
 			hide = {
 				cursorline = true,
@@ -498,7 +590,11 @@ return {
 		"otavioschwanck/arrow.nvim",
 		lazy = true,
 		keys = {
-			{ ";", mode = "n" },
+			{
+				"<Bslash>",
+				desc = "Quick bufferlist",
+				mode = "n",
+			},
 		},
 		opts = {
 			separate_by_branch = true,
@@ -506,7 +602,7 @@ return {
 				border = "single",
 			},
 			show_icons = false,
-			leader_key = ";",
+			leader_key = "<Bslash>",
 		},
 	},
 }

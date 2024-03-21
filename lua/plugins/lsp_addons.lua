@@ -42,6 +42,10 @@ return {
 		cond = cond,
 		lazy = true,
 		event = "BufRead",
+		-- keys = {
+		-- 	{ "zR", require("ufo").openAllFolds,  "Open all folds" },
+		-- 	{ "zM", require("ufo").closeAllFolds, "Close all folds" },
+		-- },
 		dependencies = {
 			{
 				"cmp-nvim-lsp",
@@ -53,6 +57,45 @@ return {
 			{ "williamboman/mason-lspconfig.nvim" },
 		},
 		config = function()
+			-- Builtin diagnostics
+			vim.diagnostic.config({
+				inlay_hints = {
+					enabled = true,
+				},
+				virtual_text = {
+					enabled = true,
+					spacing = 4,
+					prefix = "",
+					format = function(diagnostic)
+						return string.format(require("user_configs").lsp_vt_signs[diagnostic.severity])
+					end,
+					suffix = " ",
+				},
+				signs = true, -- only for the colored number column
+				underline = false,
+				update_in_insert = false,
+				float = {
+					header = false,
+					focusable = false,
+					prefix = " ",
+					suffix = " ",
+					close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+					border = "single",
+					source = "if_many",
+					scope = "cursor",
+					focus = false,
+				},
+				severity_sort = true,
+			})
+			vim.cmd([[
+				sign define DiagnosticSignError text=
+				sign define DiagnosticSignWarn text=
+				sign define DiagnosticSignInfo text=
+				sign define DiagnosticSignHint text=
+				sign define DiagnosticSignWarn text=
+				sign define DiagnosticSignInfo text=
+				sign define DiagnosticSignHint text=
+			]])
 			local on_attach = require("utils.lsp").on_attach
 			local handlers = require("utils.lsp").handlers
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -283,7 +326,18 @@ return {
 		-- Code symbol outline
 		"stevearc/aerial.nvim",
 		cond = cond,
-		event = "LspAttach",
+		keys = {
+			{
+				"<C-M>c",
+				"<cmd>AerialToggle!<cr>",
+				desc = "Toggle sidebar document code symbols",
+			},
+			{
+				"<leader>c",
+				"<cmd>Telescope aerial<cr>",
+				desc = "Pick document code symbols",
+			},
+		},
 		cmd = {
 			"AerialToggle",
 			"AerialOpen",
@@ -325,7 +379,13 @@ return {
 		"folke/trouble.nvim",
 		cond = cond,
 		lazy = true,
-		event = "LspAttach",
+		keys = {
+			{
+				"<C-M>q",
+				"<cmd>Trouble workspace_diagnostics<cr>",
+				desc = "Toggle workspace diagnostic qf",
+			},
+		},
 		opts = {
 			fold_open = "▾",
 			fold_close = "▸",
@@ -350,7 +410,7 @@ return {
 		"nvimtools/none-ls.nvim",
 		cond = cond,
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufRead",
 		opts = function()
 			return {
 				sources = require("utils.lsp").null_sources,
@@ -366,7 +426,28 @@ return {
 		"dnlhc/glance.nvim",
 		cond = cond,
 		lazy = true,
-		event = "LspAttach",
+		keys = {
+			{
+				"<leader>qd",
+				"<cmd>Glance definitions<cr>",
+				desc = "LSP definitions (Glance)",
+			},
+			{
+				"<leader>qr",
+				"<cmd>Glance references<cr>",
+				desc = "LSP references (Glance)",
+			},
+			{
+				"<leader>qi",
+				"<cmd>Glance implementations<cr>",
+				desc = "LSP Implementation (Glance)",
+			},
+			{
+				"<leader>qt",
+				"<cmd>Glance type_definitions<cr>",
+				desc = "LSP type definitions (Glance)",
+			},
+		},
 		opts = {
 			zindex = 9999,
 			detached = true,
