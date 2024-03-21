@@ -92,4 +92,8 @@ return {
 			return true
 		end,
 	},
+	{
+		"GCBallesteros/jupytext.nvim",
+		cond = vim.fn.getcwd() == vim.fn.expand("/hades/projects/msci-wiki")
+	}
 }
