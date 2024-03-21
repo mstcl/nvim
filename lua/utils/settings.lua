@@ -1,5 +1,4 @@
 local set = vim.opt
-local vt_signs = require("user_configs").lsp_vt_signs
 
 -- Providers for nvim
 vim.g.python3_host_prog = vim.fn.expand("$HOME/.config/nvim/.venv/bin/python")
@@ -79,7 +78,7 @@ set.foldcolumn = "auto:1"
 set.signcolumn = "auto:1"
 set.splitbelow = true
 set.splitright = true
-set.colorcolumn = "88"
+set.colorcolumn = "80"
 set.synmaxcol = 400
 set.scrolljump = 1
 set.sidescrolloff = 5
@@ -139,44 +138,3 @@ set.listchars = {
 	space = "·",
 	multispace = "···+",
 }
-
--- Builtin diagnostics
-vim.diagnostic.config({
-	inlay_hints = {
-		enabled = true,
-	},
-	virtual_text = {
-		enabled = true,
-		spacing = 4,
-		prefix = "",
-		format = function(diagnostic)
-			return string.format(vt_signs[diagnostic.severity])
-		end,
-		suffix = " ",
-	},
-	signs = true, -- only for the colored number column
-	underline = false,
-	update_in_insert = false,
-	float = {
-		header = false,
-		focusable = false,
-		prefix = " ",
-		suffix = " ",
-		close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-		border = "single",
-		source = "if_many",
-		scope = "cursor",
-		focus = false,
-	},
-	severity_sort = true,
-})
-
-vim.cmd([[
-sign define DiagnosticSignError text=
-sign define DiagnosticSignWarn text=
-sign define DiagnosticSignInfo text=
-sign define DiagnosticSignHint text=
-sign define DiagnosticSignWarn text=
-sign define DiagnosticSignInfo text=
-sign define DiagnosticSignHint text=
-]])

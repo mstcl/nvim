@@ -379,7 +379,7 @@ return {
 		"utilyre/sentiment.nvim",
 		version = "*",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufRead",
 		opts = {
 			pairs = {
 				{ "(", ")" },
@@ -392,7 +392,7 @@ return {
 		-- Quick guessing indent for filetypes
 		"nmac427/guess-indent.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufReadPost",
 		opts = {
 			override_editorconfig = true,
 			auto_cmd = true,
@@ -402,7 +402,32 @@ return {
 		-- Force cursor to stay in place when doing certain visual motions
 		"gbprod/stay-in-place.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		keys = {
+			{
+				"==",
+				mode = { "n" },
+			},
+			{
+				"<<",
+				mode = { "n" },
+			},
+			{
+				">>",
+				mode = { "n" },
+			},
+			{
+				"=",
+				mode = { "v" },
+			},
+			{
+				"<",
+				mode = { "v" },
+			},
+			{
+				">",
+				mode = { "v" },
+			},
+		},
 		opts = {},
 	},
 	{
@@ -454,7 +479,8 @@ return {
 	{
 		-- Automatically add f-strings
 		"chrisgrieser/nvim-puppeteer",
-		lazy = false,
+		lazy = true,
+		ft = { "python", "typescript", "javascript" },
 	},
 	{
 		-- Smart rooter, replaces autochdir
