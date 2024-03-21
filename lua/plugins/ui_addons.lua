@@ -296,7 +296,7 @@ return {
 	{
 		-- Revamped UI (notification etc.)
 		"folke/noice.nvim",
-		event = "VeryLazy",
+		event = { "BufReadPre", "CmdlineEnter" },
 		keys = {
 			{
 				"<BS>",
@@ -305,9 +305,7 @@ return {
 			},
 		},
 		lazy = true,
-		dependencies = {
-			{ "MunifTanjim/nui.nvim", lazy = true, event = "VeryLazy" },
-		},
+		dependencies = { { "MunifTanjim/nui.nvim" } },
 		opts = {
 			lsp = {
 				progress = {
@@ -440,20 +438,20 @@ return {
 		"fmbarina/multicolumn.nvim",
 		lazy = true,
 		priority = 10,
-		event = "VeryLazy",
+		event = "BufReadPre",
 		opts = {
 			sets = {
 				lua = {
-					rulers = { 88 },
+					rulers = { 80 },
 					scope = "file",
 				},
 				default = {
-					rulers = { 88 },
+					rulers = { 80 },
 					full_column = true,
 				},
 				python = {
 					scope = "window",
-					rulers = { 88 },
+					rulers = { 80 },
 					to_line_end = true,
 				},
 				starter = {
@@ -462,7 +460,7 @@ return {
 				NeogitStatus = {
 					rulers = { 9999 },
 				},
-				exclude_ft = { "markdown", "help", "netrw", "starter", "man" },
+				exclude_ft = { "help", "netrw", "starter", "man" },
 			},
 		},
 	},
@@ -491,7 +489,7 @@ return {
 		-- Highlight color blocks
 		"brenoprata10/nvim-highlight-colors",
 		lazy = true,
-		event = { "BufNew", "BufRead" },
+		event = { "BufRead" },
 		cmd = { "HighlightColors" },
 		keys = {
 			{
@@ -529,12 +527,8 @@ return {
 		-- Folding customization using LSP and more
 		"kevinhwang91/nvim-ufo",
 		lazy = true,
-		event = "VeryLazy",
-		dependencies = {
-			"kevinhwang91/promise-async",
-			lazy = true,
-			event = "VeryLazy",
-		},
+		event = "BufReadPre",
+		dependencies = { "kevinhwang91/promise-async" },
 		opts = {
 			open_fold_hl_timeout = 150,
 			close_fold_kinds_ft = {
@@ -561,6 +555,8 @@ return {
 		-- Cursorline mode decoration
 		"mvllow/modes.nvim",
 		cond = require("user_configs").ui_features.modes,
+		lazy = true,
+		event = "BufReadPre",
 		opts = {
 			set_number = false,
 		},
@@ -577,7 +573,7 @@ return {
 		-- Winbar/bufferline alternative
 		"b0o/incline.nvim",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufReadPost",
 		opts = {
 			hide = {
 				cursorline = true,

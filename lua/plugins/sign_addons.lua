@@ -46,7 +46,7 @@ return {
 				mode = { "v" },
 			},
 		},
-		dependencies = { { "nvim-lua/plenary.nvim", lazy = true, event = "VeryLazy" } },
+		dependencies = { { "nvim-lua/plenary.nvim" } },
 		opts = {
 			numhl = false,
 			linehl = false,

@@ -1,3 +1,18 @@
+local autocmd = vim.api.nvim_create_autocmd
+local groupid = vim.api.nvim_create_augroup
+local opt_local = vim.opt_local
+local wo = vim.wo
+---@param group string
+---@vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
+---@return nil
+local function augroup(group, ...)
+	local id = groupid(group, { clear = true })
+	for _, a in ipairs({ ... }) do
+		a[2].group = id
+		autocmd(unpack(a))
+	end
+end
+
 -- Plugins which add additional ways to use nvim
 return {
 	{
@@ -9,6 +24,7 @@ return {
 			{
 				"<C-Bslash>",
 				function()
+					local exec = vim.api.nvim_command
 					if vim.api.nvim_win_get_width(0) >= 150 then
 						exec("ToggleTerm direction=vertical")
 					else
@@ -44,6 +60,21 @@ return {
 			},
 			direction = "vertical",
 		},
+		config = function(_, opts)
+			require("toggleterm").setup(opts)
+			augroup("toggleterm", {
+				{ "TermOpen" },
+				{
+					pattern = "term://*",
+					callback = function()
+						local opts_b = { silent = true, buffer = 0 }
+						vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], opts_b)
+						vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts_b)
+						vim.keymap.set("t", "<C-Bslash>", [[<C-\><C-n>:ToggleTerm<CR>]], opts_b)
+					end,
+				},
+			})
+		end,
 	},
 	{
 		-- Distraction-free editing mode
@@ -170,8 +201,8 @@ return {
 					},
 				},
 				{ "permissions" },
-				{ "size",       highlight = "Special" },
-				{ "mtime",      highlight = "Number" },
+				{ "size", highlight = "Special" },
+				{ "mtime", highlight = "Number" },
 			},
 			float = {
 				padding = 4,
@@ -199,7 +230,7 @@ return {
 	{
 		-- Keymapping cheatsheet
 		"folke/which-key.nvim",
-		event = "VeryLazy",
+		event = "BufReadPre",
 		keys = {
 			{
 				"<C-P>",
@@ -230,6 +261,25 @@ return {
 				n = { "d", "y" },
 			},
 		},
+		config = function(_, opts)
+			local wk = require("which-key")
+			wk.register({
+				["<leader>"] = { name = "Leader commands (pickers & LSP)" },
+				["<space>"] = { ":", "Command", mode = { "n", "v" } },
+				["<leader>o"] = { name = "Org mode actions" },
+				["<leader>g"] = { name = "Git commands" },
+				["<leader>e"] = { name = "Explorers (additional)" },
+				["<leader>d"] = { name = "DAP commands" },
+				["<leader>q"] = { name = "LSP commands" },
+				["<C-M>"] = { name = "Toggle components" },
+				["<C-S>"] = { name = "Split windows" },
+				["["] = { name = "Previous" },
+				["]"] = { name = "Next" },
+				["z"] = { name = "Folds, spelling & align" },
+				["g"] = { name = "Comment, case & navigation" },
+			})
+			wk.setup(opts)
+		end,
 	},
 	{
 		-- Minimalist start screen
@@ -330,11 +380,6 @@ return {
 				"<leader>b",
 				"<cmd>Telescope buffers<cr>",
 				desc = "Telescope buffers",
-			},
-			{
-				"<leader>p",
-				"<cmd>Telescope lazy<cr>",
-				desc = "Telescope packages",
 			},
 			{
 				"<leader>f",
@@ -515,38 +560,40 @@ return {
 			if require("user_configs").dap_enabled then
 				telescope.load_extension("dap")
 			end
-			telescope.load_extension("lazy")
 			telescope.load_extension("noice")
 			if require("user_configs").lsp_enabled then
 				telescope.load_extension("aerial")
 			end
+			augroup("telescope", {
+				{ "Filetype" },
+				{
+					desc = "Turn off completion for telescope buffers",
+					pattern = "TelescopePrompt",
+					callback = function()
+						if require("user_configs").edit_features.completion then
+							require("cmp").setup.buffer({ completion = { autocomplete = false } })
+						end
+					end,
+				},
+			})
 		end,
 		dependencies = {
 			{
 				"nvim-telescope/telescope-dap.nvim",
 				cond = require("user_configs").dap_enabled,
-				lazy = true,
-				event = "VeryLazy",
 			},
-			{ "tsakirist/telescope-lazy.nvim", lazy = true, event = "VeryLazy" },
-			{ "debugloop/telescope-undo.nvim", lazy = true, event = "VeryLazy" },
-			{ "nvim-lua/plenary.nvim",         lazy = true, event = "VeryLazy" },
+			{ "debugloop/telescope-undo.nvim" },
+			{ "nvim-lua/plenary.nvim" },
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 				build = "make",
-				lazy = true,
-				event = "VeryLazy",
 			},
-			{ "jvgrootveld/telescope-zoxide", lazy = true, event = "VeryLazy" },
+			{ "jvgrootveld/telescope-zoxide" },
 			{
 				"rudism/telescope-dict.nvim",
 				ft = { "markdown", "tex" },
 			},
-			{
-				"nvim-telescope/telescope-frecency.nvim",
-				lazy = true,
-				event = "VeryLazy",
-			},
+			{ "nvim-telescope/telescope-frecency.nvim" },
 		},
 	},
 	{
@@ -573,6 +620,20 @@ return {
 				section = { "▸", "▾" },
 			},
 		},
+		config = function(_, opts)
+			require("neogit").setup(opts)
+			augroup("neogit", {
+				{ "Filetype" },
+				{
+					pattern = "Neogit*",
+					callback = function()
+						opt_local.list = false
+						wo.foldcolumn = "0"
+						wo.relativenumber = true
+					end,
+				},
+			})
+		end,
 	},
 	{
 		-- Tips on launch
@@ -593,7 +654,7 @@ return {
 		-- Discard inactive buffers
 		"chrisgrieser/nvim-early-retirement",
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufReadPre",
 		opts = {
 			notificationOnAutoClose = true,
 		},

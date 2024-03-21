@@ -54,11 +54,4 @@ M.barbecue_theme = {
 	["bl"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Function", true).foreground)),
 }
 
-function M.set_terminal_keymaps()
-	local opts_b = { silent = true, buffer = 0 }
-	vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], opts_b)
-	vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts_b)
-	vim.keymap.set("t", "<C-Bslash>", [[<C-\><C-n>:ToggleTerm<CR>]], opts_b)
-end
-
 return M
