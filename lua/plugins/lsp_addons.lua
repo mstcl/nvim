@@ -42,6 +42,10 @@ return {
 		cond = cond,
 		lazy = true,
 		event = "BufRead",
+		-- keys = {
+		-- 	{ "zR", require("ufo").openAllFolds,  "Open all folds" },
+		-- 	{ "zM", require("ufo").closeAllFolds, "Close all folds" },
+		-- },
 		dependencies = {
 			{
 				"cmp-nvim-lsp",
@@ -53,6 +57,45 @@ return {
 			{ "williamboman/mason-lspconfig.nvim" },
 		},
 		config = function()
+			-- Builtin diagnostics
+			vim.diagnostic.config({
+				inlay_hints = {
+					enabled = true,
+				},
+				virtual_text = {
+					enabled = true,
+					spacing = 4,
+					prefix = "",
+					format = function(diagnostic)
+						return string.format(require("user_configs").lsp_vt_signs[diagnostic.severity])
+					end,
+					suffix = " ",
+				},
+				signs = true, -- only for the colored number column
+				underline = false,
+				update_in_insert = false,
+				float = {
+					header = false,
+					focusable = false,
+					prefix = " ",
+					suffix = " ",
+					close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+					border = "single",
+					source = "if_many",
+					scope = "cursor",
+					focus = false,
+				},
+				severity_sort = true,
+			})
+			vim.cmd([[
+				sign define DiagnosticSignError text=
+				sign define DiagnosticSignWarn text=
+				sign define DiagnosticSignInfo text=
+				sign define DiagnosticSignHint text=
+				sign define DiagnosticSignWarn text=
+				sign define DiagnosticSignInfo text=
+				sign define DiagnosticSignHint text=
+			]])
 			local on_attach = require("utils.lsp").on_attach
 			local handlers = require("utils.lsp").handlers
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -367,7 +410,7 @@ return {
 		"nvimtools/none-ls.nvim",
 		cond = cond,
 		lazy = true,
-		event = "VeryLazy",
+		event = "BufRead",
 		opts = function()
 			return {
 				sources = require("utils.lsp").null_sources,
