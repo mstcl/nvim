@@ -16,6 +16,195 @@ end
 -- Plugins which add additional ways to use nvim
 return {
 	{
+		-- Navigation and fuzzy pickers
+		"ibhagwan/fzf-lua",
+		lazy = true,
+		keys = {
+			{
+				"<leader>h",
+				"<cmd>FzfLua oldfiles<cr>",
+				desc = "Browse history",
+			},
+			{
+				"<leader>l",
+				"<cmd>FzfLua resume<cr>",
+				desc = "Resume last picker",
+			},
+			{
+				"<leader>t",
+				"<cmd>FzfLua builtin<cr>",
+				desc = "FzfLua Builtin",
+			},
+			{
+				"<leader>b",
+				"<cmd>FzfLua buffers<cr>",
+				desc = "Buffers",
+			},
+			{
+				"<leader>f",
+				"<cmd>FzfLua files<cr>",
+				desc = "Find files",
+			},
+			{
+				"<leader>z",
+				"<cmd>lua require('fzf.fzf_zoxide').exec()<cr>",
+				desc = "Zoxide",
+			},
+			{
+				"<leader>c",
+				"<cmd>FzfLua lsp_document_symbols<cr>",
+				desc = "Document code symbols",
+			},
+			{
+				"<leader>w",
+				"<cmd>FzfLua lsp_workspace_diagnostics<cr>",
+				desc = "Workspace diagnostics",
+			},
+			{
+				"<leader>gb",
+				"<cmd>FzfLua git_bcommits<cr>",
+				desc = "Buffer git commits",
+			},
+			{
+				"<leader>gc",
+				"<cmd>FzfLua git_commits<cr>",
+				desc = "Git commits",
+			},
+			{
+				"<leader>gs",
+				"<cmd>FzfLua git_status<cr>",
+				desc = "Git status",
+			},
+			{
+				"<leader>/",
+				"<cmd>FzfLua live_grep_native<cr>",
+				desc = "Grep workspace",
+			},
+			{
+				"<leader><bslash>",
+				"<cmd>FzfLua lgrep_curbuf<cr>",
+				desc = "Grep buffer",
+			},
+			{
+				"<leader>qd",
+				"<cmd>FzfLua lsp_definitions<cr>",
+				desc = "Symbol definitions",
+			},
+			{
+				"<leader>qr",
+				"<cmd>FzfLua lsp_references<cr>",
+				desc = "Symbol references",
+			},
+			{
+				"<leader>qi",
+				"<cmd>FzfLua implementations<cr>",
+				desc = "Symbol implementation",
+			},
+			{
+				"<leader>qt",
+				"<cmd>FzfLua type_defs<cr>",
+				desc = "Symbol type definitions",
+			},
+			{
+				"<leader>qD",
+				"<cmd>FzfLua declarations<cr>",
+				desc = "Symbol declarations",
+			},
+		},
+		opts = function()
+			local function picker_opts(str)
+				return {
+					prompt = " ➤ ",
+					winopts = {
+						title = " " .. str .. " ",
+						title_pos = "center",
+					},
+				}
+			end
+			return {
+				commands = { sort_lastused = true },
+				manpages = { previewer = "man_native" },
+				helptags = { previewer = "help_native" },
+				defaults = {
+					git_icons = false,
+					file_icons = false,
+				},
+				fzf_opts = { ["--margin"] = "0,0", ["--info"] = "inline-right" },
+				winopts = {
+					width = 0.87,
+					height = 0.80,
+					preview = {
+						hidden = "nohidden",
+						vertical = "up:45%",
+						horizontal = "right:55%",
+						layout = "flex",
+						flip_columns = 120,
+					},
+					border = "single",
+				},
+				hls = {
+					normal = "TelescopeNormal",
+					border = "TelescopeBorder",
+					title = "TelescopeTitle",
+					help_normal = "TelescopeNormal",
+					help_border = "TelescopeBorder",
+					preview_normal = "TelescopePreviewNormal",
+					preview_border = "TelescopePreviewBorder",
+					preview_title = "TelescopePreviewTitle",
+					cursor = "Cursor",
+					cursorline = "TelescopePreviewLine",
+					cursorlinenr = "TelescopePreviewLine",
+					search = "IncSearch",
+					header_bind = "Directory",
+					header_text = "Boolean",
+					tab_marker = "Directory",
+					tab_title = "Directory",
+					buf_name = "Character",
+					buf_nr = "Character",
+					buf_flag_cur = "Boolean",
+					buf_flag_alt = "Constant",
+					live_sym = "Boolean",
+				},
+				fzf_colors = {
+					["fg"] = { "fg", "TelescopeNormal" },
+					["bg"] = { "bg", "TelescopeNormal" },
+					["hl"] = { "fg", "TelescopeMatching" },
+					["fg+"] = { "fg", "TelescopeSelection" },
+					["bg+"] = { "bg", "TelescopeSelection" },
+					["hl+"] = { "fg", "TelescopeMatching" },
+					["info"] = { "fg", "TelescopeNormal" },
+					["border"] = { "fg", "TelescopeBorder" },
+					["gutter"] = { "bg", "TelescopeNormal" },
+					["prompt"] = { "fg", "TelescopePromptPrefix" },
+					["pointer"] = { "fg", "TelescopeSelectionCaret" },
+					["marker"] = { "fg", "Directory" },
+					["header"] = { "fg", "Boolean" },
+				},
+				files = {
+					fzf_opts = { ["--ansi"] = false },
+					winopts = {
+						title = " Find files ",
+						title_pos = "center",
+					},
+				},
+				git = {
+					files = picker_opts("Git files"),
+					status = picker_opts("Git status"),
+					commits = picker_opts("Git commits"),
+					bcommits = picker_opts("Git buffer commits"),
+					branches = picker_opts("Git branches"),
+					tags = picker_opts("Git tags"),
+					stash = picker_opts("Git stash"),
+				},
+				grep = picker_opts("Live grep"),
+				args = picker_opts("Argument list"),
+			}
+		end,
+		config = function(_, opts)
+			require("fzf-lua").setup(opts)
+		end,
+	},
+	{
 		-- Terminal panel
 		"akinsho/toggleterm.nvim",
 		lazy = true,
@@ -268,7 +457,6 @@ return {
 				["<space>"] = { ":", "Command", mode = { "n", "v" } },
 				["<leader>o"] = { name = "Org mode actions" },
 				["<leader>g"] = { name = "Git commands" },
-				["<leader>e"] = { name = "Explorers (additional)" },
 				["<leader>d"] = { name = "DAP commands" },
 				["<leader>q"] = { name = "LSP commands" },
 				["<C-M>"] = { name = "Toggle components" },
@@ -352,251 +540,6 @@ return {
 		end,
 	},
 	{
-		-- Multipurpose panel, mainly for navigation
-		"nvim-telescope/telescope.nvim",
-		lazy = true,
-		keys = {
-			{
-				"<leader>h",
-				"<cmd>Telescope oldfiles<cr>",
-				desc = "Telescope history",
-			},
-			{
-				"<leader>l",
-				"<cmd>Telescope resume<cr>",
-				desc = "Telescope resume",
-			},
-			{
-				"<leader>t",
-				"<cmd>Telescope builtin<cr>",
-				desc = "Telescope builtin",
-			},
-			{
-				"<leader>t",
-				"<cmd>Telescope builtin<cr>",
-				desc = "Telescope builtin",
-			},
-			{
-				"<leader>b",
-				"<cmd>Telescope buffers<cr>",
-				desc = "Telescope buffers",
-			},
-			{
-				"<leader>f",
-				"<cmd>Telescope find_files <CR>path=%:p:h<cr>",
-				desc = "Telescope find files",
-			},
-			{
-				"<leader>er",
-				"<cmd>Telescope frecency<cr>",
-				desc = "Telescope frecency",
-			},
-			{
-				"<leader>ez",
-				"<cmd>Telescope zoxide list<cr>",
-				desc = "Telescope zoxide",
-			},
-			{
-				"<leader>n",
-				"<cmd>Telescope noice<cr>",
-				desc = "Telescope notifications",
-			},
-			{
-				"<leader>u",
-				"<cmd>Telescope undo<cr>",
-				desc = "Telescope undo tree",
-			},
-			{
-				"<leader>gC",
-				"<cmd>Telescope git_bcommits<cr>",
-				desc = "Telescope buffer git commits",
-			},
-			{
-				"<leader>gc",
-				"<cmd>Telescope git_commits<cr>",
-				desc = "Telescope git commits",
-			},
-			{
-				"<leader>gs",
-				"<cmd>Telescope git_status<cr>",
-				desc = "Telescope git status",
-			},
-			{
-				"<leader>/",
-				"<cmd>Telescope live_grep<cr>",
-				desc = "Telescope grep workspace",
-			},
-			{
-				"<leader><bslash>",
-				"<cmd>Telescope current_buffer_fuzzy_find<cr>",
-				desc = "Telescope grep buffer",
-			},
-		},
-		opts = function()
-			local flex_layout = require("utils.misc").telescope_flex_layout
-			local picker_configs = require("utils.misc").telescope_picker_configs
-			return {
-				defaults = {
-					use_less = false,
-					initial_mode = "insert",
-					selection_strategy = "reset",
-					mappings = {
-						n = {
-							["<C-p>"] = require("telescope.actions.layout").toggle_preview,
-						},
-					},
-					vimgrep_arguments = {
-						"rg",
-						"-L",
-						"--color=never",
-						"--no-heading",
-						"--with-filename",
-						"--line-number",
-						"--column",
-						"--smart-case",
-						"--trim",
-					},
-					borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
-					prompt_prefix = " ➤ ",
-					selection_caret = "  ",
-					entry_prefix = "  ",
-					results_title = "",
-					layout_config = {
-						horizontal = {
-							prompt_position = "top",
-						},
-						vertical = {
-							prompt_position = "top",
-							mirror = false,
-						},
-						cursor = { prompt_position = "top" },
-						center = { prompt_position = "top" },
-						bottom_pane = { prompt_position = "top" },
-					},
-					path_display = { "truncate" },
-					color_devicons = false,
-					sorting_strategy = "ascending",
-					winblend = 0,
-				},
-				pickers = {
-					buffers = {
-						layout_strategy = "center",
-						sort_lastused = true,
-						disable_devicons = true,
-						previewer = false,
-						mappings = {
-							i = {
-								["<c-d>"] = "delete_buffer",
-							},
-							n = {
-								["<c-d>"] = require("telescope.actions").delete_buffer,
-							},
-						},
-					},
-					find_files = {
-						layout_strategy = "flex",
-						disable_devicons = true,
-						layout_config = flex_layout,
-						find_command = require("user_configs").telescope_find_ignore,
-					},
-					oldfiles = picker_configs,
-					colorscheme = picker_configs,
-					highlights = picker_configs,
-					live_grep = picker_configs,
-					git_commits = picker_configs,
-					git_bcommits = picker_configs,
-					git_branches = picker_configs,
-					git_status = {
-						layout_strategy = "flex",
-						layout_config = flex_layout,
-						disable_devicons = true,
-						git_icons = {
-							added = "+",
-							changed = "~",
-							copied = ">",
-							deleted = "-",
-							renamed = "⇒",
-							unmerged = "‡",
-							untracked = "?",
-						},
-					},
-				},
-				extensions = {
-					fzf = {
-						fuzzy = true,
-						override_generic_sorter = true,
-						override_file_sorter = true,
-						case_mode = "smart_case",
-					},
-					undo = {
-						use_delta = true,
-						side_by_side = true,
-						layout_strategy = "flex",
-						layout_config = flex_layout,
-					},
-					zoxide = {
-						prompt_title = "Zoxide",
-					},
-					frecency = {
-						auto_validate = false,
-						use_sqlite = false,
-						layout_strategy = "flex",
-						layout_config = flex_layout,
-						disable_devicons = true,
-						show_unindexed = true,
-						show_scores = true,
-						workspaces = require("user_configs").frecency_workspaces,
-					},
-				},
-			}
-		end,
-		config = function(_, opts)
-			local telescope = require("telescope")
-			telescope.setup(opts)
-			telescope.load_extension("fzf")
-			telescope.load_extension("zoxide")
-			telescope.load_extension("frecency")
-			telescope.load_extension("undo")
-			if require("user_configs").dap_enabled then
-				telescope.load_extension("dap")
-			end
-			telescope.load_extension("noice")
-			if require("user_configs").lsp_enabled then
-				telescope.load_extension("aerial")
-			end
-			augroup("telescope", {
-				{ "Filetype" },
-				{
-					desc = "Turn off completion for telescope buffers",
-					pattern = "TelescopePrompt",
-					callback = function()
-						if require("user_configs").edit_features.completion then
-							require("cmp").setup.buffer({ completion = { autocomplete = false } })
-						end
-					end,
-				},
-			})
-		end,
-		dependencies = {
-			{
-				"nvim-telescope/telescope-dap.nvim",
-				cond = require("user_configs").dap_enabled,
-			},
-			{ "debugloop/telescope-undo.nvim" },
-			{ "nvim-lua/plenary.nvim" },
-			{
-				"nvim-telescope/telescope-fzf-native.nvim",
-				build = "make",
-			},
-			{ "jvgrootveld/telescope-zoxide" },
-			{
-				"rudism/telescope-dict.nvim",
-				ft = { "markdown", "tex" },
-			},
-			{ "nvim-telescope/telescope-frecency.nvim" },
-		},
-	},
-	{
 		"NeogitOrg/neogit",
 		lazy = true,
 		cmd = "Neogit",
@@ -606,9 +549,6 @@ return {
 				"<cmd>Neogit kind=auto<cr>",
 				desc = "Neogit",
 			},
-		},
-		dependencies = {
-			{ "nvim-telescope/telescope.nvim", lazy = true, cmd = "Telescope" },
 		},
 		opts = {
 			commit_editor = {
