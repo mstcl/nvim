@@ -61,9 +61,14 @@ return {
 				desc = "Workspace diagnostics",
 			},
 			{
-				"<leader>gb",
+				"<leader>gC",
 				"<cmd>FzfLua git_bcommits<cr>",
 				desc = "Buffer git commits",
+			},
+			{
+				"<leader>gb",
+				"<cmd>FzfLua git_branches<cr>",
+				desc = "Git branches",
 			},
 			{
 				"<leader>gc",
