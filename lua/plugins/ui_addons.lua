@@ -280,14 +280,16 @@ return {
 			},
 			select = {
 				-- enabled = false,
-				backend = "builtin",
-				builtin = {
-					border = "single",
-					win_options = {
-						cursorline = false,
-						cursorlineopt = "number",
-						winblend = 0,
-						winhighlight = "NormalFloat:TelescopeNormal,FloatBorder:TelescopeBorder,FloatTitle:Pmenu",
+				backend = "fzf_lua",
+				fzf_lua = {
+					winopts = {
+						height = 0.5,
+						width = 0.5,
+						preview = {
+							hidden = "nohidden",
+							vertical = "up:45%",
+							layout = "vertical",
+						},
 					},
 				},
 			},
@@ -527,7 +529,7 @@ return {
 		-- Folding customization using LSP and more
 		"kevinhwang91/nvim-ufo",
 		lazy = true,
-		event = "BufReadPre",
+		event = "VimEnter",
 		dependencies = { "kevinhwang91/promise-async" },
 		opts = {
 			open_fold_hl_timeout = 150,
