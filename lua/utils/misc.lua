@@ -22,30 +22,6 @@ M.buffer_opts = {
 	end,
 }
 
-M.telescope_flex_layout = {
-	horizontal = {
-		prompt_position = "top",
-		preview_width = 0.55,
-	},
-	vertical = {
-		prompt_position = "top",
-		mirror = false,
-	},
-	cursor = { prompt_position = "top" },
-	center = { prompt_position = "top" },
-	bottom_pane = { prompt_position = "top" },
-	width = 0.87,
-	height = 0.80,
-	flip_lines = 55,
-	flip_columns = 150,
-}
-
-M.telescope_picker_configs = {
-	layout_strategy = "flex",
-	layout_config = M.telescope_flex_layout,
-	disable_devicons = true,
-}
-
 M.barbecue_theme = {
 	["bg"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("WinBar", true).background)),
 	["mg"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Whitespace", true).foreground)),
