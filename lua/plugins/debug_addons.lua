@@ -21,16 +21,6 @@ return {
 		ft = "python",
 		keys = {
 			{
-				"<leader>dp",
-				"<cmd>Telescope dap commands<cr>",
-				desc = "Pick dap commands",
-			},
-			{
-				"<leader>dv",
-				"<cmd>Telescope dap variables<cr>",
-				desc = "Pick dap variables",
-			},
-			{
 				"<leader>dc",
 				"<cmd>DapContinue<cr>",
 				desc = "Debug: Continue",
