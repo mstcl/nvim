@@ -142,20 +142,6 @@ M.null_code_action_sources = {
 {% endif %}
 }
 
-M.telescope_find_ignore = {
-	"fd",
-	"--type",
-	"file",
-	"--strip-cwd-prefix",
-	"--follow",
-{% if fd_ignore_patterns is defined and fd_ignore_patterns | length > 0 %}
-{% for item in fd_ignore_patterns %}
-	"--exclude",
-	"{{ item }}",
-{% endfor %}
-{% endif %}
-}
-
 M.starter_ascii = "{{ starter_ascii }}"
 
 M.org_agenda_files = {
@@ -189,6 +175,7 @@ M.statusline_short_ft = {
 	"Packer",
 	"NvimTree",
 	"TelescopePrompt",
+	"fzf",
 	"Help",
 	"help",
 	"diff",
