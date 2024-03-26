@@ -359,7 +359,7 @@ return {
 		build = ":UpdateRemotePlugins",
 		cond = require("user_configs").syntax_features.quarto,
 		init = function()
-			vim.g.molten_image_provider = "image.nvim"
+			vim.g.molten_image_provider = "none"
 			vim.g.molten_wrap_output = true
 			vim.g.molten_auto_open_output = false
 			vim.g.molten_virt_lines_off_by_1 = true
@@ -415,12 +415,13 @@ return {
 		end,
 	},
 	{
-		-- Display images inside
+		-- Display images inside (kinda broken on Arch)
 		"3rd/image.nvim",
 		lazy = true,
 		build = "luarocks --local install magick --lua-version=5.1",
 		ft = { "markdown", "org", "ipynb", "quarto" },
-		cond = vim.fn.expand("$SSH_CLIENT") == "$SSH_CLIENT",
+		-- cond = vim.fn.expand("$SSH_CLIENT") == "$SSH_CLIENT",
+		cond = false,
 		opts = {
 			integrations = {
 				markdown = {

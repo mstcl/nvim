@@ -10,7 +10,6 @@ return {
 		dependencies = {
 			{ "rafamadriz/friendly-snippets",     lazy = true, event = "InsertEnter" },
 			{ "Zeioth/NormalSnippets",            lazy = true, event = "InsertEnter" },
-			{ "benfowler/telescope-luasnip.nvim", lazy = true, event = "InsertEnter" },
 		},
 		lazy = true,
 		event = "ModeChanged *:[iRss\x13vV\x16]*",
