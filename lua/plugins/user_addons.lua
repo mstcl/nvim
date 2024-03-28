@@ -80,10 +80,6 @@ return {
 		end,
 	},
 	{
-		"folke/noice.nvim",
-		cond = vim.g.started_by_firenvim ~= true,
-	},
-	{
 		"echasnovski/mini.starter",
 		cond = function()
 			if vim.tbl_contains(vim.v.argv, "-R") or vim.g.started_by_firenvim == true then
