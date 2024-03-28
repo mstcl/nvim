@@ -8,8 +8,8 @@ return {
 		cond = cond.completion,
 		build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
 		dependencies = {
-			{ "rafamadriz/friendly-snippets",     lazy = true, event = "InsertEnter" },
-			{ "Zeioth/NormalSnippets",            lazy = true, event = "InsertEnter" },
+			{ "rafamadriz/friendly-snippets" },
+			{ "Zeioth/NormalSnippets" },
 		},
 		lazy = true,
 		event = "ModeChanged *:[iRss\x13vV\x16]*",
@@ -54,7 +54,7 @@ return {
 		"hrsh7th/nvim-cmp",
 		cond = cond.completion,
 		lazy = true,
-		event = "InsertEnter",
+		event = { "InsertEnter", "CmdlineEnter" },
 		keys = {
 			{
 				"<C-M>a",
@@ -71,17 +71,24 @@ return {
 			},
 		},
 		dependencies = {
-			{ "saadparwaiz1/cmp_luasnip",   lazy = true, event = "InsertEnter" },
-			{ "kdheepak/cmp-latex-symbols", lazy = true, event = "InsertEnter" },
-			{ "hrsh7th/cmp-nvim-lsp",       lazy = true, event = "InsertEnter" },
-			{ "FelipeLema/cmp-async-path",  lazy = true, event = "InsertEnter" },
-			{ "hrsh7th/cmp-buffer",         lazy = true, event = "InsertEnter" },
+			{ "saadparwaiz1/cmp_luasnip" },
+			{ "kdheepak/cmp-latex-symbols" },
+			{ "hrsh7th/cmp-nvim-lsp" },
+			{ "FelipeLema/cmp-async-path" },
+			{ "hrsh7th/cmp-buffer" },
+			{ "hrsh7th/cmp-cmdline" },
+			{ "dmitmel/cmp-cmdline-history" },
 			{
 				"aspeddro/cmp-pandoc.nvim",
-				lazy = true,
-				event = "InsertEnter",
 				opts = {
 					filetypes = { "pandoc", "markdown", "rmd", "quarto" },
+				},
+			},
+			{
+				"tiagovla/zotex.nvim",
+				dependencies = { "kkharji/sqlite.lua" },
+				opts = {
+					path = vim.fn.expand("~/Zotero/zotero.sqlite"),
 				},
 			},
 		},
@@ -185,6 +192,7 @@ return {
 						max_item_count = 5,
 					},
 					{ name = "cmp_pandoc", priority = 9 },
+					{ name = "zotex", priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -199,6 +207,27 @@ return {
 			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 			cmp.setup(opts)
+			cmp.setup.cmdline("/", {
+				mapping = cmp.mapping.preset.cmdline(),
+				sources = {
+					{ name = "buffer" },
+				},
+			})
+			cmp.setup.cmdline(":", {
+				mapping = cmp.mapping.preset.cmdline(),
+				sources = cmp.config.sources({
+					{ name = "path" },
+					{ name = "cmdline" },
+					{ name = "cmdline_history" },
+				}),
+			})
+			for _, cmd_type in ipairs({ "?", "@" }) do
+				cmp.setup.cmdline(cmd_type, {
+					sources = {
+						{ name = "cmdline_history" },
+					},
+				})
+			end
 			vim.g.cmp_toggle = true
 		end,
 	},
@@ -255,7 +284,7 @@ return {
 			"ys",
 			"ds",
 			"cs",
-			{ "S",      mode = "x" },
+			{ "S", mode = "x" },
 			{ "<C-g>s", mode = "i" },
 		},
 		opts = {},
@@ -266,16 +295,16 @@ return {
 		cond = cond.move,
 		lazy = true,
 		keys = {
-			{ "<A-j>", "<cmd>MoveBlock(1)<cr>",   mode = "v", desc = "Move block down" },
-			{ "<A-k>", "<cmd>MoveBlock(-1)<cr>",  mode = "v", desc = "Move block up" },
+			{ "<A-j>", "<cmd>MoveBlock(1)<cr>", mode = "v", desc = "Move block down" },
+			{ "<A-k>", "<cmd>MoveBlock(-1)<cr>", mode = "v", desc = "Move block up" },
 			{ "<A-h>", "<cmd>MoveHBlocK(-1)<cr>", mode = "v", desc = "Move block left" },
-			{ "<A-l>", "<cmd>MoveHBlock(1)<cr>",  mode = "v", desc = "Move block right" },
-			{ "<A-j>", "<cmd>MoveLine(1)<cr>",    mode = "n", desc = "Move line up" },
-			{ "<A-k>", "<cmd>MoveLine(-1)<cr>",   mode = "n", desc = "Move line down" },
-			{ "<A-h>", "<cmd>MoveHChar(-1)<cr>",  mode = "n", desc = "Move char left" },
-			{ "<A-l>", "<cmd>MoveHChar(1)<cr>",   mode = "n", desc = "Move char right" },
-			{ "<A-f>", "<cmd>MoveWord(1)<cr>",    mode = "n", desc = "Move word forward" },
-			{ "<A-b>", "<cmd>MoveWord(-1)<cr>",   mode = "n", desc = "Move word backward" },
+			{ "<A-l>", "<cmd>MoveHBlock(1)<cr>", mode = "v", desc = "Move block right" },
+			{ "<A-j>", "<cmd>MoveLine(1)<cr>", mode = "n", desc = "Move line up" },
+			{ "<A-k>", "<cmd>MoveLine(-1)<cr>", mode = "n", desc = "Move line down" },
+			{ "<A-h>", "<cmd>MoveHChar(-1)<cr>", mode = "n", desc = "Move char left" },
+			{ "<A-l>", "<cmd>MoveHChar(1)<cr>", mode = "n", desc = "Move char right" },
+			{ "<A-f>", "<cmd>MoveWord(1)<cr>", mode = "n", desc = "Move word forward" },
+			{ "<A-b>", "<cmd>MoveWord(-1)<cr>", mode = "n", desc = "Move word backward" },
 		},
 		opts = {
 			char = {
@@ -346,8 +375,8 @@ return {
 		event = "InsertEnter",
 		lazy = true,
 		dependencies = {
-			{ "hrsh7th/nvim-cmp", lazy = true, event = "InsertEnter" },
-			{ "L3MON4D3/LuaSnip", lazy = true, event = "InsertEnter" },
+			{ "hrsh7th/nvim-cmp" },
+			{ "L3MON4D3/LuaSnip" },
 		},
 		opts = {
 			tabkey = "<Tab>",
