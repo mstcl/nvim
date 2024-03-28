@@ -237,18 +237,17 @@ return {
 						bibtexFormatter = "texlab",
 						build = {
 							args = { "-interaction=nonstopmode", "-synctex=1", "%f" },
-							executable = "pdflatex",
+							executable = "miktex-pdflatex",
 							forwardSearchAfter = true,
 							onSave = true,
 						},
 						diagnosticsDelay = 300,
 						formatterLineLength = 80,
 						forwardSearch = {
-							executable = "zathura",
+							executable = "qpdfview",
 							args = {
-								"--synctex-forward",
-								"%l:1:%f",
-								"%p",
+								"--unique",
+								"%p#src:%f:%l:0",
 							},
 						},
 					},

@@ -208,17 +208,31 @@ return {
 			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 			cmp.setup(opts)
 			cmp.setup.cmdline("/", {
-				mapping = cmp.mapping.preset.cmdline(),
+				mapping = cmp.mapping.preset.cmdline({
+					["<C-n>"] = {
+						c = false,
+					},
+					["<C-p>"] = {
+						c = false,
+					},
+				}),
 				sources = {
 					{ name = "buffer" },
 				},
 			})
 			cmp.setup.cmdline(":", {
-				mapping = cmp.mapping.preset.cmdline(),
+				mapping = cmp.mapping.preset.cmdline({
+					["<C-n>"] = {
+						c = false,
+					},
+					["<C-p>"] = {
+						c = false,
+					},
+				}),
 				sources = cmp.config.sources({
-					{ name = "path" },
+					{ name = "async_path" },
 					{ name = "cmdline" },
-					{ name = "cmdline_history" },
+					{ name = "cmdline_history", priority = 9},
 				}),
 			})
 			for _, cmd_type in ipairs({ "?", "@" }) do

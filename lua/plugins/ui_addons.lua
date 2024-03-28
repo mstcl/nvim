@@ -296,7 +296,14 @@ return {
 	},
 	{
 		"j-hui/fidget.nvim",
-		event = { "BufReadPre", "CmdlineEnter" },
+		event = { "BufReadPre" },
+		keys = {
+			{
+				"<BS>",
+				"<cmd>Fidget clear<cr>",
+				desc = "Clear notification",
+			},
+		},
 		opts = {
 			progress = {
 				suppress_on_insert = true,
@@ -480,6 +487,48 @@ return {
 			},
 			show_icons = false,
 			leader_key = "<Bslash>",
+		},
+	},
+	{
+		"stevearc/overseer.nvim",
+		lazy = true,
+		keys = {
+			{
+				"<C-M>o",
+				"<cmd>OverseerToggle<cr>",
+				desc = "Toggle Overseer",
+			},
+			{
+				"<leader>m",
+				"<cmd>OverseerRun<cr>",
+				desc = "Run tasks",
+			},
+		},
+		opts = {
+			form = {
+				border = "single",
+				win_opts = {
+					winblend = 0,
+				},
+			},
+			confirm = {
+				border = "single",
+				win_opts = {
+					winblend = 0,
+				},
+			},
+			task_win = {
+				border = "single",
+				win_opts = {
+					winblend = 0,
+				},
+			},
+			help_win = {
+				border = "single",
+				win_opts = {
+					winblend = 0,
+				},
+			},
 		},
 	},
 }
