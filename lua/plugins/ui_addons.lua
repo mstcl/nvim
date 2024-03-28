@@ -40,7 +40,7 @@ return {
 					require("statusline.git_branch"),
 					require("statusline.git_diff"),
 					require("statusline.diagnostics"),
-					require("statusline.macro"),
+					-- require("statusline.macro"),
 					"%=",
 					require("statusline.fileformat"),
 					require("statusline.indentation"),
@@ -279,7 +279,6 @@ return {
 				anchor = "SW",
 			},
 			select = {
-				-- enabled = false,
 				backend = "fzf_lua",
 				fzf_lua = {
 					winopts = {
@@ -296,142 +295,18 @@ return {
 		},
 	},
 	{
-		-- Revamped UI (notification etc.)
-		"folke/noice.nvim",
+		"j-hui/fidget.nvim",
 		event = { "BufReadPre", "CmdlineEnter" },
-		keys = {
-			{
-				"<BS>",
-				"<cmd>Noice dismiss<cr>",
-				desc = "Dismiss notification",
-			},
-		},
-		lazy = true,
-		dependencies = { { "MunifTanjim/nui.nvim" } },
 		opts = {
-			lsp = {
-				progress = {
-					enabled = false,
-				},
-				override = {
-					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-					["vim.lsp.util.stylize_markdown"] = true,
-					["cmp.entry.get_documentation"] = true,
+			progress = {
+				suppress_on_insert = true,
+				display = {
+					render_limit = 3,
+					done_icon = "✓",
 				},
 			},
-			presets = {
-				bottom_search = true,
-				long_message_to_split = true,
-				inc_rename = false,
-				lsp_doc_border = false,
-			},
-			messages = {
-				view_search = "virtualtext",
-			},
-			views = {
-				notify = {
-					border = {
-						style = "none",
-					},
-				},
-				mini = {
-					win_options = {
-						winblend = 40,
-					},
-					position = {
-						row = -1,
-					},
-					border = {
-						style = "none",
-					},
-				},
-			},
-			routes = {
-				{
-					filter = {
-						event = "msg_show",
-						kind = "lua_error",
-						find = "UfoFallbackException",
-					},
-					opts = { skip = true },
-				},
-				{
-					filter = {
-						event = "notify",
-						kind = "info",
-						find = "hlchunk",
-					},
-					opts = { skip = true },
-				},
-				{
-					filter = {
-						event = "msg_show",
-						kind = "",
-						find = "[w]",
-					},
-					opts = { skip = true },
-				},
-				{
-					filter = {
-						event = "msg_show",
-						kind = "",
-						find = "ago",
-					},
-					opts = { skip = true },
-				},
-				{
-					filter = {
-						event = "notify",
-						kind = "info",
-						find = "available",
-					},
-					opts = { skip = true },
-				},
-				{
-					filter = {
-						event = "msg_show",
-						kind = "",
-						find = "yanked",
-					},
-					opts = { skip = true },
-				},
-				{
-					view = "split",
-					filter = { event = "msg_show", min_height = 20 },
-				},
-			},
-			cmdline = {
-				enabled = true,
-				view = "cmdline",
-				format = {
-					cmdline = {
-						icon = ":",
-					},
-					search_up = {
-						icon = "/",
-					},
-					search_down = {
-						icon = "/",
-					},
-					filter = {
-						icon = "*",
-					},
-					help = {
-						icon = "?",
-					},
-					lua = {
-						icon = "@",
-					},
-				},
-			},
-			format = {
-				level = {
-					icons = {
-						error = "✗",
-						info = "i",
-						warn = "!",
-					},
-				},
+			notification = {
+				override_vim_notify = true,
 			},
 		},
 	},
@@ -462,7 +337,7 @@ return {
 				NeogitStatus = {
 					rulers = { 9999 },
 				},
-				exclude_ft = { "help", "netrw", "starter", "man" },
+				exclude_ft = { "help", "netrw", "starter", "man", "qf" },
 			},
 		},
 	},

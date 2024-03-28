@@ -244,6 +244,15 @@ return {
 		ft = { "tex" },
 	},
 	{
+		"anufrievroman/vim-angry-reviewer",
+		lazy = true,
+		cmd = "AngryReviewer",
+		cond = require("user_configs").syntax_features.tex,
+		config = function()
+			vim.g.AngryReviewerEnglish = "british"
+		end,
+	},
+	{
 		-- Orgmode syntax
 		"nvim-orgmode/orgmode",
 		lazy = true,

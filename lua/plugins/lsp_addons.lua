@@ -42,10 +42,6 @@ return {
 		cond = cond,
 		lazy = true,
 		event = "BufRead",
-		-- keys = {
-		-- 	{ "zR", require("ufo").openAllFolds,  "Open all folds" },
-		-- 	{ "zM", require("ufo").closeAllFolds, "Close all folds" },
-		-- },
 		dependencies = {
 			{
 				"cmp-nvim-lsp",

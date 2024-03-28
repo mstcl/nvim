@@ -74,6 +74,10 @@ map("x", ">", ">gv", { desc = "Indent" })
 -- Folding
 map("n", "<Tab>", "za", { desc = "Toggle current fold" })
 
+-- QFlist navigation
+map("n", "]q", "<cmd>cn<cr>", { desc = "Next quickfix item" })
+map("n", "[q", "<cmd>cp<cr>", { desc = "Previous quickfix item" })
+
 -- Buffer
 if not require("user_configs").ui_features.tabline then
 	map("n", "<Left>", function()

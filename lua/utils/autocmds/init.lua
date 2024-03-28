@@ -142,6 +142,19 @@ augroup("text_opts", {
 	},
 })
 
+augroup("vertical_help", {
+	{ "FileType" },
+	{
+		desc = "Open help in vertical split",
+		pattern = "help",
+		callback = function()
+			vim.bo.bufhidden = "unload"
+			vim.cmd.wincmd("L")
+			vim.cmd("vertical resize 81")
+		end,
+	},
+})
+
 augroup("starter", {
 	{ "VimEnter" },
 	{

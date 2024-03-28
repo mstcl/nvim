@@ -19,18 +19,18 @@ return {
 			},
 			{
 				"[g",
-				"<cmd>Gitsigns prev_hunk<cr>",
+				"<cmd>Gitsigns prev_hunk<cr><cmd>Gitsigns preview_hunk<cr>",
 				desc = "Previous hunk",
 			},
 			{
 				"]g",
-				"<cmd>Gitsigns next_hunk<cr>",
+				"<cmd>Gitsigns next_hunk<cr><cmd>Gitsigns preview_hunk<cr>",
 				desc = "Next hunk",
 			},
 			{
 				"<leader>gh",
-				"<cmd>Gitsigns preview_hunk<cr>",
-				desc = "Preview hunk",
+				"<cmd>Gitsigns preview_hunk_inline<cr>",
+				desc = "Preview hunk inline",
 			},
 			{
 				"<leader>gS",
@@ -106,7 +106,7 @@ return {
 						click = "v:lua.ScSa",
 					},
 					{
-						text = { " ", builtin.lnumfunc, " " },
+						text = { builtin.lnumfunc, " " },
 						condition = { true, builtin.not_empty },
 						click = "v:lua.ScLa",
 					},
