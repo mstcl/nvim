@@ -46,7 +46,7 @@ return {
 		"chrishrb/gx.nvim",
 		opts = {
 			handler_options = {
-				search_engine = "https://search.bim.boats/search?q=",
+				search_engine = "https://sxn.lonely-desk.top/search?q=",
 			},
 		},
 	},

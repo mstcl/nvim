@@ -19,7 +19,7 @@ func_features:
 ui_features:
   modes: true # highlight cursorline depending on the mode
   scope: true # only display buffers for under a given tab scope
-  cursorword: true # highlight words that match current word under cursor
+  cursorword: false # highlight words that match current word under cursor
   indent_lines: true # show fancy indent lines
   tabline: false # display a bar at the top showing opened buffers
 
