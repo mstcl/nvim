@@ -398,11 +398,21 @@ return {
 				local filetype = vim.bo.filetype
 				local blocklist = {}
 				if filetype == "lua" then
-					blocklist = { "local", "require", "true", "false", "--" }
+					blocklist = {
+						"local",
+						"require",
+						"true",
+						"false",
+						"--",
+						"function",
+						"end",
+						"return",
+					}
 				end
 				vim.b.minicursorword_disable = vim.tbl_contains(blocklist, curword)
 			end
 			vim.cmd("au CursorMoved * lua _G.cursorword_blocklist()")
+			vim.cmd("autocmd Filetype markdown,tex,quarto lua vim.b.minicursorword_disable = true")
 		end,
 		opts = {},
 		version = false,
