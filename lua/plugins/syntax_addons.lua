@@ -277,7 +277,6 @@ return {
 			end
 
 			orgmode.setup(opts)
-			orgmode.setup_ts_grammar()
 		end,
 	},
 	{
