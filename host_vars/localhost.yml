@@ -105,7 +105,6 @@ treesitter_sources:
   - "gosum"
   - "gowork"
   - "gotmpl"
-  - "jinja2"
 
 # ~~ (3) VANITY ~~
 
