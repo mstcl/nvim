@@ -282,13 +282,13 @@ return {
 			},
 		},
 		cmd = "ZenMode",
-		dependencies = { "twilight.nvim", lazy = true, cmd = "Twilight" },
 		opts = {
 			window = {
-				backdrop = 1,
-				width = 90,
+				backdrop = 0,
+				width = 0.9,
+				height = 0.9,
 				options = {
-					signcolumn = "yes",
+					signcolumn = "no",
 					number = false,
 					relativenumber = false,
 					cursorline = false,
@@ -298,12 +298,34 @@ return {
 				},
 			},
 			plugins = {
-				gitsigns = { enabled = true },
+				gitsigns = { enabled = false },
+				options = {
+					enabled = true,
+					ruler = false,
+					showcmd = false,
+					laststatus = 0,
+				},
+				twilight = { enabled = false },
 				kitty = {
 					enabled = true,
-					font = "+0",
+					font = "+4",
+				},
+				wezterm = {
+					enabled = true,
+					font = "+4",
+				},
+				alacritty = {
+					enabled = true,
+					font = "18",
 				},
 			},
+			on_open = function(win)
+				vim.api.nvim_set_hl(0, "ZenBg", { link = "Normal" })
+				vim.cmd([[Fidget suppress true]])
+			end,
+			on_close = function(win)
+				vim.cmd([[Fidget suppress false]])
+			end,
 		},
 	},
 	{
@@ -414,6 +436,12 @@ return {
 				signcolumn = "no",
 				foldcolumn = "0",
 				statuscolumn = "",
+			},
+			keymaps_help = {
+				border = "single",
+			},
+			ssh = {
+				border = "single",
 			},
 			cleanup_delay_ms = false,
 			delete_to_trash = true,

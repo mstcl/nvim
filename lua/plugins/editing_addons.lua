@@ -150,7 +150,7 @@ return {
 					format = function(entry, item)
 						local icon = require("user_configs").lsp_kind_icons[item.kind]
 						icon = " " .. icon .. " "
-						item.menu = "   (" .. item.kind .. ")"
+						item.menu = ""
 						item.kind = icon
 						item.abbr = string.sub(item.abbr, 1, 30)
 						return item

@@ -66,7 +66,7 @@
         msg: "Manually run `:MasonInstall mdformat`."
 
     - name: Launch neovim remote
-      ansible.builtin.command: "{{ lookup('env', 'TERM') }} --command nvim"
+      ansible.builtin.command: "{{ terminal }} --command nvim"
       changed_when: false
 
     - name: Grab mdformat tools

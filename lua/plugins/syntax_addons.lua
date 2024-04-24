@@ -66,7 +66,7 @@ return {
 				enable = true,
 				use_languagetree = true,
 				additional_vim_regex_highlighting = { "org" },
-				disable = { "latex" },
+				disable = { "yaml.ansible" },
 			},
 			autopairs = {
 				enable = true,
@@ -82,7 +82,7 @@ return {
 			},
 			indent = {
 				enable = true,
-				disable = { "yaml" },
+				disable = { "yaml", "yaml.ansible", "template" },
 			},
 			tree_setter = {
 				enable = true,
@@ -244,6 +244,7 @@ return {
 		ft = { "tex" },
 	},
 	{
+		-- An angry reviewer in your latecx files
 		"anufrievroman/vim-angry-reviewer",
 		lazy = true,
 		cmd = "AngryReviewer",
@@ -459,5 +460,93 @@ return {
 			output_extension = "qmd",
 			force_ft = "quarto",
 		},
+	},
+	{
+		-- Management of markdown files
+		"jakewvincent/mkdnflow.nvim",
+		cond = require("user_configs").syntax_features.markdown,
+		lazy = true,
+		cmd = "Mkdnflow",
+		opts = {
+			modules = {
+				bib = true,
+				buffers = true,
+				conceal = true,
+				cursor = true,
+				folds = true,
+				links = true,
+				lists = true,
+				maps = true,
+				paths = true,
+				tables = true,
+				yaml = true,
+				cmp = true,
+			},
+			filetypes = { md = true, rmd = true, markdown = true, quarto = true },
+			create_dirs = true,
+			links = {
+				style = "wiki",
+				conceal = true,
+			},
+			new_file_template = {
+				use_template = true,
+				placeholders = {
+					before = {
+						title = "link_title",
+						date = "os_date",
+					},
+					after = {},
+				},
+				template = [[
+					---
+					title: {{ title }}
+					date: {{ date }}
+				]],
+			},
+			mappings = {
+				MkdnEnter = { { "n", "v" }, "<CR>" },
+				MkdnTab = false,
+				MkdnSTab = false,
+				MkdnNextLink = { "n", "]l" },
+				MkdnPrevLink = { "n", "[l" },
+				MkdnNextHeading = { "n", "]]" },
+				MkdnPrevHeading = { "n", "[[" },
+				MkdnGoBack = { "n", "<BS>" },
+				MkdnGoForward = { "n", "<Del>" },
+				MkdnCreateLink = false, -- see MkdnEnter
+				MkdnCreateLinkFromClipboard = { { "n", "v" }, "<leader>y" }, -- see MkdnEnter
+				MkdnFollowLink = false, -- see MkdnEnter
+				MkdnDestroyLink = { "n", "<M-CR>" },
+				MkdnTagSpan = { "v", "<M-CR>" },
+				MkdnMoveSource = { "n", "<F2>" },
+				MkdnYankAnchorLink = { "n", "yaa" },
+				MkdnYankFileAnchorLink = { "n", "yfa" },
+				MkdnIncreaseHeading = { "n", "+" },
+				MkdnDecreaseHeading = { "n", "-" },
+				MkdnToggleToDo = { { "n", "v" }, "<C-Space>" },
+				MkdnNewListItem = false,
+				MkdnNewListItemBelowInsert = { "n", "o" },
+				MkdnNewListItemAboveInsert = { "n", "O" },
+				MkdnExtendList = false,
+				MkdnUpdateNumbering = { "n", "<leader>nn" },
+				MkdnTableNextCell = { "i", "<Tab>" },
+				MkdnTablePrevCell = { "i", "<S-Tab>" },
+				MkdnTableNextRow = false,
+				MkdnTablePrevRow = { "i", "<M-CR>" },
+				MkdnTableNewRowBelow = { "n", "<leader>ir" },
+				MkdnTableNewRowAbove = { "n", "<leader>iR" },
+				MkdnTableNewColAfter = { "n", "<leader>ic" },
+				MkdnTableNewColBefore = { "n", "<leader>iC" },
+				MkdnFoldSection = { "n", "<Tab>" },
+				MkdnUnfoldSection = { "n", "<S-Tab>" },
+			},
+		},
+	},
+	{
+		-- Git conflict
+		"akinsho/git-conflict.nvim",
+		version = "*",
+		lazy = false,
+		otps = {},
 	},
 }
