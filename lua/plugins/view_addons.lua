@@ -192,6 +192,8 @@ return {
 						title_pos = "center",
 					},
 				},
+				oldfiles = picker_opts("Oldfiles"),
+				buffers = picker_opts("Buffers"),
 				git = {
 					files = picker_opts("Git files"),
 					status = picker_opts("Git status"),
