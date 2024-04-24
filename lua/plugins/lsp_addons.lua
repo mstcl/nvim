@@ -120,7 +120,7 @@ return {
 			lsp.yamlls.setup = {
 				on_attach = on_attach,
 				capabilities = capabilities,
-				filetypes = { "yaml", "yml", "yaml.ansible" },
+				filetypes = { "yaml.ansible" },
 				settings = {
 					yaml = {
 						format = {

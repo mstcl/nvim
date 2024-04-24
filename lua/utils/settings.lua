@@ -6,6 +6,9 @@ vim.g.loaded_ruby_provider = false
 vim.g.loaded_node_provider = false
 vim.g.loaded_perl_provider = false
 
+-- Use filetype.lua
+vim.g.do_filetype_lua = true
+
 -- Globals
 vim.g["vimsyn_embed"] = "l"
 vim.g["tex_flavor"] = "latex"
