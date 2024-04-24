@@ -80,63 +80,17 @@ augroup("highlight_yank", {
 		desc = "Highlight the selection on yank",
 		command = 'silent! lua vim.highlight.on_yank{"IncSearch", 1000}',
 	},
-}, {
-	"BufReadPost",
-	{
-		pattern = "*.rasi",
-		callback = function()
-			opt_local.filetype = "css"
-		end,
-	},
-}, {
-	"BufReadPost",
-	{
-		pattern = "*.conf",
-		callback = function()
-			opt_local.filetype = "config"
-		end,
-	},
-}, {
-	"BufReadPost",
-	{
-		pattern = "*.sbat",
-		callback = function()
-			opt_local.filetype = "sh"
-		end,
-	},
-}, {
-	{ "BufReadPost", "BufNewFile" },
-	{
-		pattern = "*.yml",
-		callback = function()
-			opt_local.filetype = "yaml.ansible"
-		end,
-	},
-}, {
-	{ "BufReadPost", "BufNewFile" },
-	{
-		pattern = "**/docker-compose.yml",
-		callback = function()
-			opt_local.filetype = "yaml"
-			opt_local.indentkeys = opt_local.indentkeys - "0#"
-		end,
-	},
-}, {
-	{ "BufReadPost", "BufNewFile" },
-	{
-		pattern = "*/fontconfig/*",
-		command = "set ft=xml",
-	},
 })
 
 augroup("text_opts", {
 	{ "BufNewFile", "BufRead" },
 	{
-		desc = "Enable spellcheck and spell correction on certain filetypes",
+		desc = "Enable text editing options, spellcheck and spell correction on certain filetypes",
 		pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd", "*.typ" },
 		callback = function()
 			opt_local.list = false
 			opt_local.spell = true
+			opt_local.cursorline = false
 			map("i", "<C-L>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
 		end,
 	},

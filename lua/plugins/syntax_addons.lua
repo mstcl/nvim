@@ -1,7 +1,5 @@
 local autocmd = vim.api.nvim_create_autocmd
 local groupid = vim.api.nvim_create_augroup
-local opt_local = vim.opt_local
-local wo = vim.wo
 ---@param group string
 ---@vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
 ---@return nil
@@ -66,7 +64,7 @@ return {
 				enable = true,
 				use_languagetree = true,
 				additional_vim_regex_highlighting = { "org" },
-				disable = { "yaml.ansible" },
+				disable = { "latex", "yaml" },
 			},
 			autopairs = {
 				enable = true,
@@ -353,8 +351,17 @@ return {
 		"pearofducks/ansible-vim",
 		cond = require("user_configs").syntax_features.ansible,
 		lazy = true,
-		ft = "yaml.ansible",
+		event = { "BufReadPre *.j2", "BufReadPre *.yml" },
 		config = function()
+			vim.g.ansible_template_syntaxes = {
+				["*.rb.j2"] = "ruby",
+				["*.sh.j2"] = "sh",
+				["*.conf.j2"] = "config",
+				["*.yml.j2"] = "yaml",
+				["*.yaml.j2"] = "yaml",
+				["*.css.j2"] = "css",
+				["*.json.j2"] = "json",
+			}
 			vim.g.ansible_unindent_after_newline = true
 			vim.g.ansible_extra_keywords_highlight = true
 		end,
