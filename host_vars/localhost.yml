@@ -2,6 +2,7 @@
 ---
 current_user: "{{ lookup('env', 'USER') }}"
 stable_release: true # use neovim stable
+terminal: alacritty
 
 # ~~ (0) FEATURE CONFIGURATION ~~
 
@@ -37,7 +38,7 @@ syntax_features:
   ansible: true # enable ansible syntax
   quarto: true # enable quarto integrations
   markdown: true # enable markdown integrations
-  org: true # enable orgmode syntax
+  org: false # enable orgmode syntax
   tex: true # enable tex integrations
   rainbow: true # enable rainbow parens
   hlargs: true # enable different highlight for function args
@@ -67,6 +68,8 @@ treesitter_sources:
   - "bibtex"
   - "css"
   - "json"
+  - "json5"
+  - "hjson"
   - "vim"
   - "java"
   - "javascript"
@@ -84,6 +87,7 @@ treesitter_sources:
   - "git_rebase"
   - "regex"
   - "ini"
+  - "muttrc"
   - "passwd"
   - "php"
   - "rasi"
@@ -97,6 +101,11 @@ treesitter_sources:
   - "norg"
   - "xml"
   - "go"
+  - "gomod"
+  - "gosum"
+  - "gowork"
+  - "gotmpl"
+  - "jinja2"
 
 # ~~ (3) VANITY ~~
 
@@ -220,9 +229,7 @@ starter_ascii: '  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n'
 
 # Configure orgmode agenda files (can use globbing)
 # Expects a list
-org_agenda_files:
-  - "~/sftpgo/notes/*"
-  - "~/sftpgo/shared/notes/*"
+org_agenda_files: []
 
 # Plugins to load locally from ~/projects
 dev_plugins:
