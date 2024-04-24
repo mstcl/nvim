@@ -1,46 +1,16 @@
 -- Additional addons go here
 return {
-	-- "rktjmp/lush.nvim",
-	-- "rktjmp/shipwright.nvim",
 	{
-		"nvim-orgmode/orgmode",
-		opts = {
-			org_capture_templates = { t = { description = "New task", template = "* TODO %?\n  %u" } },
-			org_default_notes_file = "~/sftpgo/notes/Main.org",
-			org_custom_exports = {
-				c = {
-					label = "Export to HTML format with CSS and MathJax",
-					action = function(exporter)
-						local current_file = vim.fn.expand("%:t")
-						local target = vim.fn.expand("$HOME/sftpgo/shared/static/org/")
-							.. vim.fn.fnamemodify(current_file, ":r")
-							.. ".html"
-						local command = {
-							"pandoc",
-							"-f",
-							"org",
-							"-s",
-							current_file,
-							"-o",
-							target,
-							"-c",
-							vim.fn.expand("pandoc.css"),
-							"--mathjax",
-							"--toc",
-						}
-						local on_success = function(output)
-							print("Success!")
-							vim.api.nvim_echo({ { table.concat(output, "\n") } }, true, {})
-						end
-						local on_error = function(err)
-							print("Error!")
-							vim.api.nvim_echo({ { table.concat(err, "\n"), "ErrorMsg" } }, true, {})
-						end
-						return exporter(command, target, on_success, on_error)
-					end,
-				},
-			},
-		},
+		-- Colorscheme converter & visualization
+		"rktjmp/lush.nvim",
+		lazy = true,
+		cmd = { "Lushify" },
+	},
+	{
+		-- Colorscheme builder
+		"rktjmp/shipwright.nvim",
+		lazy = true,
+		cmd = { "Shipwright" },
 	},
 	{
 		"chrishrb/gx.nvim",
@@ -51,17 +21,7 @@ return {
 		},
 	},
 	{
-		"nvim-treesitter/nvim-treesitter",
-		opts = {
-			highlight = {
-				enable = true,
-				use_languagetree = true,
-				additional_vim_regex_highlighting = { "org" },
-				disable = { "latex", "yaml" },
-			},
-		},
-	},
-	{
+		-- Neovim in the browser!
 		"glacambre/firenvim",
 		lazy = not vim.g.started_by_firenvim,
 		build = function()
@@ -72,10 +32,6 @@ return {
 				vim.cmd(
 					[[ let g:firenvim_config['localSettings']['.*'] = { 'takeover': 'never', 'cmdline': 'neovim' } ]]
 				)
-				vim.api.nvim_create_autocmd({ "BufEnter" }, {
-					pattern = "wiki.bim.boats_*.txt",
-					command = "set filetype=gemtext",
-				})
 			end
 		end,
 	},
