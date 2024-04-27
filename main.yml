@@ -20,12 +20,14 @@
         state: present
 
     - name: Install python dependencies for neovim
+      tags: packages
       ansible.builtin.pip:
         requirements: "{{ playbook_dir }}/requirements.txt"
         state: present
         virtualenv: "{{ playbook_dir }}/.venv"
 
     - name: Install python dependencies for neovim
+      tags: plugins
       when: syntax_features.quarto
       ansible.builtin.pip:
         requirements: "{{ playbook_dir }}/requirements_python_stack.txt"
@@ -52,25 +54,30 @@
         state: link
 
     - name: Print message
+      tags: plugins
       ansible.builtin.debug:
         msg: "Launching neovim, exit when everything has been installed."
 
     - name: Print message
+      tags: plugins
       when: "'pylint' in null_diagnostics_sources"
       ansible.builtin.debug:
         msg: "Manually run `:MasonInstall pylint`."
 
     - name: Print message
+      tags: plugins
       when: "'mdformat' in null_formatting_sources"
       ansible.builtin.debug:
         msg: "Manually run `:MasonInstall mdformat`."
 
     - name: Launch neovim remote
+      tags: plugins
       ansible.builtin.command: "{{ terminal }} --command nvim"
       changed_when: false
 
     - name: Grab mdformat tools
       when: "'mdformat' in null_formatting_sources"
+      tags: plugins
       ansible.builtin.pip:
         name:
           - mdformat_footnote
@@ -84,6 +91,7 @@
 
     - name: Grab pylint-venv
       when: "'pylint' in null_diagnostics_sources"
+      tags: plugins
       ansible.builtin.pip:
         name:
           - pylint-venv
