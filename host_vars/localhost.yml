@@ -36,7 +36,7 @@ edit_features:
 syntax_features:
   typst: false # enable typst syntax
   ansible: true # enable ansible syntax
-  quarto: true # enable quarto integrations
+  quarto: false # enable quarto integrations
   markdown: true # enable markdown integrations
   org: false # enable orgmode syntax
   tex: true # enable tex integrations
@@ -175,12 +175,12 @@ lsp_sources:
   - "vimls"
   - "cssls"
   - "typst_lsp"
-  - "marksman"
   - "ruff_lsp"
   - "texlab"
   - "lua_ls"
   - "gopls"
   - "yamlls"
+  - "markdown_oxide"
 
 # ~~ (5) NONE-LS SOURCES ~~
 
