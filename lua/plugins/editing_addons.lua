@@ -187,12 +187,17 @@ return {
 					},
 					{
 						name = "nvim_lsp",
+						options = {
+							markdown_oxide = {
+								keyword_pattern = [[\(\k\| \|\/\|#\)\+]],
+							},
+						},
 						priority = 7,
 						group_index = 1,
 						max_item_count = 5,
 					},
 					{ name = "cmp_pandoc", priority = 9 },
-					{ name = "zotex", priority = 9 },
+					{ name = "zotex",      priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -232,7 +237,7 @@ return {
 				sources = cmp.config.sources({
 					{ name = "async_path" },
 					{ name = "cmdline" },
-					{ name = "cmdline_history", priority = 9},
+					{ name = "cmdline_history", priority = 9 },
 				}),
 			})
 			for _, cmd_type in ipairs({ "?", "@" }) do
@@ -298,7 +303,7 @@ return {
 			"ys",
 			"ds",
 			"cs",
-			{ "S", mode = "x" },
+			{ "S",      mode = "x" },
 			{ "<C-g>s", mode = "i" },
 		},
 		opts = {},
@@ -309,16 +314,16 @@ return {
 		cond = cond.move,
 		lazy = true,
 		keys = {
-			{ "<A-j>", "<cmd>MoveBlock(1)<cr>", mode = "v", desc = "Move block down" },
-			{ "<A-k>", "<cmd>MoveBlock(-1)<cr>", mode = "v", desc = "Move block up" },
+			{ "<A-j>", "<cmd>MoveBlock(1)<cr>",   mode = "v", desc = "Move block down" },
+			{ "<A-k>", "<cmd>MoveBlock(-1)<cr>",  mode = "v", desc = "Move block up" },
 			{ "<A-h>", "<cmd>MoveHBlocK(-1)<cr>", mode = "v", desc = "Move block left" },
-			{ "<A-l>", "<cmd>MoveHBlock(1)<cr>", mode = "v", desc = "Move block right" },
-			{ "<A-j>", "<cmd>MoveLine(1)<cr>", mode = "n", desc = "Move line up" },
-			{ "<A-k>", "<cmd>MoveLine(-1)<cr>", mode = "n", desc = "Move line down" },
-			{ "<A-h>", "<cmd>MoveHChar(-1)<cr>", mode = "n", desc = "Move char left" },
-			{ "<A-l>", "<cmd>MoveHChar(1)<cr>", mode = "n", desc = "Move char right" },
-			{ "<A-f>", "<cmd>MoveWord(1)<cr>", mode = "n", desc = "Move word forward" },
-			{ "<A-b>", "<cmd>MoveWord(-1)<cr>", mode = "n", desc = "Move word backward" },
+			{ "<A-l>", "<cmd>MoveHBlock(1)<cr>",  mode = "v", desc = "Move block right" },
+			{ "<A-j>", "<cmd>MoveLine(1)<cr>",    mode = "n", desc = "Move line up" },
+			{ "<A-k>", "<cmd>MoveLine(-1)<cr>",   mode = "n", desc = "Move line down" },
+			{ "<A-h>", "<cmd>MoveHChar(-1)<cr>",  mode = "n", desc = "Move char left" },
+			{ "<A-l>", "<cmd>MoveHChar(1)<cr>",   mode = "n", desc = "Move char right" },
+			{ "<A-f>", "<cmd>MoveWord(1)<cr>",    mode = "n", desc = "Move word forward" },
+			{ "<A-b>", "<cmd>MoveWord(-1)<cr>",   mode = "n", desc = "Move word backward" },
 		},
 		opts = {
 			char = {

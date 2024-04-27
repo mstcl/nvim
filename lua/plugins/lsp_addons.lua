@@ -103,169 +103,193 @@ return {
 				dynamicRegistration = false,
 				lineFoldingOnly = true,
 			}
+			capabilities.workspace = {
+				didChangeWatchedFiles = {
+					dynamicRegistration = true,
+				},
+			}
 			local lsp_ok, lsp = pcall(require, "lspconfig")
 			if not lsp_ok then
 				return
 			end
 			for _, server in ipairs(sources) do
-				lsp[server].setup({
-					on_attach = on_attach,
-					capabilities = capabilities,
-					handlers = handlers,
-					flags = {
-						debounce_text_changes = 150,
-					},
-				})
+				if server == "yamlls" then
+					lsp.yamlls.setup = {
+						on_attach = on_attach,
+						capabilities = capabilities,
+						filetypes = { "yaml.ansible" },
+						settings = {
+							yaml = {
+								format = {
+									enable = true,
+									singleQuote = true,
+									printWidth = 120,
+								},
+								hover = true,
+								completion = true,
+								validate = true,
+								schemas = {
+									["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+									["http://json.schemastore.org/kustomization"] = "kustomization.yaml",
+									["https://json.schemastore.org/chart.json"] = "Chart.yaml",
+									["https://json.schemastore.org/taskfile.json"] = "Taskfile*.yml",
+									["https://raw.githubusercontent.com/GoogleContainerTools/skaffold/master/docs/content/en/schemas/v2beta26.json"] =
+									"skaffold.yaml",
+									["https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha3/schema.json"] =
+									"k3d.yaml",
+									["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
+										"docker-compose.yml",
+									},
+									["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-requirements-schema.json"] = {
+										"requirements.yml",
+									},
+									["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-meta-schema.json"] = {
+										"meta/main.yml",
+									},
+									["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-vars-schema.json"] = {
+										"vars/*.yml",
+										"defaults/*.yml",
+										"host_vars/*.yml",
+										"group_vars/*.yml",
+									},
+									["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-tasks-schema.json"] = {
+										"tasks/*.yml",
+										"handlers/*.yml",
+									},
+									["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-playbook-schema.json"] = {
+										"playbooks/*.yml",
+									},
+								},
+								schemaStore = {
+									enable = true,
+									url = "https://www.schemastore.org/json",
+								},
+							},
+						},
+					}
+				elseif server == "typst_lsp" then
+					lsp.typst_lsp.setup({
+						settings = {
+							exportPdf = "onSave",
+							experimentalFormatterMode = "On",
+						},
+					})
+				elseif server == "gopls" then
+					lsp.gopls.setup({
+						on_attach = on_attach,
+						capabilities = capabilities,
+						handlers = handlers,
+						flags = {
+							debounce_text_changes = 150,
+						},
+						settings = {
+							gopls = {
+								hints = {
+									assignVariableTypes = true,
+									compositeLiteralFields = true,
+									compositeLiteralTypes = true,
+									constantValues = true,
+									functionTypeParameters = true,
+									parameterNames = true,
+									rangeVariableTypes = true,
+								},
+							},
+						},
+					})
+				elseif server == "lua_ls" then
+					lsp.lua_ls.setup({
+						on_attach = on_attach,
+						capabilities = capabilities,
+						handlers = handlers,
+						flags = {
+							debounce_text_changes = 150,
+						},
+						cmd = {
+							vim.fn.expand(
+								"$HOME/.local/share/nvim/mason/packages/lua-language-server/libexec/bin/lua-language-server"
+							),
+							"-E",
+							vim.fn.expand(
+								"$HOME/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua"
+							),
+						},
+						settings = {
+							Lua = {
+								runtime = {
+									version = "LuaJIT",
+									path = "/usr/bin/luajit",
+								},
+								diagnostics = {
+									globals = { "vim" },
+								},
+								workspace = {
+									library = vim.api.nvim_get_runtime_file("", true),
+									checkThirdParty = false,
+								},
+								telemetry = {
+									enable = false,
+								},
+							},
+						},
+					})
+				elseif server == "texlab" then
+					lsp.texlab.setup({
+						on_attach = on_attach,
+						capabilities = capabilities,
+						handlers = handlers,
+						flags = {
+							debounce_text_changes = 150,
+						},
+						cmd = { "texlab" },
+						filetypes = { "tex", "bib" },
+						settings = {
+							texlab = {
+								auxDirectory = ".",
+								bibtexFormatter = "texlab",
+								build = {
+									args = { "-interaction=nonstopmode", "-synctex=1", "%f" },
+									executable = "miktex-pdflatex",
+									forwardSearchAfter = true,
+									onSave = true,
+								},
+								diagnosticsDelay = 300,
+								formatterLineLength = 80,
+								forwardSearch = {
+									executable = "qpdfview",
+									args = {
+										"--unique",
+										"%p#src:%f:%l:0",
+									},
+								},
+							},
+						},
+					})
+				elseif server == "marksman" then
+					lsp.marksman.setup({
+						on_attach = on_attach,
+						capabilities = capabilities,
+						filetypes = { "markdown", "quarto" },
+						root_dir = require("lspconfig.util").root_pattern(".git", ".marksman.toml", "_quarto.yml"),
+					})
+				elseif server == "ruff_lsp" then
+					lsp.ruff_lsp.setup({
+						capabilities = capabilities,
+						handlers = handlers,
+						flags = {
+							debounce_text_changes = 150,
+						},
+					})
+				else
+					lsp[server].setup({
+						on_attach = on_attach,
+						capabilities = capabilities,
+						handlers = handlers,
+						flags = {
+							debounce_text_changes = 150,
+						},
+					})
+				end
 			end
-			lsp.yamlls.setup = {
-				on_attach = on_attach,
-				capabilities = capabilities,
-				filetypes = { "yaml.ansible" },
-				settings = {
-					yaml = {
-						format = {
-							enable = true,
-							singleQuote = true,
-							printWidth = 120,
-						},
-						hover = true,
-						completion = true,
-						validate = true,
-						schemas = {
-							["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
-								"docker-compose*",
-							},
-							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-requirements-schema.json"] = {
-								"requirements.yml",
-							},
-							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-meta-schema.json"] = {
-								"meta/main.yml",
-							},
-							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-vars-schema.json"] = {
-								"vars/*.yml",
-								"defaults/*.yml",
-								"host_vars/*.yml",
-								"group_vars/*.yml",
-							},
-							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-tasks-schema.json"] = {
-								"tasks/*.yml",
-								"handlers/*.yml",
-							},
-							["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-playbook-schema.json"] = {
-								"playbooks/*.yml",
-							},
-						},
-						schemaStore = {
-							enable = true,
-							url = "https://www.schemastore.org/json",
-						},
-					},
-				},
-			}
-			lsp.typst_lsp.setup({
-				settings = {
-					exportPdf = "onSave",
-					experimentalFormatterMode = "On",
-				},
-			})
-			lsp.gopls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				handlers = handlers,
-				flags = {
-					debounce_text_changes = 150,
-				},
-				settings = {
-					gopls = {
-						hints = {
-							assignVariableTypes = true,
-							compositeLiteralFields = true,
-							compositeLiteralTypes = true,
-							constantValues = true,
-							functionTypeParameters = true,
-							parameterNames = true,
-							rangeVariableTypes = true,
-						},
-					},
-				},
-			})
-			lsp.lua_ls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				handlers = handlers,
-				flags = {
-					debounce_text_changes = 150,
-				},
-				cmd = {
-					vim.fn.expand(
-						"$HOME/.local/share/nvim/mason/packages/lua-language-server/libexec/bin/lua-language-server"
-					),
-					"-E",
-					vim.fn.expand("$HOME/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua"),
-				},
-				settings = {
-					Lua = {
-						runtime = {
-							version = "LuaJIT",
-							path = "/usr/bin/luajit",
-						},
-						diagnostics = {
-							globals = { "vim" },
-						},
-						workspace = {
-							library = vim.api.nvim_get_runtime_file("", true),
-							checkThirdParty = false,
-						},
-						telemetry = {
-							enable = false,
-						},
-					},
-				},
-			})
-			lsp.texlab.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				handlers = handlers,
-				flags = {
-					debounce_text_changes = 150,
-				},
-				cmd = { "texlab" },
-				filetypes = { "tex", "bib" },
-				settings = {
-					texlab = {
-						auxDirectory = ".",
-						bibtexFormatter = "texlab",
-						build = {
-							args = { "-interaction=nonstopmode", "-synctex=1", "%f" },
-							executable = "miktex-pdflatex",
-							forwardSearchAfter = true,
-							onSave = true,
-						},
-						diagnosticsDelay = 300,
-						formatterLineLength = 80,
-						forwardSearch = {
-							executable = "qpdfview",
-							args = {
-								"--unique",
-								"%p#src:%f:%l:0",
-							},
-						},
-					},
-				},
-			})
-			lsp.marksman.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				filetypes = { "markdown", "quarto" },
-				root_dir = require("lspconfig.util").root_pattern(".git", ".marksman.toml", "_quarto.yml"),
-			})
-			lsp.ruff_lsp.setup({
-				capabilities = capabilities,
-				handlers = handlers,
-				flags = {
-					debounce_text_changes = 150,
-				},
-			})
 		end,
 	},
 	{
@@ -328,14 +352,79 @@ return {
 		},
 	},
 	{
-		-- Linter manager
+		-- Linter/formatter/diagnostic manager
 		"nvimtools/none-ls.nvim",
 		cond = cond,
 		lazy = true,
 		event = "BufRead",
 		opts = function()
+			local null_ls = require("null-ls")
+			local null_sources = {}
+			local fmt_sources = require("user_configs").null_formatting_sources
+			local hover_sources = require("user_configs").null_hover_sources
+			local diagnostics_sources = require("user_configs").null_diagnostics_sources
+			local code_action_sources = require("user_configs").null_code_action_sources
+			for _, source in ipairs(fmt_sources) do
+				if source == "mdformat" then
+					table.insert(
+						null_sources,
+						null_ls.builtins.formatting[source].with({
+							filetypes = { "markdown", "quarto" },
+						})
+					)
+				elseif source == "cbfmt" then
+					table.insert(
+						null_sources,
+						null_ls.builtins.formatting[source].with({
+							filetypes = { "markdown", "quarto", "org" },
+						})
+					)
+				else
+					table.insert(null_sources, null_ls.builtins.formatting[source])
+				end
+			end
+			for _, source in ipairs(hover_sources) do
+				table.insert(null_sources, null_ls.builtins.hover[source])
+			end
+			for _, source in ipairs(diagnostics_sources) do
+				if source == "commitlint" then
+					table.insert(
+						null_sources,
+						null_ls.builtins.diagnostics[source].with({
+							filetypes = { "NeogitCommitMessage", "gitcommit" },
+							env = {
+								NODE_PATH = vim.fn.expand(
+									"$HOME/.local/share/nvim/mason/packages/commitlint/node_modules"
+								),
+							},
+							extra_args = { "--extends", "@commitlint/config-conventional" },
+						})
+					)
+				elseif source == "proselint" then
+					table.insert(
+						null_sources,
+						null_ls.builtins.diagnostics[source].with({
+							filetypes = { "markdown", "quarto", "org", "tex" },
+						})
+					)
+				else
+					table.insert(null_sources, null_ls.builtins.diagnostics[source])
+				end
+			end
+			for _, source in ipairs(code_action_sources) do
+				if source == "proselint" then
+					table.insert(
+						null_sources,
+						null_ls.builtins.code_actions[source].with({
+							filetypes = { "markdown", "quarto", "org", "tex" },
+						})
+					)
+				else
+					table.insert(null_sources, null_ls.builtins.code_actions[source])
+				end
+			end
 			return {
-				sources = require("utils.lsp").null_sources,
+				sources = null_sources,
 				on_attach = require("utils.lsp").on_attach,
 			}
 		end,
