@@ -35,7 +35,7 @@ edit_features:
 
 syntax_features:
   typst: false # enable typst syntax
-  ansible: false # enable ansible syntax
+  ansible: true # enable ansible syntax
   quarto: false # enable quarto integrations
   markdown: true # enable markdown integrations
   org: false # enable orgmode syntax
@@ -167,6 +167,7 @@ lsp_kind_icons: # set the symbols for LSP kinds (appear in various places)
 
 # These will be automatically installed by mason
 # See: (https://github.com/mason-org/mason-registry/tree/main/packages)
+# And: (https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md)
 lsp_sources:
   - "ansiblels"
   - "clangd"
@@ -178,6 +179,7 @@ lsp_sources:
   - "ruff_lsp"
   - "texlab"
   - "lua_ls"
+  - "ltex"
   - "gopls"
   - "yamlls"
   - "markdown_oxide"
@@ -214,6 +216,7 @@ null_diagnostics_sources:
   - "ansiblelint"
   - "mypy"
   - "golangci_lint"
+  - "staticcheck"
 
 # !~~ (5d) CODE ACTIONS SOURCES ~~!
 
