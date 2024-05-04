@@ -9,6 +9,7 @@ dap_enabled: false # enable dap core, which is nvim dap, dap ui and python dap
 lsp_enabled: false # enable lsp core, which is mason, lspconfig, none-ls
 
 lsp_features:
+  virtual_text: false # virtual text diagnostic
   breadcrumbs: false # show a bar at the top (winbar) with the current scope's symbols.
   usage: false # show number of usage for functions etc.
   inlay_hints: true # inlay hints for nvim < 0.10

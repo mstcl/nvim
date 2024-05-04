@@ -11,7 +11,7 @@ return {
 		lazy = true,
 		event = "LspAttach",
 		cond = cond,
-		opts = {}
+		opts = {},
 	},
 	{
 		-- Code tools forge
@@ -65,15 +65,19 @@ return {
 				inlay_hints = {
 					enabled = true,
 				},
-				virtual_text = {
-					enabled = true,
-					spacing = 4,
-					prefix = "",
-					format = function(diagnostic)
-						return string.format(require("user_configs").lsp_vt_signs[diagnostic.severity])
-					end,
-					suffix = " ",
-				},
+				virtual_text = function()
+					if require("user_configs").lsp_features.virtual_text then
+						return {
+							spacing = 4,
+							prefix = "",
+							format = function(diagnostic)
+								return string.format(require("user_configs").lsp_vt_signs[diagnostic.severity])
+							end,
+							suffix = " ",
+						}
+					end
+					return false
+				end,
 				signs = true, -- only for the colored number column
 				underline = false,
 				update_in_insert = false,
