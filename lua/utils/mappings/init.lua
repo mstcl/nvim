@@ -40,7 +40,7 @@ map("n", "<C-M>l", function()
 	if winopt.cursorline then
 		winopt.cursorline = false
 	else
-		winopt.cursorline = false
+		winopt.cursorline = true
 	end
 end, { desc = "Toggle cursorline" })
 map("n", "<C-M>f", function()

@@ -56,12 +56,12 @@ return {
 				follow_files = true,
 			},
 			signs = {
-				add = { hl = "DiffAdd", text = "+", numhl = "DiffAdd", linehl = "DiffAdd" },
-				change = { hl = "DiffChange", text = "~", numhl = "DiffChange", linehl = "DiffChange" },
-				delete = { hl = "DiffDelete", text = "‾", numhl = "DiffDelete", linehl = "DiffDelete" },
-				topdelete = { hl = "DiffDelete", text = "‾", numhl = "DiffDelete", linehl = "DiffDelete" },
-				changedelete = { hl = "DiffChange", text = "~", numhl = "DiffChange", linehl = "DiffChange" },
-				untracked = { hl = "DiffAdd", text = "=", numhl = "DiffAdd", linehl = "DiffAdd" },
+				add = { hl = "DiffFGAdd", text = "▎", numhl = "DiffAdd", linehl = "DiffAdd" },
+				change = { hl = "DiffFGChange", text = "▎", numhl = "DiffChange", linehl = "DiffChange" },
+				delete = { hl = "DiffFGDelete", text = "▎", numhl = "DiffDelete", linehl = "DiffDelete" },
+				topdelete = { hl = "DiffFGDelete", text = "▎", numhl = "DiffDelete", linehl = "DiffDelete" },
+				changedelete = { hl = "DiffFGChange", text = "▎", numhl = "DiffChange", linehl = "DiffChange" },
+				untracked = { hl = "DiffFGAdd", text = "▎", numhl = "DiffAdd", linehl = "DiffAdd" },
 			},
 			current_line_blame = false,
 			sign_priority = 6,
@@ -96,6 +96,11 @@ return {
 						click = "v:lua.ScFa",
 					},
 					{
+						text = { builtin.lnumfunc, " " },
+						condition = { true, builtin.not_empty },
+						click = "v:lua.ScLa",
+					},
+					{
 						sign = {
 							name = { ".*" },
 							text = { ".*" },
@@ -106,7 +111,8 @@ return {
 						click = "v:lua.ScSa",
 					},
 					{
-						text = { builtin.lnumfunc, " " },
+						text = { " " },
+						hl = "SignColumn",
 						condition = { true, builtin.not_empty },
 						click = "v:lua.ScLa",
 					},
