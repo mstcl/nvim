@@ -9,6 +9,7 @@ vim.filetype.add({
 		["~/%.config/mutt/%a*"] = "muttrc",
 		[".*/tasks/.*.yml"] = "yaml.ansible",
 		[".*/main.yml"] = "yaml.ansible",
+		[".*/vars/.*.yml"] = "yaml.ansible",
 		[".*/playbooks/.*.yml"] = "yaml.ansible",
 		[".*/docker-compose.yml"] = "yaml",
 		[".*/fontconfig/%a*"] = "xml",

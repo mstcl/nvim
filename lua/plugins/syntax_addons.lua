@@ -64,7 +64,7 @@ return {
 				enable = true,
 				use_languagetree = true,
 				additional_vim_regex_highlighting = { "org" },
-				disable = { "latex", "yaml" },
+				disable = { "latex", "yaml", "yaml.ansible" },
 			},
 			autopairs = {
 				enable = true,
@@ -79,7 +79,7 @@ return {
 				},
 			},
 			indent = {
-				enable = true,
+				enable = false,
 				disable = { "yaml", "yaml.ansible", "template" },
 			},
 			tree_setter = {

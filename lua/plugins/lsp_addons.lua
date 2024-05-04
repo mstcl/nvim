@@ -7,6 +7,13 @@ local sources = require("user_configs").lsp_sources
 -- Plugins that add to nvim LSP functionalities
 return {
 	{
+		"linrongbin16/lsp-progress.nvim",
+		lazy = true,
+		event = "LspAttach",
+		cond = cond,
+		opts = {}
+	},
+	{
 		-- Code tools forge
 		"williamboman/mason.nvim",
 		lazy = true,

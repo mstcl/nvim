@@ -1,21 +1,9 @@
+local augroup = require("utils.misc").augroup
 local autocmd = vim.api.nvim_create_autocmd
-local groupid = vim.api.nvim_create_augroup
 local bo = vim.bo
 local opt_local = vim.opt_local
-local wo = vim.wo
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
-
----@param group string
----@vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
----@return nil
-local function augroup(group, ...)
-	local id = groupid(group, { clear = true })
-	for _, a in ipairs({ ... }) do
-		a[2].group = id
-		autocmd(unpack(a))
-	end
-end
 
 augroup("trim", {
 	"BufWritePre",
@@ -129,21 +117,6 @@ augroup("starter", {
 						end
 					end,
 				})
-			end
-		end,
-	},
-})
-
-augroup("showpaste", {
-	{ "InsertLeave", "InsertEnter" },
-	{
-		pattern = "*",
-		desc = "Enable showpaste in insert mode",
-		callback = function()
-			if opt_local.paste then
-				opt_local.paste = false
-			else
-				opt_local.paste = true
 			end
 		end,
 	},
