@@ -104,7 +104,7 @@ set.statusline = table.concat({
 	statusline_parts.hl_restore,
 }, "")
 set.laststatus = 3
-set.cursorlineopt = "number"
+set.cursorlineopt = "both"
 set.hidden = true
 set.showmode = false
 set.showcmd = true
