@@ -1,3 +1,6 @@
+local autocmd = vim.api.nvim_create_autocmd
+local groupid = vim.api.nvim_create_augroup
+
 local M = {}
 
 function M.has_any_words_before()
@@ -29,5 +32,17 @@ M.barbecue_theme = {
 	["hl"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Include", true).foreground)),
 	["bl"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Function", true).foreground)),
 }
+
+
+---@param group string
+---@vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
+---@return nil
+function M.augroup(group, ...)
+	local id = groupid(group, { clear = true })
+	for _, a in ipairs({ ... }) do
+		a[2].group = id
+		autocmd(unpack(a))
+	end
+end
 
 return M

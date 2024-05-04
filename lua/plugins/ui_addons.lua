@@ -24,43 +24,6 @@ return {
 		end,
 	},
 	{
-		-- Statusline
-		"sontungexpt/sttusline",
-		lazy = true,
-		event = { "BufReadPre", "BufNewFile" },
-		branch = "table_version",
-		opts = function()
-			return {
-				statusline_color = "StatusLine",
-				laststatus = 3,
-				components = {
-					require("statusline.mode"),
-					require("statusline.pos_cursor"),
-					require("statusline.empty"),
-					require("statusline.git_branch"),
-					require("statusline.git_diff"),
-					require("statusline.diagnostics"),
-					-- require("statusline.macro"),
-					"%=",
-					require("statusline.fileformat"),
-					require("statusline.indentation"),
-					require("statusline.filetype"),
-					require("statusline.cwd"),
-					require("statusline.path"),
-				},
-				disabled = {
-					filetypes = require("user_configs").statusline_short_ft,
-					buftypes = {
-						"terminal",
-					},
-				},
-			}
-		end,
-		config = function(_, opts)
-			require("sttusline").setup(opts)
-		end,
-	},
-	{
 		-- Add a sidebar map
 		"echasnovski/mini.map",
 		lazy = true,
@@ -295,29 +258,6 @@ return {
 		},
 	},
 	{
-		"j-hui/fidget.nvim",
-		event = { "BufReadPre" },
-		keys = {
-			{
-				"<BS>",
-				"<cmd>Fidget clear<cr>",
-				desc = "Clear notification",
-			},
-		},
-		opts = {
-			progress = {
-				suppress_on_insert = true,
-				display = {
-					render_limit = 3,
-					done_icon = "✓",
-				},
-			},
-			notification = {
-				override_vim_notify = true,
-			},
-		},
-	},
-	{
 		-- Colorcolumn smart functionality
 		"fmbarina/multicolumn.nvim",
 		lazy = true,
@@ -393,25 +333,6 @@ return {
 		event = "BufRead",
 		cond = require("user_configs").ui_features.cursorword,
 		init = function()
-			_G.cursorword_blocklist = function()
-				local curword = vim.fn.expand("<cword>")
-				local filetype = vim.bo.filetype
-				local blocklist = {}
-				if filetype == "lua" then
-					blocklist = {
-						"local",
-						"require",
-						"true",
-						"false",
-						"--",
-						"function",
-						"end",
-						"return",
-					}
-				end
-				vim.b.minicursorword_disable = vim.tbl_contains(blocklist, curword)
-			end
-			vim.cmd("au CursorMoved * lua _G.cursorword_blocklist()")
 			vim.cmd("autocmd Filetype markdown,tex,quarto lua vim.b.minicursorword_disable = true")
 		end,
 		opts = {},
@@ -470,6 +391,7 @@ return {
 		event = "BufReadPost",
 		opts = {
 			hide = {
+				only_win = true,
 				cursorline = true,
 			},
 			window = {

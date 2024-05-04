@@ -162,12 +162,14 @@ return {
 					search = "IncSearch",
 					header_bind = "Directory",
 					header_text = "Boolean",
-					tab_marker = "Directory",
-					tab_title = "Directory",
+					path_linenr = "Comment",
+					path_colnr = "Comment",
 					buf_name = "Character",
 					buf_nr = "Character",
 					buf_flag_cur = "Boolean",
 					buf_flag_alt = "Constant",
+					tab_title = "Directory",
+					tab_marker = "Directory",
 					live_sym = "Boolean",
 				},
 				fzf_colors = {
@@ -245,13 +247,15 @@ return {
 			shade_filetypes = {},
 			autochdir = false,
 			shade_terminals = false,
-			shading_factor = "1",
 			highlights = {
 				Normal = {
-					link = "Floaterm",
+					link = "StatusLine"
 				},
-				Statusline = {
-					link = "Statusline",
+				StatusLine = {
+					link = "StatusLine",
+				},
+				StatusLineNC = {
+					link = "StatusLineNC",
 				},
 			},
 			direction = "vertical",
@@ -463,6 +467,10 @@ return {
 			},
 		},
 		opts = {
+			presets = {
+				operators = false,
+				motions = false,
+			},
 			key_labels = {
 				["<space>"] = "␣",
 				["<cr>"] = "↵",
