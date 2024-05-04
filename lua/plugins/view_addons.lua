@@ -327,10 +327,10 @@ return {
 			},
 			on_open = function(win)
 				vim.api.nvim_set_hl(0, "ZenBg", { link = "Normal" })
-				vim.cmd([[Fidget suppress true]])
+				vim.wo.statuscolumn = ""
 			end,
 			on_close = function(win)
-				vim.cmd([[Fidget suppress false]])
+				vim.wo.statuscolumn = "%!v:lua.StatusCol()"
 			end,
 		},
 	},
