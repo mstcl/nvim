@@ -11,6 +11,7 @@ M.dev_plugins = {
 M.dap_enabled = {{ dap_enabled | string |lower }}
 M.lsp_enabled = {{ lsp_enabled | string |lower }}
 M.lsp_features = {
+	virtual_text = {{ lsp_features.virtual_text | string |lower }},
 	breadcrumbs = {{ lsp_features.breadcrumbs | string |lower }},
 	usage = {{ lsp_features.usage | string |lower }},
 	inlay_hints = {{ lsp_features.inlay_hints | string |lower }},
