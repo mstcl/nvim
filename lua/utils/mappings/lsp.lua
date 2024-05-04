@@ -18,7 +18,7 @@ function M.setup(client, bufnr)
 
 	if client.server_capabilities.codeActionProvider then
 		wk.register({
-			["<leader>qc"] = {
+			["crr"] = {
 				vim.lsp.buf.code_action,
 				"Pick code actions",
 				mode = { "n", "v" },
@@ -29,7 +29,7 @@ function M.setup(client, bufnr)
 
 	if client.server_capabilities.declarationProvider then
 		wk.register({
-			["<leader>qD"] = {
+			["gD"] = {
 				vim.lsp.buf.declaration,
 				"Declaration",
 				buffer = bufnr,
@@ -39,7 +39,7 @@ function M.setup(client, bufnr)
 
 	if client.server_capabilities.documentFormattingProvider then
 		wk.register({
-			["<leader><space>"] = {
+			["cfm"] = {
 				vim.lsp.buf.format,
 				"Format code",
 				mode = { "n", "v" },
@@ -65,7 +65,7 @@ function M.setup(client, bufnr)
 
 	if client.server_capabilities.renameProvider then
 		wk.register({
-			["<leader>r"] = {
+			["crn"] = {
 				vim.lsp.buf.rename,
 				"Rename object",
 				buffer = bufnr,
