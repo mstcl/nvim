@@ -188,7 +188,7 @@ set.spelllang = "en_gb"
 set.spell = false
 set.spelloptions = "camel"
 
-set.list = true
+set.list = false
 set.selection = "old"
 set.showbreak = "↳"
 set.fillchars = {
