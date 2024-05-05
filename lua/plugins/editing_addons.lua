@@ -112,7 +112,7 @@ return {
 				},
 				confirm_opts = {
 					behavior = cmp.ConfirmBehavior.Replace,
-					select = false,
+					select = true,
 				},
 				preselect = cmp.PreselectMode.Item,
 				completion = {
@@ -147,7 +147,7 @@ return {
 				}),
 				formatting = {
 					fields = { "kind", "abbr", "menu" },
-					format = function(entry, item)
+					format = function(_, item)
 						local icon = require("user_configs").lsp_kind_icons[item.kind]
 						icon = " " .. icon .. " "
 						item.menu = ""
@@ -211,7 +211,9 @@ return {
 			local cmp = require("cmp")
 			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-			cmp.setup(opts)
+			if opts then
+				cmp.setup(opts)
+			end
 			cmp.setup.cmdline("/", {
 				mapping = cmp.mapping.preset.cmdline({
 					["<C-n>"] = {
@@ -331,7 +333,9 @@ return {
 			},
 		},
 		config = function(_, opts)
-			require("move").setup(opts)
+			if opts then
+				require("move").setup(opts)
+			end
 		end,
 	},
 	{
@@ -339,28 +343,6 @@ return {
 		"folke/flash.nvim",
 		cond = cond.flash,
 		lazy = true,
-		keys = {
-			{ "s", mode = { "n", "x", "o" } },
-			{ "R", mode = { "n", "x", "o" } },
-			{ "r", mode = { "o" } },
-		},
-		---@type Flash.Config
-		opts = {
-			prompt = {
-				prefix = { { "Flash", "FlashPromptIcon" } },
-			},
-			modes = {
-				char = {
-					multi_line = false,
-				},
-			},
-			label = {
-				rainbow = {
-					enabled = true,
-					shade = 9,
-				},
-			},
-		},
 		keys = {
 			{
 				"s",
@@ -387,6 +369,29 @@ return {
 				desc = "Treesitter Search",
 			},
 		},
+		opts = function()
+			return {
+				prompt = {
+					prefix = { { "Flash", "FlashPromptIcon" } },
+				},
+				modes = {
+					char = {
+						multi_line = false,
+					},
+				},
+				label = {
+					rainbow = {
+						enabled = true,
+						shade = 9,
+					},
+				},
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("flash").setup(opts)
+			end
+		end,
 	},
 	{
 		-- Tab out of parentheses
@@ -397,29 +402,36 @@ return {
 			{ "hrsh7th/nvim-cmp" },
 			{ "L3MON4D3/LuaSnip" },
 		},
-		opts = {
-			tabkey = "<Tab>",
-			backwards_tabkey = "<S-Tab>",
-			act_as_tab = true,
-			act_as_shift_tab = true,
-			default_tab = "<C-t>",
-			default_shift_tab = "<C-d>",
-			enable_backwards = true,
-			completion = true,
-			tabouts = {
-				{ open = "'", close = "'" },
-				{ open = '"', close = '"' },
-				{ open = "`", close = "`" },
-				{ open = "(", close = ")" },
-				{ open = "[", close = "]" },
-				{ open = "{", close = "}" },
-				{ open = "<", close = ">" },
-				{ open = "$", close = "$" },
-				{ open = "%", close = "%" },
-			},
-			ignore_beginning = true,
-			exclude = {},
-		},
+		opts = function()
+			return {
+				tabkey = "<Tab>",
+				backwards_tabkey = "<S-Tab>",
+				act_as_tab = true,
+				act_as_shift_tab = true,
+				default_tab = "<C-t>",
+				default_shift_tab = "<C-d>",
+				enable_backwards = true,
+				completion = true,
+				tabouts = {
+					{ open = "'", close = "'" },
+					{ open = '"', close = '"' },
+					{ open = "`", close = "`" },
+					{ open = "(", close = ")" },
+					{ open = "[", close = "]" },
+					{ open = "{", close = "}" },
+					{ open = "<", close = ">" },
+					{ open = "$", close = "$" },
+					{ open = "%", close = "%" },
+				},
+				ignore_beginning = true,
+				exclude = {},
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("tabout").setup(opts)
+			end
+		end,
 	},
 	{
 		-- Highlight brackets when inside block
@@ -427,13 +439,20 @@ return {
 		version = "*",
 		lazy = true,
 		event = "BufRead",
-		opts = {
-			pairs = {
-				{ "(", ")" },
-				{ "{", "}" },
-				{ "[", "]" },
-			},
-		},
+		opts = function()
+			return {
+				pairs = {
+					{ "(", ")" },
+					{ "{", "}" },
+					{ "[", "]" },
+				},
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("sentiment").setup(opts)
+			end
+		end,
 	},
 	{
 		-- Quick guessing indent for filetypes

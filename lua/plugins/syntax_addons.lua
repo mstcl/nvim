@@ -12,7 +12,6 @@ local function augroup(group, ...)
 end
 
 -- Plugins to extend syntax, either natively or with treesitter
-local cond = require("user_configs").lsp_enabled
 return {
 	{
 		-- Treesitter engine
@@ -173,7 +172,9 @@ return {
 					return true
 				end, opts.ensure_installed)
 			end
-			require("nvim-treesitter.configs").setup(opts)
+			if opts then
+				require("nvim-treesitter.configs").setup(opts)
+			end
 		end,
 	},
 	{
@@ -231,7 +232,9 @@ return {
 			},
 		},
 		config = function(_, opts)
-			vim.g.rainbow_delimiters = opts
+			if opts then
+				vim.g.rainbow_delimiters = opts
+			end
 		end,
 	},
 	{
@@ -270,12 +273,9 @@ return {
 			org_hide_emphasis_markers = true,
 		},
 		config = function(_, opts)
-			local org_ok, orgmode = pcall(require, "orgmode")
-			if not org_ok then
-				return
+			if opts then
+				require("orgmode").setup(opts)
 			end
-
-			orgmode.setup(opts)
 		end,
 	},
 	{
@@ -284,18 +284,25 @@ return {
 		lazy = true,
 		cond = require("user_configs").syntax_features.org,
 		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
-		opts = {
-			indent = true,
-			symbols = {
-				list = "•",
-				headlines = { "◎", "○", "●", "◌" },
-				checkboxes = {
-					half = { "♣", "OrgTSCheckboxHalfChecked" },
-					done = { "✓", "OrgDone" },
-					todo = { "✗", "OrgTODO" },
+		opts = function()
+			return {
+				indent = true,
+				symbols = {
+					list = "•",
+					headlines = { "◎", "○", "●", "◌" },
+					checkboxes = {
+						half = { "-", "OrgTSCheckboxHalfChecked" },
+						done = { "✓", "OrgDone" },
+						todo = { "✗", "OrgTODO" },
+					},
 				},
-			},
-		},
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("org-bullets").setup(opts)
+			end
+		end,
 	},
 	{
 		-- QUARTO setup
@@ -304,23 +311,7 @@ return {
 		lazy = true,
 		cond = require("user_configs").syntax_features.quarto,
 		ft = { "quarto" },
-		dependencies = {
-			"jmbuhr/otter.nvim",
-			lazy = true,
-			cond = cond,
-			dependencies = { "neovim/nvim-lspconfig" },
-			ft = { "quarto", "markdown" },
-			opts = {
-				lsp = {
-					hover = {
-						border = "single",
-					},
-				},
-				buffers = {
-					set_filetype = true,
-				},
-			},
-		},
+		dependencies = { "jmbuhr/otter.nvim" },
 		opts = {
 			lspFeatures = {
 				languages = { "python", "bash", "html", "lua" },
@@ -469,7 +460,7 @@ return {
 		},
 	},
 	{
-		-- Git conflict
+		-- Git conflicts helper
 		"akinsho/git-conflict.nvim",
 		version = "*",
 		lazy = false,

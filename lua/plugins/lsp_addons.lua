@@ -343,7 +343,9 @@ return {
 			}
 		end,
 		config = function(_, opts)
-			require("barbecue").setup(opts)
+			if opts then
+				require("barbecue").setup(opts)
+			end
 			autocmd({ "WinResized", "BufWinEnter", "CursorHold", "InsertLeave" }, {
 				group = augroup("barbecue", { clear = true }),
 				callback = function()
@@ -440,7 +442,9 @@ return {
 			}
 		end,
 		config = function(_, opts)
-			require("null-ls").setup(opts)
+			if opts then
+				require("null-ls").setup(opts)
+			end
 		end,
 	},
 	{
@@ -474,6 +478,24 @@ return {
 		opts = {
 			hl = { link = "StatusLineNC" },
 			vt_position = "above",
+		},
+	},
+	{
+		-- LSP completion in code blocks
+		"jmbuhr/otter.nvim",
+		lazy = true,
+		cond = cond,
+		dependencies = { "neovim/nvim-lspconfig" },
+		ft = { "quarto", "markdown" },
+		opts = {
+			lsp = {
+				hover = {
+					border = "single",
+				},
+			},
+			buffers = {
+				set_filetype = true,
+			},
 		},
 	},
 }

@@ -70,7 +70,9 @@ return {
 			}
 		end,
 		config = function(_, opts)
-			require("mini.map").setup(opts)
+			if opts then
+				require("mini.map").setup(opts)
+			end
 		end,
 	},
 	{
@@ -344,27 +346,69 @@ return {
 		lazy = true,
 		event = "VimEnter",
 		dependencies = { "kevinhwang91/promise-async" },
-		opts = {
-			open_fold_hl_timeout = 150,
-			close_fold_kinds_ft = {
-				default = { "imports", "comment" },
-				json = { "array" },
-			},
-			preview = {
-				win_config = {
-					border = "single",
-					winhighlight = "Pmenu:Normal",
-					winblend = 0,
-				},
-				mappings = {
-					scrollU = "<C-u>",
-					scrollD = "<C-d>",
-					jumpTop = "[",
-					jumpBot = "]",
-				},
-			},
-			fold_virt_text_handler = require("utils.lsp").ufo_handler,
+		keys = {
+			{
+				"<C-K>",
+				"<cmd>lua require('ufo').peekFoldedLinesUnderCursor()<cr>",
+				desc = "Peek fold",
+			}
 		},
+		opts = function()
+			---Set nvim-ufo truncate text
+			---@return string
+			local function ufo_handler(virtText, lnum, endLnum, width, truncate)
+				local newVirtText = {}
+				local suffix = (" 󰁂 %d "):format(endLnum - lnum)
+				local sufWidth = vim.fn.strdisplaywidth(suffix)
+				local targetWidth = width - sufWidth
+				local curWidth = 0
+				for _, chunk in ipairs(virtText) do
+					local chunkText = chunk[1]
+					local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+					if targetWidth > curWidth + chunkWidth then
+						table.insert(newVirtText, chunk)
+					else
+						chunkText = truncate(chunkText, targetWidth - curWidth)
+						local hlGroup = chunk[2]
+						table.insert(newVirtText, { chunkText, hlGroup })
+						chunkWidth = vim.fn.strdisplaywidth(chunkText)
+						if curWidth + chunkWidth < targetWidth then
+							suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
+						end
+						break
+					end
+					curWidth = curWidth + chunkWidth
+				end
+				table.insert(newVirtText, { suffix, "DiffChange" })
+				return newVirtText
+			end
+			return {
+				open_fold_hl_timeout = 150,
+				close_fold_kinds_ft = {
+					default = { "imports", "comment" },
+					json = { "array" },
+				},
+				preview = {
+					win_config = {
+						border = "single",
+						winhighlight = "Pmenu:Normal",
+						winblend = 0,
+					},
+					mappings = {
+						scrollU = "<C-u>",
+						scrollD = "<C-d>",
+						jumpTop = "[",
+						jumpBot = "]",
+					},
+				},
+				fold_virt_text_handler = ufo_handler,
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("ufo").setup(opts)
+			end
+		end
 	},
 	{
 		-- Cursorline mode decoration
