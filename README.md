@@ -6,7 +6,16 @@
 
 ## Features
 
-- An actual IDE with ~40 ms start-up time.
+- A really cool text editor that lives in your terminal.
+
+### Core keymap groups
+
+- `<C-M>` - Toggle window UI components
+- `<leader>` - Plugin related keymaps (e.g. FzfLua pickers)
+- `g` - LSP lookups
+- `c` - Code actions, formatting, rename
+
+`<C-P>` brings up the which-key cheatsheet.
 
 ## Get started
 
