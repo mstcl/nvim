@@ -82,7 +82,7 @@ return {
 		keys = {
 			{
 				"<Left>",
-				"<cmd>BufferPrevious",
+				"<cmd>BufferPrevious<cr>",
 				desc = "Buffer previous",
 			},
 			{
@@ -203,7 +203,7 @@ return {
 					custom_colors = true,
 					enabled = false,
 				},
-				separator = { left = ",", right = "" },
+				separator = { left = " ", right = "" },
 				modified = { button = "✦" },
 				pinned = { button = "٭", filename = true },
 				current = { buffer_index = true, filename = true },
