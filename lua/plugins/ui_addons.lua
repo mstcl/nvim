@@ -403,25 +403,29 @@ return {
 		},
 	},
 	{
-		"otavioschwanck/arrow.nvim",
+		-- Switch between buffers, the minimal way
+		"ernstwi/juggler.nvim",
 		lazy = true,
+		opts = {
+			highlight_group_active = "Question", -- The selected buffer.
+			highlight_group_inactive = "StatuslineAlt", -- All other buffers.
+			highlight_group_separator = "Whitespace", -- The `|` between buffers.
+		},
 		keys = {
 			{
-				"<Bslash>",
-				desc = "Quick bufferlist",
-				mode = "n",
+				"<leader>j",
+				function()
+					require("juggler").activate()
+				end,
+				desc = "Juggler buffers",
 			},
 		},
-		opts = {
-			separate_by_branch = true,
-			window = {
-				border = "single",
-			},
-			show_icons = false,
-			leader_key = "<Bslash>",
+		dependencies = {
+			"nvimtools/hydra.nvim",
 		},
 	},
 	{
+		-- Code runner
 		"stevearc/overseer.nvim",
 		lazy = true,
 		keys = {
