@@ -41,68 +41,7 @@ set.background = "light"
 set.modeline = true
 set.cursorline = true
 
--- Statusline components
-local statusline_parts = {
-	-- Highlights
-	hl_main = [[%#statuslinenc#]],
-	hl_strong = [[%#statusline#]],
-	hl_alt = [[%#statuslinealt#]],
-	hl_orange = [[%#statuslineorange#]],
-	hl_restore = [[%*]],
-	-- LSP
-	diagnostics = [[%{%v:lua.require'utils.statusline'.get_lsp_diagnostic()%}]],
-	progress = [[%{%v:lua.require'utils.statusline'.get_lsp_progress()%}]],
-	-- Git
-	branch = [[%{%v:lua.require'utils.statusline'.get_git_branch()%}]],
-	diffs = [[%{%v:lua.require'utils.statusline'.get_diffs()%}]],
-	-- Misc
-	align = [[%=]],
-	truncate = [[%<]],
-	open_bracket = [[(]],
-	close_bracket = [[)]],
-	padding = [[ ]],
-	-- General
-	filename = [[%{%&ft=="toggleterm"?"terminal #".b:toggle_number."":"%t"%}]],
-	pos = [[%{%&ru?" %l:%c %2p%% ":""%}]],
-	mode = [[%{%v:lua.require'utils.statusline'.get_mode()%}]],
-	cwd = [[%{%v:lua.require'utils.statusline'.get_cwd()%}]],
-	indentation = [[%{&expandtab?"shift:":"tab:"} %{&shiftwidth}]],
-	ft = [[%{&ft!=""?"".&ft." ":"nil "}]],
-	fformat = [[%{&ff!="unix"?"  ".&ff." ":""}]],
-	fenc = [[%{(&fenc!="utf-8"&&&fenc!="")?"  ".&fenc." ":""}]],
-}
-set.statusline = table.concat({
-	statusline_parts.mode,
-	statusline_parts.hl_strong,
-	statusline_parts.filename,
-	statusline_parts.hl_main,
-	statusline_parts.padding,
-	statusline_parts.open_bracket,
-	statusline_parts.ft,
-	statusline_parts.branch,
-	statusline_parts.hl_main,
-	statusline_parts.diffs,
-	statusline_parts.hl_main,
-	statusline_parts.close_bracket,
-	statusline_parts.align,
-	statusline_parts.hl_alt,
-	statusline_parts.progress,
-	statusline_parts.hl_main,
-	statusline_parts.diagnostics,
-	statusline_parts.hl_orange,
-	statusline_parts.truncate,
-	statusline_parts.fformat,
-	statusline_parts.fenc,
-	statusline_parts.hl_alt,
-	statusline_parts.align,
-	statusline_parts.pos,
-	statusline_parts.padding,
-	statusline_parts.indentation,
-	statusline_parts.padding,
-	statusline_parts.cwd,
-	statusline_parts.padding,
-	statusline_parts.hl_restore,
-}, "")
+set.statusline = require("utils.statusline").get_default_statusline()
 set.laststatus = 3
 set.cursorlineopt = "both"
 set.hidden = true

@@ -210,7 +210,9 @@ return {
 			}
 		end,
 		config = function(_, opts)
-			require("fzf-lua").setup(opts)
+			if opts then
+				require("fzf-lua").setup(opts)
+			end
 		end,
 	},
 	{
@@ -261,7 +263,9 @@ return {
 			direction = "vertical",
 		},
 		config = function(_, opts)
-			require("toggleterm").setup(opts)
+			if opts then
+				require("toggleterm").setup(opts)
+			end
 			augroup("toggleterm", {
 				{ "TermOpen" },
 				{
@@ -458,6 +462,7 @@ return {
 	{
 		-- Keymapping cheatsheet
 		"folke/which-key.nvim",
+		cond = true,
 		event = "BufReadPre",
 		keys = {
 			{
@@ -509,7 +514,9 @@ return {
 				["g"] = { name = "LSP, comment, case & navigation" },
 				["c"] = { name = "Change & code actions" },
 			})
-			wk.setup(opts)
+			if opts then
+				wk.setup(opts)
+			end
 		end,
 	},
 	{
@@ -579,7 +586,9 @@ return {
 			}
 		end,
 		config = function(_, opts)
-			require("mini.starter").setup(opts)
+			if opts then
+				require("mini.starter").setup(opts)
+			end
 		end,
 	},
 	{
@@ -604,7 +613,9 @@ return {
 			},
 		},
 		config = function(_, opts)
-			require("neogit").setup(opts)
+			if opts then
+				require("neogit").setup(opts)
+			end
 			augroup("neogit", {
 				{ "Filetype" },
 				{

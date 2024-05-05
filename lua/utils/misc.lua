@@ -33,7 +33,7 @@ M.barbecue_theme = {
 	["bl"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Function", true).foreground)),
 }
 
-
+---Shortcut syntax to create autocmd with augroup
 ---@param group string
 ---@vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
 ---@return nil

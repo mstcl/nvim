@@ -87,7 +87,16 @@ return {
 			local builtin = require("statuscol.builtin")
 			return {
 				relculright = true,
-				ft_ignore = { "help", "starter", "Neogit*", "aerial", "lazy", "TelescopePrompt", "tex" },
+				ft_ignore = {
+					"help",
+					"starter",
+					"Neogit*",
+					"aerial",
+					"lazy",
+					"TelescopePrompt",
+					"tex",
+					"toggleterm",
+				},
 				segments = {
 					{
 						text = {
@@ -120,7 +129,9 @@ return {
 			}
 		end,
 		config = function(_, opts)
-			require("statuscol").setup(opts)
+			if opts then
+				require("statuscol").setup(opts)
+			end
 		end,
 	},
 }

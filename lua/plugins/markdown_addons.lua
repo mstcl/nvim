@@ -18,7 +18,9 @@ return {
 			virt_text_pos = "eol",
 		},
 		config = function(_, opts)
-			require("section-wordcount").setup(opts)
+			if opts then
+				require("section-wordcount").setup(opts)
+			end
 			require("section-wordcount").wordcounter({})
 		end,
 	},
