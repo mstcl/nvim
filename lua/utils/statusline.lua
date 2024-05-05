@@ -16,41 +16,26 @@ local function set_hl(str, hl, restore)
 end
 
 local modes = {
-	["n"] = "NO",
-	["no"] = "OP",
-	["nov"] = "OC",
-	["noV"] = "OL",
-	["no\x16"] = "OB",
-	["\x16"] = "VB",
-	["niI"] = "IN",
-	["niR"] = "RE",
-	["niV"] = "RV",
-	["nt"] = "NT",
-	["ntT"] = "TM",
-	["v"] = "VI",
-	["vs"] = "VI",
-	["V"] = "VL",
-	["Vs"] = "VL",
-	["\x16s"] = "VB",
-	["s"] = "SE",
-	["S"] = "SL",
-	["\x13"] = "SB",
-	["i"] = "IN",
-	["ic"] = "IC",
-	["ix"] = "IX",
-	["R"] = "RE",
-	["Rc"] = "RC",
-	["Rx"] = "RX",
-	["Rv"] = "RV",
-	["Rvc"] = "RC",
-	["Rvx"] = "RX",
-	["c"] = "CO",
-	["cv"] = "CV",
-	["r"] = "PR",
-	["rm"] = "PM",
-	["r?"] = "P?",
-	["!"] = "SH",
-	["t"] = "TE",
+	["n"] = "NORMAL",
+	["no"] = "NORMAL",
+	["v"] = "VISUAL",
+	["V"] = "VISUAL LINE",
+	[""] = "VISUAL BLOCK",
+	["s"] = "SELECT",
+	["S"] = "SELECT LINE",
+	[""] = "SELECT BLOCK",
+	["i"] = "INSERT",
+	["ic"] = "INSERT",
+	["R"] = "REPLACE",
+	["Rv"] = "VISUAL REPLACE",
+	["c"] = "COMMAND",
+	["cv"] = "VIM EX",
+	["ce"] = "EX",
+	["r"] = "PROMPT",
+	["rm"] = "MOAR",
+	["r?"] = "CONFIRM",
+	["!"] = "SHELL",
+	["t"] = "TERMINAL",
 }
 
 ---Get current mode
@@ -59,9 +44,11 @@ function M.get_mode()
 	local hl = vim.bo.mod and "TelescopeTitle" or "InclineNormal"
 	local mode = vim.fn.mode()
 	local mode_str = (mode == "n" and (vim.bo.ro or not vim.bo.ma)) and "RO" or modes[mode]
-	return set_hl(string.format(" %s ", mode_str), hl) .. " "
+	return set_hl(string.format(" %s ", mode_str), hl)
 end
 
+---Get LSP progress
+---@return string
 function M.get_lsp_progress()
 	return require("lsp-progress").progress({
 		format = function(client_messages)
@@ -142,7 +129,7 @@ end
 ---Get cwd
 ---@return string
 function M.get_cwd()
-	return " " .. vim.fn.pathshorten(vim.fn.getcwd(), 1)
+	return vim.fn.pathshorten(vim.fn.getcwd(), 1)
 end
 
 ---Get current git branch
@@ -153,7 +140,7 @@ function M.get_git_branch()
 	if vim.b.gitsigns_status_dict ~= nil then
 		branch = vim.b.gitsigns_status_dict.head
 	end
-	return set_hl("#", "StatuslineAlt") .. set_hl(branch, "StatusLineNC") .. " "
+	return set_hl("#", "StatuslineAlt") .. set_hl(branch, "StatusLineNC")
 end
 
 ---Get git diffs for current buffer
@@ -177,6 +164,107 @@ function M.get_diffs()
 		)
 	end
 	return diffs
+end
+
+function M.get_filepath()
+	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
+	if fpath == "" or fpath == "." or vim.bo.buftype == "terminal" then
+		return ""
+	end
+
+	return string.format("%%<%s/", fpath)
+end
+
+function M.get_filename()
+	local fname = vim.fn.expand("%:t")
+	if vim.bo.filetype == "toggleterm" then
+		return "#" .. vim.b.toggle_number
+	end
+	if fname == "" or vim.bo.buftype == "terminal" then
+		return "nil"
+	end
+	return fname
+end
+
+function M.get_filetype()
+	local ft = vim.bo.filetype
+	if ft == "" then
+		return "nil"
+	else
+		return (ft:gsub("^%l", string.upper))
+	end
+end
+
+-- Statusline components
+local statusline_parts = {
+	-- Highlights
+	hl_main = [[%#statuslinenc#]],
+	hl_strong = [[%#statusline#]],
+	hl_alt = [[%#statuslinealt#]],
+	hl_orange = [[%#statuslineorange#]],
+	hl_restore = [[%*]],
+	-- LSP
+	diagnostics = [[%{%v:lua.require'utils.statusline'.get_lsp_diagnostic()%}]],
+	progress = [[%{%v:lua.require'utils.statusline'.get_lsp_progress()%}]],
+	-- Git
+	branch = [[%{%v:lua.require'utils.statusline'.get_git_branch()%}]],
+	diffs = [[%{%v:lua.require'utils.statusline'.get_diffs()%}]],
+	-- Misc
+	align = [[%=]],
+	truncate = [[%<]],
+	open_bracket = [[(]],
+	close_bracket = [[)]],
+	padding = [[ ]],
+	-- General
+	filepath = [[%{%v:lua.require'utils.statusline'.get_filepath()%}]],
+	filename = [[%{%v:lua.require'utils.statusline'.get_filename()%}]],
+	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%c %2p%#statuslinealt#%%":""%}]],
+	mode = [[%{%v:lua.require'utils.statusline'.get_mode()%}]],
+	cwd = [[%{%v:lua.require'utils.statusline'.get_cwd()%}]],
+	indentation = [[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
+	ft = [[%{%v:lua.require'utils.statusline'.get_filetype()%}]],
+	fformat = [[%{&ff!="unix"?"  ".&ff." ":""}]],
+	fenc = [[%{(&fenc!="utf-8"&&&fenc!="")?"  ".&fenc." ":""}]],
+}
+
+function M.get_default_statusline()
+	return table.concat({
+		statusline_parts.mode,
+		statusline_parts.padding,
+		statusline_parts.hl_alt,
+		statusline_parts.filepath,
+		statusline_parts.hl_main,
+		statusline_parts.filename,
+		statusline_parts.padding,
+		statusline_parts.hl_alt,
+		statusline_parts.open_bracket,
+		statusline_parts.hl_main,
+		statusline_parts.ft,
+		statusline_parts.padding,
+		statusline_parts.branch,
+		statusline_parts.padding,
+		statusline_parts.hl_main,
+		statusline_parts.diffs,
+		statusline_parts.hl_alt,
+		statusline_parts.close_bracket,
+		statusline_parts.truncate,
+		statusline_parts.align,
+		statusline_parts.hl_main,
+		statusline_parts.diagnostics,
+		statusline_parts.padding,
+		statusline_parts.hl_orange,
+		statusline_parts.fformat,
+		statusline_parts.fenc,
+		statusline_parts.hl_alt,
+		statusline_parts.progress,
+		statusline_parts.padding,
+		statusline_parts.align,
+		statusline_parts.pos,
+		statusline_parts.padding,
+		statusline_parts.indentation,
+		statusline_parts.padding,
+		statusline_parts.hl_restore,
+	}, "")
 end
 
 return M
