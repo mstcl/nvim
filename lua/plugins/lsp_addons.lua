@@ -1,8 +1,12 @@
-local augroup = vim.api.nvim_create_augroup
-local autocmd = vim.api.nvim_create_autocmd
-local cond = require("user_configs").lsp_enabled
-local cond2 = require("user_configs").lsp_features
-local sources = require("user_configs").lsp_sources
+local lsp_defaults = require("utils.lsp")
+local on_attach = lsp_defaults.on_attach
+local handlers = lsp_defaults.handlers
+local capabilities = lsp_defaults.capabilities
+
+local conf = require("user_configs")
+local cond = conf.lsp_enabled
+local cond2 = conf.lsp_features
+local sources = conf.lsp_sources
 
 -- Plugins that add to nvim LSP functionalities
 return {
@@ -54,75 +58,14 @@ return {
 				"cmp-nvim-lsp",
 				lazy = true,
 				event = "InsertEnter",
-				cond = require("user_configs").edit_features.completion,
+				cond = conf.edit_features.completion,
 			},
 			{ "kevinhwang91/nvim-ufo" },
 			{ "williamboman/mason-lspconfig.nvim" },
 		},
 		config = function()
-			-- Builtin diagnostics
-			vim.diagnostic.config({
-				inlay_hints = {
-					enabled = true,
-				},
-				virtual_text = function()
-					if require("user_configs").lsp_features.virtual_text then
-						return {
-							spacing = 4,
-							prefix = "",
-							format = function(diagnostic)
-								return string.format(require("user_configs").lsp_vt_signs[diagnostic.severity])
-							end,
-							suffix = " ",
-						}
-					end
-					return false
-				end,
-				signs = true, -- only for the colored number column
-				underline = false,
-				update_in_insert = false,
-				float = {
-					header = false,
-					focusable = false,
-					prefix = " ",
-					suffix = " ",
-					close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-					border = "single",
-					source = "if_many",
-					scope = "cursor",
-					focus = false,
-				},
-				severity_sort = true,
-			})
-			vim.cmd([[
-				sign define DiagnosticSignError text=
-				sign define DiagnosticSignWarn text=
-				sign define DiagnosticSignInfo text=
-				sign define DiagnosticSignHint text=
-				sign define DiagnosticSignWarn text=
-				sign define DiagnosticSignInfo text=
-				sign define DiagnosticSignHint text=
-			]])
-			local on_attach = require("utils.lsp").on_attach
-			local handlers = require("utils.lsp").handlers
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			if require("user_configs").edit_features.completion then
-				capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-			end
-			capabilities.textDocument.completion.completionItem.snippetSupport = true
-			capabilities.textDocument.foldingRange = {
-				dynamicRegistration = false,
-				lineFoldingOnly = true,
-			}
-			capabilities.workspace = {
-				didChangeWatchedFiles = {
-					dynamicRegistration = true,
-				},
-			}
-			local lsp_ok, lsp = pcall(require, "lspconfig")
-			if not lsp_ok then
-				return
-			end
+			lsp_defaults.configure_builtin_diagnostic()
+			local lsp = require("lspconfig")
 			for _, server in ipairs(sources) do
 				if server == "yamlls" then
 					lsp.yamlls.setup = {
@@ -304,57 +247,6 @@ return {
 		end,
 	},
 	{
-		-- Breadcrumb bar
-		"utilyre/barbecue.nvim",
-		cond = cond2.breadcrumbs and cond,
-		lazy = true,
-		version = "*",
-		event = "LspAttach",
-		branch = "main",
-		dependencies = { { "smiteshp/nvim-navic", lazy = true, event = "VeryLazy" } },
-		opts = function()
-			local colors = require("utils.misc").barbecue_theme
-			local bg_fg = { bg = colors["bg"], fg = colors["fg"] }
-			local bg_mg = { bg = colors["bg"], fg = colors["mg"] }
-			local bg_hl = { bg = colors["bg"], fg = colors["hl"] }
-			local bg_bl = { bg = colors["bg"], fg = colors["bl"] }
-			return {
-				create_autocmd = false,
-				theme = {
-					normal = bg_fg,
-					context = bg_fg,
-					basename = bg_hl,
-					ellipsis = bg_mg,
-					separator = bg_mg,
-					modified = bg_hl,
-					dirname = bg_bl,
-				},
-				show_dirname = false,
-				show_basename = false,
-				symbols = {
-					separator = "⟫",
-					ellipsis = "…",
-					modified = "●",
-				},
-				exclude_filetypes = { "netrw", "toggleterm" },
-				exclude_buftypes = { "terminal" },
-				show_modified = true,
-				kinds = require("user_configs").lsp_kind_icons,
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("barbecue").setup(opts)
-			end
-			autocmd({ "WinResized", "BufWinEnter", "CursorHold", "InsertLeave" }, {
-				group = augroup("barbecue", { clear = true }),
-				callback = function()
-					require("barbecue.ui").update()
-				end,
-			})
-		end,
-	},
-	{
 		-- Bridge none-ls and mason
 		"jay-babu/mason-null-ls.nvim",
 		event = { "BufReadPre", "BufNewFile" },
@@ -373,10 +265,10 @@ return {
 		opts = function()
 			local null_ls = require("null-ls")
 			local null_sources = {}
-			local fmt_sources = require("user_configs").null_formatting_sources
-			local hover_sources = require("user_configs").null_hover_sources
-			local diagnostics_sources = require("user_configs").null_diagnostics_sources
-			local code_action_sources = require("user_configs").null_code_action_sources
+			local fmt_sources = conf.null_formatting_sources
+			local hover_sources = conf.null_hover_sources
+			local diagnostics_sources = conf.null_diagnostics_sources
+			local code_action_sources = conf.null_code_action_sources
 			for _, source in ipairs(fmt_sources) do
 				if source == "mdformat" then
 					table.insert(
@@ -438,7 +330,7 @@ return {
 			end
 			return {
 				sources = null_sources,
-				on_attach = require("utils.lsp").on_attach,
+				on_attach = on_attach,
 			}
 		end,
 		config = function(_, opts)
