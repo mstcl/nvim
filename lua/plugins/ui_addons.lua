@@ -1,3 +1,4 @@
+local conf = require("user_configs")
 -- Plugins that modify UI
 return {
 	{
@@ -5,23 +6,12 @@ return {
 		"mstcl/dmg",
 		lazy = false,
 		priority = 1000,
-		config = function()
-			vim.api.nvim_command("colorscheme dmg")
-			if require("user_configs").dap_enabled then
-				local dap_signs = require("user_configs").dap_signs
-				for type, icon in pairs(dap_signs) do
-					local hl = "Dap" .. type
-					vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-				end
-			end
-			if require("user_configs").lsp_enabled then
-				local lsp_signs = require("user_configs").lsp_signs
-				for type, icon in pairs(lsp_signs) do
-					local hl = "DiagnosticSign" .. type
-					vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-				end
-			end
-		end,
+		dependencies = {
+			"rktjmp/lush.nvim",
+		},
+		config = function ()
+			vim.cmd.colorscheme("dmg_extended")
+		end
 	},
 	{
 		-- Add a sidebar map
@@ -38,10 +28,7 @@ return {
 		},
 		version = false,
 		opts = function()
-			local map_ok, map = pcall(require, "mini.map")
-			if not map_ok then
-				return
-			end
+			local map = require("mini.map")
 			local git_integration = map.gen_integration.gitsigns({
 				add = "GitSignsAdd",
 				change = "GitSignsChange",
@@ -80,6 +67,10 @@ return {
 		"romgrk/barbar.nvim",
 		lazy = true,
 		cond = require("user_configs").ui_features.tabline,
+		init = function()
+			local lush = require("lush")
+			lush(lush.extends({ require("dmg") }).with(require("dmg_bufferline")))
+		end,
 		event = "BufRead",
 		keys = {
 			{
@@ -224,6 +215,10 @@ return {
 		"stevearc/dressing.nvim",
 		lazy = true,
 		event = "LspAttach",
+		init = function()
+			local lush = require("lush")
+			lush(lush.extends({ require("dmg") }).with(require("dmg_dressing")))
+		end,
 		opts = {
 			input = {
 				insert_only = true,
@@ -351,7 +346,7 @@ return {
 				"<C-K>",
 				"<cmd>lua require('ufo').peekFoldedLinesUnderCursor()<cr>",
 				desc = "Peek fold",
-			}
+			},
 		},
 		opts = function()
 			---Set nvim-ufo truncate text
@@ -408,7 +403,7 @@ return {
 			if opts then
 				require("ufo").setup(opts)
 			end
-		end
+		end,
 	},
 	{
 		-- Cursorline mode decoration

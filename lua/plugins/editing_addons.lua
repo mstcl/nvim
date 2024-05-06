@@ -172,6 +172,11 @@ return {
 					ghost_text = true,
 					hl_group = "NonText",
 				},
+				view = {
+					entries = {
+						follow_cursor = true
+					}
+				},
 				sources = cmp.config.sources({
 					{ name = "latex_symbols", priority = 2 },
 					{ name = "otter" },
@@ -194,7 +199,7 @@ return {
 						},
 						priority = 7,
 						group_index = 1,
-						max_item_count = 5,
+						max_item_count = 7,
 					},
 					{ name = "cmp_pandoc", priority = 9 },
 					{ name = "zotex",      priority = 9 },

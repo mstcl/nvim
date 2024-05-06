@@ -25,14 +25,6 @@ M.buffer_opts = {
 	end,
 }
 
-M.barbecue_theme = {
-	["bg"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("WinBar", true).background)),
-	["mg"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Whitespace", true).foreground)),
-	["fg"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Operator", true).foreground)),
-	["hl"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Include", true).foreground)),
-	["bl"] = "#" .. tostring(string.format("%06x", vim.api.nvim_get_hl_by_name("Function", true).foreground)),
-}
-
 ---Shortcut syntax to create autocmd with augroup
 ---@param group string
 ---@vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }

@@ -47,7 +47,7 @@ return {
 			},
 			{
 				"<leader>z",
-				"<cmd>lua require('fzf.fzf_zoxide').exec()<cr>",
+				"<cmd>lua require('fzf.zoxide').exec()<cr>",
 				desc = "Zoxide",
 			},
 			{
@@ -117,16 +117,8 @@ return {
 			},
 		},
 		opts = function()
-			local function picker_opts(str)
-				return {
-					prompt = " ➤ ",
-					winopts = {
-						title = " " .. str .. " ",
-						title_pos = "center",
-					},
-				}
-			end
 			return {
+				"default-title",
 				commands = { sort_lastused = true },
 				manpages = { previewer = "man_native" },
 				helptags = { previewer = "help_native" },
@@ -189,24 +181,7 @@ return {
 				},
 				files = {
 					fzf_opts = { ["--ansi"] = false },
-					winopts = {
-						title = " Find files ",
-						title_pos = "center",
-					},
 				},
-				oldfiles = picker_opts("Oldfiles"),
-				buffers = picker_opts("Buffers"),
-				git = {
-					files = picker_opts("Git files"),
-					status = picker_opts("Git status"),
-					commits = picker_opts("Git commits"),
-					bcommits = picker_opts("Git buffer commits"),
-					branches = picker_opts("Git branches"),
-					tags = picker_opts("Git tags"),
-					stash = picker_opts("Git stash"),
-				},
-				grep = picker_opts("Live grep"),
-				args = picker_opts("Argument list"),
 			}
 		end,
 		config = function(_, opts)

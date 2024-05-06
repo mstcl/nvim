@@ -37,7 +37,6 @@ set.ttimeout = true
 set.ttimeoutlen = 10
 
 set.termguicolors = true
-set.background = "light"
 set.modeline = true
 set.cursorline = true
 

@@ -61,7 +61,7 @@ augroup("editing", {
 	},
 })
 
-augroup("highlight_yank", {
+augroup("highlightYank", {
 	"TextYankPost",
 	{
 		pattern = "*",
@@ -70,7 +70,7 @@ augroup("highlight_yank", {
 	},
 })
 
-augroup("text_opts", {
+augroup("textOpts", {
 	{ "BufNewFile", "BufRead" },
 	{
 		desc = "Enable text editing options, spellcheck and spell correction on certain filetypes",
@@ -84,7 +84,7 @@ augroup("text_opts", {
 	},
 })
 
-augroup("vertical_help", {
+augroup("verticalHelp", {
 	{ "FileType" },
 	{
 		desc = "Open help in vertical split",
