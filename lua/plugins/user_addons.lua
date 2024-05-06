@@ -1,18 +1,6 @@
 -- Additional addons go here
 return {
 	{
-		-- Colorscheme converter & visualization
-		"rktjmp/lush.nvim",
-		lazy = true,
-		cmd = { "Lushify" },
-	},
-	{
-		-- Colorscheme builder
-		"rktjmp/shipwright.nvim",
-		lazy = true,
-		cmd = { "Shipwright" },
-	},
-	{
 		"chrishrb/gx.nvim",
 		opts = {
 			handler_options = {
