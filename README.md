@@ -2,8 +2,6 @@
 
 **My opinionated neovim configuration.**
 
-![preview](pics/preview.png)
-
 ## Features
 
 - A really cool text editor that lives in your terminal.

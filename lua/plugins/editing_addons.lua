@@ -174,8 +174,8 @@ return {
 				},
 				view = {
 					entries = {
-						follow_cursor = true
-					}
+						follow_cursor = true,
+					},
 				},
 				sources = cmp.config.sources({
 					{ name = "latex_symbols", priority = 2 },
@@ -304,14 +304,17 @@ return {
 	},
 	{
 		-- Add motions to surround objects with brackets etc.
-		"kylechui/nvim-surround",
+		"echasnovski/mini.surround",
+		version = false,
 		lazy = true,
 		keys = {
-			"ys",
-			"ds",
-			"cs",
-			{ "S",      mode = "x" },
-			{ "<C-g>s", mode = "i" },
+			"sa",
+			"sd",
+			"sr",
+			"sf",
+			"sF",
+			"sh",
+			"sn",
 		},
 		opts = {},
 	},
@@ -350,7 +353,7 @@ return {
 		lazy = true,
 		keys = {
 			{
-				"s",
+				"ss",
 				mode = { "n", "x", "o" },
 				function()
 					require("flash").jump()
@@ -404,6 +407,7 @@ return {
 		event = "InsertEnter",
 		lazy = true,
 		dependencies = {
+			{ "nvim-treesitter/nvim-treesitter" },
 			{ "hrsh7th/nvim-cmp" },
 			{ "L3MON4D3/LuaSnip" },
 		},
@@ -429,7 +433,11 @@ return {
 					{ open = "%", close = "%" },
 				},
 				ignore_beginning = true,
-				exclude = {},
+				exclude = {
+					"yaml.ansible",
+					"gotmpl",
+					"template",
+				},
 			}
 		end,
 		config = function(_, opts)
@@ -557,7 +565,7 @@ return {
 		-- Smart rooter, replaces autochdir
 		"notjedi/nvim-rooter.lua",
 		lazy = true,
-		event = "VeryLazy",
+		event = "Filetype",
 		keys = {
 			{
 				"<C-M>r",

@@ -38,8 +38,8 @@ local extended = lush.merge({
 if conf.lsp_enabled then
 	extended = lush.merge({
 		extended,
+		require("dmg_mason"),
 		require("dmg_dressing"),
-		require("dmg_lsp"),
 		require("dmg_null_ls"),
 	})
 end
