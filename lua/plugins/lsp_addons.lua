@@ -31,7 +31,16 @@ return {
 			"MasonLog",
 		},
 		cond = cond,
-		opts = {},
+		opts = {
+			log_level = vim.log.levels.ERROR,
+			ui = {
+				icons = {
+					package_installed = "●",
+					package_pending = "○",
+					package_uninstalled = "○",
+				},
+			},
+		},
 	},
 	{
 		-- Bridge nvim-lspconfig and mason
@@ -87,10 +96,8 @@ return {
 									["http://json.schemastore.org/kustomization"] = "kustomization.yaml",
 									["https://json.schemastore.org/chart.json"] = "Chart.yaml",
 									["https://json.schemastore.org/taskfile.json"] = "Taskfile*.yml",
-									["https://raw.githubusercontent.com/GoogleContainerTools/skaffold/master/docs/content/en/schemas/v2beta26.json"] =
-									"skaffold.yaml",
-									["https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha3/schema.json"] =
-									"k3d.yaml",
+									["https://raw.githubusercontent.com/GoogleContainerTools/skaffold/master/docs/content/en/schemas/v2beta26.json"] = "skaffold.yaml",
+									["https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha3/schema.json"] = "k3d.yaml",
 									["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
 										"docker-compose.yml",
 									},
@@ -231,6 +238,24 @@ return {
 						handlers = handlers,
 						flags = {
 							debounce_text_changes = 150,
+						},
+					})
+				elseif server == "gopls" then
+					lsp.gopls.setup({
+						on_attach = on_attach,
+						capabilities = capabilities,
+						settings = {
+							gopls = {
+								experimentalPostfixCompletions = true,
+								analyses = {
+									unusedparams = true,
+									shadow = true,
+								},
+								staticcheck = true,
+							},
+						},
+						init_options = {
+							usePlaceholders = true,
 						},
 					})
 				else

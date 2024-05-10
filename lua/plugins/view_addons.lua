@@ -167,17 +167,9 @@ return {
 				fzf_colors = {
 					["fg"] = { "fg", "TelescopeNormal" },
 					["bg"] = { "bg", "TelescopeNormal" },
-					["hl"] = { "fg", "TelescopeMatching" },
-					["fg+"] = { "fg", "TelescopeSelection" },
-					["bg+"] = { "bg", "TelescopeSelection" },
-					["hl+"] = { "fg", "TelescopeMatching" },
 					["info"] = { "fg", "TelescopeNormal" },
 					["border"] = { "fg", "TelescopeBorder" },
 					["gutter"] = { "bg", "TelescopeNormal" },
-					["prompt"] = { "fg", "TelescopePromptPrefix" },
-					["pointer"] = { "fg", "TelescopeSelectionCaret" },
-					["marker"] = { "fg", "Directory" },
-					["header"] = { "fg", "Boolean" },
 				},
 				files = {
 					fzf_opts = { ["--ansi"] = false },
