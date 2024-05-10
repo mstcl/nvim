@@ -217,7 +217,6 @@ null_diagnostics_sources:
   - "ansiblelint"
   - "mypy"
   - "golangci_lint"
-  - "staticcheck"
 
 # !~~ (5d) CODE ACTIONS SOURCES ~~!
 
