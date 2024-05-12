@@ -22,7 +22,7 @@ ui_features:
   modes: false # highlight cursorline depending on the mode
   scope: true # only display buffers for under a given tab scope
   cursorword: false # highlight words that match current word under cursor
-  indent_lines: false # show fancy indent lines
+  indent_lines: true # show fancy indent lines
   tabline: false # display a bar at the top showing opened buffers
 
 edit_features:
@@ -200,6 +200,8 @@ null_formatting_sources:
   - "mdformat"
   - "stylua"
   - "cbfmt"
+  - "goimports"
+  - "gofumpt"
 
 # !~~ (5b) HOVER SOURCES ~~!
 
@@ -222,6 +224,8 @@ null_diagnostics_sources:
 
 null_code_actions_sources:
   - "gitsigns"
+  - "impl"
+  - "gomodifytags"
 
 # ~~ (6) OTHERS ~~
 
