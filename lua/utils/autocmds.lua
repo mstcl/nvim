@@ -1,6 +1,4 @@
 local augroup = require("utils.misc").augroup
-local autocmd = vim.api.nvim_create_autocmd
-local bo = vim.bo
 local opt_local = vim.opt_local
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
@@ -97,26 +95,19 @@ augroup("verticalHelp", {
 	},
 })
 
-augroup("starter", {
-	{ "VimEnter" },
+augroup("loadStatusline", {
+	{ "BufReadPre" },
 	{
-		desc = "Starter autocmds",
 		pattern = "*",
+		desc = "Lazy load statusline",
 		callback = function()
-			if bo.filetype == "starter" then
-				opt_local.laststatus = 0
-				vim.o.showtabline = 0
-				vim.o.statuscolumn = ""
-				autocmd({ "BufUnload" }, {
-					pattern = "<buffer>",
-					callback = function()
-						opt_local.laststatus = 3
-						vim.o.statuscolumn = "%!v:lua.StatusCol()"
-						if require("user_configs").ui_features.tabline then
-							vim.o.showtabline = 2
-						end
-					end,
-				})
+			if vim.bo.filetype ~= "starter" then
+				if vim.o.laststatus == 0 then
+					vim.o.laststatus = 3
+				end
+				if vim.o.statusline == "" then
+					vim.o.statusline = require("utils.statusline").get_default_statusline()
+				end
 			end
 		end,
 	},

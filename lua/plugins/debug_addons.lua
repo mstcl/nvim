@@ -1,5 +1,4 @@
 local cond = require("user_configs").dap_enabled
-local dap_ok, dap = pcall(require, "dap")
 
 -- Plugins that add debugging into nvim
 return {
@@ -7,7 +6,6 @@ return {
 		-- Python debugger
 		"mfussenegger/nvim-dap-python",
 		cond = cond,
-		lazy = true,
 		ft = "python",
 		config = function()
 			require("dap-python").setup()
@@ -17,7 +15,6 @@ return {
 		-- General debugging engine
 		"mfussenegger/nvim-dap",
 		cond = cond,
-		lazy = true,
 		ft = "python",
 		keys = {
 			{
@@ -42,21 +39,32 @@ return {
 			},
 			{
 				"<leader>db",
-				"<cmd>DapToggleBreakpoint<cr>",
+				function ()
+					vim.cmd("DapToggleBreakpoint")
+					vim.notify("Toggled DAP breakpoint", vim.log.levels.INFO)
+				end,
 				desc = "Debug: breakpoint toggle",
 			},
 			{
 				"<C-M>d",
-				"<cmd>lua require('dapui').toggle()<cr>",
+				function ()
+					vim.cmd("lua require('dapui').toggle()")
+					vim.notify("Toggled DAP ui", vim.log.levels.INFO)
+				end,
 				desc = "Toggle DAP ui",
 			},
 		},
+		init = function()
+			local wk = require("which-key")
+			wk.register({
+				["<leader>d"] = { name = "DAP commands" },
+			})
+		end,
 	},
 	{
 		-- Show debugging variable values as virtual text
 		"theHamsta/nvim-dap-virtual-text",
 		cond = cond,
-		lazy = true,
 		dependencies = { "mfussenegger/nvim-dap" },
 		opts = {
 			enabled = true,
@@ -75,7 +83,6 @@ return {
 		-- Show available DAP information panels
 		"rcarriga/nvim-dap-ui",
 		cond = cond,
-		lazy = true,
 		ft = "python",
 		dependencies = {
 			"mfussenegger/nvim-dap",
@@ -83,8 +90,7 @@ return {
 		},
 		keys = {
 			{
-				"<C-M>d",
-				desc = "Toggle DAP ui",
+				"<C-M>d"
 			},
 		},
 		opts = {

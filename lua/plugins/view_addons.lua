@@ -1,24 +1,13 @@
-local autocmd = vim.api.nvim_create_autocmd
-local groupid = vim.api.nvim_create_augroup
+local augroup = require("utils.misc").augroup
 local opt_local = vim.opt_local
 local wo = vim.wo
----@param group string
----@vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
----@return nil
-local function augroup(group, ...)
-	local id = groupid(group, { clear = true })
-	for _, a in ipairs({ ... }) do
-		a[2].group = id
-		autocmd(unpack(a))
-	end
-end
 
 -- Plugins which add additional ways to use nvim
 return {
 	{
 		-- Navigation and fuzzy pickers
 		"ibhagwan/fzf-lua",
-		lazy = true,
+
 		keys = {
 			{
 				"<leader>h",
@@ -185,7 +174,7 @@ return {
 	{
 		-- Terminal panel
 		"akinsho/toggleterm.nvim",
-		lazy = true,
+
 		cmd = "ToggleTerm",
 		keys = {
 			{
@@ -218,7 +207,7 @@ return {
 			shade_terminals = false,
 			highlights = {
 				Normal = {
-					link = "StatusLine"
+					link = "StatusLine",
 				},
 				StatusLine = {
 					link = "StatusLine",
@@ -238,6 +227,8 @@ return {
 				{
 					pattern = "term://*",
 					callback = function()
+						vim.wo.foldcolumn = "0"
+						-- Keymaps to leave
 						local opts_b = { silent = true, buffer = 0 }
 						vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], opts_b)
 						vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts_b)
@@ -250,11 +241,14 @@ return {
 	{
 		-- Distraction-free editing mode
 		"folke/zen-mode.nvim",
-		lazy = true,
+
 		keys = {
 			{
 				"<C-M>z",
-				"<cmd>ZenMode<cr>",
+				function ()
+					vim.cmd("ZenMode")
+					vim.notify("Toggled zen mode", vim.log.levels.INFO)
+				end,
 				desc = "Toggle Zen Mode",
 			},
 		},
@@ -296,11 +290,11 @@ return {
 					font = "18",
 				},
 			},
-			on_open = function(win)
+			on_open = function(_)
 				vim.api.nvim_set_hl(0, "ZenBg", { link = "Normal" })
 				vim.wo.statuscolumn = ""
 			end,
-			on_close = function(win)
+			on_close = function(_)
 				vim.wo.statuscolumn = "%!v:lua.StatusCol()"
 			end,
 		},
@@ -308,7 +302,7 @@ return {
 	{
 		-- Dim all but current paragraph object
 		"folke/twilight.nvim",
-		lazy = true,
+
 		cmd = "Twilight",
 		opts = {
 			context = 5,
@@ -325,13 +319,13 @@ return {
 			{ "gA", mode = "v" },
 		},
 		version = false,
-		lazy = true,
+
 		opts = {},
 	},
 	{
 		-- View git diff
 		"sindrets/diffview.nvim",
-		lazy = true,
+
 		cmd = {
 			"DiffviewOpen",
 			"DiffviewFileHistory",
@@ -394,8 +388,8 @@ return {
 					},
 				},
 				{ "permissions" },
-				{ "size", highlight = "Special" },
-				{ "mtime", highlight = "Number" },
+				{ "size",       highlight = "Special" },
+				{ "mtime",      highlight = "Number" },
 			},
 			float = {
 				padding = 4,
@@ -470,15 +464,14 @@ return {
 			wk.register({
 				["<leader>"] = { name = "Leader commands (pickers & LSP)" },
 				["<space>"] = { ":", "Command", mode = { "n", "v" } },
-				["<leader>o"] = { name = "Org mode actions" },
 				["<leader>g"] = { name = "Git commands" },
-				["<leader>d"] = { name = "DAP commands" },
 				["<C-M>"] = { name = "Toggle components" },
 				["<C-S>"] = { name = "Split windows" },
 				["["] = { name = "Previous" },
 				["]"] = { name = "Next" },
 				["z"] = { name = "Folds, spelling & align" },
 				["g"] = { name = "LSP, comment, case & navigation" },
+				["gs"] = { name = "Surround" },
 				["c"] = { name = "Change & code actions" },
 			})
 			if opts then
@@ -489,6 +482,9 @@ return {
 	{
 		-- Minimalist start screen
 		"echasnovski/mini.starter",
+		init = function()
+			vim.o.laststatus = 0
+		end,
 		cond = function()
 			if vim.tbl_contains(vim.v.argv, "-R") then
 				return false
@@ -525,19 +521,6 @@ return {
 
 				return ("Good %s, %s."):format(day_part, username)
 			end
-			local footer = function()
-				local stats = require("lazy").stats()
-				return "Loaded " .. stats.loaded .. "/" .. stats.count .. " plugins"
-			end
-			local version = function()
-				local versioninfo = vim.version() or {}
-				local major = versioninfo.major or ""
-				local minor = versioninfo.minor or ""
-				local patch = versioninfo.patch or ""
-				local prerelease = versioninfo.api_prerelease and "-dev" or ""
-				local version = ("NVIM v%s.%s.%s%s"):format(major, minor, patch, prerelease)
-				return version
-			end
 			return {
 				items = {
 					starter.sections.recent_files(5, true, false),
@@ -560,7 +543,7 @@ return {
 	},
 	{
 		"NeogitOrg/neogit",
-		lazy = true,
+
 		cmd = "Neogit",
 		keys = {
 			{
@@ -599,22 +582,17 @@ return {
 	{
 		-- Tips on launch
 		"TobinPalmer/Tip.nvim",
-		lazy = true,
+
 		cond = require("user_configs").func_features.tip,
 		event = "VimEnter",
-		init = function()
-			-- Default config
-			--- @type Tip.config
-			require("tip").setup({
-				title = "Tip!",
-				url = "https://vtip.43z.one",
-			})
-		end,
+		opts = {
+			title = "Tip!",
+			url = "https://vtip.43z.one",
+		},
 	},
 	{
 		-- Discard inactive buffers
 		"chrisgrieser/nvim-early-retirement",
-		lazy = true,
 		event = "BufReadPre",
 		opts = {
 			notificationOnAutoClose = true,
@@ -623,5 +601,6 @@ return {
 	{
 		-- Disable features on big files
 		"pteroctopus/faster.nvim",
+		lazy = false,
 	},
 }

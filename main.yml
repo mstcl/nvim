@@ -19,12 +19,18 @@
           - ripgrep
         state: present
 
+    - name: Ensure venv directory exists
+      ansible.builtin.file:
+        path: "~/.venv"
+        state: directory
+        mode: "0775"
+
     - name: Install python dependencies for neovim
       tags: packages
       ansible.builtin.pip:
         requirements: "{{ playbook_dir }}/requirements.txt"
         state: present
-        virtualenv: "{{ playbook_dir }}/.venv"
+        virtualenv: "~/.venv/nvim"
 
     - name: Install python dependencies for neovim
       tags: plugins
@@ -32,7 +38,7 @@
       ansible.builtin.pip:
         requirements: "{{ playbook_dir }}/requirements_python_stack.txt"
         state: present
-        virtualenv: "{{ playbook_dir }}/.venv"
+        virtualenv: "~/.venv/nvim"
 
     - name: Template configuration
       ansible.builtin.template:

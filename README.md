@@ -6,15 +6,6 @@
 
 - A really cool text editor that lives in your terminal.
 
-### Core keymap groups
-
-- `<C-M>` - Toggle window UI components
-- `<leader>` - Plugin related keymaps (e.g. FzfLua pickers)
-- `g` - LSP lookups
-- `c` - Code actions, formatting, rename
-
-`<C-P>` brings up the which-key cheatsheet.
-
 ## Get started
 
 ### Cloning
@@ -48,3 +39,24 @@ $ git checkout master; git pull origin master; git checkout prod; git merge mast
 ```
 
 Work through conflicts if needed.
+
+## Nvim python API
+
+A python "venv" (virtual environment) is created with necessary packages in
+`~/.venv/nvim`, especially if the python/notebook stack is detected. Source
+this venv in projects that need it with
+[direnv](https://github.com/direnv/direnv) or similar tools.
+
+```bash
+$ source ~/.venv/nvim/bin/activate
+```
+
+## Core keymap groups
+
+- `<C-M>` - Toggle modules
+- `<leader>` - Plugin/extra keymaps
+- `g` - LSP lookups
+- `c` - Code actions, formatting, rename
+- `[` & `]`- Go to prev/next * (buffers, diagnostics, functions, conflicts, hunks)
+
+`<C-P>` brings up the which-key cheatsheet.

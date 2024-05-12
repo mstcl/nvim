@@ -11,15 +11,19 @@ function M.on_attach(client, bufnr)
 		require("lsp-inlayhints").on_attach(client, bufnr)
 	end
 
-	-- refresh codelens on textchanged and insertleave
-	-- and trigger codelens refresh
-	-- augroup("refreshCodeLens", {
-	-- 	{ "TextChanged", "InsertLeave", "LspAttach" },
-	-- 	{
-	-- 		buffer = bufnr,
-	-- 		callback = lsp.codelens.refresh,
-	-- 	},
-	-- })
+	if client.name == "gopls" then
+		if not client.server_capabilities.semanticTokensProvider then
+			local semantic = client.config.capabilities.textDocument.semanticTokens
+			client.server_capabilities.semanticTokensProvider = {
+				full = true,
+				legend = {
+					tokenTypes = semantic.tokenTypes,
+					tokenModifiers = semantic.tokenModifiers,
+				},
+				range = true,
+			}
+		end
+	end
 end
 
 M.handlers = {

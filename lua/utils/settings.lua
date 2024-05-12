@@ -1,3 +1,5 @@
+-- DEFAULT settings
+
 local set = vim.opt
 
 -- Providers for nvim
@@ -40,7 +42,6 @@ set.termguicolors = true
 set.modeline = true
 set.cursorline = true
 
-set.statusline = require("utils.statusline").get_default_statusline()
 set.laststatus = 3
 set.cursorlineopt = "both"
 set.hidden = true
@@ -55,11 +56,7 @@ set.ttyfast = true
 set.conceallevel = 2
 
 -- Tabline
-if require("user_configs").ui_features.tabline then
-	set.showtabline = 2
-else
-	set.showtabline = 0
-end
+set.showtabline = 0
 
 set.winblend = 0
 set.pumblend = 0
@@ -77,9 +74,6 @@ set.backspace = { "indent", "eol", "start" }
 set.foldmethod = "syntax"
 set.foldminlines = 1
 set.foldnestmax = 6
-set.foldenable = true
-set.foldlevelstart = 99
-set.foldlevel = 99
 
 -- Signcolumn
 set.foldcolumn = "auto:1"
