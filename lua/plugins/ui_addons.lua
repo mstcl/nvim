@@ -1,4 +1,4 @@
-local conf = require("user_configs")
+local augroup = require("utils.misc").augroup
 -- Plugins that modify UI
 return {
 	{
@@ -9,19 +9,19 @@ return {
 		dependencies = {
 			"rktjmp/lush.nvim",
 		},
-		config = function ()
+		config = function()
 			vim.cmd.colorscheme("dmg_extended")
-		end
+		end,
 	},
 	{
 		-- Add a sidebar map
 		"echasnovski/mini.map",
-		lazy = true,
 		keys = {
 			{
 				"<C-M>m",
 				function()
 					require("mini.map").toggle()
+					vim.notify("Toggled mini map", vim.log.levels.INFO)
 				end,
 				desc = "Toggle code minimap",
 			},
@@ -63,161 +63,21 @@ return {
 		end,
 	},
 	{
-		-- Tabline and bufferline
-		"romgrk/barbar.nvim",
-		lazy = true,
-		cond = require("user_configs").ui_features.tabline,
-		init = function()
-			local lush = require("lush")
-			lush(lush.extends({ require("dmg") }).with(require("dmg_bufferline")))
-		end,
-		event = "BufRead",
-		keys = {
-			{
-				"<Left>",
-				"<cmd>BufferPrevious<cr>",
-				desc = "Buffer previous",
-			},
-			{
-				"<Right>",
-				"<cmd>BufferNext<cr>",
-				desc = "Buffer next",
-			},
-			{
-				"<leader><Left>",
-				"<cmd>BufferMovePrevious<cr>",
-				desc = "Move buffer backward",
-			},
-			{
-				"<leader><Right>",
-				"<cmd>BufferMoveNext<cr>",
-				desc = "Move buffer forward",
-			},
-			{
-				"<leader>`",
-				"<cmd>BufferFirst<cr>",
-				desc = "Buffer first",
-			},
-			{
-				"<leader>-",
-				"<cmd>BufferLast<cr>",
-				desc = "Buffer last",
-			},
-			{
-				"<leader>1",
-				"<cmd>BufferGoto 1<cr>",
-				desc = "Buffer 1",
-			},
-			{
-				"<leader>2",
-				"<cmd>BufferGoto 2<cr>",
-				desc = "Buffer 2",
-			},
-			{
-				"<leader>3",
-				"<cmd>BufferGoto 3<cr>",
-				desc = "Buffer 3",
-			},
-			{
-				"<leader>4",
-				"<cmd>BufferGoto 4<cr>",
-				desc = "Buffer 4",
-			},
-			{
-				"<leader>5",
-				"<cmd>BufferGoto 5<cr>",
-				desc = "Buffer 5",
-			},
-			{
-				"<leader>6",
-				"<cmd>BufferGoto 6<cr>",
-				desc = "Buffer 6",
-			},
-			{
-				"<leader>7",
-				"<cmd>BufferGoto 7<cr>",
-				desc = "Buffer 7",
-			},
-			{
-				"<leader>8",
-				"<cmd>BufferGoto 8<cr>",
-				desc = "Buffer 8",
-			},
-			{
-				"<leader>9",
-				"<cmd>BufferGoto 9<cr>",
-				desc = "Buffer 9",
-			},
-			{
-				"<Up>",
-				"<cmd>BufferPin<cr>",
-				desc = "Buffer pin",
-			},
-			{
-				"<Down>",
-				"<cmd>BufferClose<cr>",
-				desc = "Buffer close",
-			},
-			{
-				"<leader>b",
-				"<cmd>BufferPick<cr>",
-				desc = "Pick buffer",
-			},
-		},
-		init = function()
-			vim.g.barbar_auto_setup = false
-		end,
-		opts = {
-			animation = true,
-			auto_hide = false,
-			tabpages = true,
-			closable = true,
-			clickable = true,
-			focus_on_close = "left",
-			hide = { extensions = false, inactive = false },
-			highlight_inactive_file_icons = false,
-			exclude_name = { "python", "[dap-repl]" },
-			icons = {
-				buffer_index = true,
-				buffer_number = false,
-				button = "⋄",
-				gitsigns = {
-					added = { enabled = false, icon = "+" },
-					changed = { enabled = false, icon = "~" },
-					deleted = { enabled = false, icon = "-" },
-				},
-				diagnostics = {
-					[vim.diagnostic.severity.ERROR] = { enabled = true, icon = "*" },
-					[vim.diagnostic.severity.WARN] = { enabled = false },
-					[vim.diagnostic.severity.INFO] = { enabled = false },
-					[vim.diagnostic.severity.HINT] = { enabled = false },
-				},
-				filetype = {
-					custom_colors = true,
-					enabled = false,
-				},
-				separator = { left = " ", right = "" },
-				modified = { button = "✦" },
-				pinned = { button = "٭", filename = true },
-				current = { buffer_index = true, filename = true },
-				inactive = { filename = true },
-			},
-			insert_at_end = false,
-			maximum_padding = 0,
-			maximum_length = 30,
-			semantic_letters = true,
-			letters = "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP",
-			no_name_title = nil,
-		},
-	},
-	{
 		-- Add nice input dialogs to prompt
 		"stevearc/dressing.nvim",
-		lazy = true,
-		event = "LspAttach",
 		init = function()
 			local lush = require("lush")
 			lush(lush.extends({ require("dmg") }).with(require("dmg_dressing")))
+			---@diagnostic disable-next-line: duplicate-set-field
+			vim.ui.select = function(...)
+				require("lazy").load({ plugins = { "dressing.nvim" } })
+				return vim.ui.select(...)
+			end
+			---@diagnostic disable-next-line: duplicate-set-field
+			vim.ui.input = function(...)
+				require("lazy").load({ plugins = { "dressing.nvim" } })
+				return vim.ui.input(...)
+			end
 		end,
 		opts = {
 			input = {
@@ -257,7 +117,6 @@ return {
 	{
 		-- Colorcolumn smart functionality
 		"fmbarina/multicolumn.nvim",
-		lazy = true,
 		priority = 10,
 		event = "BufReadPre",
 		opts = {
@@ -286,30 +145,8 @@ return {
 		},
 	},
 	{
-		-- Show indent lines
-		"shellRaining/hlchunk.nvim",
-		lazy = true,
-		cond = require("user_configs").ui_features.indent_lines,
-		event = "LspAttach",
-		opts = {
-			indent = {
-				exclude_filetypes = require("user_configs").indent_scope_disabled_ft,
-			},
-			blank = {
-				enable = false,
-			},
-			line_num = {
-				enable = false,
-			},
-			chunk = {
-				enable = false,
-			},
-		},
-	},
-	{
 		-- Highlight color blocks
 		"brenoprata10/nvim-highlight-colors",
-		lazy = true,
 		event = { "BufRead" },
 		cmd = { "HighlightColors" },
 		keys = {
@@ -326,9 +163,22 @@ return {
 	{
 		-- Naively highlight word under cursor
 		"echasnovski/mini.cursorword",
-		lazy = true,
 		event = "BufRead",
 		cond = require("user_configs").ui_features.cursorword,
+		keys = {
+			{
+				"<C-M>w",
+				function()
+					vim.g.minicursorword_disable = not vim.g.minicursorword_disable
+					if vim.g.minicursorword_disable then
+						vim.notify("Disabled cursorword", vim.log.levels.INFO)
+					else
+						vim.notify("Enabled cursorword", vim.log.levels.INFO)
+					end
+				end,
+				desc = "Toggle cursorword",
+			},
+		},
 		init = function()
 			vim.cmd("autocmd Filetype markdown,tex,quarto lua vim.b.minicursorword_disable = true")
 		end,
@@ -338,7 +188,6 @@ return {
 	{
 		-- Folding customization using LSP and more
 		"kevinhwang91/nvim-ufo",
-		lazy = true,
 		event = "VimEnter",
 		dependencies = { "kevinhwang91/promise-async" },
 		keys = {
@@ -348,6 +197,16 @@ return {
 				desc = "Peek fold",
 			},
 		},
+		init = function()
+			---@diagnostic disable-next-line: inject-field
+			vim.o.foldcolumn = "1" -- '0' is not bad
+			---@diagnostic disable-next-line: inject-field
+			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+			---@diagnostic disable-next-line: inject-field
+			vim.o.foldlevelstart = 99
+			---@diagnostic disable-next-line: inject-field
+			vim.o.foldenable = true
+		end,
 		opts = function()
 			---Set nvim-ufo truncate text
 			---@return string
@@ -409,7 +268,6 @@ return {
 		-- Cursorline mode decoration
 		"mvllow/modes.nvim",
 		cond = require("user_configs").ui_features.modes,
-		lazy = true,
 		event = "BufReadPre",
 		opts = {
 			set_number = false,
@@ -419,14 +277,12 @@ return {
 		-- Tabs and buffer
 		"tiagovla/scope.nvim",
 		cond = require("user_configs").ui_features.scope,
-		lazy = true,
 		event = "BufRead",
 		opts = {},
 	},
 	{
 		-- Winbar/bufferline alternative
 		"b0o/incline.nvim",
-		lazy = true,
 		event = "BufReadPost",
 		opts = {
 			hide = {
@@ -444,7 +300,6 @@ return {
 	{
 		-- Switch between buffers, the minimal way
 		"ernstwi/juggler.nvim",
-		lazy = true,
 		opts = {
 			highlight_group_active = "Question", -- The selected buffer.
 			highlight_group_inactive = "StatuslineAlt", -- All other buffers.
@@ -466,11 +321,13 @@ return {
 	{
 		-- Code runner
 		"stevearc/overseer.nvim",
-		lazy = true,
 		keys = {
 			{
 				"<C-M>o",
-				"<cmd>OverseerToggle<cr>",
+				function()
+					vim.cmd("OverseerToggle")
+					vim.notify("Toggled overseer", vim.log.levels.INFO)
+				end,
 				desc = "Toggle Overseer",
 			},
 			{
@@ -505,5 +362,168 @@ return {
 				},
 			},
 		},
+	},
+	{
+		-- Search and replace
+		"MagicDuck/grug-far.nvim",
+		cmd = { "GrugFar" },
+		opts = {
+			disableBufferLineNumbers = true,
+			resultsSeparatorLineChar = "─",
+			spinnerStates = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
+			icons = {
+				enabled = false,
+			},
+		},
+	},
+	{
+		-- Tabline and bufferline
+		"echasnovski/mini.tabline",
+		version = false,
+
+		opts = {
+			show_icons = false,
+		},
+		cond = require("user_configs").ui_features.tabline,
+		init = function(_, opts)
+			augroup("loadTabline", {
+				{ "BufReadPre" },
+				{
+					pattern = "*",
+					desc = "Lazy load tabline",
+					callback = function()
+						if vim.bo.filetype ~= "starter" and vim.o.showtabline == 0 then
+							vim.o.showtabline = 2
+							require("mini.tabline").setup(opts)
+							vim.api.nvim_set_hl(0, "MiniTablineFill", { link = "TablineFill" })
+						end
+					end,
+				},
+			})
+		end,
+	},
+	{
+		-- Indent lines
+		"echasnovski/mini.indentscope",
+		version = false,
+		keys = {
+			{
+				"<C-M>i",
+				function()
+					vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable
+					if vim.g.miniindentscope_disable then
+						vim.notify("Disabled indent scope", vim.log.levels.INFO)
+					else
+						vim.notify("Enabled indent scope", vim.log.levels.INFO)
+					end
+				end,
+				desc = "Toggle indentscope",
+			},
+		},
+		event = "BufReadPre",
+		opts = {
+			draw = {
+				delay = 50,
+			},
+			mappings = {
+				goto_top = "",
+				goto_bottom = "",
+			},
+			symbol = "│",
+		},
+		cond = require("user_configs").ui_features.indent_lines,
+		init = function()
+			vim.api.nvim_set_hl(0, "MiniIndentscopeSymbol", { link = "NonText" })
+		end,
+	},
+	{
+		-- Show notifications (for cmdheight = 0)
+		"echasnovski/mini.notify",
+		version = false,
+		keys = {
+			{
+				"<C-BS>",
+				function()
+					require("mini.notify").clear()
+				end,
+				desc = "Dismiss all notifications",
+			},
+		},
+		opts = {
+			content = {
+				format = function(notif)
+					return " " .. notif.msg .. " "
+				end,
+			},
+			lsp_progress = {
+				enable = false,
+			},
+			window = {
+				config = {
+					border = "none",
+				},
+			},
+		},
+		init = function()
+			---@diagnostic disable-next-line: duplicate-set-field
+			vim.notify = function(...)
+				if not require("lazy.core.config").plugins["mini.notify"]._.loaded then
+					require("lazy").load({ plugins = "mini.notify" })
+				end
+				require("mini.notify").make_notify()(...)
+			end
+		end,
+	},
+	{
+		-- Animations
+		"echasnovski/mini.animate",
+		event = "CursorMoved",
+		keys = {
+			{
+				"<C-M>a",
+				function()
+					vim.g.minianimate_disable = not vim.g.minianimate_disable
+					if vim.g.minianimate_disable then
+						vim.notify("Disabled animation", vim.log.levels.INFO)
+					else
+						vim.notify("Enabled animation", vim.log.levels.INFO)
+					end
+				end,
+				desc = "Toggle animate",
+			},
+		},
+		opts = function()
+			-- don't use animate when scrolling with the mouse
+			local mouse_scrolled = false
+			for _, scroll in ipairs({ "Up", "Down" }) do
+				local key = "<ScrollWheel" .. scroll .. ">"
+				vim.keymap.set({ "", "i" }, key, function()
+					mouse_scrolled = true
+					return key
+				end, { expr = true })
+			end
+
+			local animate = require("mini.animate")
+			return {
+				cursor = {
+					timing = animate.gen_timing.linear({ duration = 100, unit = "total" }),
+				},
+				resize = {
+					timing = animate.gen_timing.linear({ duration = 100, unit = "total" }),
+				},
+				scroll = {
+					timing = animate.gen_timing.linear({ duration = 150, unit = "total" }),
+					subscroll = animate.gen_subscroll.equal({
+						predicate = function(total_scroll)
+							if mouse_scrolled then
+								mouse_scrolled = false
+								return false
+							end
+							return total_scroll > 1
+						end,
+					}),
+				},
+			}
+		end,
 	},
 }

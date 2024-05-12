@@ -11,7 +11,6 @@ return {
 			{ "rafamadriz/friendly-snippets" },
 			{ "Zeioth/NormalSnippets" },
 		},
-		lazy = true,
 		event = "ModeChanged *:[iRss\x13vV\x16]*",
 		opts = {
 			history = true,
@@ -53,21 +52,20 @@ return {
 		-- Autocompletion menu & plugins
 		"hrsh7th/nvim-cmp",
 		cond = cond.completion,
-		lazy = true,
+		version = false,
 		event = { "InsertEnter", "CmdlineEnter" },
 		keys = {
 			{
-				"<C-M>a",
+				"<C-M>c",
 				function()
-					if require("user_configs").edit_features.completion then
-						if vim.g.cmp_toggle then
-							vim.g.cmp_toggle = false
-						else
-							vim.g.cmp_toggle = true
-						end
+					vim.g.cmp_toggle = not vim.g.cmp_toggle
+					if not vim.g.cmp_toggle then
+						vim.notify("Disabled auto-completion", vim.log.levels.INFO)
+					else
+						vim.notify("Enabled auto-completion", vim.log.levels.INFO)
 					end
 				end,
-				desc = "Toggle auto-completion window",
+				desc = "Toggle auto-completion",
 			},
 		},
 		dependencies = {
@@ -93,15 +91,10 @@ return {
 			},
 		},
 		opts = function()
-			local cmp_ok, cmp = pcall(require, "cmp")
-			if not cmp_ok then
-				return
-			end
-			local luasnip_ok, luasnip = pcall(require, "luasnip")
-			if not luasnip_ok then
-				return
-			end
+			local cmp = require("cmp")
+			local luasnip = require("luasnip")
 			return {
+				auto_brackets = {},
 				enabled = function()
 					return vim.g.cmp_toggle
 				end,
@@ -124,8 +117,12 @@ return {
 				mapping = cmp.mapping.preset.insert({
 					["<C-d>"] = cmp.mapping.scroll_docs(-4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
-					["<C-e>"] = cmp.mapping.close(),
+					["<C-e>"] = cmp.mapping.abort(),
 					["<CR>"] = cmp.mapping.confirm({ select = true }),
+					["<C-CR>"] = function(fallback)
+						cmp.abort()
+						fallback()
+					end,
 					["<Tab>"] = function(fallback)
 						if cmp.visible() then
 							cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
@@ -202,7 +199,7 @@ return {
 						max_item_count = 7,
 					},
 					{ name = "cmp_pandoc", priority = 9 },
-					{ name = "zotex",      priority = 9 },
+					{ name = "zotex", priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -214,11 +211,21 @@ return {
 		end,
 		config = function(_, opts)
 			local cmp = require("cmp")
-			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 			if opts then
 				cmp.setup(opts)
 			end
+			local Kind = cmp.lsp.CompletionItemKind
+			cmp.event:on("confirm_done", function(event)
+				if not vim.tbl_contains(opts.auto_brackets or {}, vim.bo.filetype) then
+					return
+				end
+				local entry = event.entry
+				local item = entry:get_completion_item()
+				if vim.tbl_contains({ Kind.Function, Kind.Method }, item.kind) then
+					local keys = vim.api.nvim_replace_termcodes("()<left>", false, false, true)
+					vim.api.nvim_feedkeys(keys, "i", true)
+				end
+			end)
 			cmp.setup.cmdline("/", {
 				mapping = cmp.mapping.preset.cmdline({
 					["<C-n>"] = {
@@ -259,11 +266,10 @@ return {
 	},
 	{
 		-- Syntax aware comments & keybindings
-		"numToStr/Comment.nvim",
-		lazy = true,
+		"echasnovski/mini.comment",
 		keys = {
-			{ "gc", mode = { "n", "x" } },
-			{ "gb", mode = { "n", "x" } },
+			{ "gc", mode = { "n", "x", "v" } },
+			{ "gcc", mode = "n" },
 		},
 		opts = {},
 	},
@@ -271,7 +277,6 @@ return {
 		-- Allows mapping custom escape keys without ruining typing experience.
 		"max397574/better-escape.nvim",
 		cond = cond.escape,
-		lazy = true,
 		event = "InsertCharPre",
 		opts = {
 			mapping = { "jk" },
@@ -281,59 +286,104 @@ return {
 		},
 	},
 	{
-		-- Plug and play automatically insert autopairs
-		"windwp/nvim-autopairs",
-		lazy = true,
-		event = { "InsertEnter", "CmdlineEnter" },
+		-- Add motions to surround objects with brackets etc.
+		"echasnovski/mini.surround",
+		version = false,
+		keys = {
+			{ "gsa", desc = "Add surrounding", mode = { "n", "v" } },
+			{ "gsd", desc = "Delete surrounding" },
+			{ "gsf", desc = "Find right surrounding" },
+			{ "gsF", desc = "Find left surrounding" },
+			{ "gsc", desc = "Highlight surrounding" },
+			{ "gsr", desc = "Replace surrounding" },
+			{ "gsn", desc = "Update surround n-lines" },
+		},
 		opts = {
-			check_ts = true,
-			ts_config = { java = false },
-			fast_wrap = {
-				map = "<M-e>",
-				manual_position = false,
-				chars = { "{", "[", "(", '"', "'" },
-				pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], "%s+", ""),
-				offset = 0,
-				end_key = "$",
-				keys = "qwertyuiopzxcvbnmasdfghjkl",
-				check_comma = true,
-				highlight = "CurSearch",
-				highlight_grey = "Comment",
+			mappings = {
+				add = "gsa",
+				delete = "gsd",
+				find = "gsf",
+				find_left = "gsF",
+				highlight = "gsh",
+				replace = "gsr",
+				update_n_lines = "gsn",
 			},
 		},
 	},
 	{
-		-- Add motions to surround objects with brackets etc.
-		"echasnovski/mini.surround",
+		-- Bracketed motions for prev and next
+		"echasnovski/mini.bracketed",
 		version = false,
-		lazy = true,
 		keys = {
-			"sa",
-			"sd",
-			"sr",
-			"sf",
-			"sF",
-			"sh",
-			"sn",
+			{ "]b", desc = "Next buffer" },
+			{ "[b", desc = "Previous buffer" },
+			{ "]c", desc = "Next comment" },
+			{ "[c", desc = "Previous comment" },
+			{ "]d", desc = "Next diagnostic" },
+			{ "[d", desc = "Previous diagnostic" },
+			{ "]i", desc = "Next indent" },
+			{ "[i", desc = "Previous indent" },
+			{ "]j", desc = "Next jumplist" },
+			{ "[j", desc = "Previous jumplist" },
+			{ "]l", desc = "Next location" },
+			{ "[l", desc = "Previous location" },
+			{ "]o", desc = "Next oldfile" },
+			{ "[o", desc = "Previous oldfile" },
+			{ "]q", desc = "Next quickfix" },
+			{ "[q", desc = "Previous quickfix" },
+			{ "]t", desc = "Next treesitter" },
+			{ "[t", desc = "Previous treesitter" },
+			{ "]u", desc = "Next undo" },
+			{ "[u", desc = "Previous undo" },
+			{ "]w", desc = "Next window" },
+			{ "[w", desc = "Previous window" },
+			{ "]y", desc = "Next yank" },
+			{ "[y", desc = "Previous yank" },
+			{ "]B", desc = "Last buffer" },
+			{ "[B", desc = "First buffer" },
+			{ "]C", desc = "Last comment" },
+			{ "[C", desc = "First comment" },
+			{ "]D", desc = "Last diagnostic" },
+			{ "[D", desc = "First diagnostic" },
+			{ "]I", desc = "Last indent" },
+			{ "[I", desc = "First indent" },
+			{ "]J", desc = "Last jumplist" },
+			{ "[J", desc = "First jumplist" },
+			{ "]L", desc = "Last location" },
+			{ "[L", desc = "First location" },
+			{ "]O", desc = "Last oldfile" },
+			{ "[O", desc = "First oldfile" },
+			{ "]Q", desc = "Last quickfix" },
+			{ "[Q", desc = "First quickfix" },
+			{ "]T", desc = "Last treesitter" },
+			{ "[T", desc = "First treesitter" },
+			{ "]U", desc = "Last undo" },
+			{ "[U", desc = "First undo" },
+			{ "]W", desc = "Last window" },
+			{ "[W", desc = "First window" },
+			{ "]Y", desc = "Last yank" },
+			{ "[Y", desc = "First yank" },
 		},
-		opts = {},
+		opts = {
+			conflict = { suffix = "" },
+			file = { suffix = "" },
+		},
 	},
 	{
 		-- Keybindings to move lines and blocks
 		"fedepujol/move.nvim",
 		cond = cond.move,
-		lazy = true,
 		keys = {
-			{ "<A-j>", "<cmd>MoveBlock(1)<cr>",   mode = "v", desc = "Move block down" },
-			{ "<A-k>", "<cmd>MoveBlock(-1)<cr>",  mode = "v", desc = "Move block up" },
+			{ "<A-j>", "<cmd>MoveBlock(1)<cr>", mode = "v", desc = "Move block down" },
+			{ "<A-k>", "<cmd>MoveBlock(-1)<cr>", mode = "v", desc = "Move block up" },
 			{ "<A-h>", "<cmd>MoveHBlocK(-1)<cr>", mode = "v", desc = "Move block left" },
-			{ "<A-l>", "<cmd>MoveHBlock(1)<cr>",  mode = "v", desc = "Move block right" },
-			{ "<A-j>", "<cmd>MoveLine(1)<cr>",    mode = "n", desc = "Move line up" },
-			{ "<A-k>", "<cmd>MoveLine(-1)<cr>",   mode = "n", desc = "Move line down" },
-			{ "<A-h>", "<cmd>MoveHChar(-1)<cr>",  mode = "n", desc = "Move char left" },
-			{ "<A-l>", "<cmd>MoveHChar(1)<cr>",   mode = "n", desc = "Move char right" },
-			{ "<A-f>", "<cmd>MoveWord(1)<cr>",    mode = "n", desc = "Move word forward" },
-			{ "<A-b>", "<cmd>MoveWord(-1)<cr>",   mode = "n", desc = "Move word backward" },
+			{ "<A-l>", "<cmd>MoveHBlock(1)<cr>", mode = "v", desc = "Move block right" },
+			{ "<A-j>", "<cmd>MoveLine(1)<cr>", mode = "n", desc = "Move line up" },
+			{ "<A-k>", "<cmd>MoveLine(-1)<cr>", mode = "n", desc = "Move line down" },
+			{ "<A-h>", "<cmd>MoveHChar(-1)<cr>", mode = "n", desc = "Move char left" },
+			{ "<A-l>", "<cmd>MoveHChar(1)<cr>", mode = "n", desc = "Move char right" },
+			{ "<A-f>", "<cmd>MoveWord(1)<cr>", mode = "n", desc = "Move word forward" },
+			{ "<A-b>", "<cmd>MoveWord(-1)<cr>", mode = "n", desc = "Move word backward" },
 		},
 		opts = {
 			char = {
@@ -350,10 +400,17 @@ return {
 		-- Jump around the buffer
 		"folke/flash.nvim",
 		cond = cond.flash,
-		lazy = true,
 		keys = {
 			{
-				"ss",
+				"S",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").treesitter()
+				end,
+				desc = "Flash Treesitter",
+			},
+			{
+				"s",
 				mode = { "n", "x", "o" },
 				function()
 					require("flash").jump()
@@ -376,11 +433,20 @@ return {
 				end,
 				desc = "Treesitter Search",
 			},
+			{
+				"<C-S>",
+				mode = { "c" },
+				function()
+					require("flash").toggle()
+					vim.notify("Toggled searching with Flash", vim.log.levels.INFO)
+				end,
+				desc = "Toggled Flash Search",
+			},
 		},
 		opts = function()
 			return {
 				prompt = {
-					prefix = { { "Flash", "FlashPromptIcon" } },
+					prefix = { { " FLASH ", "FlashPromptIcon" } },
 				},
 				modes = {
 					char = {
@@ -405,7 +471,6 @@ return {
 		-- Tab out of parentheses
 		"abecodes/tabout.nvim",
 		event = "InsertEnter",
-		lazy = true,
 		dependencies = {
 			{ "nvim-treesitter/nvim-treesitter" },
 			{ "hrsh7th/nvim-cmp" },
@@ -450,7 +515,6 @@ return {
 		-- Highlight brackets when inside block
 		"utilyre/sentiment.nvim",
 		version = "*",
-		lazy = true,
 		event = "BufRead",
 		opts = function()
 			return {
@@ -470,7 +534,6 @@ return {
 	{
 		-- Quick guessing indent for filetypes
 		"nmac427/guess-indent.nvim",
-		lazy = true,
 		event = "BufReadPost",
 		opts = {
 			override_editorconfig = true,
@@ -480,7 +543,6 @@ return {
 	{
 		-- Force cursor to stay in place when doing certain visual motions
 		"gbprod/stay-in-place.nvim",
-		lazy = true,
 		keys = {
 			{
 				"==",
@@ -512,7 +574,6 @@ return {
 	{
 		-- Toggling booleans and more
 		"nat-418/boole.nvim",
-		lazy = true,
 		keys = {
 			{
 				"<C-A>",
@@ -539,7 +600,6 @@ return {
 		-- Context at end of block, outside parentheses
 		"code-biscuits/nvim-biscuits",
 		cond = cond.biscuits,
-		lazy = true,
 		event = "VeryLazy",
 		opts = {
 			show_on_start = true,
@@ -558,18 +618,19 @@ return {
 	{
 		-- Automatically add f-strings
 		"chrisgrieser/nvim-puppeteer",
-		lazy = true,
 		ft = { "python", "typescript", "javascript" },
 	},
 	{
 		-- Smart rooter, replaces autochdir
 		"notjedi/nvim-rooter.lua",
-		lazy = true,
-		event = "Filetype",
+		event = "VeryLazy",
 		keys = {
 			{
 				"<C-M>r",
-				"<cmd>RooterToggle<cr>",
+				function()
+					vim.cmd("RooterToggle")
+					vim.notify("Toggled Rooter", vim.log.levels.INFO)
+				end,
 				desc = "Toggle between autochdir 🡘 root dir",
 			},
 		},
@@ -590,7 +651,6 @@ return {
 	{
 		-- Better word movement
 		"chrisgrieser/nvim-spider",
-		lazy = true,
 		cond = cond.spider,
 		keys = {
 			{ "e", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x" } },
@@ -612,6 +672,149 @@ return {
 				package_json = true,
 				search = true,
 			},
+		},
+	},
+	-- auto pairs
+	{
+		"echasnovski/mini.pairs",
+		event = "InsertEnter",
+		opts = {
+			mappings = {
+				["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^\\`].", register = { cr = false } },
+			},
+		},
+		keys = {
+			{
+				"<C-M>p",
+				function()
+					vim.g.minipairs_disable = not vim.g.minipairs_disable
+					if vim.g.minipairs_disable then
+						vim.notify("Disabled auto-pairs", vim.log.levels.INFO)
+					else
+						vim.notify("Enabled auto-pairs", vim.log.levels.INFO)
+					end
+				end,
+				desc = "Toggle auto-pairs",
+			},
+		},
+	},
+	{
+		-- Textobjects
+		"echasnovski/mini.ai",
+		keys = {
+			{ "a", mode = { "x", "o" } },
+			{ "i", mode = { "x", "o" } },
+		},
+		opts = function()
+			local ai = require("mini.ai")
+			return {
+				custom_textobjects = {
+					o = ai.gen_spec.treesitter({
+						a = { "@block.outer", "@conditional.outer", "@loop.outer" },
+						i = { "@block.inner", "@conditional.inner", "@loop.inner" },
+					}, {}),
+					f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }, {}),
+					c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }, {}),
+					t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" },
+					d = { "%f[%d]%d+" }, -- digits
+					e = { -- Word with case
+						{
+							"%u[%l%d]+%f[^%l%d]",
+							"%f[%S][%l%d]+%f[^%l%d]",
+							"%f[%P][%l%d]+%f[^%l%d]",
+							"^[%l%d]+%f[^%l%d]",
+						},
+						"^().*()$",
+					},
+					g = function() -- Whole buffer, similar to `gg` and 'G' motion
+						local from = { line = 1, col = 1 }
+						local to = {
+							line = vim.fn.line("$"),
+							col = math.max(vim.fn.getline("$"):len(), 1),
+						}
+						return { from = from, to = to }
+					end,
+					u = ai.gen_spec.function_call(), -- u for "Usage"
+					U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
+				},
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("mini.ai").setup(opts)
+			end
+			---@type table<string, string|table>
+			local i = {
+				[" "] = "Whitespace",
+				['"'] = 'Balanced "',
+				["'"] = "Balanced '",
+				["`"] = "Balanced `",
+				["("] = "Balanced (",
+				[")"] = "Balanced ) including white-space",
+				[">"] = "Balanced > including white-space",
+				["<lt>"] = "Balanced <",
+				["]"] = "Balanced ] including white-space",
+				["["] = "Balanced [",
+				["}"] = "Balanced } including white-space",
+				["{"] = "Balanced {",
+				["?"] = "User Prompt",
+				_ = "Underscore",
+				a = "Argument",
+				b = "Balanced ), ], }",
+				c = "Class",
+				d = "Digit(s)",
+				e = "Word in CamelCase & snake_case",
+				f = "Function",
+				g = "Entire file",
+				o = "Block, conditional, loop",
+				q = "Quote `, \", '",
+				t = "Tag",
+				u = "Use/call function & method",
+				U = "Use/call without dot in name",
+			}
+			local a = vim.deepcopy(i)
+			for k, v in pairs(a) do
+				a[k] = v:gsub(" including.*", "")
+			end
+
+			local ic = vim.deepcopy(i)
+			local ac = vim.deepcopy(a)
+			for key, name in pairs({ n = "Next", l = "Last" }) do
+				i[key] = vim.tbl_extend("force", { name = "Inside " .. name .. " textobject" }, ic)
+				a[key] = vim.tbl_extend("force", { name = "Around " .. name .. " textobject" }, ac)
+			end
+			require("which-key").register({
+				mode = { "o", "x" },
+				i = i,
+				a = a,
+			})
+		end,
+	},
+	{
+		-- Remove buffers
+		"echasnovski/mini.bufremove",
+		keys = {
+			{
+				"<C-Q>",
+				function()
+					local bd = require("mini.bufremove").delete
+					if vim.bo.modified then
+						local choice =
+							vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
+						if choice == 1 then -- Yes
+							vim.cmd.write()
+							bd(0)
+						elseif choice == 2 then -- No
+							bd(0, true)
+						end
+					else
+						bd(0)
+					end
+				end,
+				desc = "Delete Buffer",
+			},
+			-- stylua: ignore
+			{ "<C-Down>", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
 		},
 	},
 }

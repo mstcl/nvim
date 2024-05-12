@@ -8,14 +8,6 @@ local M = {}
 
 -- LSP mappings for native LSP
 function M.setup(client, bufnr)
-	wk.register({
-		["<C-Q>"] = {
-			vim.diagnostic.open_float,
-			"Open diagnostic (floating)",
-			buffer = bufnr,
-		},
-	})
-
 	if client.server_capabilities.codeActionProvider then
 		wk.register({
 			["crr"] = {
@@ -72,23 +64,6 @@ function M.setup(client, bufnr)
 			},
 		})
 	end
-
-	wk.register({
-		["[d"] = {
-			function()
-				vim.diagnostic.goto_prev({ wrap = false, float = true })
-			end,
-			"Previous diagnostic",
-			buffer = bufnr,
-		},
-		["]d"] = {
-			function()
-				vim.diagnostic.goto_next({ wrap = false, float = true })
-			end,
-			"Next diagnostic",
-			buffer = bufnr,
-		},
-	})
 end
 
 return M

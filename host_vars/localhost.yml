@@ -18,10 +18,11 @@ func_features:
   tip: false # show a tip on startup (pretty annoying but useful if you're new)
 
 ui_features:
+  animate: true # non-blocking smooth scrolling (toggle-able)
   modes: false # highlight cursorline depending on the mode
   scope: true # only display buffers for under a given tab scope
-  cursorword: false # highlight words that match current word under cursor
-  indent_lines: false # show fancy indent lines
+  cursorword: false # highlight words that match current word under cursor (toggle-able)
+  indent_lines: true # show fancy indent lines (toggle-able)
   tabline: false # display a bar at the top showing opened buffers
 
 edit_features:

@@ -1,14 +1,17 @@
+local augroup = require("utils.misc").augroup
 -- Plugins that add things to the signcolumn (or foldcolumn)
 return {
 	{
 		-- Git status in signcolumn
 		"lewis6991/gitsigns.nvim",
-		lazy = true,
 		event = "BufReadPre",
 		keys = {
 			{
 				"<C-M>g",
-				"<cmd>Gitsigns toggle_signs<cr>",
+				function ()
+					vim.cmd("Gitsigns toggle_signs")
+					vim.notify("Toggled git signs", vim.log.levels.INFO)
+				end,
 				desc = "Toggle gitsigns",
 			},
 			{
@@ -73,7 +76,6 @@ return {
 	{
 		-- Show signs for folded blocks
 		"lewis6991/foldsigns.nvim",
-		lazy = true,
 		event = "BufRead",
 		opts = {
 			exclude = { "LspDiagnosticsSignWarning" },
@@ -82,7 +84,6 @@ return {
 	{
 		-- Utility to tweak statuscolumn
 		"luukvbaal/statuscol.nvim",
-		lazy = false,
 		opts = function()
 			local builtin = require("statuscol.builtin")
 			return {
@@ -91,10 +92,7 @@ return {
 					"help",
 					"starter",
 					"Neogit*",
-					"aerial",
 					"lazy",
-					"TelescopePrompt",
-					"tex",
 					"toggleterm",
 				},
 				segments = {
@@ -128,10 +126,20 @@ return {
 				},
 			}
 		end,
-		config = function(_, opts)
-			if opts then
-				require("statuscol").setup(opts)
-			end
+		init = function(opts)
+			augroup("loadStatuscolumn", {
+				{ "BufReadPre" },
+				{
+					pattern = "*",
+					desc = "Lazy load statuscol",
+					callback = function()
+						if vim.bo.filetype ~= "starter" and vim.wo.statuscolumn == "" then
+							require("statuscol").setup(opts)
+							vim.wo.statuscolumn = "%!v:lua.StatusCol()"
+						end
+					end,
+				},
+			})
 		end,
 	},
 }

@@ -12,7 +12,6 @@ local sources = conf.lsp_sources
 return {
 	{
 		"linrongbin16/lsp-progress.nvim",
-		lazy = true,
 		event = "LspAttach",
 		cond = cond,
 		opts = {},
@@ -20,7 +19,6 @@ return {
 	{
 		-- Code tools forge
 		"williamboman/mason.nvim",
-		lazy = true,
 		event = { "BufReadPre", "BufNewFile" },
 		cmd = {
 			"MasonInstall",
@@ -45,7 +43,6 @@ return {
 	{
 		-- Bridge nvim-lspconfig and mason
 		"williamboman/mason-lspconfig.nvim",
-		lazy = true,
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			{ "williamboman/mason.nvim" },
@@ -60,12 +57,10 @@ return {
 		-- Configure LSP
 		"neovim/nvim-lspconfig",
 		cond = cond,
-		lazy = true,
 		event = "BufRead",
 		dependencies = {
 			{
 				"cmp-nvim-lsp",
-				lazy = true,
 				event = "InsertEnter",
 				cond = conf.edit_features.completion,
 			},
@@ -82,7 +77,9 @@ return {
 						capabilities = capabilities,
 						filetypes = { "yaml.ansible" },
 						settings = {
+							redhat = { telemetry = { enabled = false } },
 							yaml = {
+								keyOrdering = false,
 								format = {
 									enable = true,
 									singleQuote = true,
@@ -105,20 +102,22 @@ return {
 										"requirements.yml",
 									},
 									["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-meta-schema.json"] = {
-										"meta/main.yml",
+										"**/meta/main.yml",
 									},
 									["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-vars-schema.json"] = {
-										"vars/*.yml",
-										"defaults/*.yml",
-										"host_vars/*.yml",
-										"group_vars/*.yml",
+										"**/vars/*.yml",
+										"**/defaults/*.yml",
+										"**/host_vars/*.yml",
+										"**/group_vars/*.yml",
 									},
 									["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-tasks-schema.json"] = {
-										"tasks/*.yml",
-										"handlers/*.yml",
+										"**/tasks/*.yml",
+										"**/handlers/*.yml",
 									},
 									["https://raw.githubusercontent.com/ansible-community/ansible-lint/schemas/src/ansiblelint/f/ansible-playbook-schema.json"] = {
-										"playbooks/*.yml",
+										"**/playbooks/*.yml",
+										"main.yml",
+										"site.yml",
 									},
 								},
 								schemaStore = {
@@ -145,6 +144,17 @@ return {
 						},
 						settings = {
 							gopls = {
+								gofumpt = true,
+								codelenses = {
+									gc_details = false,
+									generate = true,
+									regenerate_cgo = true,
+									run_govulncheck = true,
+									test = true,
+									tidy = true,
+									upgrade_dependency = true,
+									vendor = true,
+								},
 								hints = {
 									assignVariableTypes = true,
 									compositeLiteralFields = true,
@@ -154,6 +164,18 @@ return {
 									parameterNames = true,
 									rangeVariableTypes = true,
 								},
+								analyses = {
+									fieldalignment = true,
+									nilness = true,
+									unusedparams = true,
+									unusedwrite = true,
+									useany = true,
+								},
+								usePlaceholders = true,
+								completeUnimported = true,
+								staticcheck = true,
+								directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+								semanticTokens = true,
 							},
 						},
 					})
@@ -285,7 +307,6 @@ return {
 		-- Linter/formatter/diagnostic manager
 		"nvimtools/none-ls.nvim",
 		cond = cond,
-		lazy = true,
 		event = "BufRead",
 		opts = function()
 			local null_ls = require("null-ls")
@@ -368,7 +389,6 @@ return {
 		-- Inlay hints
 		"lvimuser/lsp-inlayhints.nvim",
 		cond = cond2.inlay_hints and cond,
-		lazy = true,
 		event = "LspAttach",
 		opts = {
 			inlay_hints = {
@@ -390,7 +410,6 @@ return {
 		-- Virtual text to show usage
 		"Wansmer/symbol-usage.nvim",
 		cond = cond2.usage and cond,
-		lazy = true,
 		event = "BufReadPre",
 		opts = {
 			hl = { link = "StatusLineNC" },
@@ -400,7 +419,6 @@ return {
 	{
 		-- LSP completion in code blocks
 		"jmbuhr/otter.nvim",
-		lazy = true,
 		cond = cond,
 		dependencies = { "neovim/nvim-lspconfig" },
 		ft = { "quarto", "markdown" },

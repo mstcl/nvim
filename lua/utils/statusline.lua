@@ -195,6 +195,46 @@ function M.get_filetype()
 	end
 end
 
+function M.get_search_counts()
+	if vim.v.hlsearch == 1 then
+		local sinfo = vim.fn.searchcount({ maxcount = 0 })
+		local search_stat = sinfo.incomplete > 0 and "[?/?]"
+			or sinfo.total > 0 and ("[%s/%s]"):format(sinfo.current, sinfo.total)
+			or nil
+
+		if search_stat ~= nil then
+			return search_stat
+		end
+	end
+	return ""
+end
+
+function M.get_macro_recording()
+	local recording_register = vim.fn.reg_recording()
+	if recording_register == "" then
+		return ""
+	else
+		return "[@" .. recording_register .. "]"
+	end
+end
+
+function M.get_fformat()
+	local ff = vim.bo.fileformat
+	if ff == "unix" or ff == "" then
+		return ""
+	end
+	return "[" .. ff .. "]"
+end
+
+function M.get_ffenc()
+	local fe = vim.bo.fileencoding
+	if fe == "utf-8" or fe == "" then
+		return ""
+	end
+	return "[" .. fe .. "]"
+end
+
+
 -- Statusline components
 local statusline_parts = {
 	-- Highlights
@@ -221,10 +261,13 @@ local statusline_parts = {
 	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%c %2p%#statuslinealt#%%":""%}]],
 	mode = [[%{%v:lua.require'utils.statusline'.get_mode()%}]],
 	cwd = [[%{%v:lua.require'utils.statusline'.get_cwd()%}]],
-	indentation = [[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
+	indentation =
+	[[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
 	ft = [[%{%v:lua.require'utils.statusline'.get_filetype()%}]],
-	fformat = [[%{&ff!="unix"?"  ".&ff." ":""}]],
-	fenc = [[%{(&fenc!="utf-8"&&&fenc!="")?"  ".&fenc." ":""}]],
+	fformat = [[%{%v:lua.require'utils.statusline'.get_fformat()%}]],
+	fenc = [[%{%v:lua.require'utils.statusline'.get_ffenc()%}]],
+	search = [[%{%v:lua.require'utils.statusline'.get_search_counts()%}]],
+	macro = [[%{%v:lua.require'utils.statusline'.get_macro_recording()%}]],
 }
 
 function M.get_default_statusline()
@@ -247,18 +290,27 @@ function M.get_default_statusline()
 		statusline_parts.diffs,
 		statusline_parts.hl_alt,
 		statusline_parts.close_bracket,
-		statusline_parts.truncate,
-		statusline_parts.align,
 		statusline_parts.hl_main,
-		statusline_parts.diagnostics,
 		statusline_parts.padding,
+		statusline_parts.diagnostics,
+		statusline_parts.truncate,
+		-- Messy middle bit
+		statusline_parts.align,
+		statusline_parts.hl_alt,
+		statusline_parts.macro,
+		--
+		statusline_parts.hl_alt,
+		statusline_parts.search,
+		--
 		statusline_parts.hl_orange,
 		statusline_parts.fformat,
+		--
+		statusline_parts.hl_orange,
 		statusline_parts.fenc,
+		-- Right most
+		statusline_parts.align,
 		statusline_parts.hl_alt,
 		statusline_parts.progress,
-		statusline_parts.padding,
-		statusline_parts.align,
 		statusline_parts.pos,
 		statusline_parts.padding,
 		statusline_parts.indentation,

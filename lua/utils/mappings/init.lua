@@ -13,11 +13,14 @@ map("n", "<C-N>", function()
 		if winopt.relativenumber then
 			winopt.number = false
 			winopt.relativenumber = false
+			vim.notify("Number: off", vim.log.levels.INFO)
 		else
 			winopt.relativenumber = true
+			vim.notify("Number: relative", vim.log.levels.INFO)
 		end
 	else
 		winopt.number = true
+		vim.notify("Number: static", vim.log.levels.INFO)
 	end
 end, { desc = "Cycle number mode" })
 map(
@@ -27,27 +30,36 @@ map(
 	{ desc = "Clear screen & highlights" }
 )
 map("n", "<C-M>s", function()
-	exec("setlocal spell! spelllang=en_gb")
+	vim.opt_local.spell = not (vim.opt_local.spell:get())
+	if not (vim.opt_local.spell:get()) then
+		vim.notify("Disabled spellchecking", vim.log.levels.INFO)
+	else
+		vim.notify("Enabled spellchecking", vim.log.levels.INFO)
+	end
 end, { desc = "Toggle spell checking" })
 map("n", "<C-M>n", function()
-	if winopt.list then
-		winopt.list = false
+	winopt.list = not winopt.list
+	if not winopt.list then
+		vim.notify("Disabled non-text characters", vim.log.levels.INFO)
 	else
-		winopt.list = true
+		vim.notify("Enabled non-text characters", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle non-text characters" })
 map("n", "<C-M>l", function()
-	if winopt.cursorline then
-		winopt.cursorline = false
+	winopt.cursorline = not winopt.cursorline
+	if not winopt.cursorline then
+		vim.notify("Disabled cursorline", vim.log.levels.INFO)
 	else
-		winopt.cursorline = true
+		vim.notify("Enabled cursorline", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle cursorline" })
 map("n", "<C-M>f", function()
 	if winopt.foldcolumn == "1" then
 		winopt.foldcolumn = "0"
+		vim.notify("Disabled foldcolumn", vim.log.levels.INFO)
 	else
 		winopt.foldcolumn = "1"
+		vim.notify("Enabled foldcolumn", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle foldcolumn" })
 
@@ -74,25 +86,10 @@ map("x", ">", ">gv", { desc = "Indent" })
 -- Folding
 map("n", "<Tab>", "za", { desc = "Toggle current fold" })
 
--- QFlist navigation
-map("n", "]q", "<cmd>cn<cr>", { desc = "Next quickfix item" })
-map("n", "[q", "<cmd>cp<cr>", { desc = "Previous quickfix item" })
-
--- Buffer
-if not require("user_configs").ui_features.tabline then
-	map("n", "<Left>", function()
-		exec("bprev")
-	end, { desc = "Buffer previous" })
-	map("n", "<Right>", function()
-		exec("bnext")
-	end, { desc = "Buffer next" })
-	map("n", "<leader>`", function()
-		exec("bfirst")
-	end, { desc = "Buffer first" })
-	map("n", "<leader>-", function()
-		exec("blast")
-	end, { desc = "Buffer last" })
-	map("n", "<Down>", function()
-		exec("bunload")
-	end, { desc = "Buffer unload" })
-end
+-- Better search
+map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
+map("x", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
+map("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
+map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search Result" })
+map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
+map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })

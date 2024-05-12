@@ -1,15 +1,4 @@
-local autocmd = vim.api.nvim_create_autocmd
-local groupid = vim.api.nvim_create_augroup
----@param group string
----@vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
----@return nil
-local function augroup(group, ...)
-	local id = groupid(group, { clear = true })
-	for _, a in ipairs({ ... }) do
-		a[2].group = id
-		autocmd(unpack(a))
-	end
-end
+local augroup = require("utils.misc").augroup
 
 -- Plugins to extend syntax, either natively or with treesitter
 return {
@@ -17,11 +6,13 @@ return {
 		-- Treesitter engine
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
-		lazy = true,
 		keys = {
 			{
 				"<C-M>t",
-				"<cmd>TSBufToggle highlight<cr>",
+				function()
+					vim.cmd("TSBufToggle highlight")
+					vim.notify("Toggled treesitter highlighting", vim.log.levels.INFO)
+				end,
 				desc = "Toggle treesitter highlighting",
 			},
 		},
@@ -103,24 +94,6 @@ return {
 				},
 			},
 			textobjects = {
-				select = {
-					enable = true,
-					lookahead = true,
-					keymaps = {
-						["ak"] = { query = "@block.outer", desc = "around block" },
-						["ik"] = { query = "@block.inner", desc = "inside block" },
-						["ac"] = { query = "@class.outer", desc = "around class" },
-						["ic"] = { query = "@class.inner", desc = "inside class" },
-						["a?"] = { query = "@conditional.outer", desc = "around conditional" },
-						["i?"] = { query = "@conditional.inner", desc = "inside conditional" },
-						["af"] = { query = "@function.outer", desc = "around function " },
-						["if"] = { query = "@function.inner", desc = "inside function " },
-						["al"] = { query = "@loop.outer", desc = "around loop" },
-						["il"] = { query = "@loop.inner", desc = "inside loop" },
-						["aa"] = { query = "@parameter.outer", desc = "around argument" },
-						["ia"] = { query = "@parameter.inner", desc = "inside argument" },
-					},
-				},
 				move = {
 					enable = true,
 					set_jumps = true,
@@ -180,7 +153,6 @@ return {
 	{
 		-- Highlight argument's definition and usage
 		"m-demare/hlargs.nvim",
-		lazy = true,
 		ft = {
 			"c",
 			"cpp",
@@ -213,7 +185,6 @@ return {
 	{
 		-- Highlight parenthesis
 		"HiPhish/rainbow-delimiters.nvim",
-		lazy = true,
 		event = { "BufRead" },
 		cond = require("user_configs").syntax_features.rainbow,
 		opts = {
@@ -240,14 +211,12 @@ return {
 	{
 		-- Concealing in tex
 		"KeitaNakamura/tex-conceal.vim",
-		lazy = true,
 		cond = require("user_configs").syntax_features.tex,
 		ft = { "tex" },
 	},
 	{
 		-- An angry reviewer in your latecx files
 		"anufrievroman/vim-angry-reviewer",
-		lazy = true,
 		cmd = "AngryReviewer",
 		cond = require("user_configs").syntax_features.tex,
 		config = function()
@@ -257,7 +226,6 @@ return {
 	{
 		-- Orgmode syntax
 		"nvim-orgmode/orgmode",
-		lazy = true,
 		cond = require("user_configs").syntax_features.org,
 		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
 		opts = {
@@ -277,11 +245,16 @@ return {
 				require("orgmode").setup(opts)
 			end
 		end,
+		init = function()
+			local wk = require("which-key")
+			wk.register({
+				["<leader>o"] = { name = "Org mode actions" },
+			})
+		end,
 	},
 	{
 		-- Org bullet
 		"akinsho/org-bullets.nvim",
-		lazy = true,
 		cond = require("user_configs").syntax_features.org,
 		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
 		opts = function()
@@ -308,7 +281,6 @@ return {
 		-- QUARTO setup
 		"quarto-dev/quarto-nvim",
 		dev = false,
-		lazy = true,
 		cond = require("user_configs").syntax_features.quarto,
 		ft = { "quarto" },
 		dependencies = { "jmbuhr/otter.nvim" },
@@ -330,7 +302,6 @@ return {
 	{
 		-- Typst syntax
 		"kaarmu/typst.vim",
-		lazy = true,
 		cond = require("user_configs").syntax_features.typst,
 		event = "FileType",
 		config = function()
@@ -341,7 +312,6 @@ return {
 		-- Ansible syntax
 		"pearofducks/ansible-vim",
 		cond = require("user_configs").syntax_features.ansible,
-		lazy = true,
 		event = { "BufReadPre *.j2", "BufReadPre *.yml" },
 		config = function()
 			vim.g.ansible_template_syntaxes = {
@@ -360,7 +330,6 @@ return {
 	{
 		-- Python notebooks
 		"benlubas/molten-nvim",
-		lazy = true,
 		ft = "quarto",
 		version = "^1.0.0",
 		build = ":UpdateRemotePlugins",
@@ -424,7 +393,6 @@ return {
 	{
 		-- Display images inside (kinda broken on Arch)
 		"3rd/image.nvim",
-		lazy = true,
 		build = "luarocks --local install magick --lua-version=5.1",
 		ft = { "markdown", "org", "ipynb", "quarto" },
 		-- cond = vim.fn.expand("$SSH_CLIENT") == "$SSH_CLIENT",
@@ -450,8 +418,7 @@ return {
 	{
 		-- Convert ipython notebooks to something sane
 		"GCBallesteros/jupytext.nvim",
-		lazy = false,
-		event = { "FileType" },
+		event = "VeryLazy",
 		cond = require("user_configs").syntax_features.quarto,
 		opts = {
 			style = "quarto",
@@ -463,7 +430,49 @@ return {
 		-- Git conflicts helper
 		"akinsho/git-conflict.nvim",
 		version = "*",
-		lazy = false,
-		config = true,
+		event = "BufReadPre",
+		keys = {
+			{
+				"co",
+				"<Plug>(git-conflict-ours)",
+				desc = "Choose ours (conflict)",
+			},
+			{
+				"ct",
+				"<Plug>(git-conflict-theirs)",
+				desc = "Choose theirs (conflict)",
+			},
+			{
+				"cb",
+				"<Plug>(git-conflict-both)",
+				desc = "Choose both (conflict)",
+			},
+			{
+				"cn",
+				"<Plug>(git-conflict-none)",
+				desc = "Choose none (conflict)",
+			},
+			{
+				"]x",
+				"<Plug>(git-conflict-next-conflict)",
+				desc = "Next conflict",
+			},
+			{
+				"[x",
+				"<Plug>(git-conflict-prev-conflict)",
+				desc = "Previous conflict",
+			},
+		},
+		opts = function()
+			return {
+				default_mappings = false,
+				disable_diagnostics = true,
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("git-conflict").setup(opts)
+			end
+		end,
 	},
 }
