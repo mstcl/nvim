@@ -525,6 +525,7 @@ return {
 				items = {
 					starter.sections.recent_files(5, true, false),
 					starter.sections.recent_files(3, false, false),
+					starter.sections.sessions(3),
 					quick(),
 				},
 				content_hooks = {

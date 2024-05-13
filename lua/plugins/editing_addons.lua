@@ -6,8 +6,8 @@ return {
 		-- Snippet engine
 		"L3MON4D3/LuaSnip",
 		cond = cond.completion,
-		build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
 		dependencies = {
+			build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
 			{ "rafamadriz/friendly-snippets" },
 			{ "Zeioth/NormalSnippets" },
 		},
@@ -374,20 +374,23 @@ return {
 		"fedepujol/move.nvim",
 		cond = cond.move,
 		keys = {
-			{ "<A-j>", "<cmd>MoveBlock(1)<cr>", mode = "v", desc = "Move block down" },
-			{ "<A-k>", "<cmd>MoveBlock(-1)<cr>", mode = "v", desc = "Move block up" },
-			{ "<A-h>", "<cmd>MoveHBlocK(-1)<cr>", mode = "v", desc = "Move block left" },
-			{ "<A-l>", "<cmd>MoveHBlock(1)<cr>", mode = "v", desc = "Move block right" },
-			{ "<A-j>", "<cmd>MoveLine(1)<cr>", mode = "n", desc = "Move line up" },
-			{ "<A-k>", "<cmd>MoveLine(-1)<cr>", mode = "n", desc = "Move line down" },
-			{ "<A-h>", "<cmd>MoveHChar(-1)<cr>", mode = "n", desc = "Move char left" },
-			{ "<A-l>", "<cmd>MoveHChar(1)<cr>", mode = "n", desc = "Move char right" },
-			{ "<A-f>", "<cmd>MoveWord(1)<cr>", mode = "n", desc = "Move word forward" },
-			{ "<A-b>", "<cmd>MoveWord(-1)<cr>", mode = "n", desc = "Move word backward" },
+			{ "<A-j>", ":MoveBlock(1)<cr>", mode = "v", desc = "Move block down" },
+			{ "<A-k>", ":MoveBlock(-1)<cr>", mode = "v", desc = "Move block up" },
+			{ "<A-h>", ":MoveHBlocK(-1)<cr>", mode = "v", desc = "Move block left" },
+			{ "<A-l>", ":MoveHBlock(1)<cr>", mode = "v", desc = "Move block right" },
+			{ "<A-j>", ":MoveLine(1)<cr>", mode = "n", desc = "Move line up" },
+			{ "<A-k>", ":MoveLine(-1)<cr>", mode = "n", desc = "Move line down" },
+			{ "<A-h>", ":MoveHChar(-1)<cr>", mode = "n", desc = "Move char left" },
+			{ "<A-l>", ":MoveHChar(1)<cr>", mode = "n", desc = "Move char right" },
+			{ "<A-f>", ":MoveWord(1)<cr>", mode = "n", desc = "Move word forward" },
+			{ "<A-b>", ":MoveWord(-1)<cr>", mode = "n", desc = "Move word backward" },
 		},
 		opts = {
 			char = {
 				enable = true,
+			},
+			block = {
+				indent = false,
 			},
 		},
 		config = function(_, opts)
@@ -680,7 +683,12 @@ return {
 		event = "InsertEnter",
 		opts = {
 			mappings = {
-				["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^\\`].", register = { cr = false } },
+				["`"] = {
+					action = "closeopen",
+					pair = "``",
+					neigh_pattern = "[^\\`].",
+					register = { cr = false },
+				},
 			},
 		},
 		keys = {
@@ -726,7 +734,7 @@ return {
 						},
 						"^().*()$",
 					},
-					g = function() -- Whole buffer, similar to `gg` and 'G' motion
+					g = function()
 						local from = { line = 1, col = 1 }
 						local to = {
 							line = vim.fn.line("$"),
@@ -734,8 +742,8 @@ return {
 						}
 						return { from = from, to = to }
 					end,
-					u = ai.gen_spec.function_call(), -- u for "Usage"
-					U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
+					u = ai.gen_spec.function_call(),
+					U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }),
 				},
 			}
 		end,
@@ -815,6 +823,30 @@ return {
 			},
 			-- stylua: ignore
 			{ "<C-Down>", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
+		},
+	},
+	{
+		"echasnovski/mini.sessions",
+		version = false,
+		event = "VimEnter",
+		keys = {
+			{
+				"<leader>s",
+				function()
+					vim.ui.input({ prompot = "Session name:" }, function(name)
+						name = name or vim.fn.getcwd():gsub("/", "-")
+						require("mini.sessions").write(name)
+						vim.notify("Saved session: " .. name, vim.log.levels.INFO)
+					end)
+				end,
+				desc = "Save session",
+			},
+		},
+		build = {
+			"mkdir -p ~/.cache/nvim/sessions",
+		},
+		opts = {
+			directory = "~/.cache/nvim/sessions",
 		},
 	},
 }
