@@ -7,7 +7,6 @@ return {
 	{
 		-- Navigation and fuzzy pickers
 		"ibhagwan/fzf-lua",
-
 		keys = {
 			{
 				"<leader>h",
@@ -80,11 +79,6 @@ return {
 				desc = "Grep buffer",
 			},
 			{
-				"gd",
-				"<cmd>FzfLua lsp_definitions<cr>",
-				desc = "Symbol definitions",
-			},
-			{
 				"gr",
 				"<cmd>FzfLua lsp_references<cr>",
 				desc = "Symbol references",
@@ -94,31 +88,18 @@ return {
 				"<cmd>FzfLua lsp_implementations<cr>",
 				desc = "Symbol implementation",
 			},
-			{
-				"gP",
-				"<cmd>FzfLua lsp_type_defs<cr>",
-				desc = "Symbol type definitions",
-			},
-			{
-				"gD",
-				"<cmd>FzfLua lsp_declarations<cr>",
-				desc = "Symbol declarations",
-			},
 		},
 		opts = function()
 			return {
 				"default-title",
-				commands = { sort_lastused = true },
-				manpages = { previewer = "man_native" },
-				helptags = { previewer = "help_native" },
 				defaults = {
 					git_icons = false,
 					file_icons = false,
 				},
 				fzf_opts = { ["--margin"] = "0,0", ["--info"] = "inline-right" },
 				winopts = {
-					width = 0.87,
-					height = 0.80,
+					width = 0.65,
+					height = 0.70,
 					preview = {
 						hidden = "nohidden",
 						vertical = "up:45%",
@@ -160,8 +141,60 @@ return {
 					["border"] = { "fg", "TelescopeBorder" },
 					["gutter"] = { "bg", "TelescopeNormal" },
 				},
+				keymap = {
+					builtin = {
+						-- neovim `:tmap` mappings for the fzf win
+						["<F11>"] = "toggle-fullscreen",
+						["?"] = "toggle-preview",
+						-- Rotate preview clockwise/counter-clockwise
+						["<F1>"] = "toggle-preview-ccw",
+						["<F2>"] = "toggle-preview-cw",
+						["<C-P>"] = "preview-page-down",
+						["<C-N>"] = "preview-page-up",
+						["<S-left>"] = "preview-page-reset",
+					},
+					fzf = {
+						["ctrl-c"] = "abort",
+						["ctrl-u"] = "unix-line-discard",
+						["ctrl-f"] = "half-page-down",
+						["ctrl-b"] = "half-page-up",
+						["ctrl-a"] = "beginning-of-line",
+						["ctrl-e"] = "end-of-line",
+						["alt-a"] = "toggle-all",
+						["?"] = "toggle-preview",
+						["ctrl-p"] = "preview-page-down",
+						["ctrl-n"] = "preview-page-up",
+					},
+				},
+				-- Custom pickers
 				files = {
 					fzf_opts = { ["--ansi"] = false },
+				},
+				commands = { sort_lastused = true },
+				manpages = { previewer = "man_native" },
+				helptags = { previewer = "help_native" },
+				diagnostics = {
+					winopts = {
+						width = 0.4,
+						height = 0.5,
+						vertical = "up:80%",
+						preview = { layout = "vertical" },
+					},
+				},
+				lsp = {
+					winopts = {
+						width = 0.4,
+						height = 0.5,
+						vertical = "up:80%",
+						preview = { layout = "vertical" },
+					},
+				},
+				buffers = {
+					winopts = {
+						width = 0.3,
+						height = 0.3,
+						preview = { hidden = "hidden" },
+					},
 				},
 			}
 		end,
@@ -174,7 +207,6 @@ return {
 	{
 		-- Terminal panel
 		"akinsho/toggleterm.nvim",
-
 		cmd = "ToggleTerm",
 		keys = {
 			{
@@ -241,11 +273,10 @@ return {
 	{
 		-- Distraction-free editing mode
 		"folke/zen-mode.nvim",
-
 		keys = {
 			{
 				"<C-M>z",
-				function ()
+				function()
 					vim.cmd("ZenMode")
 					vim.notify("Toggled zen mode", vim.log.levels.INFO)
 				end,
@@ -287,7 +318,7 @@ return {
 				},
 				alacritty = {
 					enabled = true,
-					font = "18",
+					font = "16",
 				},
 			},
 			on_open = function(_)
@@ -302,7 +333,6 @@ return {
 	{
 		-- Dim all but current paragraph object
 		"folke/twilight.nvim",
-
 		cmd = "Twilight",
 		opts = {
 			context = 5,
@@ -325,7 +355,6 @@ return {
 	{
 		-- View git diff
 		"sindrets/diffview.nvim",
-
 		cmd = {
 			"DiffviewOpen",
 			"DiffviewFileHistory",
@@ -388,8 +417,8 @@ return {
 					},
 				},
 				{ "permissions" },
-				{ "size",       highlight = "Special" },
-				{ "mtime",      highlight = "Number" },
+				{ "size", highlight = "Special" },
+				{ "mtime", highlight = "Number" },
 			},
 			float = {
 				padding = 4,
@@ -472,7 +501,6 @@ return {
 				["z"] = { name = "Folds, spelling & align" },
 				["g"] = { name = "LSP, comment, case & navigation" },
 				["gs"] = { name = "Surround" },
-				["c"] = { name = "Change & code actions" },
 			})
 			if opts then
 				wk.setup(opts)
@@ -543,7 +571,6 @@ return {
 	},
 	{
 		"NeogitOrg/neogit",
-
 		cmd = "Neogit",
 		keys = {
 			{
@@ -582,7 +609,6 @@ return {
 	{
 		-- Tips on launch
 		"TobinPalmer/Tip.nvim",
-
 		cond = require("user_configs").func_features.tip,
 		event = "VimEnter",
 		opts = {

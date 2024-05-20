@@ -1,68 +1,48 @@
-local exec = vim.api.nvim_command
-local wk_ok, wk = pcall(require, "which-key")
-if not wk_ok then
-	return
-end
+local map = vim.keymap.set
 
 local M = {}
 
 -- LSP mappings for native LSP
 function M.setup(client, bufnr)
+	map("n", "gd", vim.lsp.buf.definition, { desc = "Symbol defintion", buffer = bufnr })
+	map("n", "gp", vim.lsp.buf.type_definition, { desc = "Symbol type defintion", buffer = bufnr })
+
+	if client.server_capabilities.inlayHintProvider then
+		map("n", "<C-M>b", function()
+			---@diagnostic disable-next-line: missing-parameter
+			vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+			---@diagnostic disable-next-line: missing-parameter
+			if not vim.lsp.inlay_hint.is_enabled() then
+				vim.notify("Disabled inlay hints", vim.log.levels.INFO)
+			else
+				vim.notify("Enabled inlay hints", vim.log.levels.INFO)
+			end
+		end, { desc = "Toggle inlay hints" })
+	end
+
 	if client.server_capabilities.codeActionProvider then
-		wk.register({
-			["crr"] = {
-				vim.lsp.buf.code_action,
-				"Pick code actions",
-				mode = { "n", "v" },
-				buffer = bufnr,
-			},
-		})
+		map({ "n", "v" }, "ga", vim.lsp.buf.code_action, { desc = "Symbol code actions", buffer = bufnr })
 	end
 
 	if client.server_capabilities.declarationProvider then
-		wk.register({
-			["gD"] = {
-				vim.lsp.buf.declaration,
-				"Declaration",
-				buffer = bufnr,
-			},
-		})
+		map("n", "gD", vim.lsp.buf.declaration, { desc = "Symbol declaration", buffer = bufnr })
 	end
 
 	if client.server_capabilities.documentFormattingProvider then
-		wk.register({
-			["cfm"] = {
-				vim.lsp.buf.format,
-				"Format code",
-				mode = { "n", "v" },
-				buffer = bufnr,
-			},
-		})
+		map({ "n", "v" }, "gF", vim.lsp.buf.format, { desc = "Format code", buffer = bufnr })
 	end
 
 	if client.server_capabilities.hoverProvider then
-		wk.register({
-			["<C-K>"] = {
-				function()
-					local winid = require("ufo").peekFoldedLinesUnderCursor()
-					if not winid then
-						vim.lsp.buf.hover()
-					end
-				end,
-				"Code documentation",
-				buffer = bufnr,
-			},
-		})
+		map("n", "K", function()
+			local winid = require("ufo").peekFoldedLinesUnderCursor()
+			if not winid then
+				vim.lsp.buf.hover()
+			end
+		end, { desc = "Symbol documentation", buffer = bufnr })
 	end
 
 	if client.server_capabilities.renameProvider then
-		wk.register({
-			["crn"] = {
-				vim.lsp.buf.rename,
-				"Rename object",
-				buffer = bufnr,
-			},
-		})
+		map("n", "gR", vim.lsp.buf.rename, { desc = "Rename symbol", buffer = bufnr })
 	end
 end
 

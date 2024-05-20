@@ -6,6 +6,7 @@ return {
 		-- Treesitter engine
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
+		lazy = vim.fn.argc(-1) == 0,
 		keys = {
 			{
 				"<C-M>t",
@@ -33,10 +34,9 @@ return {
 		},
 		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
 		build = ":TSUpdate",
-		dependencies = {
-			{ "nvim-treesitter/nvim-treesitter-textobjects" },
-		},
 		init = function(plugin)
+			require("lazy.core.loader").add_to_rtp(plugin)
+			require("nvim-treesitter.query_predicates")
 			augroup("Treesitter", {
 				{ "VimEnter" },
 				{
@@ -148,7 +148,15 @@ return {
 			if opts then
 				require("nvim-treesitter.configs").setup(opts)
 			end
+			vim.schedule(function()
+				require("lazy").load({ plugins = { "nvim-treesitter-textobjects" } })
+			end)
 		end,
+	},
+	{
+		-- Treesitter text objects
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		lazy = true,
 	},
 	{
 		-- Highlight argument's definition and usage
@@ -303,7 +311,7 @@ return {
 		-- Typst syntax
 		"kaarmu/typst.vim",
 		cond = require("user_configs").syntax_features.typst,
-		event = "FileType",
+		event = "Filetype",
 		config = function()
 			vim.g.typst_pdf_viewer = "sioyek"
 		end,

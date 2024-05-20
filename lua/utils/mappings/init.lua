@@ -31,6 +31,7 @@ map(
 )
 map("n", "<C-M>s", function()
 	vim.opt_local.spell = not (vim.opt_local.spell:get())
+	---@diagnostic disable-next-line: undefined-field
 	if not (vim.opt_local.spell:get()) then
 		vim.notify("Disabled spellchecking", vim.log.levels.INFO)
 	else
@@ -93,3 +94,9 @@ map("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result
 map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search Result" })
 map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
+
+-- Buffer traversal
+map("n", "]b", "<cmd>bnext<cr>", {desc = "Next buffer"})
+map("n", "[b", "<cmd>bprevious<cr>", {desc = "Previous buffer"})
+map("n", "]B", "<cmd>blast<cr>", {desc = "Last buffer"})
+map("n", "[B", "<cmd>bfirst<cr>", {desc = "First buffer"})

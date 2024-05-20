@@ -115,8 +115,8 @@ return {
 					priority_weight = 1.0,
 				},
 				mapping = cmp.mapping.preset.insert({
-					["<C-d>"] = cmp.mapping.scroll_docs(-4),
-					["<C-f>"] = cmp.mapping.scroll_docs(4),
+					["<C-P>"] = cmp.mapping.scroll_docs(-4),
+					["<C-N>"] = cmp.mapping.scroll_docs(4),
 					["<C-e>"] = cmp.mapping.abort(),
 					["<CR>"] = cmp.mapping.confirm({ select = true }),
 					["<C-CR>"] = function(fallback)
@@ -221,9 +221,14 @@ return {
 				end
 				local entry = event.entry
 				local item = entry:get_completion_item()
-				if vim.tbl_contains({ Kind.Function, Kind.Method }, item.kind) then
-					local keys = vim.api.nvim_replace_termcodes("()<left>", false, false, true)
-					vim.api.nvim_feedkeys(keys, "i", true)
+				if vim.tbl_contains({ Kind.Function, Kind.Method }, item.kind) and item.insertTextFormat ~= 2 then
+					local cursor = vim.api.nvim_win_get_cursor(0)
+					local prev_char =
+						vim.api.nvim_buf_get_text(0, cursor[1] - 1, cursor[2], cursor[1] - 1, cursor[2] + 1, {})[1]
+					if prev_char ~= "(" and prev_char ~= ")" then
+						local keys = vim.api.nvim_replace_termcodes("()<left>", false, false, true)
+						vim.api.nvim_feedkeys(keys, "i", true)
+					end
 				end
 			end)
 			cmp.setup.cmdline("/", {
@@ -263,15 +268,6 @@ return {
 			end
 			vim.g.cmp_toggle = true
 		end,
-	},
-	{
-		-- Syntax aware comments & keybindings
-		"echasnovski/mini.comment",
-		keys = {
-			{ "gc", mode = { "n", "x", "v" } },
-			{ "gcc", mode = "n" },
-		},
-		opts = {},
 	},
 	{
 		-- Allows mapping custom escape keys without ruining typing experience.
@@ -315,12 +311,8 @@ return {
 		"echasnovski/mini.bracketed",
 		version = false,
 		keys = {
-			{ "]b", desc = "Next buffer" },
-			{ "[b", desc = "Previous buffer" },
 			{ "]c", desc = "Next comment" },
 			{ "[c", desc = "Previous comment" },
-			{ "]d", desc = "Next diagnostic" },
-			{ "[d", desc = "Previous diagnostic" },
 			{ "]i", desc = "Next indent" },
 			{ "[i", desc = "Previous indent" },
 			{ "]j", desc = "Next jumplist" },
@@ -333,18 +325,8 @@ return {
 			{ "[q", desc = "Previous quickfix" },
 			{ "]t", desc = "Next treesitter" },
 			{ "[t", desc = "Previous treesitter" },
-			{ "]u", desc = "Next undo" },
-			{ "[u", desc = "Previous undo" },
-			{ "]w", desc = "Next window" },
-			{ "[w", desc = "Previous window" },
-			{ "]y", desc = "Next yank" },
-			{ "[y", desc = "Previous yank" },
-			{ "]B", desc = "Last buffer" },
-			{ "[B", desc = "First buffer" },
 			{ "]C", desc = "Last comment" },
 			{ "[C", desc = "First comment" },
-			{ "]D", desc = "Last diagnostic" },
-			{ "[D", desc = "First diagnostic" },
 			{ "]I", desc = "Last indent" },
 			{ "[I", desc = "First indent" },
 			{ "]J", desc = "Last jumplist" },
@@ -357,16 +339,15 @@ return {
 			{ "[Q", desc = "First quickfix" },
 			{ "]T", desc = "Last treesitter" },
 			{ "[T", desc = "First treesitter" },
-			{ "]U", desc = "Last undo" },
-			{ "[U", desc = "First undo" },
-			{ "]W", desc = "Last window" },
-			{ "[W", desc = "First window" },
-			{ "]Y", desc = "Last yank" },
-			{ "[Y", desc = "First yank" },
 		},
 		opts = {
+			buffer = { suffix = "" },
+			diagnostic = { suffix = "" },
 			conflict = { suffix = "" },
 			file = { suffix = "" },
+			undo = { suffix = "" },
+			window = { suffix = "" },
+			yank = { suffix = "" },
 		},
 	},
 	{

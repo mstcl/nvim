@@ -6,10 +6,7 @@ function M.on_attach(client, bufnr)
 	-- setup mappings
 	require("utils.mappings.lsp").setup(client, bufnr)
 
-	-- inlay_hints for neovim < 0.10
-	if conf.lsp_features.inlay_hints then
-		require("lsp-inlayhints").on_attach(client, bufnr)
-	end
+	vim.lsp.inlay_hint.enable(conf.lsp_features.inlay_hints)
 
 	if client.name == "gopls" then
 		if not client.server_capabilities.semanticTokensProvider then
@@ -36,9 +33,7 @@ M.handlers = {
 -- Configure builtin diagnostics
 function M.configure_builtin_diagnostic()
 	vim.diagnostic.config({
-		inlay_hints = {
-			enabled = true,
-		},
+		---@return boolean|fun()
 		virtual_text = function()
 			if require("user_configs").lsp_features.virtual_text then
 				return {
@@ -56,14 +51,14 @@ function M.configure_builtin_diagnostic()
 		underline = false,
 		update_in_insert = false,
 		float = {
-			header = false,
-			focusable = false,
-			prefix = " ",
-			suffix = " ",
-			close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+			close_events = {
+				"BufLeave",
+				"CursorMoved",
+				"InsertEnter",
+				"FocusLost",
+			},
 			border = "single",
 			source = "if_many",
-			scope = "cursor",
 			focus = false,
 		},
 		severity_sort = true,

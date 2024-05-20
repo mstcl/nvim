@@ -55,7 +55,7 @@ function M.get_lsp_progress()
 			if #client_messages > 0 then
 				return table.concat(client_messages, " ")
 			end
-			if #vim.lsp.get_active_clients() > 0 then
+			if #vim.lsp.get_clients() > 0 then
 				return ""
 			end
 			return ""

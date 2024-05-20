@@ -56,7 +56,6 @@ $ source ~/.venv/nvim/bin/activate
 - `<C-M>` - Toggle modules
 - `<leader>` - Plugin/extra keymaps
 - `g` - LSP lookups
-- `c` - Code actions, formatting, rename
 - `[` & `]`- Go to prev/next * (buffers, diagnostics, functions, conflicts, hunks)
 
 `<C-P>` brings up the which-key cheatsheet.
