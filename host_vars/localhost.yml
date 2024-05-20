@@ -108,6 +108,7 @@ treesitter_sources:
   - "gosum"
   - "gowork"
   - "gotmpl"
+  - "make"
 
 # ~~ (3) VANITY ~~
 
@@ -179,7 +180,7 @@ lsp_sources:
   - "vimls"
   - "cssls"
   - "typst_lsp"
-  - "ruff_lsp"
+  - "ruff"
   - "texlab"
   - "lua_ls"
   - "ltex"
