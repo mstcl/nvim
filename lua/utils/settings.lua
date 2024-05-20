@@ -66,8 +66,6 @@ set.pumwidth = 15
 set.iskeyword:append("-")
 set.nrformats:append("unsigned")
 set.nrformats:remove("bin", "hex")
-set.pastetoggle = "<F2>"
-set.clipboard = "unnamedplus"
 set.mouse = "a"
 set.backspace = { "indent", "eol", "start" }
 

@@ -192,7 +192,7 @@ return {
 		dependencies = { "kevinhwang91/promise-async" },
 		keys = {
 			{
-				"<C-K>",
+				"K",
 				"<cmd>lua require('ufo').peekFoldedLinesUnderCursor()<cr>",
 				desc = "Peek fold",
 			},
@@ -249,8 +249,8 @@ return {
 						winblend = 0,
 					},
 					mappings = {
-						scrollU = "<C-u>",
-						scrollD = "<C-d>",
+						scrollU = "<C-N>",
+						scrollD = "<C-P>",
 						jumpTop = "[",
 						jumpBot = "]",
 					},
@@ -430,10 +430,26 @@ return {
 				goto_bottom = "",
 			},
 			symbol = "│",
+			options = { try_as_border = true }
 		},
 		cond = require("user_configs").ui_features.indent_lines,
 		init = function()
 			vim.api.nvim_set_hl(0, "MiniIndentscopeSymbol", { link = "NonText" })
+			augroup("indentLinesDisable", {
+				{ "Filetype" },
+				{
+					pattern = {
+						"fzf",
+						"toggleterm",
+						"starter",
+						"lazy",
+					},
+					desc = "Disable indentscope",
+					callback = function()
+						vim.b.miniindentscope_disable = true
+					end,
+				},
+			})
 		end,
 	},
 	{

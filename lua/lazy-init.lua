@@ -1,4 +1,5 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+---@diagnostic disable-next-line: undefined-field
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
@@ -18,9 +19,7 @@ require("lazy").setup({
 	},
 	default = { lazy = true },
 	dev = {
-		---@type string | fun(plugin: LazyPlugin): string directory where you store your local plugin projects
 		path = "~/projects",
-		---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
 		patterns = require("user_configs").dev_plugins,
 		fallback = true,
 	},
@@ -98,11 +97,8 @@ require("lazy").setup({
 				"tarPlugin",
 				"getscript",
 				"getscriptPlugin",
-				"vimball",
 				"vimballPlugin",
 				"2html_plugin",
-				"logipat",
-				"rrhelper",
 				"spellfile_plugin",
 				"tutor_mode_plugin",
 				"matchit",

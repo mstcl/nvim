@@ -212,6 +212,14 @@ return {
 								telemetry = {
 									enable = false,
 								},
+								hint = {
+									enable = true,
+									setType = false,
+									paramType = true,
+									paramName = "Disable",
+									semicolon = "Disable",
+									arrayIndex = "Disable",
+								}
 							},
 						},
 					})
@@ -384,27 +392,6 @@ return {
 				require("null-ls").setup(opts)
 			end
 		end,
-	},
-	{
-		-- Inlay hints
-		"lvimuser/lsp-inlayhints.nvim",
-		cond = cond2.inlay_hints and cond,
-		event = "LspAttach",
-		opts = {
-			inlay_hints = {
-				parameter_hints = {
-					show = false,
-				},
-				type_hints = {
-					show = true,
-					prefix = "\t",
-					separator = " ",
-					remove_colon_start = false,
-					remove_color_end = false,
-				},
-				highlight = "NonText",
-			},
-		},
 	},
 	{
 		-- Virtual text to show usage

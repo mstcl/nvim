@@ -94,13 +94,6 @@ if conf.ui_features.indent_lines then
 	})
 end
 
-if conf.lsp_features.inlay_hints then
-	extended = lush.merge({
-		extended,
-		require("dmg_lsp_inlay_hints"),
-	})
-end
-
 if conf.lsp_features.breadcrumbs then
 	extended = lush.merge({
 		extended,

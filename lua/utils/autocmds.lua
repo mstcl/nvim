@@ -83,7 +83,7 @@ augroup("textOpts", {
 })
 
 augroup("verticalHelp", {
-	{ "FileType" },
+	{ "Filetype" },
 	{
 		desc = "Open help in vertical split",
 		pattern = "help",

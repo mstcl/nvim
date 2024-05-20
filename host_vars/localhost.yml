@@ -2,7 +2,7 @@
 ---
 current_user: "{{ lookup('env', 'USER') }}"
 stable_release: true # use neovim stable
-terminal: alacritty
+terminal: "/usr/bin/alacritty" # terminal executable e.g. /usr/bin/alacritty
 
 # ~~ (0) FEATURE CONFIGURATION ~~
 
@@ -13,7 +13,7 @@ lsp_features:
   virtual_text: false # virtual text diagnostic
   breadcrumbs: false # show a bar at the top (winbar) with the current scope's symbols.
   usage: false # show number of usage for functions etc.
-  inlay_hints: true # inlay hints for nvim < 0.10
+  inlay_hints: false # default inlay hints (toggle-able)
 
 func_features:
   tip: false # show a tip on startup (pretty annoying but useful if you're new)
