@@ -441,7 +441,7 @@ return {
 		config = function(_, opts)
 			if opts then
 				require("mini.animate").setup(opts)
-				vim.g.minianimate_disable = cond.animate
+				vim.g.minianimate_disable = not cond.animate
 			end
 		end,
 	},
