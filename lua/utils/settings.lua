@@ -69,9 +69,13 @@ set.nrformats:remove("bin", "hex")
 set.mouse = "a"
 set.backspace = { "indent", "eol", "start" }
 
-set.foldmethod = "syntax"
+set.foldmethod = "expr"
+set.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+set.foldtext = ""
+set.foldlevel = 99
+set.foldlevelstart = 1
 set.foldminlines = 1
-set.foldnestmax = 6
+set.foldnestmax = 4
 
 -- Signcolumn
 set.foldcolumn = "auto:1"
@@ -81,7 +85,6 @@ set.signcolumn = "auto:1"
 
 set.splitbelow = true
 set.splitright = true
-set.colorcolumn = "80"
 set.synmaxcol = 400
 set.scrolljump = 1
 set.sidescrolloff = 5

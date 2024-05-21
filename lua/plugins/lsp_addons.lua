@@ -92,7 +92,6 @@ return {
 				event = "InsertEnter",
 				cond = conf.edit_features.completion,
 			},
-			{ "kevinhwang91/nvim-ufo" },
 			{ "williamboman/mason-lspconfig.nvim" },
 		},
 		config = function()
