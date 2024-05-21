@@ -175,6 +175,7 @@ lsp_sources:
   - "gopls"
   - "yamlls"
   - "markdown_oxide"
+  - "dockerls"
 
 # ~~ (5) NONE-LS SOURCES ~~
 
