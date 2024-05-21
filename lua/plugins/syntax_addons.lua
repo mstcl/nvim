@@ -295,25 +295,6 @@ return {
 		end,
 	},
 	{
-		-- Ansible syntax
-		"pearofducks/ansible-vim",
-		cond = require("user_configs").syntax_features.ansible,
-		event = { "BufReadPre *.j2", "BufReadPre *.yml" },
-		config = function()
-			vim.g.ansible_template_syntaxes = {
-				["*.rb.j2"] = "ruby",
-				["*.sh.j2"] = "sh",
-				["*.conf.j2"] = "config",
-				["*.yml.j2"] = "yaml",
-				["*.yaml.j2"] = "yaml",
-				["*.css.j2"] = "css",
-				["*.json.j2"] = "json",
-			}
-			vim.g.ansible_unindent_after_newline = true
-			vim.g.ansible_extra_keywords_highlight = true
-		end,
-	},
-	{
 		-- Python notebooks
 		"benlubas/molten-nvim",
 		ft = "quarto",

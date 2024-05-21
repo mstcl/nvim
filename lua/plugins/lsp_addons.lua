@@ -315,6 +315,23 @@ return {
 							usePlaceholders = true,
 						},
 					})
+				elseif server == "ansiblels" then
+					lsp.ansiblels.setup({
+						on_attach = on_attach,
+						capabilities = capabilities,
+						settings = {
+							ansible = {
+								ansible = {
+									useFullyQualifiedCollectionNames = true
+								}
+							},
+							redhat = {
+								telemetry = {
+									enabled = false
+								}
+							}
+						}
+					})
 				else
 					lsp[server].setup({
 						on_attach = on_attach,

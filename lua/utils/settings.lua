@@ -96,7 +96,7 @@ set.textwidth = 0
 set.linebreak = true
 set.virtualedit = "block"
 set.completeopt = { "menu", "menuone", "noselect", "noinsert" }
-set.shortmess = set.shortmess + "OosatTcI"
+set.shortmess = set.shortmess + "OosatTcICFSW"
 
 set.hlsearch = true
 set.ignorecase = true

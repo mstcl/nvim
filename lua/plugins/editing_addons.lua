@@ -6,7 +6,7 @@ return {
 		-- Autocompletion menu & plugins
 		"hrsh7th/nvim-cmp",
 		version = false,
-		event = { "InsertEnter", "CmdlineEnter" },
+		event = { "InsertEnter" },
 		keys = {
 			{
 				"<C-M>ca",
@@ -25,8 +25,6 @@ return {
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "FelipeLema/cmp-async-path" },
 			{ "hrsh7th/cmp-buffer" },
-			{ "hrsh7th/cmp-cmdline" },
-			{ "dmitmel/cmp-cmdline-history" },
 			{ "rafamadriz/friendly-snippets" },
 			{
 				"garymjr/nvim-snippets",
@@ -198,41 +196,6 @@ return {
 					end
 				end
 			end)
-			cmp.setup.cmdline("/", {
-				mapping = cmp.mapping.preset.cmdline({
-					["<C-n>"] = {
-						c = false,
-					},
-					["<C-p>"] = {
-						c = false,
-					},
-				}),
-				sources = {
-					{ name = "buffer" },
-				},
-			})
-			cmp.setup.cmdline(":", {
-				mapping = cmp.mapping.preset.cmdline({
-					["<C-n>"] = {
-						c = false,
-					},
-					["<C-p>"] = {
-						c = false,
-					},
-				}),
-				sources = cmp.config.sources({
-					{ name = "async_path" },
-					{ name = "cmdline" },
-					{ name = "cmdline_history", priority = 9 },
-				}),
-			})
-			for _, cmd_type in ipairs({ "?", "@" }) do
-				cmp.setup.cmdline(cmd_type, {
-					sources = {
-						{ name = "cmdline_history" },
-					},
-				})
-			end
 			vim.g.cmp_toggle = cond.completion
 		end,
 	},
@@ -477,15 +440,6 @@ return {
 				require("sentiment").setup(opts)
 			end
 		end,
-	},
-	{
-		-- Quick guessing indent for filetypes
-		"nmac427/guess-indent.nvim",
-		event = "BufReadPost",
-		opts = {
-			override_editorconfig = true,
-			auto_cmd = true,
-		},
 	},
 	{
 		-- Force cursor to stay in place when doing certain visual motions

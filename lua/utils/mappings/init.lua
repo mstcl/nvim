@@ -7,6 +7,8 @@ map("n", "Q", "")
 map("n", "gQ", "")
 map("n", "<leader>p", "<cmd>Lazy show<cr>", { desc = "Lazy" })
 
+map({"n", "v"}, "<space>", ":", { remap = false, desc = "Command", silent = true })
+
 -- UI toggles
 map("n", "<C-N>", function()
 	if winopt.number then
