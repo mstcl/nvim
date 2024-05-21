@@ -5,12 +5,11 @@ return {
 	{
 		-- Autocompletion menu & plugins
 		"hrsh7th/nvim-cmp",
-		cond = cond.completion,
 		version = false,
 		event = { "InsertEnter", "CmdlineEnter" },
 		keys = {
 			{
-				"<C-M>c",
+				"<C-M>cc",
 				function()
 					vim.g.cmp_toggle = not vim.g.cmp_toggle
 					if not vim.g.cmp_toggle then
@@ -23,8 +22,6 @@ return {
 			},
 		},
 		dependencies = {
-			{ "saadparwaiz1/cmp_luasnip" },
-			{ "kdheepak/cmp-latex-symbols" },
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "FelipeLema/cmp-async-path" },
 			{ "hrsh7th/cmp-buffer" },
@@ -58,13 +55,6 @@ return {
 				"aspeddro/cmp-pandoc.nvim",
 				opts = {
 					filetypes = { "pandoc", "markdown", "rmd", "quarto" },
-				},
-			},
-			{
-				"tiagovla/zotex.nvim",
-				dependencies = { "kkharji/sqlite.lua" },
-				opts = {
-					path = vim.fn.expand("~/Zotero/zotero.sqlite"),
 				},
 			},
 		},
@@ -159,10 +149,8 @@ return {
 					},
 				},
 				sources = cmp.config.sources({
-					{ name = "snippets",      priority = 8, max_item_count = 3 },
-					{ name = "latex_symbols", priority = 2 },
+					{ name = "snippets", priority = 8, max_item_count = 3 },
 					{ name = "otter" },
-					{ name = "orgmode" },
 					{
 						name = "async_path",
 						max_item_count = 4,
@@ -179,7 +167,6 @@ return {
 						max_item_count = 7,
 					},
 					{ name = "cmp_pandoc", priority = 9 },
-					{ name = "zotex",      priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -246,13 +233,12 @@ return {
 					},
 				})
 			end
-			vim.g.cmp_toggle = true
+			vim.g.cmp_toggle = cond.completion
 		end,
 	},
 	{
 		-- Allows mapping custom escape keys without ruining typing experience.
 		"max397574/better-escape.nvim",
-		cond = cond.escape,
 		event = "InsertCharPre",
 		opts = {
 			mapping = { "jk" },
@@ -333,7 +319,6 @@ return {
 	{
 		-- Keybindings to move lines and blocks
 		"fedepujol/move.nvim",
-		cond = cond.move,
 		keys = {
 			{ "<A-j>", ":MoveBlock(1)<cr>",   mode = "v", desc = "Move block down" },
 			{ "<A-k>", ":MoveBlock(-1)<cr>",  mode = "v", desc = "Move block up" },
@@ -360,7 +345,6 @@ return {
 	{
 		-- Jump around the buffer
 		"folke/flash.nvim",
-		cond = cond.flash,
 		keys = {
 			{
 				"S",
@@ -435,7 +419,6 @@ return {
 		dependencies = {
 			{ "nvim-treesitter/nvim-treesitter" },
 			{ "hrsh7th/nvim-cmp" },
-			-- { "L3MON4D3/LuaSnip" },
 		},
 		opts = function()
 			return {
@@ -558,25 +541,6 @@ return {
 		},
 	},
 	{
-		-- Context at end of block, outside parentheses
-		"code-biscuits/nvim-biscuits",
-		cond = cond.biscuits,
-		event = "VeryLazy",
-		opts = {
-			show_on_start = true,
-			cursor_line_only = true,
-			prefix_string = " □ ",
-			language_config = {
-				org = {
-					disabled = true,
-				},
-				markdown = {
-					disabled = true,
-				},
-			},
-		},
-	},
-	{
 		-- Automatically add f-strings
 		"chrisgrieser/nvim-puppeteer",
 		ft = { "python", "typescript", "javascript" },
@@ -584,7 +548,6 @@ return {
 	{
 		-- Better word movement
 		"chrisgrieser/nvim-spider",
-		cond = cond.spider,
 		keys = {
 			{ "e", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x" } },
 			{ "b", "<cmd>lua require('spider').motion('b')<CR>", mode = { "n", "o", "x" } },
@@ -602,7 +565,7 @@ return {
 		},
 		keys = {
 			{
-				"<C-M>p",
+				"<C-M>ap",
 				function()
 					vim.g.minipairs_disable = not vim.g.minipairs_disable
 					if vim.g.minipairs_disable then
@@ -651,7 +614,7 @@ return {
 						}
 						return { from = from, to = to }
 					end,
-					u = ai.gen_spec.function_call(), -- u for "Usage"
+					u = ai.gen_spec.function_call(),            -- u for "Usage"
 					U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
 				},
 			}

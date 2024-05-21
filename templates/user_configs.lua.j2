@@ -12,27 +12,19 @@ M.dap_enabled = {{ dap_enabled | string |lower }}
 M.lsp_enabled = {{ lsp_enabled | string |lower }}
 M.lsp_features = {
 	virtual_text = {{ lsp_features.virtual_text | string |lower }},
-	usage = {{ lsp_features.usage | string |lower }},
 	inlay_hints = {{ lsp_features.inlay_hints | string |lower }},
 }
-M.func_features = {
-	tip = {{ func_features.tip | string |lower }}
-}
 M.edit_features = {
-	biscuits = {{ edit_features.biscuits | string |lower }},
 	completion = {{ edit_features.completion | string |lower }},
-	escape = {{ edit_features.escape | string |lower }},
-	move = {{ edit_features.move | string |lower }},
-	flash = {{ edit_features.flash | string |lower }},
-	spider = {{ edit_features.spider | string |lower }},
 }
 
 M.ui_features = {
 	animate = {{ ui_features.animate | string | lower}},
-	modes = {{ ui_features.modes | string |lower }},
-	scope = {{ ui_features.scope | string |lower }},
 	indent_lines = {{ ui_features.indent_lines | string |lower }},
 	tabline = {{ ui_features.tabline | string |lower }},
+	biscuits = {{ ui_features.biscuits | string |lower }},
+	rainbow = {{ ui_features.rainbow | string |lower }},
+	hlargs = {{ ui_features.hlargs | string |lower }},
 }
 
 M.syntax_features = {
@@ -41,8 +33,6 @@ M.syntax_features = {
 	quarto = {{ syntax_features.quarto | string |lower }},
 	org = {{ syntax_features.org | string |lower }},
 	tex = {{ syntax_features.tex | string |lower }},
-	rainbow = {{ syntax_features.rainbow | string |lower }},
-	hlargs = {{ syntax_features.hlargs | string |lower }},
 	markdown = {{ syntax_features.markdown | string |lower }},
 }
 

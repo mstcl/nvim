@@ -422,16 +422,6 @@ return {
 		end,
 	},
 	{
-		-- Virtual text to show usage
-		"Wansmer/symbol-usage.nvim",
-		cond = cond2.usage and cond,
-		event = "BufReadPre",
-		opts = {
-			hl = { link = "StatusLineNC" },
-			vt_position = "above",
-		},
-	},
-	{
 		-- LSP completion in code blocks
 		"jmbuhr/otter.nvim",
 		cond = cond,

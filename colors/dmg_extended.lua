@@ -32,6 +32,11 @@ local extended = lush.merge({
 	require("dmg_whichkey"),
 	require("dmg_neogit"),
 	require("dmg_incline"),
+	require("dmg_hlargs"),
+	require("dmg_rainbow"),
+	require("dmg_cmp"),
+	require("dmg_flash"),
+	require("dmg_biscuits"),
 })
 
 if conf.lsp_enabled then
@@ -44,67 +49,10 @@ if conf.lsp_enabled then
 	})
 end
 
-if conf.edit_features.completion then
-	extended = lush.merge({
-		extended,
-		require("dmg_cmp"),
-	})
-end
-
-
-if conf.edit_features.flash then
-	extended = lush.merge({
-		extended,
-		require("dmg_flash"),
-	})
-end
-
-if conf.edit_features.biscuits then
-	extended = lush.merge({
-		extended,
-		require("dmg_biscuits"),
-	})
-end
-
-if conf.ui_features.modes then
-	extended = lush.merge({
-		extended,
-		require("dmg_modes"),
-	})
-end
-
 if conf.ui_features.tabline then
 	extended = lush.merge({
 		extended,
 		require("dmg_bufferline"),
-	})
-end
-
-if conf.ui_features.cursorword then
-	extended = lush.merge({
-		extended,
-		require("dmg_mini_cursorword"),
-	})
-end
-
-if conf.ui_features.indent_lines then
-	extended = lush.merge({
-		extended,
-		require("dmg_hlchunk"),
-	})
-end
-
-if conf.syntax_features.hlargs then
-	extended = lush.merge({
-		extended,
-		require("dmg_hlargs"),
-	})
-end
-
-if conf.syntax_features.rainbow then
-	extended = lush.merge({
-		extended,
-		require("dmg_rainbow"),
 	})
 end
 

@@ -156,6 +156,16 @@ return {
 	{
 		-- Highlight argument's definition and usage
 		"m-demare/hlargs.nvim",
+		keys = {
+			{
+				"<C-M>ha",
+				function()
+					require('hlargs').toggle()
+					vim.notify("Toggled highlighting arguments", vim.log.levels.INFO)
+				end,
+				desc = "Toggle highlighting arguments",
+			},
+		},
 		ft = {
 			"c",
 			"cpp",
@@ -179,37 +189,10 @@ return {
 			"vim",
 			"zig",
 		},
-		cond = require("user_configs").syntax_features.hlargs,
 		opts = {
 			color = "#87591a",
 			hl_priority = 200,
 		},
-	},
-	{
-		-- Highlight parenthesis
-		"HiPhish/rainbow-delimiters.nvim",
-		event = { "BufRead" },
-		cond = require("user_configs").syntax_features.rainbow,
-		opts = {
-			query = {
-				[""] = "rainbow-delimiters",
-				latex = "rainbow-blocks",
-				lua = "rainbow-blocks",
-			},
-			highlight = {
-				"TSRainbowRed",
-				"TSRainbowBlue",
-				"TSRainbowCyan",
-				"TSRainbowGreen",
-				"TSRainbowviolet",
-				"TSRainbowYellow",
-			},
-		},
-		config = function(_, opts)
-			if opts then
-				vim.g.rainbow_delimiters = opts
-			end
-		end,
 	},
 	{
 		-- Concealing in tex

@@ -9,41 +9,31 @@ terminal: "" # terminal executable e.g. /usr/bin/alacritty
 dap_enabled: false # enable dap core, which is nvim dap, dap ui and python dap
 lsp_enabled: false # enable lsp core, which is mason, lspconfig, none-ls
 
-lsp_features:
-  virtual_text: false # virtual text diagnostic
-  breadcrumbs: false # show a bar at the top (winbar) with the current scope's symbols.
-  usage: false # show number of usage for functions etc.
-  inlay_hints: false # default inlay hints (toggle-able)
+# Default plugins to toggle-on/enable. Some are toggle-able (indicated as such),
+# which means the setting only turns them on/off by default.
 
-func_features:
-  tip: false # show a tip on startup (pretty annoying but useful if you're new)
+lsp_features:
+  virtual_text: false # virtual text diagnostic.
+  inlay_hints: false # default inlay hints (toggle-able).
 
 ui_features:
-  animate: true # non-blocking smooth scrolling (toggle-able)
-  modes: false # highlight cursorline depending on the mode
-  scope: true # only display buffers for under a given tab scope
-  cursorword: false # highlight words that match current word under cursor (toggle-able)
-  indent_lines: true # show fancy indent lines (toggle-able)
-  tabline: false # display a bar at the top showing opened buffers
+  animate: true # non-blocking smooth scrolling (toggle-able).
+  indent_lines: true # show fancy indent lines (toggle-able).
+  tabline: false # display a bar at the top showing opened buffers.
+  biscuits: false # show the current scope level at the end of the scope (toggle-able).
+  rainbow: true # enable rainbow parens (toggle-able).
+  hlargs: true # enable different highlight for function args (toggle-able).
 
 edit_features:
-  biscuits: false # show the current scope level at the end of the scope.
-  completion: true # text completion
-  escape: true # use jk for escape
-  move: true # extra line and char movements
-  flash: true # quickly jump anywhere
-  spider: true # smarter word movements
-  rooter: true # project rooter
+  completion: true # fancy text completion (toggle-able).
 
 syntax_features:
-  typst: false # enable typst syntax
-  ansible: false # enable ansible syntax
-  quarto: false # enable quarto integrations
-  markdown: false # enable markdown integrations
-  org: false # enable orgmode syntax
-  tex: false # enable tex integrations
-  rainbow: true # enable rainbow parens
-  hlargs: true # enable different highlight for function args
+  typst: false # enable typst syntax.
+  ansible: false # enable ansible syntax.
+  quarto: false # enable quarto integrations.
+  markdown: false # enable markdown integrations.
+  org: false # enable orgmode syntax.
+  tex: false # enable tex integrations.
 
 # ~~ (1) WORKSPACES ~~
 

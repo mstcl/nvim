@@ -46,7 +46,7 @@ map("n", "<C-M>n", function()
 		vim.notify("Enabled non-text characters", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle non-text characters" })
-map("n", "<C-M>l", function()
+map("n", "<C-M>cl", function()
 	winopt.cursorline = not winopt.cursorline
 	if not winopt.cursorline then
 		vim.notify("Disabled cursorline", vim.log.levels.INFO)
