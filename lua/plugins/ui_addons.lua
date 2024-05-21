@@ -324,7 +324,7 @@ return {
 			symbol = "│",
 			options = { try_as_border = true },
 		},
-		config = function (_, opts)
+		config = function(_, opts)
 			if opts then
 				require("mini.indentscope").setup(opts)
 				vim.g.miniindentscope_disable = not cond.indent_lines
@@ -459,21 +459,19 @@ return {
 			},
 		},
 		event = "LspAttach",
-		opts = function()
-			return {
-				show_on_start = cond.biscuits,
-				cursor_line_only = true,
-				prefix_string = " □ ",
-				language_config = {
-					org = {
-						disabled = true,
-					},
-					markdown = {
-						disabled = true,
-					},
+		opts = {
+			show_on_start = cond.biscuits,
+			cursor_line_only = true,
+			prefix_string = " □ ",
+			language_config = {
+				org = {
+					disabled = true,
 				},
-			}
-		end,
+				markdown = {
+					disabled = true,
+				},
+			},
+		},
 	},
 	{
 		-- Highlight parenthesis
