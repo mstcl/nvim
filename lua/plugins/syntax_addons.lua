@@ -154,11 +154,6 @@ return {
 		end,
 	},
 	{
-		-- Treesitter text objects
-		"nvim-treesitter/nvim-treesitter-textobjects",
-		lazy = true,
-	},
-	{
 		-- Highlight argument's definition and usage
 		"m-demare/hlargs.nvim",
 		ft = {

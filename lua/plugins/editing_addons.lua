@@ -3,52 +3,6 @@ local cond = require("user_configs").edit_features
 -- Plugins that add extra functionality with keybindings or while editing
 return {
 	{
-		-- Snippet engine
-		"L3MON4D3/LuaSnip",
-		cond = cond.completion,
-		dependencies = {
-			build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
-			{ "rafamadriz/friendly-snippets" },
-			{ "Zeioth/NormalSnippets" },
-		},
-		event = "ModeChanged *:[iRss\x13vV\x16]*",
-		opts = {
-			history = true,
-			delete_check_events = "TextChanged",
-			region_check_events = "CursorMoved",
-		},
-		config = function(_, opts)
-			if opts then
-				require("luasnip").config.setup(opts)
-			end
-			vim.tbl_map(function(type)
-				require("luasnip.loaders.from_" .. type).lazy_load()
-			end, { "vscode", "snipmate", "lua" })
-			local luasnip_ok, luasnip = pcall(require, "luasnip")
-			if not luasnip_ok then
-				return
-			end
-			luasnip.filetype_extend("typescript", { "tsdoc" })
-			luasnip.filetype_extend("javascript", { "jsdoc" })
-			luasnip.filetype_extend("lua", { "luadoc" })
-			luasnip.filetype_extend("python", { "pydoc" })
-			luasnip.filetype_extend("rust", { "rustdoc" })
-			luasnip.filetype_extend("cs", { "csharpdoc" })
-			luasnip.filetype_extend("java", { "javadoc" })
-			luasnip.filetype_extend("c", { "cdoc" })
-			luasnip.filetype_extend("cpp", { "cppdoc" })
-			luasnip.filetype_extend("php", { "phpdoc" })
-			luasnip.filetype_extend("kotlin", { "kdoc" })
-			luasnip.filetype_extend("ruby", { "rdoc" })
-			luasnip.filetype_extend("sh", { "shelldoc" })
-			luasnip.filetype_extend("quarto", { "markdown" })
-			luasnip.filetype_extend("rmarkdown", { "markdown" })
-			require("luasnip.loaders.from_vscode").lazy_load({
-				paths = { vim.fn.stdpath("config") .. "/snippets" },
-			})
-		end,
-	},
-	{
 		-- Autocompletion menu & plugins
 		"hrsh7th/nvim-cmp",
 		cond = cond.completion,
@@ -76,6 +30,30 @@ return {
 			{ "hrsh7th/cmp-buffer" },
 			{ "hrsh7th/cmp-cmdline" },
 			{ "dmitmel/cmp-cmdline-history" },
+			{ "rafamadriz/friendly-snippets" },
+			{
+				"garymjr/nvim-snippets",
+				opts = {
+					friendly_snippets = true,
+					extended_filetypes = {
+						{ typescript = { "tsdoc" } },
+						{ javascript = { "jsdoc" } },
+						{ lua = { "luadoc" } },
+						{ python = { "pydoc" } },
+						{ rust = { "rustdoc" } },
+						{ cs = { "csharpdoc" } },
+						{ java = { "javadoc" } },
+						{ c = { "cdoc" } },
+						{ cpp = { "cppdoc" } },
+						{ php = { "phpdoc" } },
+						{ kotlin = { "kdoc" } },
+						{ ruby = { "rdoc" } },
+						{ sh = { "shelldoc" } },
+						{ quarto = { "markdown" } },
+						{ rmarkdown = { "markdown" } },
+					},
+				},
+			},
 			{
 				"aspeddro/cmp-pandoc.nvim",
 				opts = {
@@ -92,15 +70,14 @@ return {
 		},
 		opts = function()
 			local cmp = require("cmp")
-			local luasnip = require("luasnip")
 			return {
 				auto_brackets = {},
 				enabled = function()
 					return vim.g.cmp_toggle
 				end,
 				snippet = {
-					expand = function(args)
-						luasnip.lsp_expand(args.body)
+					expand = function(snippet)
+						vim.snippet.expand(snippet.body)
 					end,
 				},
 				confirm_opts = {
@@ -118,7 +95,14 @@ return {
 					["<C-P>"] = cmp.mapping.scroll_docs(-4),
 					["<C-N>"] = cmp.mapping.scroll_docs(4),
 					["<C-e>"] = cmp.mapping.abort(),
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
+					["<CR>"] = function(fallback)
+						if cmp.core.view:visible() or vim.fn.pumvisible() == 1 then
+							if cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }) then
+								return
+							end
+						end
+						return fallback()
+					end,
 					["<C-CR>"] = function(fallback)
 						cmp.abort()
 						fallback()
@@ -126,8 +110,8 @@ return {
 					["<Tab>"] = function(fallback)
 						if cmp.visible() then
 							cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-						elseif luasnip.expand_or_jumpable() then
-							luasnip.expand_or_jump()
+						elseif vim.snippet.active({ direction = 1 }) then
+							vim.snippet.jump(1)
 						else
 							fallback()
 						end
@@ -135,8 +119,8 @@ return {
 					["<S-Tab>"] = function(fallback)
 						if cmp.visible() then
 							cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-						elseif luasnip.jumpable(-1) then
-							luasnip.jump(-1)
+						elseif vim.snippet.active({ direction = -1 }) then
+							vim.snippet.jump(-1)
 						else
 							fallback()
 						end
@@ -175,17 +159,13 @@ return {
 					},
 				},
 				sources = cmp.config.sources({
+					{ name = "snippets",      priority = 8, max_item_count = 3 },
 					{ name = "latex_symbols", priority = 2 },
 					{ name = "otter" },
 					{ name = "orgmode" },
 					{
 						name = "async_path",
 						max_item_count = 4,
-					},
-					{
-						name = "luasnip",
-						priority = 8,
-						max_item_count = 3,
 					},
 					{
 						name = "nvim_lsp",
@@ -199,7 +179,7 @@ return {
 						max_item_count = 7,
 					},
 					{ name = "cmp_pandoc", priority = 9 },
-					{ name = "zotex", priority = 9 },
+					{ name = "zotex",      priority = 9 },
 					{
 						name = "buffer",
 						options = require("utils.misc").buffer_opts,
@@ -286,7 +266,7 @@ return {
 		"echasnovski/mini.surround",
 		version = false,
 		keys = {
-			{ "gsa", desc = "Add surrounding", mode = { "n", "v" } },
+			{ "gsa", desc = "Add surrounding",        mode = { "n", "v" } },
 			{ "gsd", desc = "Delete surrounding" },
 			{ "gsf", desc = "Find right surrounding" },
 			{ "gsF", desc = "Find left surrounding" },
@@ -355,16 +335,16 @@ return {
 		"fedepujol/move.nvim",
 		cond = cond.move,
 		keys = {
-			{ "<A-j>", ":MoveBlock(1)<cr>", mode = "v", desc = "Move block down" },
-			{ "<A-k>", ":MoveBlock(-1)<cr>", mode = "v", desc = "Move block up" },
+			{ "<A-j>", ":MoveBlock(1)<cr>",   mode = "v", desc = "Move block down" },
+			{ "<A-k>", ":MoveBlock(-1)<cr>",  mode = "v", desc = "Move block up" },
 			{ "<A-h>", ":MoveHBlocK(-1)<cr>", mode = "v", desc = "Move block left" },
-			{ "<A-l>", ":MoveHBlock(1)<cr>", mode = "v", desc = "Move block right" },
-			{ "<A-j>", ":MoveLine(1)<cr>", mode = "n", desc = "Move line up" },
-			{ "<A-k>", ":MoveLine(-1)<cr>", mode = "n", desc = "Move line down" },
-			{ "<A-h>", ":MoveHChar(-1)<cr>", mode = "n", desc = "Move char left" },
-			{ "<A-l>", ":MoveHChar(1)<cr>", mode = "n", desc = "Move char right" },
-			{ "<A-f>", ":MoveWord(1)<cr>", mode = "n", desc = "Move word forward" },
-			{ "<A-b>", ":MoveWord(-1)<cr>", mode = "n", desc = "Move word backward" },
+			{ "<A-l>", ":MoveHBlock(1)<cr>",  mode = "v", desc = "Move block right" },
+			{ "<A-j>", ":MoveLine(1)<cr>",    mode = "n", desc = "Move line up" },
+			{ "<A-k>", ":MoveLine(-1)<cr>",   mode = "n", desc = "Move line down" },
+			{ "<A-h>", ":MoveHChar(-1)<cr>",  mode = "n", desc = "Move char left" },
+			{ "<A-l>", ":MoveHChar(1)<cr>",   mode = "n", desc = "Move char right" },
+			{ "<A-f>", ":MoveWord(1)<cr>",    mode = "n", desc = "Move word forward" },
+			{ "<A-b>", ":MoveWord(-1)<cr>",   mode = "n", desc = "Move word backward" },
 		},
 		opts = {
 			char = {
@@ -458,7 +438,7 @@ return {
 		dependencies = {
 			{ "nvim-treesitter/nvim-treesitter" },
 			{ "hrsh7th/nvim-cmp" },
-			{ "L3MON4D3/LuaSnip" },
+			-- { "L3MON4D3/LuaSnip" },
 		},
 		opts = function()
 			return {
@@ -605,34 +585,6 @@ return {
 		ft = { "python", "typescript", "javascript" },
 	},
 	{
-		-- Smart rooter, replaces autochdir
-		"notjedi/nvim-rooter.lua",
-		event = "VeryLazy",
-		keys = {
-			{
-				"<C-M>r",
-				function()
-					vim.cmd("RooterToggle")
-					vim.notify("Toggled Rooter", vim.log.levels.INFO)
-				end,
-				desc = "Toggle between autochdir 🡘 root dir",
-			},
-		},
-		cond = cond.rooter,
-		opts = {
-			manual = false,
-			exclude_filetypes = { "quarto", "markdown", "org", "tex", "bib" },
-			rooter_patterns = {
-				".git",
-				".hg",
-				"project.json",
-				".svn",
-				"pyproject.toml",
-				"README.md",
-			},
-		},
-	},
-	{
 		-- Better word movement
 		"chrisgrieser/nvim-spider",
 		cond = cond.spider,
@@ -640,22 +592,6 @@ return {
 			{ "e", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x" } },
 			{ "b", "<cmd>lua require('spider').motion('b')<CR>", mode = { "n", "o", "x" } },
 			{ "w", "<cmd>lua require('spider').motion('w')<CR>", mode = { "n", "o", "x" } },
-		},
-	},
-	{
-		"chrishrb/gx.nvim",
-		keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
-		cmd = { "Browse" },
-		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = {
-			open_browser_app = "xdg-open",
-			handlers = {
-				plugin = true,
-				github = true,
-				brewfile = true,
-				package_json = true,
-				search = true,
-			},
 		},
 	},
 	-- auto pairs
@@ -780,33 +716,6 @@ return {
 		end,
 	},
 	{
-		-- Remove buffers
-		"echasnovski/mini.bufremove",
-		keys = {
-			{
-				"<C-Q>",
-				function()
-					local bd = require("mini.bufremove").delete
-					if vim.bo.modified then
-						local choice =
-							vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
-						if choice == 1 then -- Yes
-							vim.cmd.write()
-							bd(0)
-						elseif choice == 2 then -- No
-							bd(0, true)
-						end
-					else
-						bd(0)
-					end
-				end,
-				desc = "Delete Buffer",
-			},
-			-- stylua: ignore
-			{ "<C-Down>", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
-		},
-	},
-	{
 		"echasnovski/mini.sessions",
 		version = false,
 		event = "VimEnter",
@@ -829,5 +738,10 @@ return {
 		opts = {
 			directory = "~/.cache/nvim/sessions",
 		},
+	},
+	{
+		-- Treesitter text objects
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		lazy = true,
 	},
 }

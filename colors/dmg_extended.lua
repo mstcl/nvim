@@ -27,7 +27,6 @@ local extended = lush.merge({
 	require("dmg"),
 	require("dmg_statusline"),
 	require("dmg_mini_starter"),
-	require("dmg_mini_map"),
 	require("dmg_telescope"),
 	require("dmg_ufo"),
 	require("dmg_whichkey"),
@@ -41,6 +40,7 @@ if conf.lsp_enabled then
 		require("dmg_mason"),
 		require("dmg_dressing"),
 		require("dmg_null_ls"),
+		require("dmg_navic"),
 	})
 end
 
@@ -91,13 +91,6 @@ if conf.ui_features.indent_lines then
 	extended = lush.merge({
 		extended,
 		require("dmg_hlchunk"),
-	})
-end
-
-if conf.lsp_features.breadcrumbs then
-	extended = lush.merge({
-		extended,
-		require("dmg_barbecue"),
 	})
 end
 

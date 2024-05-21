@@ -1,4 +1,5 @@
 local lsp = vim.lsp
+local augroup = require("utils.misc").augroup
 local conf = require("user_configs")
 local M = {}
 
@@ -7,6 +8,10 @@ function M.on_attach(client, bufnr)
 	require("utils.mappings.lsp").setup(client, bufnr)
 
 	vim.lsp.inlay_hint.enable(conf.lsp_features.inlay_hints)
+
+	if client.server_capabilities.documentSymbolProvider then
+        require("nvim-navic").attach(client, bufnr)
+    end
 
 	if client.name == "gopls" then
 		if not client.server_capabilities.semanticTokensProvider then
@@ -20,6 +25,19 @@ function M.on_attach(client, bufnr)
 				range = true,
 			}
 		end
+	end
+
+	if client.server_capabilities.codeLensProvider then
+		augroup("codeLensRefresh", {
+			{ "LspAttach" },
+			{
+				callback = function()
+					vim.lsp.codelens.refresh()
+				end,
+			},
+			buffer = bufnr,
+			desc = "Refresh codelens"
+		})
 	end
 end
 

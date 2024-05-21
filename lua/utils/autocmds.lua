@@ -112,3 +112,25 @@ augroup("loadStatusline", {
 		end,
 	},
 })
+
+augroup("rooter", {
+	{ "BufEnter" },
+	{
+		desc = "Set cwd to project root directory",
+		callback = function(ctx)
+			local root = vim.fs.root(ctx.buf, {
+				"Makefile",
+				".git",
+				".hg",
+				"project.json",
+				".svn",
+				"pyproject.toml",
+				"README.md",
+			})
+			if root then
+				---@diagnostic disable-next-line: undefined-field
+				vim.uv.chdir(root)
+			end
+		end,
+	},
+})
