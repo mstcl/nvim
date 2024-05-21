@@ -9,7 +9,7 @@ return {
 		event = { "InsertEnter", "CmdlineEnter" },
 		keys = {
 			{
-				"<C-M>cc",
+				"<C-M>ca",
 				function()
 					vim.g.cmp_toggle = not vim.g.cmp_toggle
 					if not vim.g.cmp_toggle then

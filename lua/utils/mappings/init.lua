@@ -63,6 +63,15 @@ map("n", "<C-M>f", function()
 		vim.notify("Enabled foldcolumn", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle foldcolumn" })
+map("n", "<C-M>cc", function()
+	if winopt.colorcolumn ~= "0" then
+		winopt.colorcolumn = ""
+		vim.notify("Disabled cursorcolumn", vim.log.levels.INFO)
+	else
+		winopt.foldcolumn = "80"
+		vim.notify("Enabled cursorcolumn", vim.log.levels.INFO)
+	end
+end, { desc = "Toggle cursorcolumn" })
 
 -- Window splitting
 map("n", "<C-S>v", function()

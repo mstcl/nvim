@@ -28,7 +28,6 @@ local extended = lush.merge({
 	require("dmg_statusline"),
 	require("dmg_mini_starter"),
 	require("dmg_telescope"),
-	require("dmg_ufo"),
 	require("dmg_whichkey"),
 	require("dmg_neogit"),
 	require("dmg_incline"),
@@ -36,7 +35,6 @@ local extended = lush.merge({
 	require("dmg_rainbow"),
 	require("dmg_cmp"),
 	require("dmg_flash"),
-	require("dmg_biscuits"),
 })
 
 if conf.lsp_enabled then

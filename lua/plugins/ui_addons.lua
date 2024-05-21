@@ -67,36 +67,6 @@ return {
 		},
 	},
 	{
-		-- Colorcolumn smart functionality
-		"fmbarina/multicolumn.nvim",
-		priority = 10,
-		event = "BufReadPre",
-		opts = {
-			sets = {
-				lua = {
-					rulers = { 80 },
-					scope = "file",
-				},
-				default = {
-					rulers = { 80 },
-					full_column = true,
-				},
-				python = {
-					scope = "window",
-					rulers = { 80 },
-					to_line_end = true,
-				},
-				starter = {
-					rulers = { 9999 },
-				},
-				NeogitStatus = {
-					rulers = { 9999 },
-				},
-				exclude_ft = { "help", "netrw", "starter", "man", "qf" },
-			},
-		},
-	},
-	{
 		-- Highlight color blocks
 		"brenoprata10/nvim-highlight-colors",
 		event = { "BufRead" },
@@ -115,85 +85,6 @@ return {
 		},
 	},
 	{
-		-- Folding customization using LSP and more
-		"kevinhwang91/nvim-ufo",
-		event = "VimEnter",
-		dependencies = { "kevinhwang91/promise-async" },
-		keys = {
-			{
-				"K",
-				"<cmd>lua require('ufo').peekFoldedLinesUnderCursor()<cr>",
-				desc = "Peek fold",
-			},
-		},
-		init = function()
-			---@diagnostic disable-next-line: inject-field
-			vim.o.foldcolumn = "1" -- '0' is not bad
-			---@diagnostic disable-next-line: inject-field
-			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-			---@diagnostic disable-next-line: inject-field
-			vim.o.foldlevelstart = 99
-			---@diagnostic disable-next-line: inject-field
-			vim.o.foldenable = true
-		end,
-		opts = function()
-			---Set nvim-ufo truncate text
-			---@return string
-			local function ufo_handler(virtText, lnum, endLnum, width, truncate)
-				local newVirtText = {}
-				local suffix = (" 󰁂 %d "):format(endLnum - lnum)
-				local sufWidth = vim.fn.strdisplaywidth(suffix)
-				local targetWidth = width - sufWidth
-				local curWidth = 0
-				for _, chunk in ipairs(virtText) do
-					local chunkText = chunk[1]
-					local chunkWidth = vim.fn.strdisplaywidth(chunkText)
-					if targetWidth > curWidth + chunkWidth then
-						table.insert(newVirtText, chunk)
-					else
-						chunkText = truncate(chunkText, targetWidth - curWidth)
-						local hlGroup = chunk[2]
-						table.insert(newVirtText, { chunkText, hlGroup })
-						chunkWidth = vim.fn.strdisplaywidth(chunkText)
-						if curWidth + chunkWidth < targetWidth then
-							suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
-						end
-						break
-					end
-					curWidth = curWidth + chunkWidth
-				end
-				table.insert(newVirtText, { suffix, "DiffChange" })
-				return newVirtText
-			end
-			return {
-				open_fold_hl_timeout = 150,
-				close_fold_kinds_ft = {
-					default = { "imports", "comment" },
-					json = { "array" },
-				},
-				preview = {
-					win_config = {
-						border = "single",
-						winhighlight = "Pmenu:Normal",
-						winblend = 0,
-					},
-					mappings = {
-						scrollU = "<C-N>",
-						scrollD = "<C-P>",
-						jumpTop = "[",
-						jumpBot = "]",
-					},
-				},
-				fold_virt_text_handler = ufo_handler,
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("ufo").setup(opts)
-			end
-		end,
-	},
-	{
 		-- Winbar/bufferline alternative
 		"b0o/incline.nvim",
 		event = "BufReadPost",
@@ -207,64 +98,6 @@ return {
 					horizontal = 0,
 					vertical = 0,
 				},
-			},
-		},
-	},
-	{
-		-- Code runner
-		"stevearc/overseer.nvim",
-		keys = {
-			{
-				"<C-M>o",
-				function()
-					vim.cmd("OverseerToggle")
-					vim.notify("Toggled overseer", vim.log.levels.INFO)
-				end,
-				desc = "Toggle Overseer",
-			},
-			{
-				"<leader>m",
-				"<cmd>OverseerRun<cr>",
-				desc = "Run tasks",
-			},
-		},
-		opts = {
-			form = {
-				border = "single",
-				win_opts = {
-					winblend = 0,
-				},
-			},
-			confirm = {
-				border = "single",
-				win_opts = {
-					winblend = 0,
-				},
-			},
-			task_win = {
-				border = "single",
-				win_opts = {
-					winblend = 0,
-				},
-			},
-			help_win = {
-				border = "single",
-				win_opts = {
-					winblend = 0,
-				},
-			},
-		},
-	},
-	{
-		-- Search and replace
-		"MagicDuck/grug-far.nvim",
-		cmd = { "GrugFar" },
-		opts = {
-			disableBufferLineNumbers = true,
-			resultsSeparatorLineChar = "─",
-			spinnerStates = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
-			icons = {
-				enabled = false,
 			},
 		},
 	},
@@ -444,34 +277,6 @@ return {
 				vim.g.minianimate_disable = not cond.animate
 			end
 		end,
-	},
-	{
-		-- Context at end of block, outside parentheses
-		"code-biscuits/nvim-biscuits",
-		keys = {
-			{
-				"<C-M>b",
-				function()
-					require("nvim-biscuits").toggle_biscuits()
-					vim.notify("Toggled biscuits", vim.log.levels.INFO)
-				end,
-				desc = "Toggle biscuits",
-			},
-		},
-		event = "LspAttach",
-		opts = {
-			show_on_start = cond.biscuits,
-			cursor_line_only = true,
-			prefix_string = " □ ",
-			language_config = {
-				org = {
-					disabled = true,
-				},
-				markdown = {
-					disabled = true,
-				},
-			},
-		},
 	},
 	{
 		-- Highlight parenthesis

@@ -28,18 +28,6 @@ function M.on_attach(client, bufnr)
 			}
 		end
 	end
-
-	if client.server_capabilities.codeLensProvider then
-		vim.lsp.codelens.refresh()
-		augroup("codeLensRefresh", {
-			{ "BufEnter", "CursorHold", "InsertLeave" },
-			{
-				callback = vim.lsp.codelens.refresh
-			},
-			buffer = bufnr,
-			desc = "Refresh codelens"
-		})
-	end
 end
 
 M.handlers = {

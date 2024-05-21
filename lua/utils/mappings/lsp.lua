@@ -34,10 +34,7 @@ function M.setup(client, bufnr)
 
 	if client.server_capabilities.hoverProvider then
 		map("n", "K", function()
-			local winid = require("ufo").peekFoldedLinesUnderCursor()
-			if not winid then
-				vim.lsp.buf.hover()
-			end
+			vim.lsp.buf.hover()
 		end, { desc = "Symbol documentation", buffer = bufnr })
 	end
 
