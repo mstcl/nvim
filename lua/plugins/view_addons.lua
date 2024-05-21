@@ -616,16 +616,6 @@ return {
 		end,
 	},
 	{
-		-- Tips on launch
-		"TobinPalmer/Tip.nvim",
-		cond = require("user_configs").func_features.tip,
-		event = "VimEnter",
-		opts = {
-			title = "Tip!",
-			url = "https://vtip.43z.one",
-		},
-	},
-	{
 		-- Discard inactive buffers
 		"chrisgrieser/nvim-early-retirement",
 		event = "BufReadPre",
