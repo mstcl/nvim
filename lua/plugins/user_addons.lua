@@ -1,14 +1,6 @@
 -- Additional addons go here
 return {
 	{
-		"chrishrb/gx.nvim",
-		opts = {
-			handler_options = {
-				search_engine = "https://sxn.lonely-desk.top/search?q=",
-			},
-		},
-	},
-	{
 		-- Neovim in the browser!
 		"glacambre/firenvim",
 		lazy = not vim.g.started_by_firenvim,
