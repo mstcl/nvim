@@ -14,7 +14,35 @@ return {
 		"linrongbin16/lsp-progress.nvim",
 		event = "LspAttach",
 		cond = cond,
-		opts = {},
+		opts = {
+			series_format = function(title, message, percentage, _)
+				local builder = {}
+				local has_title = false
+				local has_message = false
+				if type(message) == "string" and string.len(message) > 0 then
+					has_message = true
+				end
+				if type(title) == "string" and string.len(title) > 0 then
+					has_title = true
+				end
+				if percentage and (has_title or has_message) then
+					table.insert(builder, string.format("%.0f%%", percentage))
+				end
+				return table.concat(builder, " ")
+			end,
+			client_format = function(client_name, _, series_messages)
+				return #series_messages > 0 and client_name .. " " .. table.concat(series_messages, " ") .. " " or nil
+			end,
+			format = function(client_messages)
+				if #client_messages > 0 then
+					return table.concat(client_messages, " ")
+				end
+				if #vim.lsp.get_clients() > 0 then
+					return ""
+				end
+				return ""
+			end,
+		},
 	},
 	{
 		-- Code tools forge
@@ -219,7 +247,7 @@ return {
 									paramName = "Disable",
 									semicolon = "Disable",
 									arrayIndex = "Disable",
-								}
+								},
 							},
 						},
 					})
@@ -419,5 +447,31 @@ return {
 				set_filetype = true,
 			},
 		},
+	},
+	{
+		-- LSP symbol components
+		"SmiteshP/nvim-navic",
+		event = "BufReadPre",
+		cond = cond,
+		opts = function()
+			local function get_kinds()
+				local kinds = require("user_configs").lsp_kind_icons
+				local new_kinds = {}
+				for k, _ in pairs(kinds) do
+					new_kinds[k] = ""
+				end
+				return new_kinds
+			end
+			return {
+				icons = get_kinds(),
+				depth_limit = 4,
+				highlight = true,
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("nvim-navic").setup(opts)
+			end
+		end,
 	},
 }

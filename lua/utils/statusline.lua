@@ -50,17 +50,7 @@ end
 ---Get LSP progress
 ---@return string
 function M.get_lsp_progress()
-	return require("lsp-progress").progress({
-		format = function(client_messages)
-			if #client_messages > 0 then
-				return table.concat(client_messages, " ")
-			end
-			if #vim.lsp.get_clients() > 0 then
-				return ""
-			end
-			return ""
-		end,
-	})
+	return require("lsp-progress").progress()
 end
 
 augroup("lspProgress", {
@@ -234,9 +224,18 @@ function M.get_ffenc()
 	return "[" .. fe .. "]"
 end
 
+function M.get_symbol()
+	local symbol = require("nvim-navic").get_location()
+	if symbol == "" then
+		return ""
+	end
+	return "%#statuslinealt#(" .. symbol .. "%#statuslinealt#)"
+end
 
--- Statusline components
+-- Statusline/winbar components
 local statusline_parts = {
+	-- LSP symbol
+	symbol = [[%{%v:lua.require'utils.statusline'.get_symbol()%}]],
 	-- Highlights
 	hl_main = [[%#statuslinenc#]],
 	hl_strong = [[%#statusline#]],
@@ -258,11 +257,10 @@ local statusline_parts = {
 	-- General
 	filepath = [[%{%v:lua.require'utils.statusline'.get_filepath()%}]],
 	filename = [[%{%v:lua.require'utils.statusline'.get_filename()%}]],
-	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%c %2p%#statuslinealt#%%":""%}]],
+	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%2c %2p%#statuslinealt#%%":""%}]],
 	mode = [[%{%v:lua.require'utils.statusline'.get_mode()%}]],
 	cwd = [[%{%v:lua.require'utils.statusline'.get_cwd()%}]],
-	indentation =
-	[[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
+	indentation = [[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
 	ft = [[%{%v:lua.require'utils.statusline'.get_filetype()%}]],
 	fformat = [[%{%v:lua.require'utils.statusline'.get_fformat()%}]],
 	fenc = [[%{%v:lua.require'utils.statusline'.get_ffenc()%}]],
@@ -311,12 +309,27 @@ function M.get_default_statusline()
 		statusline_parts.align,
 		statusline_parts.hl_alt,
 		statusline_parts.progress,
+		--
+		statusline_parts.symbol,
+		--
 		statusline_parts.pos,
+		--
 		statusline_parts.padding,
 		statusline_parts.indentation,
+		--
 		statusline_parts.padding,
 		statusline_parts.hl_restore,
 	}, "")
+end
+
+function M.get_default_winbar()
+	return table.concat({
+		statusline_parts.padding,
+		statusline_parts.symbol,
+		statusline_parts.align,
+		statusline_parts.hl_alt,
+		statusline_parts.progress,
+	})
 end
 
 return M

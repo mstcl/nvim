@@ -14,55 +14,6 @@ return {
 		end,
 	},
 	{
-		-- Add a sidebar map
-		"echasnovski/mini.map",
-		keys = {
-			{
-				"<C-M>m",
-				function()
-					require("mini.map").toggle()
-					vim.notify("Toggled mini map", vim.log.levels.INFO)
-				end,
-				desc = "Toggle code minimap",
-			},
-		},
-		version = false,
-		opts = function()
-			local map = require("mini.map")
-			local git_integration = map.gen_integration.gitsigns({
-				add = "GitSignsAdd",
-				change = "GitSignsChange",
-				delete = "GitSignsDelete",
-			})
-			local diagnostic_integration = map.gen_integration.diagnostic({
-				error = "DiagnosticFloatingError",
-				warn = "DiagnosticFloatingWarn",
-				info = "DiagnosticFloatingInfo",
-				hint = "DiagnosticFloatingHint",
-			})
-			return {
-				integrations = { diagnostic_integration, git_integration },
-				symbols = {
-					encode = map.gen_encode_symbols.dot("3x2"),
-					scroll_line = "▓",
-					scroll_view = "▒",
-				},
-				window = {
-					focusable = false,
-					side = "right",
-					show_integration_count = false,
-					width = 10,
-					winblend = 25,
-				},
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("mini.map").setup(opts)
-			end
-		end,
-	},
-	{
 		-- Add nice input dialogs to prompt
 		"stevearc/dressing.nvim",
 		init = function()
@@ -157,33 +108,10 @@ return {
 			},
 		},
 		opts = {
+			render = "virtual",
+			virtual_symbol = " ■",
 			enable_named_colors = false,
 		},
-	},
-	{
-		-- Naively highlight word under cursor
-		"echasnovski/mini.cursorword",
-		event = "BufRead",
-		cond = require("user_configs").ui_features.cursorword,
-		keys = {
-			{
-				"<C-M>w",
-				function()
-					vim.g.minicursorword_disable = not vim.g.minicursorword_disable
-					if vim.g.minicursorword_disable then
-						vim.notify("Disabled cursorword", vim.log.levels.INFO)
-					else
-						vim.notify("Enabled cursorword", vim.log.levels.INFO)
-					end
-				end,
-				desc = "Toggle cursorword",
-			},
-		},
-		init = function()
-			vim.cmd("autocmd Filetype markdown,tex,quarto lua vim.b.minicursorword_disable = true")
-		end,
-		opts = {},
-		version = false,
 	},
 	{
 		-- Folding customization using LSP and more
@@ -430,7 +358,7 @@ return {
 				goto_bottom = "",
 			},
 			symbol = "│",
-			options = { try_as_border = true }
+			options = { try_as_border = true },
 		},
 		cond = require("user_configs").ui_features.indent_lines,
 		init = function()

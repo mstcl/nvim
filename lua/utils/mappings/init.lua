@@ -96,7 +96,19 @@ map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result
 map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 
 -- Buffer traversal
-map("n", "]b", "<cmd>bnext<cr>", {desc = "Next buffer"})
-map("n", "[b", "<cmd>bprevious<cr>", {desc = "Previous buffer"})
-map("n", "]B", "<cmd>blast<cr>", {desc = "Last buffer"})
-map("n", "[B", "<cmd>bfirst<cr>", {desc = "First buffer"})
+map("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
+map("n", "[b", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+map("n", "]B", "<cmd>blast<cr>", { desc = "Last buffer" })
+map("n", "[B", "<cmd>bfirst<cr>", { desc = "First buffer" })
+map("n", "<C-Q", "<cmd>confirm bdelete<cr>", { desc = "Delete buffer" })
+
+-- save original gx to use as fallback
+local old_gx = vim.fn.maparg("gx", "n", nil, true)
+map("n", "gx", function()
+	local word = vim.fn.expand("<cWORD>"):match("[\"']([%a_%.%-]+/[%a_%.%-]+)[\"']")
+	if word then
+		vim.ui.open("https://github.com/" .. word)
+	else
+		old_gx.callback()
+	end
+end, { desc = old_gx.desc })

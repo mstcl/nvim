@@ -12,7 +12,6 @@ M.dap_enabled = {{ dap_enabled | string |lower }}
 M.lsp_enabled = {{ lsp_enabled | string |lower }}
 M.lsp_features = {
 	virtual_text = {{ lsp_features.virtual_text | string |lower }},
-	breadcrumbs = {{ lsp_features.breadcrumbs | string |lower }},
 	usage = {{ lsp_features.usage | string |lower }},
 	inlay_hints = {{ lsp_features.inlay_hints | string |lower }},
 }
@@ -26,14 +25,12 @@ M.edit_features = {
 	move = {{ edit_features.move | string |lower }},
 	flash = {{ edit_features.flash | string |lower }},
 	spider = {{ edit_features.spider | string |lower }},
-	rooter = {{ edit_features.rooter | string |lower }},
 }
 
 M.ui_features = {
 	animate = {{ ui_features.animate | string | lower}},
 	modes = {{ ui_features.modes | string |lower }},
 	scope = {{ ui_features.scope | string |lower }},
-	cursorword = {{ ui_features.cursorword | string |lower }},
 	indent_lines = {{ ui_features.indent_lines | string |lower }},
 	tabline = {{ ui_features.tabline | string |lower }},
 }
