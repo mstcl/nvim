@@ -95,13 +95,13 @@ return {
 						cmp.abort()
 						fallback()
 					end,
-					["<Tab>"] = function(fallback)
+					["<Tab>"] = function(_)
 						if cmp.visible() then
 							cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
 						elseif vim.snippet.active({ direction = 1 }) then
 							vim.snippet.jump(1)
 						else
-							fallback()
+							require("neotab").tabout()
 						end
 					end,
 					["<S-Tab>"] = function(fallback)
@@ -380,46 +380,9 @@ return {
 	},
 	{
 		-- Tab out of parentheses
-		"abecodes/tabout.nvim",
+		"kawre/neotab.nvim",
 		event = "InsertEnter",
-		dependencies = {
-			{ "nvim-treesitter/nvim-treesitter" },
-			{ "hrsh7th/nvim-cmp" },
-		},
-		opts = function()
-			return {
-				tabkey = "<Tab>",
-				backwards_tabkey = "<S-Tab>",
-				act_as_tab = true,
-				act_as_shift_tab = true,
-				default_tab = "<C-t>",
-				default_shift_tab = "<C-d>",
-				enable_backwards = true,
-				completion = true,
-				tabouts = {
-					{ open = "'", close = "'" },
-					{ open = '"', close = '"' },
-					{ open = "`", close = "`" },
-					{ open = "(", close = ")" },
-					{ open = "[", close = "]" },
-					{ open = "{", close = "}" },
-					{ open = "<", close = ">" },
-					{ open = "$", close = "$" },
-					{ open = "%", close = "%" },
-				},
-				ignore_beginning = true,
-				exclude = {
-					"yaml.ansible",
-					"gotmpl",
-					"template",
-				},
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("tabout").setup(opts)
-			end
-		end,
+		opts = {},
 	},
 	{
 		-- Highlight brackets when inside block
