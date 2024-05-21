@@ -7,7 +7,9 @@ function M.on_attach(client, bufnr)
 	-- setup mappings
 	require("utils.mappings.lsp").setup(client, bufnr)
 
-	vim.lsp.inlay_hint.enable(conf.lsp_features.inlay_hints)
+	if client.server_capabilities.inlayHintProvider then
+		vim.lsp.inlay_hint.enable(conf.lsp_features.inlay_hints)
+	end
 
 	if client.server_capabilities.documentSymbolProvider then
         require("nvim-navic").attach(client, bufnr)
@@ -28,12 +30,11 @@ function M.on_attach(client, bufnr)
 	end
 
 	if client.server_capabilities.codeLensProvider then
+		vim.lsp.codelens.refresh()
 		augroup("codeLensRefresh", {
-			{ "LspAttach" },
+			{ "BufEnter", "CursorHold", "InsertLeave" },
 			{
-				callback = function()
-					vim.lsp.codelens.refresh()
-				end,
+				callback = vim.lsp.codelens.refresh
 			},
 			buffer = bufnr,
 			desc = "Refresh codelens"
