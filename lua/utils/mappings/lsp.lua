@@ -8,7 +8,7 @@ function M.setup(client, bufnr)
 	map("n", "gp", vim.lsp.buf.type_definition, { desc = "Symbol type defintion", buffer = bufnr })
 
 	if client.server_capabilities.inlayHintProvider then
-		map("n", "<C-M>b", function()
+		map("n", "<C-M>ih", function()
 			---@diagnostic disable-next-line: missing-parameter
 			vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 			---@diagnostic disable-next-line: missing-parameter

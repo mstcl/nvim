@@ -189,7 +189,15 @@ return {
 						preview = { layout = "vertical" },
 					},
 				},
+				tabs = {
+					winopts = {
+						width = 0.3,
+						height = 0.3,
+						preview = { hidden = "hidden" },
+					},
+				},
 				buffers = {
+					sort_lastused = true,
 					winopts = {
 						width = 0.3,
 						height = 0.3,

@@ -1,4 +1,5 @@
 local augroup = require("utils.misc").augroup
+local cond = require("user_configs").ui_features
 -- Plugins that modify UI
 return {
 	{
@@ -102,7 +103,7 @@ return {
 		cmd = { "HighlightColors" },
 		keys = {
 			{
-				"<C-M>h",
+				"<C-M>hh",
 				"<cmd>HighlightColors Toggle<cr>",
 				desc = "Toggle highlighting colours",
 			},
@@ -193,22 +194,6 @@ return {
 		end,
 	},
 	{
-		-- Cursorline mode decoration
-		"mvllow/modes.nvim",
-		cond = require("user_configs").ui_features.modes,
-		event = "BufReadPre",
-		opts = {
-			set_number = false,
-		},
-	},
-	{
-		-- Tabs and buffer
-		"tiagovla/scope.nvim",
-		cond = require("user_configs").ui_features.scope,
-		event = "BufRead",
-		opts = {},
-	},
-	{
 		-- Winbar/bufferline alternative
 		"b0o/incline.nvim",
 		event = "BufReadPost",
@@ -223,27 +208,6 @@ return {
 					vertical = 0,
 				},
 			},
-		},
-	},
-	{
-		-- Switch between buffers, the minimal way
-		"ernstwi/juggler.nvim",
-		opts = {
-			highlight_group_active = "Question", -- The selected buffer.
-			highlight_group_inactive = "StatuslineAlt", -- All other buffers.
-			highlight_group_separator = "Whitespace", -- The `|` between buffers.
-		},
-		keys = {
-			{
-				"<leader>j",
-				function()
-					require("juggler").activate()
-				end,
-				desc = "Juggler buffers",
-			},
-		},
-		dependencies = {
-			"nvimtools/hydra.nvim",
 		},
 	},
 	{
@@ -336,7 +300,7 @@ return {
 		version = false,
 		keys = {
 			{
-				"<C-M>i",
+				"<C-M>ii",
 				function()
 					vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable
 					if vim.g.miniindentscope_disable then
@@ -360,7 +324,12 @@ return {
 			symbol = "│",
 			options = { try_as_border = true },
 		},
-		cond = require("user_configs").ui_features.indent_lines,
+		config = function (_, opts)
+			if opts then
+				require("mini.indentscope").setup(opts)
+				vim.g.miniindentscope_disable = not cond.indent_lines
+			end
+		end,
 		init = function()
 			vim.api.nvim_set_hl(0, "MiniIndentscopeSymbol", { link = "NonText" })
 			augroup("indentLinesDisable", {
@@ -424,7 +393,7 @@ return {
 		event = "CursorMoved",
 		keys = {
 			{
-				"<C-M>a",
+				"<C-M>aa",
 				function()
 					vim.g.minianimate_disable = not vim.g.minianimate_disable
 					if vim.g.minianimate_disable then
@@ -468,6 +437,84 @@ return {
 					}),
 				},
 			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("mini.animate").setup(opts)
+				vim.g.minianimate_disable = cond.animate
+			end
+		end,
+	},
+	{
+		-- Context at end of block, outside parentheses
+		"code-biscuits/nvim-biscuits",
+		keys = {
+			{
+				"<C-M>b",
+				function()
+					require("nvim-biscuits").toggle_biscuits()
+					vim.notify("Toggled biscuits", vim.log.levels.INFO)
+				end,
+				desc = "Toggle biscuits",
+			},
+		},
+		event = "LspAttach",
+		opts = function()
+			return {
+				show_on_start = cond.biscuits,
+				cursor_line_only = true,
+				prefix_string = " □ ",
+				language_config = {
+					org = {
+						disabled = true,
+					},
+					markdown = {
+						disabled = true,
+					},
+				},
+			}
+		end,
+	},
+	{
+		-- Highlight parenthesis
+		"HiPhish/rainbow-delimiters.nvim",
+		keys = {
+			{
+				"<C-M>r",
+				function()
+					require("rainbow-delimiters").toggle()
+					if not require("rainbow-delimiters").is_enabled() then
+						vim.notify("Disabled rainbow delimiters", vim.log.levels.INFO)
+					else
+						vim.notify("Enabled rainbow delimiters", vim.log.levels.INFO)
+					end
+				end,
+				desc = "Toggle rainbow delimiters",
+			},
+		},
+		event = { "BufRead" },
+		opts = {
+			query = {
+				[""] = "rainbow-delimiters",
+				latex = "rainbow-blocks",
+				lua = "rainbow-blocks",
+			},
+			highlight = {
+				"TSRainbowRed",
+				"TSRainbowBlue",
+				"TSRainbowCyan",
+				"TSRainbowGreen",
+				"TSRainbowviolet",
+				"TSRainbowYellow",
+			},
+		},
+		config = function(_, opts)
+			if opts then
+				vim.g.rainbow_delimiters = opts
+				if not cond.rainbow then
+					require("rainbow-delimiters").disable()
+				end
+			end
 		end,
 	},
 }
