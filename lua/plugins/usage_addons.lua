@@ -500,7 +500,6 @@ return {
 			local wk = require("which-key")
 			wk.register({
 				["<leader>"] = { name = "Leader commands (pickers & LSP)" },
-				["<space>"] = { ":", "Command", mode = { "n", "v" } },
 				["<leader>g"] = { name = "Git commands" },
 				["<C-M>"] = { name = "Toggle components" },
 				["<C-S>"] = { name = "Split windows" },

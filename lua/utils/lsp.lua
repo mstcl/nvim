@@ -12,8 +12,8 @@ function M.on_attach(client, bufnr)
 	end
 
 	if client.server_capabilities.documentSymbolProvider then
-        require("nvim-navic").attach(client, bufnr)
-    end
+		require("nvim-navic").attach(client, bufnr)
+	end
 
 	if client.name == "gopls" then
 		if not client.server_capabilities.semanticTokensProvider then

@@ -28,7 +28,6 @@ edit_features:
 
 syntax_features:
   typst: false # enable typst syntax.
-  ansible: false # enable ansible syntax.
   quarto: false # enable quarto integrations.
   markdown: false # enable markdown integrations.
   org: false # enable orgmode syntax.
