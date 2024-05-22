@@ -345,7 +345,6 @@ return {
 		-- Bridge none-ls and mason
 		"jay-babu/mason-null-ls.nvim",
 		event = { "BufReadPre", "BufNewFile" },
-		dependencies = { "nvim-lua/plenary.nvim" },
 		cond = cond,
 		opts = {
 			ensure_installed = nil,
@@ -357,6 +356,7 @@ return {
 		"nvimtools/none-ls.nvim",
 		cond = cond,
 		event = "BufRead",
+		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = function()
 			local null_ls = require("null-ls")
 			local null_sources = {}
