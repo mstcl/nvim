@@ -73,11 +73,11 @@ set.foldmethod = "expr"
 set.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 set.foldtext = ""
 set.foldlevel = 99
-set.foldlevelstart = 1
+set.foldlevelstart = 3
 set.foldminlines = 1
 set.foldnestmax = 4
 
--- Signcolumn
+-- Statuscolumn
 set.foldcolumn = "auto:1"
 set.number = true
 set.relativenumber = true

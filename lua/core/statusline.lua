@@ -1,4 +1,4 @@
-local augroup = require("utils.misc").augroup
+local augroup = require("core.utils").augroup
 local lsp_signs = require("user_configs").lsp_signs
 
 local M = {}
@@ -235,7 +235,7 @@ end
 -- Statusline/winbar components
 local statusline_parts = {
 	-- LSP symbol
-	symbol = [[%{%v:lua.require'utils.statusline'.get_symbol()%}]],
+	symbol = [[%{%v:lua.require'core.statusline'.get_symbol()%}]],
 	-- Highlights
 	hl_main = [[%#statuslinenc#]],
 	hl_strong = [[%#statusline#]],
@@ -243,11 +243,11 @@ local statusline_parts = {
 	hl_orange = [[%#statuslineorange#]],
 	hl_restore = [[%*]],
 	-- LSP
-	diagnostics = [[%{%v:lua.require'utils.statusline'.get_lsp_diagnostic()%}]],
-	progress = [[%{%v:lua.require'utils.statusline'.get_lsp_progress()%}]],
+	diagnostics = [[%{%v:lua.require'core.statusline'.get_lsp_diagnostic()%}]],
+	progress = [[%{%v:lua.require'core.statusline'.get_lsp_progress()%}]],
 	-- Git
-	branch = [[%{%v:lua.require'utils.statusline'.get_git_branch()%}]],
-	diffs = [[%{%v:lua.require'utils.statusline'.get_diffs()%}]],
+	branch = [[%{%v:lua.require'core.statusline'.get_git_branch()%}]],
+	diffs = [[%{%v:lua.require'core.statusline'.get_diffs()%}]],
 	-- Misc
 	align = [[%=]],
 	truncate = [[%<]],
@@ -255,17 +255,17 @@ local statusline_parts = {
 	close_bracket = [[)]],
 	padding = [[ ]],
 	-- General
-	filepath = [[%{%v:lua.require'utils.statusline'.get_filepath()%}]],
-	filename = [[%{%v:lua.require'utils.statusline'.get_filename()%}]],
+	filepath = [[%{%v:lua.require'core.statusline'.get_filepath()%}]],
+	filename = [[%{%v:lua.require'core.statusline'.get_filename()%}]],
 	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%2c %2p%#statuslinealt#%%":""%}]],
-	mode = [[%{%v:lua.require'utils.statusline'.get_mode()%}]],
-	cwd = [[%{%v:lua.require'utils.statusline'.get_cwd()%}]],
+	mode = [[%{%v:lua.require'core.statusline'.get_mode()%}]],
+	cwd = [[%{%v:lua.require'core.statusline'.get_cwd()%}]],
 	indentation = [[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
-	ft = [[%{%v:lua.require'utils.statusline'.get_filetype()%}]],
-	fformat = [[%{%v:lua.require'utils.statusline'.get_fformat()%}]],
-	fenc = [[%{%v:lua.require'utils.statusline'.get_ffenc()%}]],
-	search = [[%{%v:lua.require'utils.statusline'.get_search_counts()%}]],
-	macro = [[%{%v:lua.require'utils.statusline'.get_macro_recording()%}]],
+	ft = [[%{%v:lua.require'core.statusline'.get_filetype()%}]],
+	fformat = [[%{%v:lua.require'core.statusline'.get_fformat()%}]],
+	fenc = [[%{%v:lua.require'core.statusline'.get_ffenc()%}]],
+	search = [[%{%v:lua.require'core.statusline'.get_search_counts()%}]],
+	macro = [[%{%v:lua.require'core.statusline'.get_macro_recording()%}]],
 }
 
 function M.get_default_statusline()

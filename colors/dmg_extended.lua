@@ -32,7 +32,6 @@ local extended = lush.merge({
 	require("dmg_neogit"),
 	require("dmg_incline"),
 	require("dmg_hlargs"),
-	require("dmg_rainbow"),
 	require("dmg_cmp"),
 	require("dmg_flash"),
 })

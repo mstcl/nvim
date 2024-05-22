@@ -1,4 +1,4 @@
-local augroup = require("utils.misc").augroup
+local augroup = require("core.utils").augroup
 -- Plugins that add things to the signcolumn (or foldcolumn)
 return {
 	{
@@ -8,7 +8,7 @@ return {
 		keys = {
 			{
 				"<C-M>g",
-				function ()
+				function()
 					vim.cmd("Gitsigns toggle_signs")
 					vim.notify("Toggled git signs", vim.log.levels.INFO)
 				end,
@@ -49,7 +49,7 @@ return {
 				mode = { "v" },
 			},
 		},
-		dependencies = { { "nvim-lua/plenary.nvim" } },
+		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = {
 			numhl = false,
 			linehl = false,
@@ -81,65 +81,67 @@ return {
 			exclude = { "LspDiagnosticsSignWarning" },
 		},
 	},
-	{
-		-- Utility to tweak statuscolumn
-		"luukvbaal/statuscol.nvim",
-		opts = function()
-			local builtin = require("statuscol.builtin")
-			return {
-				relculright = true,
-				ft_ignore = {
-					"help",
-					"starter",
-					"Neogit*",
-					"lazy",
-					"toggleterm",
-				},
-				segments = {
-					{
-						text = {
-							builtin.foldfunc,
-						},
-						click = "v:lua.ScFa",
-					},
-					{
-						text = { builtin.lnumfunc, " " },
-						condition = { true, builtin.not_empty },
-						click = "v:lua.ScLa",
-					},
-					{
-						sign = {
-							name = { ".*" },
-							text = { ".*" },
-							colwidth = 1,
-							maxwidth = 2,
-							auto = true,
-						},
-						click = "v:lua.ScSa",
-					},
-					{
-						text = { " " },
-						hl = "SignColumn",
-						condition = { true, builtin.not_empty },
-						click = "v:lua.ScLa",
-					},
-				},
-			}
-		end,
-		init = function(opts)
-			augroup("loadStatuscolumn", {
-				{ "BufReadPre" },
-				{
-					pattern = "*",
-					desc = "Lazy load statuscol",
-					callback = function()
-						if vim.bo.filetype ~= "starter" and vim.wo.statuscolumn == "" then
-							require("statuscol").setup(opts)
-							vim.wo.statuscolumn = "%!v:lua.StatusCol()"
-						end
-					end,
-				},
-			})
-		end,
-	},
+	-- {
+	-- 	-- Utility to tweak statuscolumn
+	-- 	"luukvbaal/statuscol.nvim",
+	-- 	opts = function()
+	-- 		local builtin = require("statuscol.builtin")
+	-- 		return {
+	-- 			relculright = true,
+	-- 			ft_ignore = {
+	-- 				"help",
+	-- 				"starter",
+	-- 				"Neogit*",
+	-- 				"lazy",
+	-- 				"toggleterm",
+	-- 			},
+	-- 			segments = {
+	-- 				{
+	-- 					text = {
+	-- 						builtin.foldfunc,
+	-- 					},
+	-- 					click = "v:lua.ScFa",
+	-- 				},
+	-- 				{
+	-- 					text = { builtin.lnumfunc, " " },
+	-- 					condition = { true, builtin.not_empty },
+	-- 					click = "v:lua.ScLa",
+	-- 				},
+	-- 				{
+	-- 					sign = {
+	-- 						name = { ".*" },
+	-- 						text = { ".*" },
+	-- 						colwidth = 1,
+	-- 						maxwidth = 2,
+	-- 						auto = true,
+	-- 					},
+	-- 					click = "v:lua.ScSa",
+	-- 				},
+	-- 				{
+	-- 					text = { " " },
+	-- 					hl = "SignColumn",
+	-- 					condition = { true, builtin.not_empty },
+	-- 					click = "v:lua.ScLa",
+	-- 				},
+	-- 			},
+	-- 		}
+	-- 	end,
+	-- 	init = function(opts)
+	-- 		augroup("loadStatuscolumn", {
+	-- 			{ "BufReadPre" },
+	-- 			{
+	-- 				pattern = "*",
+	-- 				desc = "Lazy load statuscol",
+	-- 				callback = function()
+	-- 					if not require("core.utils").big(vim.fn.expand("%")) then
+	-- 						if vim.bo.filetype ~= "starter" and vim.wo.statuscolumn == "" then
+	-- 							require("statuscol").setup(opts)
+	-- 							vim.wo.statuscolumn = "%!v:lua.StatusCol()"
+	-- 						end
+	-- 					end
+	-- 				end,
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
 }

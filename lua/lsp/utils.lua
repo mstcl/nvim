@@ -1,11 +1,11 @@
 local lsp = vim.lsp
-local augroup = require("utils.misc").augroup
+local augroup = require("core.utils").augroup
 local conf = require("user_configs")
 local M = {}
 
 function M.on_attach(client, bufnr)
 	-- setup mappings
-	require("utils.mappings.lsp").setup(client, bufnr)
+	require("lsp.mappings").setup(client, bufnr)
 
 	if client.server_capabilities.inlayHintProvider then
 		vim.lsp.inlay_hint.enable(conf.lsp_features.inlay_hints)
@@ -79,8 +79,10 @@ function M.configure_builtin_diagnostic()
 end
 
 M.capabilities = lsp.protocol.make_client_capabilities()
-if conf.edit_features.completion then
-	M.capabilities = require("cmp_nvim_lsp").default_capabilities(M.capabilities)
+
+local ok, cmp_lsp = pcall(require, "cmp_nvim_lsp")
+if ok and conf.edit_features.completion then
+	M.capabilities = cmp_lsp.default_capabilities(M.capabilities)
 end
 M.capabilities.textDocument.completion.completionItem.snippetSupport = true
 M.capabilities.textDocument.foldingRange = {

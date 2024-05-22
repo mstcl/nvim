@@ -1,4 +1,4 @@
-local augroup = require("utils.misc").augroup
+local augroup = require("core.utils").augroup
 
 -- Plugins to extend syntax, either natively or with treesitter
 return {
@@ -33,6 +33,7 @@ return {
 			"TSEditQueryUserAfter",
 		},
 		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
 		build = ":TSUpdate",
 		init = function(plugin)
 			require("lazy.core.loader").add_to_rtp(plugin)
@@ -55,6 +56,13 @@ return {
 				use_languagetree = true,
 				additional_vim_regex_highlighting = { "org" },
 				disable = { "latex", "yaml", "yaml.ansible" },
+				is_supported = function()
+					if require("core.utils").big(vim.fn.expand("%")) then
+						return false
+					else
+						return true
+					end
+				end,
 			},
 			autopairs = {
 				enable = true,
@@ -160,7 +168,7 @@ return {
 			{
 				"<C-M>ha",
 				function()
-					require('hlargs').toggle()
+					require("hlargs").toggle()
 					vim.notify("Toggled highlighting arguments", vim.log.levels.INFO)
 				end,
 				desc = "Toggle highlighting arguments",
@@ -300,6 +308,20 @@ return {
 		ft = "quarto",
 		version = "^1.0.0",
 		build = ":UpdateRemotePlugins",
+		keys = {
+			{
+				"me",
+				":<C-u>MoltenEvaluateVisual<cr>gv",
+				mode = "v",
+				desc = "Evaluate cell (visual)",
+				buffer = true,
+			},
+			{ "md", "<cmd>MoltenDelete<cr>",            desc = "Delete cell",      buffer = true },
+			{ "mh", "<cmd>MoltenHideOutput<cr>",        desc = "Hide cell output", buffer = true },
+			{ "mo", ":noautocmd MoltenEnterOutput<cr>", desc = "Open cell output", buffer = true },
+			{ "]e", "<cmd>MoltenNext<cr>",              desc = "Next cell",        buffer = true },
+			{ "[e", "<cmd>MoltenPrev<cr>",              desc = "Next cell",        buffer = true },
+		},
 		cond = require("user_configs").syntax_features.quarto,
 		init = function()
 			vim.g.molten_image_provider = "none"
@@ -356,6 +378,12 @@ return {
 				end,
 			})
 		end,
+		config = function()
+			local wk = require("which-key")
+			wk.register({
+				["m"] = { name = "Molten operations" },
+			})
+		end
 	},
 	{
 		-- Display images inside (kinda broken on Arch)

@@ -15,7 +15,7 @@ vim.opt.runtimepath:prepend(lazypath)
 require("lazy").setup({
 	spec = {
 		{ import = "plugins" },
-		{ import = "plugins.user_addons" },
+		{ import = "plugins.override" },
 	},
 	default = { lazy = true },
 	dev = {

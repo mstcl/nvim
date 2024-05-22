@@ -29,4 +29,15 @@ function M.augroup(group, ...)
 	end
 end
 
+---Detecting big file size (> 400 KB)
+---Normally we want to pass `vim.fn.expand("%")`
+---@ param filepath string
+---@return boolean
+function M.big(filepath)
+	if vim.fn.getfsize(filepath) > 400 * 1024 then
+		return true
+	end
+	return false
+end
+
 return M

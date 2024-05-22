@@ -167,7 +167,7 @@ return {
 					{ name = "cmp_pandoc", priority = 9 },
 					{
 						name = "buffer",
-						options = require("utils.misc").buffer_opts,
+						options = require("core.utils").buffer_opts,
 						keyword_length = 5,
 						max_item_count = 2,
 					},
@@ -610,10 +610,5 @@ return {
 		opts = {
 			directory = "~/.cache/nvim/sessions",
 		},
-	},
-	{
-		-- Treesitter text objects
-		"nvim-treesitter/nvim-treesitter-textobjects",
-		lazy = true,
 	},
 }

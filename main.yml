@@ -42,14 +42,21 @@
 
     - name: Template configuration
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/templates/user_configs.lua.j2"
-        dest: "{{ playbook_dir }}/lua/user_configs.lua"
+        src: "{{ playbook_dir }}/templates/variables.lua.j2"
+        dest: "{{ playbook_dir }}/lua/core/variables.lua"
         mode: "0644"
 
-    - name: Template additional addons
+    - name: Template override core
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/templates/user_addons.lua.j2"
-        dest: "{{ playbook_dir }}/lua/plugins/user_addons.lua"
+        src: "{{ playbook_dir }}/templates/override_core.lua.j2"
+        dest: "{{ playbook_dir }}/lua/core/override.lua"
+        mode: "0644"
+        force: false
+
+    - name: Template override addons
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/override_plugins.lua.j2"
+        dest: "{{ playbook_dir }}/lua/plugins/override.lua"
         mode: "0644"
         force: false
 

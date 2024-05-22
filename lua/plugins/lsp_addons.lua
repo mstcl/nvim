@@ -1,11 +1,10 @@
-local lsp_defaults = require("utils.lsp")
+local lsp_defaults = require("lsp.utils")
 local on_attach = lsp_defaults.on_attach
 local handlers = lsp_defaults.handlers
 local capabilities = lsp_defaults.capabilities
 
 local conf = require("user_configs")
 local cond = conf.lsp_enabled
-local cond2 = conf.lsp_features
 local sources = conf.lsp_sources
 
 -- Plugins that add to nvim LSP functionalities
@@ -87,11 +86,6 @@ return {
 		cond = cond,
 		event = "BufRead",
 		dependencies = {
-			{
-				"cmp-nvim-lsp",
-				event = "InsertEnter",
-				cond = conf.edit_features.completion,
-			},
 			{ "williamboman/mason-lspconfig.nvim" },
 		},
 		config = function()
@@ -120,8 +114,10 @@ return {
 									["http://json.schemastore.org/kustomization"] = "kustomization.yaml",
 									["https://json.schemastore.org/chart.json"] = "Chart.yaml",
 									["https://json.schemastore.org/taskfile.json"] = "Taskfile*.yml",
-									["https://raw.githubusercontent.com/GoogleContainerTools/skaffold/master/docs/content/en/schemas/v2beta26.json"] = "skaffold.yaml",
-									["https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha3/schema.json"] = "k3d.yaml",
+									["https://raw.githubusercontent.com/GoogleContainerTools/skaffold/master/docs/content/en/schemas/v2beta26.json"] =
+									"skaffold.yaml",
+									["https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha3/schema.json"] =
+									"k3d.yaml",
 									["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
 										"docker-compose.yml",
 									},
@@ -322,15 +318,15 @@ return {
 						settings = {
 							ansible = {
 								ansible = {
-									useFullyQualifiedCollectionNames = true
-								}
+									useFullyQualifiedCollectionNames = true,
+								},
 							},
 							redhat = {
 								telemetry = {
-									enabled = false
-								}
-							}
-						}
+									enabled = false,
+								},
+							},
+						},
 					})
 				else
 					lsp[server].setup({
@@ -349,6 +345,7 @@ return {
 		-- Bridge none-ls and mason
 		"jay-babu/mason-null-ls.nvim",
 		event = { "BufReadPre", "BufNewFile" },
+		dependencies = { "nvim-lua/plenary.nvim" },
 		cond = cond,
 		opts = {
 			ensure_installed = nil,
@@ -443,6 +440,14 @@ return {
 		cond = cond,
 		dependencies = { "neovim/nvim-lspconfig" },
 		ft = { "quarto", "markdown" },
+		keys = {
+			{ "<C-K>", "<cmd>lua require('otter').ask_hover<cr>",           desc = "Otter hover",           buffer = true },
+			{ "god",   "<cmd>lua require('otter').ask_definition<cr>",      desc = "Otter definition",      buffer = true },
+			{ "gop",   "<cmd>lua require('otter').ask_type_definition<cr>", desc = "Otter type definition", buffer = true },
+			{ "goR",   "<cmd>lua require('otter').ask_definition<cr>",      desc = "Otter rename",          buffer = true },
+			{ "gor",   "<cmd>lua require('otter').ask_definition<cr>",      desc = "Otter references",      buffer = true },
+			{ "goF",   "<cmd>lua require('otter').ask_definition<cr>",      desc = "Otter format code",     buffer = true },
+		},
 		opts = {
 			lsp = {
 				hover = {
@@ -453,6 +458,15 @@ return {
 				set_filetype = true,
 			},
 		},
+		config = function(_, opts)
+			local wk = require("which-key")
+			wk.register({
+				["go"] = { name = "Otter (code block) symbols" },
+			})
+			if opts then
+				require("otter").setup(opts)
+			end
+		end,
 	},
 	{
 		-- LSP symbol components
