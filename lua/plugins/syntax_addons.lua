@@ -168,70 +168,7 @@ return {
 		ft = { "tex" },
 	},
 	{
-		-- An angry reviewer in your latecx files
-		"anufrievroman/vim-angry-reviewer",
-		cmd = "AngryReviewer",
-		cond = conf.syntax_features.tex,
-		config = function()
-			vim.g.AngryReviewerEnglish = "british"
-		end,
-	},
-	{
-		-- Orgmode syntax
-		"nvim-orgmode/orgmode",
-		cond = conf.syntax_features.org,
-		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
-		opts = {
-			mappings = {
-				org = {
-					org_return = false,
-				},
-			},
-			org_agenda_files = conf.org_agenda_files,
-			win_split_mode = "vsplit",
-			win_border = "single",
-			org_highlight_latex_and_related = "entities",
-			org_hide_emphasis_markers = true,
-		},
-		config = function(_, opts)
-			if opts then
-				require("orgmode").setup(opts)
-			end
-		end,
-		init = function()
-			local wk = require("which-key")
-			wk.register({
-				["<leader>o"] = { name = "Org mode actions" },
-			})
-		end,
-	},
-	{
-		-- Org bullet
-		"akinsho/org-bullets.nvim",
-		cond = conf.syntax_features.org,
-		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
-		opts = function()
-			return {
-				indent = true,
-				symbols = {
-					list = "•",
-					headlines = { "◎", "○", "●", "◌" },
-					checkboxes = {
-						half = { "-", "OrgTSCheckboxHalfChecked" },
-						done = { "✓", "OrgDone" },
-						todo = { "✗", "OrgTODO" },
-					},
-				},
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("org-bullets").setup(opts)
-			end
-		end,
-	},
-	{
-		-- QUARTO setup
+		-- Quarto syntax
 		"quarto-dev/quarto-nvim",
 		dev = false,
 		cond = conf.syntax_features.quarto,
@@ -342,7 +279,7 @@ return {
 			wk.register({
 				["m"] = { name = "Molten operations" },
 			})
-		end
+		end,
 	},
 	{
 		-- Convert ipython notebooks to something sane
@@ -407,7 +344,7 @@ return {
 	{
 		-- Display wordcount under section header
 		"dimfeld/section-wordcount.nvim",
-		ft = { "markdown" , "quarto"},
+		ft = { "markdown", "quarto" },
 		cond = require("core.variables").syntax_features.markdown,
 		opts = {
 			highlight = "NonText",

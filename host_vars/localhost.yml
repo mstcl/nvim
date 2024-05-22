@@ -28,7 +28,6 @@ syntax_features:
   typst: false # enable typst syntax.
   quarto: false # enable quarto integrations.
   markdown: false # enable markdown integrations.
-  org: false # enable orgmode syntax.
   tex: false # enable tex integrations.
 
 # ~~ (1) WORKSPACES ~~
