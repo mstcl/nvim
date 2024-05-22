@@ -430,8 +430,8 @@ return {
 					},
 				},
 				{ "permissions" },
-				{ "size", highlight = "Special" },
-				{ "mtime", highlight = "Number" },
+				{ "size",       highlight = "Special" },
+				{ "mtime",      highlight = "Number" },
 			},
 			float = {
 				padding = 4,
@@ -604,14 +604,17 @@ return {
 			if opts then
 				require("neogit").setup(opts)
 			end
-			augroup("neogit", {
+			augroup("neogitDisable", {
 				{ "Filetype" },
 				{
 					pattern = "Neogit*",
 					callback = function()
-						opt_local.list = false
-						wo.foldcolumn = "0"
-						wo.relativenumber = true
+						vim.b.miniindentscope_disable = true
+						vim.wo.statuscolumn = "%!v:lua.get_statuscol()"
+						vim.wo.number = false
+						vim.wo.relativenumber = false
+						vim.g.foldcolumn = false
+						vim.wo.cursorline = false
 					end,
 				},
 			})

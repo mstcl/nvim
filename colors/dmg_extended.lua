@@ -1,7 +1,7 @@
 local conf = require("core.variables")
 
 vim.opt.background = "light"
-vim.g.colors_name = "dmg_extended"
+vim.g.colors_ame = "dmg_extended"
 
 vim.g.terminal_color_0 = "#c8beb7"
 vim.g.terminal_color_1 = "#630e49"
