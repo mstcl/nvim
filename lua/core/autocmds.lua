@@ -1,7 +1,8 @@
-local augroup = require("utils.misc").augroup
+local augroup = require("core.utils").augroup
 local opt_local = vim.opt_local
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
+local big = require("core.utils").big
 
 augroup("trim", {
 	"BufWritePre",
@@ -105,8 +106,8 @@ augroup("loadStatusline", {
 				if vim.o.laststatus == 0 then
 					vim.o.laststatus = 3
 				end
-				if vim.o.statusline == "" then
-					vim.o.statusline = require("utils.statusline").get_default_statusline()
+				if vim.o.statusline == "" and not big(vim.fn.expand("%")) then
+					vim.o.statusline = require("core.statusline").get_default_statusline()
 				end
 			end
 		end,
@@ -118,18 +119,46 @@ augroup("rooter", {
 	{
 		desc = "Set cwd to project root directory",
 		callback = function(ctx)
-			local root = vim.fs.root(ctx.buf, {
-				"Makefile",
-				".git",
-				".hg",
-				"project.json",
-				".svn",
-				"pyproject.toml",
-				"README.md",
-			})
-			if root then
-				---@diagnostic disable-next-line: undefined-field
-				vim.uv.chdir(root)
+			if not big(vim.fn.expand("%")) then
+				local root = vim.fs.root(ctx.buf, {
+					"Makefile",
+					".git",
+					".hg",
+					"project.json",
+					".svn",
+					"pyproject.toml",
+					"README.md",
+				})
+				if root then
+					---@diagnostic disable-next-line: undefined-field
+					vim.uv.chdir(root)
+				end
+			end
+		end,
+	},
+})
+
+augroup("bigFile", {
+	{ "BufReadPre" },
+	{
+		pattern = "*",
+		callback = function()
+			if big(vim.fn.expand("%")) then
+				vim.opt_local.statusline = ""
+				vim.opt_local.swapfile = false
+				vim.opt_local.foldmethod = "manual"
+				vim.opt_local.undolevels = -1
+				vim.opt_local.undoreload = 0
+				vim.opt_local.list = false
+				vim.opt_local.number = false
+				vim.opt_local.relativenumber = false
+				vim.opt_local.cursorline = false
+				vim.opt_local.foldcolumn = "0"
+				vim.opt_local.signcolumn = "no"
+				vim.opt_local.colorcolumn = "0"
+				vim.b.minianimate_disable = true
+				vim.b.miniindentscope_disable = true
+				vim.b.miniindentscope_disable = true
 			end
 		end,
 	},

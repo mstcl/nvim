@@ -1,4 +1,4 @@
-local augroup = require("utils.misc").augroup
+local augroup = require("core.utils").augroup
 local opt_local = vim.opt_local
 local wo = vim.wo
 
@@ -333,9 +333,9 @@ return {
 				vim.api.nvim_set_hl(0, "ZenBg", { link = "Normal" })
 				vim.wo.statuscolumn = ""
 			end,
-			on_close = function(_)
-				vim.wo.statuscolumn = "%!v:lua.StatusCol()"
-			end,
+			-- on_close = function(_)
+			-- 	vim.wo.statuscolumn = "%!v:lua.StatusCol()"
+			-- end,
 		},
 	},
 	{
@@ -621,11 +621,6 @@ return {
 		opts = {
 			notificationOnAutoClose = true,
 		},
-	},
-	{
-		-- Disable features on big files
-		"pteroctopus/faster.nvim",
-		lazy = false,
 	},
 	{
 		-- Search and replace

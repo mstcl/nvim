@@ -1,10 +1,14 @@
 vim.g.mapleader = ","
 vim.g.maplocalleader = ",."
 
-require("utils.settings")
+-- Plugins
+require("core.lazy")
 
-require("lazy-init")
+-- Core setup
+require("core.settings")
+require("core.commands")
+require("core.autocmds")
+require("core.mappings")
 
-require("utils.commands")
-require("utils.autocmds")
-require("utils.mappings")
+-- Overrides
+-- require("lua.core.override")

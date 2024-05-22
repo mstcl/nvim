@@ -1,4 +1,4 @@
-local augroup = require("utils.misc").augroup
+local augroup = require("core.utils").augroup
 local cond = require("user_configs").ui_features
 -- Plugins that modify UI
 return {
@@ -223,7 +223,6 @@ return {
 	{
 		-- Animations
 		"echasnovski/mini.animate",
-		event = "CursorMoved",
 		keys = {
 			{
 				"<C-M>aa",
@@ -237,6 +236,15 @@ return {
 				end,
 				desc = "Toggle animate",
 			},
+			{ "gg" },
+			{ "G" },
+			{ "H" },
+			{ "L" },
+			{ "M" },
+			{ "<C-D>" },
+			{ "<C-U>" },
+			{ "<C-F>" },
+			{ "<C-P>" },
 		},
 		opts = function()
 			-- don't use animate when scrolling with the mouse
@@ -275,48 +283,6 @@ return {
 			if opts then
 				require("mini.animate").setup(opts)
 				vim.g.minianimate_disable = not cond.animate
-			end
-		end,
-	},
-	{
-		-- Highlight parenthesis
-		"HiPhish/rainbow-delimiters.nvim",
-		keys = {
-			{
-				"<C-M>r",
-				function()
-					require("rainbow-delimiters").toggle()
-					if not require("rainbow-delimiters").is_enabled() then
-						vim.notify("Disabled rainbow delimiters", vim.log.levels.INFO)
-					else
-						vim.notify("Enabled rainbow delimiters", vim.log.levels.INFO)
-					end
-				end,
-				desc = "Toggle rainbow delimiters",
-			},
-		},
-		event = { "BufRead" },
-		opts = {
-			query = {
-				[""] = "rainbow-delimiters",
-				latex = "rainbow-blocks",
-				lua = "rainbow-blocks",
-			},
-			highlight = {
-				"TSRainbowRed",
-				"TSRainbowBlue",
-				"TSRainbowCyan",
-				"TSRainbowGreen",
-				"TSRainbowviolet",
-				"TSRainbowYellow",
-			},
-		},
-		config = function(_, opts)
-			if opts then
-				vim.g.rainbow_delimiters = opts
-				if not cond.rainbow then
-					require("rainbow-delimiters").disable()
-				end
 			end
 		end,
 	},
