@@ -96,11 +96,11 @@ augroup("verticalHelp", {
 	},
 })
 
-augroup("loadStatusline", {
+augroup("loadUI", {
 	{ "BufReadPre" },
 	{
 		pattern = "*",
-		desc = "Lazy load statusline",
+		desc = "Lazy load UI",
 		callback = function()
 			if vim.bo.filetype ~= "starter" then
 				if vim.o.laststatus == 0 then
@@ -108,6 +108,7 @@ augroup("loadStatusline", {
 				end
 				if vim.o.statusline == "" and not big(vim.fn.expand("%")) then
 					vim.o.statusline = require("core.statusline").get_default_statusline()
+					vim.o.statuscolumn = "%!v:lua.get_statuscol()"
 				end
 			end
 		end,

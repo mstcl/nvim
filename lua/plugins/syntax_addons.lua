@@ -162,47 +162,6 @@ return {
 		end,
 	},
 	{
-		-- Highlight argument's definition and usage
-		"m-demare/hlargs.nvim",
-		keys = {
-			{
-				"<C-M>ha",
-				function()
-					require("hlargs").toggle()
-					vim.notify("Toggled highlighting arguments", vim.log.levels.INFO)
-				end,
-				desc = "Toggle highlighting arguments",
-			},
-		},
-		ft = {
-			"c",
-			"cpp",
-			"c_sharp",
-			"go",
-			"java",
-			"javascript",
-			"jsx",
-			"julia",
-			"kotlin",
-			"lua",
-			"nix",
-			"php",
-			"python",
-			"r",
-			"ruby",
-			"rust",
-			"solidity",
-			"tsx",
-			"typescript",
-			"vim",
-			"zig",
-		},
-		opts = {
-			color = "#87591a",
-			hl_priority = 200,
-		},
-	},
-	{
 		-- Concealing in tex
 		"KeitaNakamura/tex-conceal.vim",
 		cond = conf.syntax_features.tex,
@@ -386,31 +345,6 @@ return {
 		end
 	},
 	{
-		-- Display images inside (kinda broken on Arch)
-		"3rd/image.nvim",
-		build = "luarocks --local install magick --lua-version=5.1",
-		ft = { "markdown", "org", "ipynb", "quarto" },
-		-- cond = vim.fn.expand("$SSH_CLIENT") == "$SSH_CLIENT",
-		cond = false,
-		opts = {
-			integrations = {
-				markdown = {
-					filetypes = { "markdown", "vimwiki", "quarto" },
-				},
-				neorg = {
-					filetypes = { "org" },
-				},
-			},
-			backend = "ueberzug",
-			max_width = 100,
-			max_height = 12,
-			max_height_window_percentage = math.huge,
-			max_width_window_percentage = math.huge,
-			window_overlap_clear_enabled = true,
-			window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
-		},
-	},
-	{
 		-- Convert ipython notebooks to something sane
 		"GCBallesteros/jupytext.nvim",
 		event = "VeryLazy",
@@ -469,12 +403,6 @@ return {
 				require("git-conflict").setup(opts)
 			end
 		end,
-	},
-	{
-		-- Format tables in markdown files
-		"godlygeek/tabular",
-		cond = require("core.variables").syntax_features.markdown,
-		cmd = { "Tabularize" }
 	},
 	{
 		-- Display wordcount under section header

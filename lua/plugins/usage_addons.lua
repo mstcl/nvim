@@ -286,7 +286,6 @@ return {
 				"<C-M>z",
 				function()
 					vim.cmd("ZenMode")
-					vim.notify("Toggled zen mode", vim.log.levels.INFO)
 				end,
 				desc = "Toggle Zen Mode",
 			},
@@ -303,7 +302,6 @@ return {
 					relativenumber = false,
 					cursorline = false,
 					cursorcolumn = false,
-					foldcolumn = "0",
 					list = false,
 				},
 			},
@@ -331,11 +329,18 @@ return {
 			},
 			on_open = function(_)
 				vim.api.nvim_set_hl(0, "ZenBg", { link = "Normal" })
-				vim.wo.statuscolumn = ""
+				vim.g.zen_indent_cache = vim.b.miniindentscope_disable
+				vim.g.zen_notify_cache = vim.b.mininotify_disable
+				vim.b.miniindentscope_disable = true
+				vim.b.mininotify_disable = true
+				vim.g.zen_foldcolumn_cache = vim.g.foldcolumn
+				vim.g.foldcolumn = false
 			end,
-			-- on_close = function(_)
-			-- 	vim.wo.statuscolumn = "%!v:lua.StatusCol()"
-			-- end,
+			on_close = function(_)
+				vim.b.mininotify_disable = vim.g.zen_notify_cache
+				vim.b.miniindentscope_disable = vim.g.zen_indent_cache
+				vim.g.foldcolumn = vim.g.zen_foldcolumn_cache
+			end,
 		},
 	},
 	{
@@ -529,19 +534,16 @@ return {
 		priority = 100,
 		version = false,
 		opts = function()
-			local starter_ok, starter = pcall(require, "mini.starter")
-			if not starter_ok then
-				return
-			end
-			local org_agenda = function()
-				require("orgmode").action("agenda.prompt")
-			end
+			local starter = require("mini.starter")
 			local quick = function()
 				return function()
 					local quick_tbl = {
 						{ action = "Lazy show", name = "Plugins", section = "Quick actions" },
 					}
 					if require("core.variables").syntax_features.org then
+						local org_agenda = function()
+							require("orgmode").action("agenda.prompt")
+						end
 						table.insert(quick_tbl, { action = org_agenda, name = "Agenda", section = "Quick actions" })
 					end
 					return quick_tbl
@@ -552,6 +554,7 @@ return {
 				-- [04:00, 12:00) - morning, [12:00, 20:00) - day, [20:00, 04:00) - evening
 				local part_id = math.floor((hour + 4) / 8) + 1
 				local day_part = ({ "evening", "morning", "afternoon", "evening" })[part_id]
+				---@diagnostic disable-next-line: undefined-field
 				local username = vim.loop.os_get_passwd()["username"] or "USERNAME"
 
 				return ("Good %s, %s."):format(day_part, username)
@@ -678,6 +681,103 @@ return {
 					winblend = 0,
 				},
 			},
+		},
+	},
+	{
+		-- Git status in signcolumn
+		"lewis6991/gitsigns.nvim",
+		event = "BufReadPre",
+		keys = {
+			{
+				"<C-M>g",
+				function()
+					vim.cmd("Gitsigns toggle_signs")
+					vim.notify("Toggled git signs", vim.log.levels.INFO)
+				end,
+				desc = "Toggle gitsigns",
+			},
+			{
+				"ih",
+				":<C-U>Gitsigns select_hunk<CR>",
+				desc = "Select hunk",
+				mode = { "o", "x" },
+			},
+			{
+				"[g",
+				"<cmd>Gitsigns prev_hunk<cr><cmd>Gitsigns preview_hunk<cr>",
+				desc = "Previous hunk",
+			},
+			{
+				"]g",
+				"<cmd>Gitsigns next_hunk<cr><cmd>Gitsigns preview_hunk<cr>",
+				desc = "Next hunk",
+			},
+			{
+				"<leader>gh",
+				"<cmd>Gitsigns preview_hunk_inline<cr>",
+				desc = "Preview hunk inline",
+			},
+			{
+				"<leader>gS",
+				"<cmd>Gitsigns stage_hunk<cr>",
+				desc = "Stage hunk",
+			},
+			{
+				"<leader>gS",
+				function()
+					require("gitsigns").stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+				end,
+				desc = "Stage hunk",
+				mode = { "v" },
+			},
+		},
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			numhl = false,
+			linehl = false,
+			signcolumn = true,
+			watch_gitdir = {
+				interval = 1000,
+				follow_files = true,
+			},
+			signs = {
+				add = { hl = "DiffFGAdd", text = "▎", numhl = "DiffAdd", linehl = "DiffAdd" },
+				change = { hl = "DiffFGChange", text = "▎", numhl = "DiffChange", linehl = "DiffChange" },
+				delete = { hl = "DiffFGDelete", text = "▎", numhl = "DiffDelete", linehl = "DiffDelete" },
+				topdelete = { hl = "DiffFGDelete", text = "▎", numhl = "DiffDelete", linehl = "DiffDelete" },
+				changedelete = { hl = "DiffFGChange", text = "▎", numhl = "DiffChange", linehl = "DiffChange" },
+				untracked = { hl = "DiffFGAdd", text = "▎", numhl = "DiffAdd", linehl = "DiffAdd" },
+			},
+			current_line_blame = false,
+			sign_priority = 6,
+			update_debounce = 100,
+			status_formatter = nil,
+			word_diff = false,
+		},
+	},
+	{
+		-- Global manage session
+		"echasnovski/mini.sessions",
+		version = false,
+		event = "VimEnter",
+		keys = {
+			{
+				"<leader>s",
+				function()
+					vim.ui.input({ prompot = "Session name:" }, function(name)
+						name = name or vim.fn.getcwd():gsub("/", "-")
+						require("mini.sessions").write(name)
+						vim.notify("Saved session: " .. name, vim.log.levels.INFO)
+					end)
+				end,
+				desc = "Save session",
+			},
+		},
+		build = {
+			"mkdir -p ~/.cache/nvim/sessions",
+		},
+		opts = {
+			directory = "~/.cache/nvim/sessions",
 		},
 	},
 }

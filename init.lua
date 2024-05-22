@@ -11,4 +11,4 @@ require("core.autocmds")
 require("core.mappings")
 
 -- Overrides
--- require("lua.core.override")
+require("core.override")
