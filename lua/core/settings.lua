@@ -42,7 +42,6 @@ set.termguicolors = true
 set.modeline = true
 set.cursorline = true
 
-set.laststatus = 3
 set.cursorlineopt = "both"
 set.hidden = true
 set.showmode = false
@@ -78,10 +77,10 @@ set.foldminlines = 1
 set.foldnestmax = 4
 
 -- Statuscolumn
-set.foldcolumn = "auto:1"
+vim.g.foldcolumn = true
 set.number = true
 set.relativenumber = true
-set.signcolumn = "auto:1"
+set.signcolumn = "auto"
 
 set.splitbelow = true
 set.splitright = true
@@ -130,7 +129,7 @@ set.fillchars = {
 	foldopen = "▾",
 	foldclose = "▸",
 	foldsep = "│",
-	fold = " ",
+	fold = "·",
 	diff = "╱",
 }
 set.listchars = {

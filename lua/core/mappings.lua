@@ -1,6 +1,5 @@
 local map = vim.keymap.set
 local exec = vim.api.nvim_command
-local winopt = vim.wo
 
 -- Remove mappings
 map("n", "Q", "")
@@ -11,17 +10,17 @@ map({"n", "v"}, "<space>", ":", { remap = false, desc = "Command", silent = true
 
 -- UI toggles
 map("n", "<C-N>", function()
-	if winopt.number then
-		if winopt.relativenumber then
-			winopt.number = false
-			winopt.relativenumber = false
+	if vim.o.number then
+		if vim.o.relativenumber then
+			vim.o.number = false
+			vim.o.relativenumber = false
 			vim.notify("Number: off", vim.log.levels.INFO)
 		else
-			winopt.relativenumber = true
+			vim.o.relativenumber = true
 			vim.notify("Number: relative", vim.log.levels.INFO)
 		end
 	else
-		winopt.number = true
+		vim.o.number = true
 		vim.notify("Number: static", vim.log.levels.INFO)
 	end
 end, { desc = "Cycle number mode" })
@@ -41,36 +40,37 @@ map("n", "<C-M>s", function()
 	end
 end, { desc = "Toggle spell checking" })
 map("n", "<C-M>n", function()
-	winopt.list = not winopt.list
-	if not winopt.list then
+	vim.wo.list = not vim.wo.list
+	if not vim.wo.list then
 		vim.notify("Disabled non-text characters", vim.log.levels.INFO)
 	else
 		vim.notify("Enabled non-text characters", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle non-text characters" })
 map("n", "<C-M>cl", function()
-	winopt.cursorline = not winopt.cursorline
-	if not winopt.cursorline then
+	vim.wo.cursorline = not vim.wo.cursorline
+	if not vim.wo.cursorline then
 		vim.notify("Disabled cursorline", vim.log.levels.INFO)
 	else
 		vim.notify("Enabled cursorline", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle cursorline" })
 map("n", "<C-M>f", function()
-	if winopt.foldcolumn == "1" then
-		winopt.foldcolumn = "0"
+	vim.g.foldcolumn = not vim.g.foldcolumn
+	if not vim.g.foldcolumn then
+		vim.o.numberwidth = 3
 		vim.notify("Disabled foldcolumn", vim.log.levels.INFO)
 	else
-		winopt.foldcolumn = "1"
+		vim.o.numberwidth = 4
 		vim.notify("Enabled foldcolumn", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle foldcolumn" })
 map("n", "<C-M>cc", function()
-	if winopt.colorcolumn ~= "0" then
-		winopt.colorcolumn = ""
+	if vim.wo.colorcolumn ~= "" then
+		vim.wo.colorcolumn = ""
 		vim.notify("Disabled cursorcolumn", vim.log.levels.INFO)
 	else
-		winopt.foldcolumn = "80"
+		vim.wo.colorcolumn = "80"
 		vim.notify("Enabled cursorcolumn", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle cursorcolumn" })

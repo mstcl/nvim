@@ -40,4 +40,66 @@ function M.big(filepath)
 	return false
 end
 
+local function pad_str(in_str, width, align)
+	-- right aligns content
+	-- https://vimhelp.org/options.txt.html#%27statusline%27
+	local ralign_token = "%="
+
+	local num_spaces = width - #in_str
+	if num_spaces < 1 then
+		num_spaces = 1
+	end
+	local spaces = string.rep(" ", num_spaces)
+
+	if align == "left" then
+		return table.concat({ in_str, spaces })
+	end
+
+	return table.concat({ spaces, in_str, ralign_token })
+end
+
+function M.get_fold(lnum)
+	local fold = vim.g.foldcolumn
+	if not fold then
+		return ""
+	end
+	local fcs = vim.opt.fillchars:get()
+	local foldopen = fcs.foldopen or "▾"
+	local foldclose = fcs.foldclose or "▸"
+	if vim.fn.foldlevel(lnum) <= vim.fn.foldlevel(lnum - 1) then
+		return "%#NonText#%= "
+	end
+	local str = vim.fn.foldclosed(lnum) == -1 and foldopen or foldclose
+	return "%#NonText#%=" .. str .. " "
+end
+
+--- Return line number in configured format.
+function M.lnumfunc(args)
+	if not args.rnu and not args.nu then
+		return ""
+	end
+
+	if args.virtnum ~= 0 then
+		return pad_str("+", 4, "right") .. " "
+	end
+
+	local lnum = args.rnu and (args.relnum > 0 and args.relnum or (args.nu and args.lnum or 0)) or args.lnum
+
+	return pad_str(tostring(lnum), 4, "right") .. " "
+end
+
+_G.get_statuscol = function()
+	local win = vim.g.statusline_winid
+	local args = {}
+
+	args.lnum = vim.v.lnum
+	args.relnum = vim.v.relnum
+	args.virtnum = vim.v.virtnum
+
+	args.nu = vim.api.nvim_get_option_value("nu", { win = win })
+	args.rnu = vim.api.nvim_get_option_value("rnu", { win = win })
+
+	return M.lnumfunc(args) .. "%=%s" .. M.get_fold(vim.v.lnum)
+end
+
 return M

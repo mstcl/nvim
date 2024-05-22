@@ -155,7 +155,7 @@ return {
 				goto_top = "",
 				goto_bottom = "",
 			},
-			symbol = "│",
+			symbol = "┃",
 			options = { try_as_border = true },
 		},
 		config = function(_, opts)
