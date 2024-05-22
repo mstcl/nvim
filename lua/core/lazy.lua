@@ -20,7 +20,7 @@ require("lazy").setup({
 	default = { lazy = true },
 	dev = {
 		path = "~/projects",
-		patterns = require("user_configs").dev_plugins,
+		patterns = require("core.variables").dev_plugins,
 		fallback = true,
 	},
 	install = {

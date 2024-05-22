@@ -1,5 +1,5 @@
 local augroup = require("core.utils").augroup
-local lsp_signs = require("user_configs").lsp_signs
+local lsp_signs = require("core.variables").lsp_signs
 
 local M = {}
 

@@ -1,5 +1,6 @@
 local augroup = require("core.utils").augroup
-local cond = require("user_configs").ui_features
+local cond = require("core.variables").ui_features
+
 -- Plugins that modify UI
 return {
 	{
@@ -109,7 +110,7 @@ return {
 		opts = {
 			show_icons = false,
 		},
-		cond = require("user_configs").ui_features.tabline,
+		cond = require("core.variables").ui_features.tabline,
 		init = function(_, opts)
 			augroup("loadTabline", {
 				{ "BufReadPre" },

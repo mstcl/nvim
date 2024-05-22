@@ -1,4 +1,4 @@
-local cond = require("user_configs").edit_features
+local cond = require("core.variables").edit_features
 
 -- Plugins that add extra functionality with keybindings or while editing
 return {
@@ -117,7 +117,7 @@ return {
 				formatting = {
 					fields = { "kind", "abbr", "menu" },
 					format = function(_, item)
-						local icon = require("user_configs").lsp_kind_icons[item.kind]
+						local icon = require("core.variables").lsp_kind_icons[item.kind]
 						icon = " " .. icon .. " "
 						item.menu = ""
 						item.kind = icon

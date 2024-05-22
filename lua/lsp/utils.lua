@@ -1,6 +1,5 @@
 local lsp = vim.lsp
-local augroup = require("core.utils").augroup
-local conf = require("user_configs")
+local conf = require("core.variables")
 local M = {}
 
 function M.on_attach(client, bufnr)
@@ -42,12 +41,12 @@ function M.configure_builtin_diagnostic()
 	vim.diagnostic.config({
 		---@return boolean|fun()
 		virtual_text = function()
-			if require("user_configs").lsp_features.virtual_text then
+			if require("core.variables").lsp_features.virtual_text then
 				return {
 					spacing = 4,
 					prefix = "",
 					format = function(diagnostic)
-						return string.format(require("user_configs").lsp_vt_signs[diagnostic.severity])
+						return string.format(require("core.variables").lsp_vt_signs[diagnostic.severity])
 					end,
 					suffix = " ",
 				}

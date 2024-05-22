@@ -1,5 +1,5 @@
 local augroup = require("core.utils").augroup
-
+local conf = require("core.variables")
 -- Plugins to extend syntax, either natively or with treesitter
 return {
 	{
@@ -49,7 +49,7 @@ return {
 			require("nvim-treesitter.query_predicates")
 		end,
 		opts = {
-			ensure_installed = require("user_configs").treesitter_sources,
+			ensure_installed = conf.treesitter_sources,
 			sync_install = false,
 			highlight = {
 				enable = true,
@@ -205,14 +205,14 @@ return {
 	{
 		-- Concealing in tex
 		"KeitaNakamura/tex-conceal.vim",
-		cond = require("user_configs").syntax_features.tex,
+		cond = conf.syntax_features.tex,
 		ft = { "tex" },
 	},
 	{
 		-- An angry reviewer in your latecx files
 		"anufrievroman/vim-angry-reviewer",
 		cmd = "AngryReviewer",
-		cond = require("user_configs").syntax_features.tex,
+		cond = conf.syntax_features.tex,
 		config = function()
 			vim.g.AngryReviewerEnglish = "british"
 		end,
@@ -220,7 +220,7 @@ return {
 	{
 		-- Orgmode syntax
 		"nvim-orgmode/orgmode",
-		cond = require("user_configs").syntax_features.org,
+		cond = conf.syntax_features.org,
 		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
 		opts = {
 			mappings = {
@@ -228,7 +228,7 @@ return {
 					org_return = false,
 				},
 			},
-			org_agenda_files = require("user_configs").org_agenda_files,
+			org_agenda_files = conf.org_agenda_files,
 			win_split_mode = "vsplit",
 			win_border = "single",
 			org_highlight_latex_and_related = "entities",
@@ -249,7 +249,7 @@ return {
 	{
 		-- Org bullet
 		"akinsho/org-bullets.nvim",
-		cond = require("user_configs").syntax_features.org,
+		cond = conf.syntax_features.org,
 		event = { "BufReadPre", "BufEnter *.org", "BufWinEnter *.org" },
 		opts = function()
 			return {
@@ -275,7 +275,7 @@ return {
 		-- QUARTO setup
 		"quarto-dev/quarto-nvim",
 		dev = false,
-		cond = require("user_configs").syntax_features.quarto,
+		cond = conf.syntax_features.quarto,
 		ft = { "quarto" },
 		dependencies = { "jmbuhr/otter.nvim" },
 		opts = {
@@ -296,7 +296,7 @@ return {
 	{
 		-- Typst syntax
 		"kaarmu/typst.vim",
-		cond = require("user_configs").syntax_features.typst,
+		cond = conf.syntax_features.typst,
 		event = "Filetype",
 		config = function()
 			vim.g.typst_pdf_viewer = "sioyek"
@@ -322,7 +322,7 @@ return {
 			{ "]e", "<cmd>MoltenNext<cr>",              desc = "Next cell",        buffer = true },
 			{ "[e", "<cmd>MoltenPrev<cr>",              desc = "Next cell",        buffer = true },
 		},
-		cond = require("user_configs").syntax_features.quarto,
+		cond = conf.syntax_features.quarto,
 		init = function()
 			vim.g.molten_image_provider = "none"
 			vim.g.molten_wrap_output = true
@@ -414,7 +414,7 @@ return {
 		-- Convert ipython notebooks to something sane
 		"GCBallesteros/jupytext.nvim",
 		event = "VeryLazy",
-		cond = require("user_configs").syntax_features.quarto,
+		cond = conf.syntax_features.quarto,
 		opts = {
 			style = "quarto",
 			output_extension = "qmd",
@@ -468,6 +468,28 @@ return {
 			if opts then
 				require("git-conflict").setup(opts)
 			end
+		end,
+	},
+	{
+		-- Format tables in markdown files
+		"godlygeek/tabular",
+		cond = require("core.variables").syntax_features.markdown,
+		cmd = { "Tabularize" }
+	},
+	{
+		-- Display wordcount under section header
+		"dimfeld/section-wordcount.nvim",
+		ft = { "markdown" , "quarto"},
+		cond = require("core.variables").syntax_features.markdown,
+		opts = {
+			highlight = "NonText",
+			virt_text_pos = "eol",
+		},
+		config = function(_, opts)
+			if opts then
+				require("section-wordcount").setup(opts)
+			end
+			require("section-wordcount").wordcounter({})
 		end,
 	},
 }
