@@ -1,4 +1,4 @@
-local conf = require("user_configs")
+local conf = require("core.variables")
 
 vim.opt.background = "light"
 vim.g.colors_name = "dmg_extended"

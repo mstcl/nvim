@@ -1,4 +1,5 @@
 local augroup = require("core.utils").augroup
+
 -- Plugins that add things to the signcolumn (or foldcolumn)
 return {
 	{

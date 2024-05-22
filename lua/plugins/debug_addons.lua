@@ -1,4 +1,4 @@
-local cond = require("user_configs").dap_enabled
+local cond = require("core.variables").dap_enabled
 
 -- Plugins that add debugging into nvim
 return {

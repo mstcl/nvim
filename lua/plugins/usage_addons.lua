@@ -541,7 +541,7 @@ return {
 					local quick_tbl = {
 						{ action = "Lazy show", name = "Plugins", section = "Quick actions" },
 					}
-					if require("user_configs").syntax_features.org then
+					if require("core.variables").syntax_features.org then
 						table.insert(quick_tbl, { action = org_agenda, name = "Agenda", section = "Quick actions" })
 					end
 					return quick_tbl
@@ -568,7 +568,7 @@ return {
 					starter.gen_hook.aligning("center", "center"),
 				},
 				footer = "",
-				header = require("user_configs").starter_ascii .. greetings(),
+				header = require("core.variables").starter_ascii .. greetings(),
 			}
 		end,
 		config = function(_, opts)

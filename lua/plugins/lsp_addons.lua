@@ -3,7 +3,7 @@ local on_attach = lsp_defaults.on_attach
 local handlers = lsp_defaults.handlers
 local capabilities = lsp_defaults.capabilities
 
-local conf = require("user_configs")
+local conf = require("core.variables")
 local cond = conf.lsp_enabled
 local sources = conf.lsp_sources
 
@@ -475,7 +475,7 @@ return {
 		cond = cond,
 		opts = function()
 			local function get_kinds()
-				local kinds = require("user_configs").lsp_kind_icons
+				local kinds = conf.lsp_kind_icons
 				local new_kinds = {}
 				for k, _ in pairs(kinds) do
 					new_kinds[k] = ""
