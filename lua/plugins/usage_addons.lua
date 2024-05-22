@@ -1,6 +1,4 @@
 local augroup = require("core.utils").augroup
-local opt_local = vim.opt_local
-local wo = vim.wo
 
 -- Plugins which add additional ways to use nvim
 return {
