@@ -50,18 +50,23 @@ end
 ---Get LSP progress
 ---@return string
 function M.get_lsp_progress()
+	if not require("core.variables").lsp_enabled then
+		return ""
+	end
 	return require("lsp-progress").progress()
 end
 
-augroup("lspProgress", {
-	{ "User" },
-	{
-		pattern = "LspProgressStatusUpdated",
-		callback = vim.schedule_wrap(function()
-			vim.cmd("redrawstatus")
-		end),
-	},
-})
+if require("core.variables").lsp_enabled then
+	augroup("lspProgress", {
+		{ "User" },
+		{
+			pattern = "LspProgressStatusUpdated",
+			callback = vim.schedule_wrap(function()
+				vim.cmd("redrawstatus")
+			end),
+		},
+	})
+end
 
 local diagnostic_sign = {
 	[1] = lsp_signs.Error,
@@ -77,25 +82,30 @@ local diagnostic_color = {
 	[4] = "StatuslineBlue",
 }
 
-augroup("diagnosticUpdate", {
-	{ "DiagnosticChanged" },
-	{
-		desc = "Update diagnostics cache for the status line.",
-		callback = function(info)
-			local b = vim.b[info.buf]
-			local diagnostic_cnt_cache = { 0, 0, 0, 0 }
-			for _, diagnostic in ipairs(info.data.diagnostics) do
-				diagnostic_cnt_cache[diagnostic.severity] = diagnostic_cnt_cache[diagnostic.severity] + 1
-			end
-			b.diagnostic_str_cache = nil
-			b.diagnostic_cnt_cache = diagnostic_cnt_cache
-		end,
-	},
-})
+if require("core.variables").lsp_enabled then
+	augroup("diagnosticUpdate", {
+		{ "DiagnosticChanged" },
+		{
+			desc = "Update diagnostics cache for the status line.",
+			callback = function(info)
+				local b = vim.b[info.buf]
+				local diagnostic_cnt_cache = { 0, 0, 0, 0 }
+				for _, diagnostic in ipairs(info.data.diagnostics) do
+					diagnostic_cnt_cache[diagnostic.severity] = diagnostic_cnt_cache[diagnostic.severity] + 1
+				end
+				b.diagnostic_str_cache = nil
+				b.diagnostic_cnt_cache = diagnostic_cnt_cache
+			end,
+		},
+	})
+end
 
 ---Get diagnostics for current buffer
 ---@return string
 function M.get_lsp_diagnostic()
+	if not require("core.variables").lsp_enabled then
+		return ""
+	end
 	if vim.b.diagnostic_str_cache then
 		return vim.b.diagnostic_str_cache
 	end

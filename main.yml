@@ -23,7 +23,7 @@
       ansible.builtin.file:
         path: "~/.venv"
         state: directory
-        mode: "0775"
+        mode: "0755"
 
     - name: Install python dependencies for neovim
       tags: packages
