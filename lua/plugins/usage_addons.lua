@@ -265,7 +265,7 @@ return {
 				{
 					pattern = "term://*",
 					callback = function()
-						vim.wo.foldcolumn = "0"
+						vim.wo.statuscolumn = ""
 						-- Keymaps to leave
 						local opts_b = { silent = true, buffer = 0 }
 						vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], opts_b)
