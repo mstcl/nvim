@@ -18,13 +18,11 @@ M.ui_features = {
 	animate = true,
 	indent_lines = true,
 	tabline = false,
-	hlargs = true,
 }
 
 M.syntax_features = {
 	typst = false,
 	quarto = false,
-	org = false,
 	tex = true,
 	markdown = true,
 }
