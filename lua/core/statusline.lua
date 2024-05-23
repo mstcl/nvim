@@ -235,6 +235,9 @@ function M.get_ffenc()
 end
 
 function M.get_symbol()
+	if not require("core.variables").lsp_enabled then
+		return ""
+	end
 	local symbol = require("nvim-navic").get_location()
 	if symbol == "" then
 		return ""
@@ -270,7 +273,8 @@ local statusline_parts = {
 	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%2c %2p%#statuslinealt#%%":""%}]],
 	mode = [[%{%v:lua.require'core.statusline'.get_mode()%}]],
 	cwd = [[%{%v:lua.require'core.statusline'.get_cwd()%}]],
-	indentation = [[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
+	indentation =
+	[[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
 	ft = [[%{%v:lua.require'core.statusline'.get_filetype()%}]],
 	fformat = [[%{%v:lua.require'core.statusline'.get_fformat()%}]],
 	fenc = [[%{%v:lua.require'core.statusline'.get_ffenc()%}]],
