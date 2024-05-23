@@ -23,7 +23,7 @@ vim.g.markdown_mapping_switch_status = "<C-space>"
 vim.g.markdown_enable_conceal = 1
 vim.g.markdown_enable_folding = 0
 
--- Default options
+-- Files
 set.autochdir = false
 set.autoread = true
 set.swapfile = false
@@ -32,42 +32,52 @@ set.history = 1000
 set.undofile = true
 set.undolevels = 500
 set.encoding = "utf-8"
+set.modeline = true
+set.modelines = 1
 
+-- Ticks
 set.updatetime = 180
 set.timeoutlen = 400
 set.ttimeout = true
 set.ttimeoutlen = 10
 
-set.termguicolors = true
-set.modeline = true
+-- Cursorline
 set.cursorline = true
+set.cursorlineopt = "number"
 
-set.cursorlineopt = "both"
+-- Bars
 set.hidden = true
 set.showmode = false
 set.showcmd = true
 set.cmdheight = 0
 set.ruler = true
+set.showtabline = 0
 
 -- Rendering
 set.lazyredraw = false
 set.ttyfast = true
 set.conceallevel = 2
-
--- Tabline
-set.showtabline = 0
-
 set.winblend = 0
+set.termguicolors = true
+set.synmaxcol = 400
+set.virtualedit = "block"
+set.selection = "old"
+
+-- Pum
 set.pumblend = 0
 set.pumheight = 15
 set.pumwidth = 15
 
+-- Hacks
 set.iskeyword:append("-")
 set.nrformats:append("unsigned")
 set.nrformats:remove("bin", "hex")
+
+-- Keys
 set.mouse = "a"
 set.backspace = { "indent", "eol", "start" }
 
+-- Folding
 set.foldmethod = "expr"
 set.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 set.foldtext = ""
@@ -81,22 +91,35 @@ vim.g.foldcolumn = true
 set.number = true
 set.relativenumber = true
 set.signcolumn = "auto"
+set.shortmess = set.shortmess + "OosatTcICFSW"
 
+-- Window
+set.splitkeep = "screen" -- less jarring splitting
 set.splitbelow = true
 set.splitright = true
-set.synmaxcol = 400
+set.jumpoptions = "stack,view"
+
+-- Scrolling
 set.scrolljump = 1
 set.sidescrolloff = 5
 set.scrolloff = 1
+
+-- Wrap & textwidth
 set.wrap = true
 set.whichwrap = set.whichwrap + "<>[]hl"
 set.wrapmargin = 0
 set.textwidth = 0
+set.colorcolumn = "0"
 set.linebreak = true
-set.virtualedit = "block"
-set.completeopt = { "menu", "menuone", "noselect", "noinsert" }
-set.shortmess = set.shortmess + "OosatTcICFSW"
 
+-- Completion
+set.completeopt = { "menu", "menuone", "noselect", "noinsert" }
+set.wildmenu = true
+set.wildmode = "longest:full,full"
+set.wildoptions = "pum"
+
+-- Searching
+set.inccommand = "split" -- split when s/find/replace
 set.hlsearch = true
 set.ignorecase = true
 set.infercase = true
@@ -105,6 +128,7 @@ set.smartcase = true
 set.showmatch = true
 set.matchtime = 1
 
+-- Indentation
 set.tabstop = 4
 set.shiftwidth = 4
 set.softtabstop = 4
@@ -116,12 +140,13 @@ set.smartindent = false
 set.breakindent = true
 set.copyindent = true
 
+-- Spell
 set.spelllang = "en_gb"
 set.spell = false
 set.spelloptions = "camel"
 
+-- Non-text characters
 set.list = false
-set.selection = "old"
 set.showbreak = "↳"
 set.fillchars = {
 	eob = " ",
