@@ -88,18 +88,4 @@ function M.lnumfunc(args)
 	return pad_str(tostring(lnum), 4, "right") .. " "
 end
 
-_G.get_statuscol = function()
-	local win = vim.g.statusline_winid
-	local args = {}
-
-	args.lnum = vim.v.lnum
-	args.relnum = vim.v.relnum
-	args.virtnum = vim.v.virtnum
-
-	args.nu = vim.api.nvim_get_option_value("nu", { win = win })
-	args.rnu = vim.api.nvim_get_option_value("rnu", { win = win })
-
-	return M.lnumfunc(args) .. "%=%s" .. M.get_fold(vim.v.lnum)
-end
-
 return M
