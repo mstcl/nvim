@@ -245,10 +245,10 @@ function M.get_symbol()
 	return "%#statuslinealt#(" .. symbol .. "%#statuslinealt#)"
 end
 
--- Statusline/winbar components
-local statusline_parts = {
+-- Components
+M.components = {
 	-- LSP symbol
-	symbol = [[%{%v:lua.require'core.statusline'.get_symbol()%}]],
+	symbol = [[%{%v:lua.require'core.components'.get_symbol()%}]],
 	-- Highlights
 	hl_main = [[%#statuslinenc#]],
 	hl_strong = [[%#statusline#]],
@@ -256,11 +256,11 @@ local statusline_parts = {
 	hl_orange = [[%#statuslineorange#]],
 	hl_restore = [[%*]],
 	-- LSP
-	diagnostics = [[%{%v:lua.require'core.statusline'.get_lsp_diagnostic()%}]],
-	progress = [[%{%v:lua.require'core.statusline'.get_lsp_progress()%}]],
+	diagnostics = [[%{%v:lua.require'core.components'.get_lsp_diagnostic()%}]],
+	progress = [[%{%v:lua.require'core.components'.get_lsp_progress()%}]],
 	-- Git
-	branch = [[%{%v:lua.require'core.statusline'.get_git_branch()%}]],
-	diffs = [[%{%v:lua.require'core.statusline'.get_diffs()%}]],
+	branch = [[%{%v:lua.require'core.components'.get_git_branch()%}]],
+	diffs = [[%{%v:lua.require'core.components'.get_diffs()%}]],
 	-- Misc
 	align = [[%=]],
 	truncate = [[%<]],
@@ -268,82 +268,18 @@ local statusline_parts = {
 	close_bracket = [[)]],
 	padding = [[ ]],
 	-- General
-	filepath = [[%{%v:lua.require'core.statusline'.get_filepath()%}]],
-	filename = [[%{%v:lua.require'core.statusline'.get_filename()%}]],
+	filepath = [[%{%v:lua.require'core.components'.get_filepath()%}]],
+	filename = [[%{%v:lua.require'core.components'.get_filename()%}]],
 	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%2c %2p%#statuslinealt#%%":""%}]],
-	mode = [[%{%v:lua.require'core.statusline'.get_mode()%}]],
-	cwd = [[%{%v:lua.require'core.statusline'.get_cwd()%}]],
+	mode = [[%{%v:lua.require'core.components'.get_mode()%}]],
+	cwd = [[%{%v:lua.require'core.components'.get_cwd()%}]],
 	indentation =
 	[[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
-	ft = [[%{%v:lua.require'core.statusline'.get_filetype()%}]],
-	fformat = [[%{%v:lua.require'core.statusline'.get_fformat()%}]],
-	fenc = [[%{%v:lua.require'core.statusline'.get_ffenc()%}]],
-	search = [[%{%v:lua.require'core.statusline'.get_search_counts()%}]],
-	macro = [[%{%v:lua.require'core.statusline'.get_macro_recording()%}]],
+	ft = [[%{%v:lua.require'core.components'.get_filetype()%}]],
+	fformat = [[%{%v:lua.require'core.components'.get_fformat()%}]],
+	fenc = [[%{%v:lua.require'core.components'.get_ffenc()%}]],
+	search = [[%{%v:lua.require'core.components'.get_search_counts()%}]],
+	macro = [[%{%v:lua.require'core.components'.get_macro_recording()%}]],
 }
-
-function M.get_default_statusline()
-	return table.concat({
-		statusline_parts.mode,
-		statusline_parts.padding,
-		statusline_parts.hl_alt,
-		statusline_parts.filepath,
-		statusline_parts.hl_main,
-		statusline_parts.filename,
-		statusline_parts.padding,
-		statusline_parts.hl_alt,
-		statusline_parts.open_bracket,
-		statusline_parts.hl_main,
-		statusline_parts.ft,
-		statusline_parts.padding,
-		statusline_parts.branch,
-		statusline_parts.padding,
-		statusline_parts.hl_main,
-		statusline_parts.diffs,
-		statusline_parts.hl_alt,
-		statusline_parts.close_bracket,
-		statusline_parts.hl_main,
-		statusline_parts.padding,
-		statusline_parts.diagnostics,
-		statusline_parts.truncate,
-		-- Messy middle bit
-		statusline_parts.align,
-		statusline_parts.hl_alt,
-		statusline_parts.macro,
-		--
-		statusline_parts.hl_alt,
-		statusline_parts.search,
-		--
-		statusline_parts.hl_orange,
-		statusline_parts.fformat,
-		--
-		statusline_parts.hl_orange,
-		statusline_parts.fenc,
-		-- Right most
-		statusline_parts.align,
-		statusline_parts.hl_alt,
-		statusline_parts.progress,
-		--
-		statusline_parts.symbol,
-		--
-		statusline_parts.pos,
-		--
-		statusline_parts.padding,
-		statusline_parts.indentation,
-		--
-		statusline_parts.padding,
-		statusline_parts.hl_restore,
-	}, "")
-end
-
-function M.get_default_winbar()
-	return table.concat({
-		statusline_parts.padding,
-		statusline_parts.symbol,
-		statusline_parts.align,
-		statusline_parts.hl_alt,
-		statusline_parts.progress,
-	})
-end
 
 return M

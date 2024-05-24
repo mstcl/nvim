@@ -9,6 +9,7 @@ require("core.settings")
 require("core.commands")
 require("core.autocmds")
 require("core.mappings")
+require("core.ui")
 
 -- Overrides
 require("core.override")

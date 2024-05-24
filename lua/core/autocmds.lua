@@ -107,7 +107,7 @@ augroup("loadUI", {
 					vim.o.laststatus = 3
 				end
 				if vim.o.statusline == "" and not big(vim.fn.expand("%")) then
-					vim.o.statusline = require("core.statusline").get_default_statusline()
+					vim.o.statusline = "%!v:lua.get_statusline()"
 					vim.o.statuscolumn = "%!v:lua.get_statuscol()"
 				end
 			end
@@ -119,16 +119,19 @@ augroup("rooter", {
 	{ "BufEnter" },
 	{
 		desc = "Set cwd to project root directory",
-		callback = function(ctx)
+		callback = function(args)
 			if not big(vim.fn.expand("%")) then
-				local root = vim.fs.root(ctx.buf, {
-					"Makefile",
+				local root = vim.fs.root(args.buf, {
 					".git",
+					"Makefile",
 					".hg",
 					"project.json",
 					".svn",
 					"pyproject.toml",
 					"README.md",
+					"go.mod",
+					".envrc",
+					".editorconfig",
 				})
 				if root then
 					---@diagnostic disable-next-line: undefined-field
