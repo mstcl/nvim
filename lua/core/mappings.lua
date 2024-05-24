@@ -6,9 +6,10 @@ map("n", "Q", "")
 map("n", "gQ", "")
 map("n", "<leader>p", "<cmd>Lazy show<cr>", { desc = "Lazy" })
 
-map({"n", "v"}, "<space>", ":", { remap = false, desc = "Command", silent = true })
+map({ "n", "v" }, "<space>", ":", { remap = false, desc = "Command", silent = true })
 
 -- UI toggles
+
 map("n", "<C-N>", function()
 	if vim.o.number then
 		if vim.o.relativenumber then
@@ -24,13 +25,21 @@ map("n", "<C-N>", function()
 		vim.notify("Number: static", vim.log.levels.INFO)
 	end
 end, { desc = "Cycle number mode" })
+
 map(
 	"n",
 	"<C-L>",
 	":nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR><c-l>",
 	{ desc = "Clear screen & highlights" }
 )
-map("n", "<C-M>s", function()
+
+map("n", "<C-M>so", function ()
+	vim.opt.scrolloff = 999 - vim.o.scrolloff
+	vim.notify("Toggled sidescrolloff", vim.log.levels.INFO)
+end, { desc = "Toggle sidescrolloff" })
+
+map("n", "<C-M>sp", function()
+	---@diagnostic disable-next-line: undefined-field
 	vim.opt_local.spell = not (vim.opt_local.spell:get())
 	---@diagnostic disable-next-line: undefined-field
 	if not (vim.opt_local.spell:get()) then
@@ -39,6 +48,7 @@ map("n", "<C-M>s", function()
 		vim.notify("Enabled spellchecking", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle spell checking" })
+
 map("n", "<C-M>n", function()
 	vim.wo.list = not vim.wo.list
 	if not vim.wo.list then
@@ -47,6 +57,7 @@ map("n", "<C-M>n", function()
 		vim.notify("Enabled non-text characters", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle non-text characters" })
+
 map("n", "<C-M>cl", function()
 	vim.wo.cursorline = not vim.wo.cursorline
 	if not vim.wo.cursorline then
@@ -55,6 +66,7 @@ map("n", "<C-M>cl", function()
 		vim.notify("Enabled cursorline", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle cursorline" })
+
 map("n", "<C-M>f", function()
 	vim.g.foldcolumn = not vim.g.foldcolumn
 	if not vim.g.foldcolumn then
@@ -65,6 +77,7 @@ map("n", "<C-M>f", function()
 		vim.notify("Enabled foldcolumn", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle foldcolumn" })
+
 map("n", "<C-M>cc", function()
 	if vim.wo.colorcolumn ~= "" then
 		vim.wo.colorcolumn = ""
@@ -79,6 +92,7 @@ end, { desc = "Toggle cursorcolumn" })
 map("n", "<C-S>v", function()
 	exec("vs")
 end, { desc = "Split vertical" })
+
 map("n", "<C-S>h", function()
 	exec("sp")
 end, { desc = "Split horizontal" })
