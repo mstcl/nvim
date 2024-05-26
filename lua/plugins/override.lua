@@ -1,2 +1,7 @@
 -- Additional addons go here
-return {}
+return {
+	{
+		"rktjmp/shipwright.nvim",
+		cmd = "Shipwright"
+	}
+}
