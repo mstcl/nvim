@@ -12,6 +12,7 @@ local lush = require("lush")
 local extended = lush.merge({
 	require("dmg"),
 	require("dmg_statusline"),
+	require("dmg_dressing"),
 	require("dmg_mini_starter"),
 	require("dmg_telescope"),
 	require("dmg_whichkey"),
