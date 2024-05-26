@@ -41,7 +41,7 @@ local modes = {
 ---Get current mode
 ---@return string
 function M.get_mode()
-	local hl = vim.bo.mod and "StatuslineMode" or "StatuslineModified"
+	local hl = vim.bo.mod and "StatuslineModified" or "StatuslineMode"
 	local mode = vim.fn.mode()
 	local mode_str = (mode == "n" and (vim.bo.ro or not vim.bo.ma)) and "RO" or modes[mode]
 	return set_hl(string.format(" %s ", mode_str), hl)

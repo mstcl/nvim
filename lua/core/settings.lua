@@ -147,7 +147,7 @@ set.spelloptions = "camel"
 
 -- Non-text characters
 set.list = false
-set.showbreak = "↳"
+set.showbreak = "↪"
 set.fillchars = {
 	eob = " ",
 	vert = "│",

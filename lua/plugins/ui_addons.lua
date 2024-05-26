@@ -5,22 +5,20 @@ local cond = require("core.variables").ui_features
 return {
 	{
 		-- Colorscheme
-		"mstcl/dmg",
+		"mstcl/ivory",
 		lazy = false,
 		priority = 1000,
 		dependencies = {
 			"rktjmp/lush.nvim",
 		},
 		config = function()
-			vim.cmd.colorscheme("dmg_extended")
+			vim.cmd.colorscheme("ivory_extended")
 		end,
 	},
 	{
 		-- Add nice input dialogs to prompt
 		"stevearc/dressing.nvim",
 		init = function()
-			local lush = require("lush")
-			lush(lush.extends({ require("dmg") }).with(require("dmg_dressing")))
 			---@diagnostic disable-next-line: duplicate-set-field
 			vim.ui.select = function(...)
 				require("lazy").load({ plugins = { "dressing.nvim" } })
