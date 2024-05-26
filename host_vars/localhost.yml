@@ -30,22 +30,14 @@ syntax_features:
   markdown: false # enable markdown integrations.
   tex: false # enable tex integrations.
 
-# ~~ (1) WORKSPACES ~~
-
-# Declare workspaces for quick access to scoped searches using a frecency algo. Environment variables like $HOME are expanded.
-# Expects a list with items like:
-# frecency_workspaces:
-#   - home: "/home/user"
-frecency_workspaces: []
-
-# ~~ (2) TREESITTER ~~
+# ~~ (1) TREESITTER ~~
 
 # Treesitter sources to ensure installed.
 # See: (https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#supported-languages)
 # Expects a list
 treesitter_sources: []
 
-# ~~ (3) VANITY ~~
+# ~~ (2) VANITY ~~
 
 dap_signs: # set the symbols for DAP (appear on signcolumn)
   - Breakpoint: "⚑"
@@ -102,50 +94,42 @@ lsp_kind_icons: # set the symbols for LSP kinds (appear in various places)
   - Value: "λ"
   - Watch: "W"
 
-# ~~ (4) LSP SOURCES ~~
+# ~~ (3) LSP SOURCES ~~
 
 # These will be automatically installed by mason
 # See: (https://github.com/mason-org/mason-registry/tree/main/packages)
 # Expects a list
 lsp_sources: []
 
-# ~~ (5) NONE-LS SOURCES ~~
+# ~~ (4) NONE-LS SOURCES ~~
 
 # These will be automatically installed by mason
 # See: (https://github.com/mason-org/mason-registry/tree/main/packages)
 # And: (https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md)
 # Each expects a list
 
-# !~~ (5a) FORMATTING SOURCES ~~!
+# !~~ (4a) FORMATTING SOURCES ~~!
 
 null_formatting_sources: []
 
-# !~~ (5b) HOVER SOURCES ~~!
+# !~~ (4b) HOVER SOURCES ~~!
 
 null_hover_sources: []
 
-# !~~ (5c) HOVER SOURCES ~~!
+# !~~ (4c) HOVER SOURCES ~~!
 
 null_diagnostics_sources: []
 
-# !~~ (5d) CODE ACTIONS SOURCES ~~!
+# !~~ (4d) CODE ACTIONS SOURCES ~~!
 
 null_code_actions_sources: []
 
-# ~~ (6) OTHERS ~~
-
-# Configure fd to allow a cleaner Telescope find_files output
-# Expects a list
-fd_ignore_patterns: []
+# ~~ (5) OTHERS ~~
 
 # Configure the dashboard ascii
 # Put the ascii in single quotes, all on one line (linebreak \n)
 # Here is a cat
 starter_ascii: '  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n'
-
-# Configure orgmode agenda files (can use globbing)
-# Expects a list
-org_agenda_files: []
 
 # Plugins to load locally from ~/projects
 dev_plugins: []
