@@ -228,3 +228,4 @@ org_agenda_files: []
 # Plugins to load locally from ~/projects
 dev_plugins:
   - dmg
+  - ivory
