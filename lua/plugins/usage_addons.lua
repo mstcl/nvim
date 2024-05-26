@@ -593,7 +593,7 @@ return {
 			},
 		},
 		opts = function()
-			opts = {
+			return {
 				commit_editor = {
 					kind = "vsplit",
 				},
