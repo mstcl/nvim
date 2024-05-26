@@ -356,7 +356,7 @@ return {
 		-- Utility to align text by delimiters
 		"echasnovski/mini.align",
 		keys = {
-			{ "ga", mode = "v" },
+			{ "gaa", mode = "v" },
 			{ "gA", mode = "v" },
 		},
 		version = false,
