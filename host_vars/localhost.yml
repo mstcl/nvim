@@ -30,20 +30,7 @@ syntax_features:
   markdown: true # enable markdown integrations.
   tex: true # enable tex integrations.
 
-# ~~ (1) WORKSPACES ~~
-
-# Declare workspaces for quick access to scoped searches using a frecency algo.
-frecency_workspaces:
-  - conf: "$HOME/.config"
-  - scripts: "$HOME/scripts"
-  - dot: "$HOME/dotfiles"
-  - zsh: "$HOME/.config/zsh"
-  - nvim: "$HOME/.config/nvim"
-  - projects: "$HOME/projects"
-  - go: "$HOME/projects/go"
-  - org: "$HOME/sftpgo/notes"
-
-# ~~ (2) TREESITTER ~~
+# ~~ (1) TREESITTER ~~
 
 # Treesitter sources to ensure installed.
 # See: (https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#supported-languages)
@@ -95,7 +82,7 @@ treesitter_sources:
   - "gotmpl"
   - "make"
 
-# ~~ (3) VANITY ~~
+# ~~ (2) VANITY ~~
 
 dap_signs: # set the symbols for DAP (appear on signcolumn)
   - Breakpoint: "⚑"
@@ -152,7 +139,7 @@ lsp_kind_icons: # set the symbols for LSP kinds (appear in various places)
   - Value: "λ"
   - Watch: "W"
 
-# ~~ (4) LSP SOURCES ~~
+# ~~ (3) LSP SOURCES ~~
 
 # These will be automatically installed by mason
 # See: (https://github.com/mason-org/mason-registry/tree/main/packages)
@@ -174,13 +161,13 @@ lsp_sources:
   - "markdown_oxide"
   - "dockerls"
 
-# ~~ (5) NONE-LS SOURCES ~~
+# ~~ (4) NONE-LS SOURCES ~~
 
 # These will be automatically installed by mason
 # See: (https://github.com/mason-org/mason-registry/tree/main/packages)
 # And: (https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md)
 
-# !~~ (5a) FORMATTING SOURCES ~~!
+# !~~ (4a) FORMATTING SOURCES ~~!
 
 null_formatting_sources:
   - "prettierd"
@@ -191,13 +178,13 @@ null_formatting_sources:
   - "goimports"
   - "gofumpt"
 
-# !~~ (5b) HOVER SOURCES ~~!
+# !~~ (4b) HOVER SOURCES ~~!
 
 null_hover_sources:
   - "dictionary" # needs curl
   - "printenv"
 
-# !~~ (5c) HOVER SOURCES ~~!
+# !~~ (4c) HOVER SOURCES ~~!
 
 null_diagnostics_sources:
   - "hadolint"
@@ -208,22 +195,18 @@ null_diagnostics_sources:
   - "mypy"
   - "golangci_lint"
 
-# !~~ (5d) CODE ACTIONS SOURCES ~~!
+# !~~ (4d) CODE ACTIONS SOURCES ~~!
 
 null_code_actions_sources:
   - "gitsigns"
   - "impl"
   - "gomodifytags"
 
-# ~~ (6) OTHERS ~~
+# ~~ (5) OTHERS ~~
 
 # Configure the dashboard ascii
 # Put the ascii in single quotes, all on one line (linebreak \n)
 starter_ascii: '  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n'
-
-# Configure orgmode agenda files (can use globbing)
-# Expects a list
-org_agenda_files: []
 
 # Plugins to load locally from ~/projects
 dev_plugins:

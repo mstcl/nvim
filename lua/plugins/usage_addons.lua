@@ -228,34 +228,36 @@ return {
 				desc = "Terminal",
 			},
 		},
-		opts = {
-			winbar = {
-				enabled = false,
-			},
-			size = function(term)
-				if term.direction == "horizontal" then
-					return 15
-				elseif term.direction == "vertical" then
-					return vim.o.columns * 0.4
-				end
-			end,
-			hide_numbers = true,
-			shade_filetypes = {},
-			autochdir = false,
-			shade_terminals = false,
-			highlights = {
-				Normal = {
-					link = "StatusLine",
+		opts = function()
+			return {
+				winbar = {
+					enabled = false,
 				},
-				StatusLine = {
-					link = "StatusLine",
+				size = function(term)
+					if term.direction == "horizontal" then
+						return 15
+					elseif term.direction == "vertical" then
+						return vim.o.columns * 0.4
+					end
+				end,
+				hide_numbers = true,
+				shade_filetypes = {},
+				autochdir = false,
+				shade_terminals = false,
+				highlights = {
+					Normal = {
+						link = "StatusLine",
+					},
+					StatusLine = {
+						link = "StatusLine",
+					},
+					StatusLineNC = {
+						link = "StatusLineNC",
+					},
 				},
-				StatusLineNC = {
-					link = "StatusLineNC",
-				},
-			},
-			direction = "vertical",
-		},
+				direction = "vertical",
+			}
+		end,
 		config = function(_, opts)
 			if opts then
 				require("toggleterm").setup(opts)
@@ -357,7 +359,7 @@ return {
 		"echasnovski/mini.align",
 		keys = {
 			{ "gaa", mode = "v" },
-			{ "gA", mode = "v" },
+			{ "gA",  mode = "v" },
 		},
 		version = false,
 
@@ -472,33 +474,35 @@ return {
 				desc = "List all keymaps",
 			},
 		},
-		opts = {
-			presets = {
-				operators = false,
-				motions = false,
-			},
-			key_labels = {
-				["<space>"] = "␣",
-				["<cr>"] = "↵",
-				["<tab>"] = "↹",
-				["<Left>"] = "←",
-				["<Right>"] = "→",
-				["<Up>"] = "↑",
-				["<Down>"] = "↓",
-				["<leader>"] = ",",
-				["<c-w>"] = "<C-W>",
-			},
-			ignore_missing = false,
-			icons = {
-				breadcrumb = "▸",
-				separator = "⟫",
-			},
-			triggers_blacklist = {
-				i = { "j", "k" },
-				v = { "j", "k" },
-				n = { "d", "y" },
-			},
-		},
+		opts = function()
+			return {
+				presets = {
+					operators = false,
+					motions = false,
+				},
+				key_labels = {
+					["<space>"] = "␣",
+					["<cr>"] = "↵",
+					["<tab>"] = "↹",
+					["<Left>"] = "←",
+					["<Right>"] = "→",
+					["<Up>"] = "↑",
+					["<Down>"] = "↓",
+					["<leader>"] = ",",
+					["<c-w>"] = "<C-W>",
+				},
+				ignore_missing = false,
+				icons = {
+					breadcrumb = "▸",
+					separator = "⟫",
+				},
+				triggers_blacklist = {
+					i = { "j", "k" },
+					v = { "j", "k" },
+					n = { "d", "y" },
+				},
+			}
+		end,
 		config = function(_, opts)
 			local wk = require("which-key")
 			wk.register({
@@ -588,16 +592,18 @@ return {
 				desc = "Neogit",
 			},
 		},
-		opts = {
-			commit_editor = {
-				kind = "vsplit",
-			},
-			signs = {
-				hunk = { "", "" },
-				item = { "▸", "▾" },
-				section = { "▸", "▾" },
-			},
-		},
+		opts = function()
+			opts = {
+				commit_editor = {
+					kind = "vsplit",
+				},
+				signs = {
+					hunk = { "", "" },
+					item = { "▸", "▾" },
+					section = { "▸", "▾" },
+				},
+			}
+		end,
 		config = function(_, opts)
 			if opts then
 				require("neogit").setup(opts)

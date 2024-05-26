@@ -441,23 +441,55 @@ return {
 		dependencies = { "neovim/nvim-lspconfig" },
 		ft = { "quarto", "markdown" },
 		keys = {
-			{ "<C-K>", "<cmd>lua require('otter').ask_hover<cr>",           desc = "Otter hover",           buffer = true },
-			{ "god",   "<cmd>lua require('otter').ask_definition<cr>",      desc = "Otter definition",      buffer = true },
-			{ "gop",   "<cmd>lua require('otter').ask_type_definition<cr>", desc = "Otter type definition", buffer = true },
-			{ "goR",   "<cmd>lua require('otter').ask_definition<cr>",      desc = "Otter rename",          buffer = true },
-			{ "gor",   "<cmd>lua require('otter').ask_definition<cr>",      desc = "Otter references",      buffer = true },
-			{ "goF",   "<cmd>lua require('otter').ask_definition<cr>",      desc = "Otter format code",     buffer = true },
+			{
+				"<C-K>",
+				"<cmd>lua require('otter').ask_hover<cr>",
+				desc = "Otter hover",
+				buffer = true,
+			},
+			{
+				"god",
+				"<cmd>lua require('otter').ask_definition<cr>",
+				desc = "Otter definition",
+				buffer = true,
+			},
+			{
+				"gop",
+				"<cmd>lua require('otter').ask_type_definition<cr>",
+				desc = "Otter type definition",
+				buffer = true,
+			},
+			{
+				"goR",
+				"<cmd>lua require('otter').ask_definition<cr>",
+				desc = "Otter rename",
+				buffer = true,
+			},
+			{
+				"gor",
+				"<cmd>lua require('otter').ask_definition<cr>",
+				desc = "Otter references",
+				buffer = true,
+			},
+			{
+				"goF",
+				"<cmd>lua require('otter').ask_definition<cr>",
+				desc = "Otter format code",
+				buffer = true,
+			},
 		},
-		opts = {
-			lsp = {
-				hover = {
-					border = "single",
+		opts = function()
+			return {
+				lsp = {
+					hover = {
+						border = "single",
+					},
 				},
-			},
-			buffers = {
-				set_filetype = true,
-			},
-		},
+				buffers = {
+					set_filetype = true,
+				},
+			}
+		end,
 		config = function(_, opts)
 			local wk = require("which-key")
 			wk.register({
