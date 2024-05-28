@@ -133,3 +133,6 @@ starter_ascii: '  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n'
 
 # Plugins to load locally from ~/projects
 dev_plugins: []
+
+# zk wiki path for fzf-lua (https://github.com/zk-org/zk)
+zk_wiki: ""
