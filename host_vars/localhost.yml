@@ -213,4 +213,4 @@ dev_plugins:
   - ivory
 
 # zk wiki path for fzf-lua (https://github.com/zk-org/zk)
-zk_wiki: ""
+zk_wiki: "~/shared/wiki"
