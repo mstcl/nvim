@@ -27,7 +27,6 @@ $ make update
 $ make rerun
 ```
 
-
 ## Nvim python API
 
 A python "venv" (virtual environment) is created with necessary packages in
