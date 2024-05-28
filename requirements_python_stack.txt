@@ -1,3 +1,5 @@
+pynvim
+pip
 pnglatex
 jupyter_client
 pillow

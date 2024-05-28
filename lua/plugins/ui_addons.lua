@@ -4,16 +4,15 @@ local cond = require("core.variables").ui_features
 -- Plugins that modify UI
 return {
 	{
-		-- Colorscheme
-		"mstcl/ivory",
-		lazy = false,
-		priority = 1000,
+		-- Colorscheme building
+		"rktjmp/shipwright.nvim",
+		cmd = "Shipwright",
 		dependencies = {
 			"rktjmp/lush.nvim",
+			-- Lush colorschemes to extend/modify
+			"mstcl/dmg",
+			"mstcl/ivory",
 		},
-		config = function()
-			vim.cmd.colorscheme("ivory_extended")
-		end,
 	},
 	{
 		-- Add nice input dialogs to prompt
