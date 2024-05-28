@@ -23,7 +23,7 @@ return {
 			},
 			{
 				"<leader>b",
-				"<cmd>FzfLua buffers<cr>",
+				"<cmd>FzfLua buffers path_shorten=true<cr>",
 				desc = "Buffers",
 			},
 			{
@@ -37,13 +37,18 @@ return {
 				desc = "Zoxide",
 			},
 			{
+				"<leader>n",
+				"<cmd>lua require('fzf.zk').exec()<cr>",
+				desc = "Notes",
+			},
+			{
 				"<leader>c",
 				"<cmd>FzfLua lsp_document_symbols<cr>",
 				desc = "Document code symbols",
 			},
 			{
 				"<leader>w",
-				"<cmd>FzfLua lsp_workspace_diagnostics<cr>",
+				"<cmd>FzfLua lsp_workspace_diagnostics path_shorten=true<cr>",
 				desc = "Workspace diagnostics",
 			},
 			{
@@ -68,7 +73,7 @@ return {
 			},
 			{
 				"<leader>/",
-				"<cmd>FzfLua live_grep_native<cr>",
+				"<cmd>FzfLua live_grep path_shorten=true<cr>",
 				desc = "Grep workspace",
 			},
 			{
