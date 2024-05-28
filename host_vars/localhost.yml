@@ -211,3 +211,6 @@ starter_ascii: '  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n'
 dev_plugins:
   - dmg
   - ivory
+
+# zk wiki path for fzf-lua (https://github.com/zk-org/zk)
+zk_wiki: ""
