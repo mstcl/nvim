@@ -4,41 +4,29 @@
 
 ## Features
 
-- A really cool text editor that lives in your terminal.
+A really cool text editor that lives in your terminal.
 
-## Get started
-
-### Cloning
+## Installing
 
 ```sh
 $ git clone -b master https://github.com/mstcl/nvim
 $ cd nvim
-```
-
-### Configuration
-
-```sh
 $ git checkout -B prod
 ```
 
-Read through what's available to configure in `host_vars/localhost.yml` and
-edit it.
-
-### Installing
-
-When you're happy:
+Variables are in `host_vars/localhost.yml`.
 
 ```sh
-$ ansible-playbook main.yml
+# Run whole playbook
+$ make install
+
+# Pull upstream
+$ make update
+
+# Rerun without installing packages
+$ make rerun
 ```
 
-## Updating
-
-```sh
-$ git checkout master; git pull origin master; git checkout prod; git merge master
-```
-
-Work through conflicts if needed.
 
 ## Nvim python API
 
@@ -51,11 +39,20 @@ this venv in projects that need it with
 $ source ~/.venv/nvim/bin/activate
 ```
 
-## Core keymap groups
+## Colorschemes
+
+None come installed by default. I made [dmg](https://github.com/mstcl/dmg) and
+[ivory](https://github.com/mstcl/ivory) with
+[lush](https://github.com/rktjmp/lush.nvim) for my own usage so they are
+compiled to Vimscript in `colors` with extensions enabled.
+
+To build these colorschemes, navigate to `~/.config/nvim`, open up neovim and
+run `:Shipwright`.
+
+## Additional keymaps
 
 - `<C-M>` - Toggle modules
-- `<leader>` - Plugin/extra keymaps
+- `<leader>` - Plugin, fuzzy picker keymaps
 - `g` - LSP lookups
-- `[` & `]`- Go to prev/next * (buffers, diagnostics, functions, conflicts, hunks)
-
-`<C-P>` brings up the which-key cheatsheet.
+- `gs` - Surround
+- `[` & `]`- Go to prev/next (buffers, diagnostics, functions, conflicts, hunks)

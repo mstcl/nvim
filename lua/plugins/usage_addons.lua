@@ -469,7 +469,7 @@ return {
 		event = "BufReadPre",
 		keys = {
 			{
-				"<C-P>",
+				"<C-M>k",
 				"<cmd>WhichKey<cr>",
 				desc = "List all keymaps",
 			},
