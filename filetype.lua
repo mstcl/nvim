@@ -4,6 +4,13 @@ vim.filetype.add({
 		conf = "config",
 		rasi = "css",
 		tmpl = "gotmpl",
+		zsh = "sh",
+		sh = "sh",
+	},
+	filename = {
+		[".zshrc"] = "sh",
+		[".zshenv"] = "sh",
+		[".zprofile"] = "sh",
 	},
 	pattern = {
 		["~/%.config/mutt/%a*"] = "muttrc",

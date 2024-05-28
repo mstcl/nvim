@@ -5,7 +5,7 @@ run(
 	lushwright.to_vimscript,
 	{ prepend, "set background=light" },
 	{ prepend, 'let g:colors_name="ivory_extended"' },
-	{ overwrite, "colors/ivory_extended.vim" }
+	{ patchwrite, "colors/ivory_extended.vim", "\" PATCH BEGIN", "\" PATCH END" }
 )
 run(
 	require("lush.dmg_extended"),
@@ -13,4 +13,5 @@ run(
 	{ prepend, "set background=light" },
 	{ prepend, 'let g:colors_name="dmg_extended"' },
 	{ overwrite, "colors/dmg_extended.vim" }
+	{ patchwrite, "colors/dmg_extended.vim", "\" PATCH BEGIN", "\" PATCH END" }
 )
