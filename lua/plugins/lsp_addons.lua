@@ -157,6 +157,22 @@ return {
 							experimentalFormatterMode = "On",
 						},
 					})
+				elseif server == "ltex" then
+					local spell_words = {}
+					for word in io.open(vim.fn.stdpath("config") .. "/spell/en.utf-8.add", "r"):lines() do
+						table.insert(spell_words, word)
+					end
+					lsp.ltex.setup({
+						settings = {
+							ltex = {
+								language = "en-GB",
+								enabled = true,
+								dictionary = {
+									["en-GB"] = spell_words,
+								},
+							},
+						},
+					})
 				elseif server == "gopls" then
 					lsp.gopls.setup({
 						on_attach = on_attach,
