@@ -155,10 +155,9 @@ lsp_sources:
   - "ruff"
   - "texlab"
   - "lua_ls"
-  - "ltex"
   - "gopls"
   - "yamlls"
-  - "markdown_oxide"
+  - "zk"
   - "dockerls"
 
 # ~~ (4) NONE-LS SOURCES ~~

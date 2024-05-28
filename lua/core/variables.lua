@@ -29,14 +29,6 @@ M.syntax_features = {
 }
 
 M.frecency_workspaces = {
-	["conf"] = vim.fn.expand("$HOME/.config"),
-	["scripts"] = vim.fn.expand("$HOME/scripts"),
-	["dot"] = vim.fn.expand("$HOME/dotfiles"),
-	["zsh"] = vim.fn.expand("$HOME/.config/zsh"),
-	["nvim"] = vim.fn.expand("$HOME/.config/nvim"),
-	["projects"] = vim.fn.expand("$HOME/projects"),
-	["go"] = vim.fn.expand("$HOME/projects/go"),
-	["org"] = vim.fn.expand("$HOME/sftpgo/notes"),
 }
 
 M.treesitter_sources = {
@@ -164,10 +156,9 @@ M.lsp_sources = {
 	"ruff",
 	"texlab",
 	"lua_ls",
-	"ltex",
 	"gopls",
 	"yamlls",
-	"markdown_oxide",
+	"zk",
 	"dockerls",
 }
 
