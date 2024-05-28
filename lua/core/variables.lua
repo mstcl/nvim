@@ -198,4 +198,6 @@ M.starter_ascii = "  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n"
 M.org_agenda_files = {
 }
 
+M.zk_wiki = "~/shared/wiki"
+
 return M
