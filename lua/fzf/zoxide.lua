@@ -9,6 +9,8 @@ local opts = {
 	winopts = {
 		title = " Zoxide ",
 		title_pos = "center",
+		height = 0.5,
+		width = 0.3,
 	},
 }
 
