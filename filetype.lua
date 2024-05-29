@@ -2,7 +2,9 @@ vim.filetype.add({
 	extension = {
 		sbat = "sh",
 		conf = "config",
-		rasi = "css",
+		rasi = "rasi",
+		rofi = "rasi",
+		wofi = "rasi",
 		tmpl = "gotmpl",
 		zsh = "sh",
 		sh = "sh",
@@ -13,6 +15,12 @@ vim.filetype.add({
 		[".zprofile"] = "sh",
 	},
 	pattern = {
+		[".*/waybar/config"] = "jsonc",
+		[".*/dunst/dunstrc"] = "ini",
+		[".*/mako/config"] = "dosini",
+		[".*/hypr/.+%.conf"] = "hyprlang",
+		[".*/kitty/.+%.conf"] = "bash",
+		["%.env%.[%w_.-]+"] = "sh",
 		["~/%.config/mutt/%a*"] = "muttrc",
 		[".*/tasks/.*.yml"] = "yaml.ansible",
 		[".*/main.yml"] = "yaml.ansible",
