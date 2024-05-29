@@ -31,10 +31,10 @@ return {
 		end,
 		opts = {
 			input = {
-				insert_only = true,
+				insert_only = false,
 				prompt_align = "left",
 				start_in_insert = true,
-				relative = "cursor",
+				relative = "editor",
 				border = "single",
 				prefer_width = 20,
 				max_width = nil,
@@ -42,7 +42,6 @@ return {
 				get_config = nil,
 				win_options = {
 					winblend = 0,
-					winhighlight = "NormalFloat:TelescopeNormal,FloatBorder:TelescopeBorder,FloatTitle:Pmenu",
 				},
 			},
 			override = {
@@ -53,9 +52,9 @@ return {
 				fzf_lua = {
 					winopts = {
 						height = 0.5,
-						width = 0.5,
+						width = 0.25,
 						preview = {
-							hidden = "nohidden",
+							hidden = "hidden",
 							vertical = "up:45%",
 							layout = "vertical",
 						},

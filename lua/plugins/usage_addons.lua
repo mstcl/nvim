@@ -83,12 +83,12 @@ return {
 			},
 			{
 				"gr",
-				"<cmd>FzfLua lsp_references<cr>",
+				"<cmd>FzfLua lsp_references path_shorten=true<cr>",
 				desc = "Symbol references",
 			},
 			{
 				"gI",
-				"<cmd>FzfLua lsp_implementations<cr>",
+				"<cmd>FzfLua lsp_implementations path_shorten=true<cr>",
 				desc = "Symbol implementation",
 			},
 		},
@@ -101,6 +101,8 @@ return {
 				},
 				fzf_opts = { ["--margin"] = "0,0", ["--info"] = "inline-right" },
 				winopts = {
+					col = 0.5,
+					row = 0.35,
 					width = 0.65,
 					height = 0.70,
 					preview = {
@@ -147,7 +149,7 @@ return {
 				keymap = {
 					builtin = {
 						-- neovim `:tmap` mappings for the fzf win
-						["<F11>"] = "toggle-fullscreen",
+						["<C-F>"] = "toggle-fullscreen",
 						["?"] = "toggle-preview",
 						-- Rotate preview clockwise/counter-clockwise
 						["<F1>"] = "toggle-preview-ccw",
@@ -159,8 +161,6 @@ return {
 					fzf = {
 						["ctrl-c"] = "abort",
 						["ctrl-u"] = "unix-line-discard",
-						["ctrl-f"] = "half-page-down",
-						["ctrl-b"] = "half-page-up",
 						["ctrl-a"] = "beginning-of-line",
 						["ctrl-e"] = "end-of-line",
 						["alt-a"] = "toggle-all",
@@ -178,7 +178,7 @@ return {
 				helptags = { previewer = "help_native" },
 				diagnostics = {
 					winopts = {
-						width = 0.4,
+						width = 0.3,
 						height = 0.5,
 						vertical = "up:80%",
 						preview = { layout = "vertical" },
@@ -186,7 +186,7 @@ return {
 				},
 				lsp = {
 					winopts = {
-						width = 0.4,
+						width = 0.3,
 						height = 0.5,
 						vertical = "up:80%",
 						preview = { layout = "vertical" },
