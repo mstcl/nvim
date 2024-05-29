@@ -149,8 +149,10 @@ highlight FlashBackdrop guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight FlashLabel guifg=#26126d guibg=#d1ccde guisp=NONE blend=NONE gui=NONE
 highlight FlashPromptIcon guifg=#ded8d3 guibg=#26126a guisp=NONE blend=NONE gui=bold
 highlight FloatBorder guifg=#c8beb7 guibg=#c8beb7 guisp=NONE blend=NONE gui=NONE
+highlight FloatFooter guifg=#493f37 guibg=#c8beb7 guisp=NONE blend=NONE gui=bold
 highlight FloatShadow guifg=NONE guibg=black guisp=NONE blend=80 gui=NONE
 highlight FloatShadowThrough guifg=NONE guibg=black guisp=NONE blend=100 gui=NONE
+highlight FloatTitle guifg=#493f37 guibg=#c8beb7 guisp=NONE blend=NONE gui=bold
 highlight FoldColumn guifg=#9e8d7f guibg=#e9e5e2 guisp=NONE blend=NONE gui=bold
 highlight! link CursorLineFold FoldColumn
 highlight Folded guifg=#9e8d7f guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
@@ -250,7 +252,7 @@ highlight PreProc guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link @preproc PreProc
 highlight Question guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link @property Question
-highlight QuickFixLine guifg=NONE guibg=#9e8d7f guisp=NONE blend=NONE gui=NONE
+highlight QuickFixLine guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight RedrawDebugClear guifg=NONE guibg=yellow guisp=NONE blend=NONE gui=NONE
 highlight RedrawDebugComposed guifg=NONE guibg=green guisp=NONE blend=NONE gui=NONE
 highlight RedrawDebugNormal guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=reverse
@@ -368,7 +370,6 @@ highlight TelescopeSelectionCaret guifg=#161e29 guibg=#bdb1a8 guisp=NONE blend=N
 highlight TelescopeTitle guifg=#ded8d3 guibg=#630e49 guisp=NONE blend=NONE gui=bold
 highlight TermCursor guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=reverse
 highlight Title guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=bold
-highlight! link FloatTitle Title
 highlight! link @text.title Title
 highlight Underlined guifg=#573e1a guibg=NONE guisp=#573e1a blend=NONE gui=underline
 highlight! link Tag Underlined
