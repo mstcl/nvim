@@ -27,6 +27,15 @@ function M.on_attach(client, bufnr)
 			}
 		end
 	end
+
+	if client.name == "zk" then
+		vim.keymap.set("n", "<leader>ki", ":ZkIndex<CR>", {
+			desc = "Index notes",
+			noremap = true,
+			silent = true,
+			buffer = bufnr,
+		})
+	end
 end
 
 M.handlers = {

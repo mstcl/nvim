@@ -21,7 +21,13 @@ function M.setup(client, bufnr)
 	end
 
 	if client.server_capabilities.codeActionProvider then
-		map({ "n", "v" }, "ga", vim.lsp.buf.code_action, { desc = "Symbol code actions", buffer = bufnr })
+		map({ "n" }, "ga", vim.lsp.buf.code_action, { desc = "Symbol code actions", buffer = bufnr })
+		map(
+			"v",
+			"ga",
+			":'<,'>lua vim.lsp.buf.range_code_action()<CR>",
+			{ desc = "Symbol code actions", buffer = bufnr }
+		)
 	end
 
 	if client.server_capabilities.declarationProvider then
