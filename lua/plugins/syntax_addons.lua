@@ -48,99 +48,109 @@ return {
 			require("lazy.core.loader").add_to_rtp(plugin)
 			require("nvim-treesitter.query_predicates")
 		end,
-		opts = {
-			ensure_installed = conf.treesitter_sources,
-			sync_install = false,
-			highlight = {
-				enable = true,
-				use_languagetree = true,
-				additional_vim_regex_highlighting = { "org" },
-				disable = { "latex", "yaml", "yaml.ansible" },
-				is_supported = function()
-					if require("core.utils").big(vim.fn.expand("%")) then
-						return false
-					else
-						return true
-					end
-				end,
-			},
-			autopairs = {
-				enable = true,
-			},
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					init_selection = false,
-					node_incremental = "an",
-					scope_incremental = "aN",
-					node_decremental = "in",
-				},
-			},
-			indent = {
-				enable = false,
-				disable = { "yaml", "yaml.ansible", "template" },
-			},
-			tree_setter = {
-				enable = true,
-			},
-			playground = {
-				enable = true,
-				disable = {},
-				updatetime = 25,
-				persist_queries = false,
-				keybindings = {
-					toggle_query_editor = "o",
-					toggle_hl_groups = "i",
-					toggle_injected_languages = "t",
-					toggle_anonymous_nodes = "a",
-					toggle_language_display = "I",
-					focus_language = "f",
-					unfocus_language = "F",
-					update = "R",
-					goto_node = "<cr>",
-					show_help = "?",
-				},
-			},
-			textobjects = {
-				move = {
+		opts = function()
+			local ensure_installed = conf.treesitter_sources
+			local function add(lang)
+				if type(ensure_installed) == "table" then
+					table.insert(ensure_installed, lang)
+				end
+			end
+			add("git_config")
+			add("rasi")
+			return {
+				ensure_installed = conf.treesitter_sources,
+				sync_install = false,
+				highlight = {
 					enable = true,
-					set_jumps = true,
-					goto_next_start = {
-						["]k"] = { query = "@block.outer", desc = "Next block start" },
-						["]f"] = { query = "@function.outer", desc = "Next function start" },
-						["]a"] = { query = "@parameter.inner", desc = "Next parameter start" },
-					},
-					goto_next_end = {
-						["]K"] = { query = "@block.outer", desc = "Next block end" },
-						["]F"] = { query = "@function.outer", desc = "Next function end" },
-						["]A"] = { query = "@parameter.inner", desc = "Next parameter end" },
-					},
-					goto_previous_start = {
-						["[k"] = { query = "@block.outer", desc = "Previous block start" },
-						["[f"] = { query = "@function.outer", desc = "Previous function start" },
-						["[a"] = { query = "@parameter.inner", desc = "Previous parameter start" },
-					},
-					goto_previous_end = {
-						["[K"] = { query = "@block.outer", desc = "Previous block end" },
-						["[F"] = { query = "@function.outer", desc = "Previous function end" },
-						["[A"] = { query = "@parameter.inner", desc = "Previous parameter end" },
-					},
+					use_languagetree = true,
+					additional_vim_regex_highlighting = { "org" },
+					disable = { "latex", "yaml", "yaml.ansible" },
+					is_supported = function()
+						if require("core.utils").big(vim.fn.expand("%")) then
+							return false
+						else
+							return true
+						end
+					end,
 				},
-				swap = {
+				autopairs = {
 					enable = true,
-					swap_next = {
-						[">K"] = { query = "@block.outer", desc = "Swap next block" },
-						[">F"] = { query = "@function.outer", desc = "Swap next function" },
-						[">A"] = { query = "@parameter.inner", desc = "Swap next parameter" },
-					},
-					swap_previous = {
-						["<K"] = { query = "@block.outer", desc = "Swap previous block" },
-						["<F"] = { query = "@function.outer", desc = "Swap previous function" },
-						["<A"] = { query = "@parameter.inner", desc = "Swap previous parameter" },
+				},
+				incremental_selection = {
+					enable = true,
+					keymaps = {
+						init_selection = false,
+						node_incremental = "an",
+						scope_incremental = "aN",
+						node_decremental = "in",
 					},
 				},
-			},
-		},
+				indent = {
+					enable = false,
+					disable = { "yaml", "yaml.ansible", "template" },
+				},
+				tree_setter = {
+					enable = true,
+				},
+				playground = {
+					enable = true,
+					disable = {},
+					updatetime = 25,
+					persist_queries = false,
+					keybindings = {
+						toggle_query_editor = "o",
+						toggle_hl_groups = "i",
+						toggle_injected_languages = "t",
+						toggle_anonymous_nodes = "a",
+						toggle_language_display = "I",
+						focus_language = "f",
+						unfocus_language = "F",
+						update = "R",
+						goto_node = "<cr>",
+						show_help = "?",
+					},
+				},
+				textobjects = {
+					move = {
+						enable = true,
+						set_jumps = true,
+						goto_next_start = {
+							["]k"] = { query = "@block.outer", desc = "Next block start" },
+							["]f"] = { query = "@function.outer", desc = "Next function start" },
+							["]a"] = { query = "@parameter.inner", desc = "Next parameter start" },
+						},
+						goto_next_end = {
+							["]K"] = { query = "@block.outer", desc = "Next block end" },
+							["]F"] = { query = "@function.outer", desc = "Next function end" },
+							["]A"] = { query = "@parameter.inner", desc = "Next parameter end" },
+						},
+						goto_previous_start = {
+							["[k"] = { query = "@block.outer", desc = "Previous block start" },
+							["[f"] = { query = "@function.outer", desc = "Previous function start" },
+							["[a"] = { query = "@parameter.inner", desc = "Previous parameter start" },
+						},
+						goto_previous_end = {
+							["[K"] = { query = "@block.outer", desc = "Previous block end" },
+							["[F"] = { query = "@function.outer", desc = "Previous function end" },
+							["[A"] = { query = "@parameter.inner", desc = "Previous parameter end" },
+						},
+					},
+					swap = {
+						enable = true,
+						swap_next = {
+							[">K"] = { query = "@block.outer", desc = "Swap next block" },
+							[">F"] = { query = "@function.outer", desc = "Swap next function" },
+							[">A"] = { query = "@parameter.inner", desc = "Swap next parameter" },
+						},
+						swap_previous = {
+							["<K"] = { query = "@block.outer", desc = "Swap previous block" },
+							["<F"] = { query = "@function.outer", desc = "Swap previous function" },
+							["<A"] = { query = "@parameter.inner", desc = "Swap previous parameter" },
+						},
+					},
+				},
+			}
+		end,
 		config = function(_, opts)
 			if type(opts.ensure_installed) == "table" then
 				---@type table<string, boolean>
