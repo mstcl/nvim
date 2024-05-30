@@ -98,6 +98,10 @@ M.capabilities.textDocument.foldingRange = {
 	lineFoldingOnly = true,
 }
 M.capabilities.workspace = {
+	fileOperations = {
+		didRename = true,
+		willRename = true,
+	},
 	didChangeWatchedFiles = {
 		dynamicRegistration = true,
 	},
