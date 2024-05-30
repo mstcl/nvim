@@ -14,17 +14,17 @@ return {
 			{
 				"<leader>l",
 				"<cmd>FzfLua resume<cr>",
-				desc = "Resume last picker",
+				desc = "Last picker (resume)",
 			},
 			{
-				"<leader>t",
+				"<leader>i",
 				"<cmd>FzfLua builtin<cr>",
-				desc = "FzfLua Builtin",
+				desc = "Installed pickers",
 			},
 			{
 				"<leader>b",
 				"<cmd>FzfLua buffers path_shorten=true<cr>",
-				desc = "Buffers",
+				desc = "Buffer list",
 			},
 			{
 				"<leader>f",
@@ -37,14 +37,9 @@ return {
 				desc = "Zoxide",
 			},
 			{
-				"<leader>n",
-				"<cmd>lua require('fzf.zk').exec()<cr>",
-				desc = "Notes",
-			},
-			{
 				"<leader>c",
 				"<cmd>FzfLua lsp_document_symbols<cr>",
-				desc = "Document code symbols",
+				desc = "Code symbols (document)",
 			},
 			{
 				"<leader>w",
@@ -54,7 +49,7 @@ return {
 			{
 				"<leader>gC",
 				"<cmd>FzfLua git_bcommits<cr>",
-				desc = "Buffer git commits",
+				desc = "Git commits (buffer)",
 			},
 			{
 				"<leader>gb",
@@ -777,6 +772,9 @@ return {
 				"<leader>s",
 				function()
 					vim.ui.input({ prompot = "Session name:" }, function(name)
+						if name == nil then
+							return
+						end
 						name = name or vim.fn.getcwd():gsub("/", "-")
 						require("mini.sessions").write(name)
 						vim.notify("Saved session: " .. name, vim.log.levels.INFO)

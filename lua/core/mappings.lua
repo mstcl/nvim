@@ -4,7 +4,7 @@ local exec = vim.api.nvim_command
 -- Remove mappings
 map("n", "Q", "")
 map("n", "gQ", "")
-map("n", "<leader>p", "<cmd>Lazy show<cr>", { desc = "Lazy" })
+map("n", "<leader>p", "<cmd>Lazy show<cr>", { desc = "Plugins manager (lazy)" })
 
 map({ "n", "v" }, "<space>", ":", { remap = false, desc = "Command", silent = true })
 
