@@ -344,6 +344,7 @@ return {
 							},
 						},
 					})
+				elseif server == "zk" then
 				else
 					lsp[server].setup({
 						on_attach = on_attach,

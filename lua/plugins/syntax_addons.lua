@@ -355,7 +355,7 @@ return {
 		-- Display wordcount under section header
 		"dimfeld/section-wordcount.nvim",
 		ft = { "markdown", "quarto" },
-		cond = require("core.variables").syntax_features.markdown,
+		cond = conf.syntax_features.markdown,
 		opts = {
 			highlight = "NonText",
 			virt_text_pos = "eol",
@@ -365,6 +365,86 @@ return {
 				require("section-wordcount").setup(opts)
 			end
 			require("section-wordcount").wordcounter({})
+		end,
+	},
+	{
+		-- Markdown note taking assistant
+		"zk-org/zk-nvim",
+		ft = "markdown",
+		cond = conf.syntax_features.markdown,
+		keys = {
+			{
+				"<leader>ne",
+				"<cmd>ZkNotes<cr>",
+				desc = "Note entries",
+			},
+			{
+				"<leader>nn",
+				function()
+					vim.ui.input({ prompt = "Enter path/title: " }, function(input)
+						if input == nil then
+							return
+						end
+						local rel = ""
+						local title = ""
+						for k, v in string.gmatch(input, "(.*)/(.*)") do
+							rel = k
+							title = v
+						end
+						require("zk.commands").get("ZkNew")({
+							dir = rel,
+							title = title,
+						})
+					end)
+				end,
+				desc = "New note",
+			},
+			{
+				"<leader>nl",
+				"<cmd>ZkLinks<cr>",
+				desc = "Note links",
+			},
+			{
+				"<leader>nb",
+				"<cmd>ZkBacklinks<cr>",
+				desc = "Note backlinks",
+			},
+			{
+				"<leader>nt",
+				"<cmd>ZkTags<cr>",
+				desc = "Note tags",
+			},
+			{
+				"<leader>n",
+				":'<,'>ZkNewFromTitleSelection<cr>",
+				desc = "New note from selection",
+				mode = "v",
+			},
+		},
+		config = function()
+			local wk = require("which-key")
+			wk.register({
+				["<leader>n"] = { name = "Notes (zk) commands" },
+			})
+			require("zk").setup({
+				picker = "fzf_lua",
+				auto_attach = {
+					enabled = true,
+					filetypes = { "markdown" },
+				},
+				lsp = {
+					config = {
+						cmd = { "zk", "lsp" },
+						name = "kz",
+						on_attach = require("lsp.utils").on_attach,
+						capabilities = require("lsp.utils").capabilities,
+						handlers = require("lsp.utils").handlers,
+						flags = {
+							debounce_text_changes = 150,
+						},
+					},
+				},
+			})
 		end,
 	},
 }
