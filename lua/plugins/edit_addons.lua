@@ -24,7 +24,7 @@ return {
 		dependencies = {
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "FelipeLema/cmp-async-path" },
-			{ "hrsh7th/cmp-buffer" },
+			{ "lukas-reineke/cmp-rg" },
 			{ "rafamadriz/friendly-snippets" },
 			{
 				"garymjr/nvim-snippets",
@@ -82,7 +82,7 @@ return {
 				mapping = cmp.mapping.preset.insert({
 					["<C-P>"] = cmp.mapping.scroll_docs(-4),
 					["<C-N>"] = cmp.mapping.scroll_docs(4),
-					["<C-e>"] = cmp.mapping.abort(),
+					["<C-E>"] = cmp.mapping.complete_common_string(),
 					["<CR>"] = function(fallback)
 						if cmp.core.view:visible() or vim.fn.pumvisible() == 1 then
 							if cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }) then
@@ -169,9 +169,8 @@ return {
 					},
 					{ name = "cmp_pandoc", priority = 9 },
 					{
-						name = "buffer",
-						options = require("core.utils").buffer_opts,
-						keyword_length = 5,
+						name = "rg",
+						keyword_length = 3,
 						max_item_count = 2,
 					},
 				}),
