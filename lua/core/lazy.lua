@@ -60,9 +60,7 @@ require("lazy").setup({
 		browser = nil, ---@type string?
 		throttle = 20,
 	},
-	diff = {
-		cmd = "diffview",
-	},
+	diff = {},
 	checker = {
 		enabled = false,
 		concurrency = nil, ---@type number? set to 1 to check for updates very slowly

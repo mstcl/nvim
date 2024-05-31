@@ -132,14 +132,81 @@ function M.get_cwd()
 	return vim.fn.pathshorten(vim.fn.getcwd(), 1)
 end
 
+local function is_valid_git_repo(buf_id)
+	-- Check if it's a valid buffer
+	local path = vim.api.nvim_buf_get_name(buf_id)
+	if path == "" or vim.fn.filereadable(path) ~= 1 then
+		return false
+	end
+
+	-- Check if the current directory is a Git repository
+	if vim.fn.isdirectory(".git") == 0 then
+		return false
+	end
+
+	return true
+end
+
+local branch_cache = {}
+
+-- Function to clear the Git branch cache
+local function clear_git_branch_cache()
+	-- Clear by doing an empty table :)
+	branch_cache = {}
+end
+
+-- Autocommand to clear the Git branch cache when the directory changes
+vim.api.nvim_create_autocmd("DirChanged", {
+	callback = clear_git_branch_cache,
+})
+
+local function update_git_branch(data)
+	if not is_valid_git_repo(data.buf) then
+		return
+	end
+
+	-- Check if branch is already cached
+	local cached_branch = branch_cache[data.buf]
+	if cached_branch then
+		vim.b.git_branch = cached_branch
+		return
+	end
+
+	---@diagnostic disable-next-line: undefined-field
+	local stdout = vim.uv.new_pipe(false)
+	---@diagnostic disable-next-line: undefined-field
+	local _, _ = vim.uv.spawn(
+		"git",
+		{
+			args = { "-C", vim.fn.expand("%:p:h"), "branch", "--show-current" },
+			stdio = { nil, stdout, nil },
+		},
+		vim.schedule_wrap(function(code, _)
+			if code == 0 then
+				stdout:read_start(function(_, content)
+					if content then
+						vim.b.git_branch = content:gsub("\n", "") -- Remove newline character
+						branch_cache[data.buf] = vim.b.git_branch -- Cache the branch name
+						stdout:close()
+					end
+				end)
+			else
+				stdout:close()
+			end
+		end)
+	)
+end
+
+-- Call this function when the buffer is opened in a window
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	callback = update_git_branch,
+})
+
 ---Get current git branch
 ---@return string
 function M.get_git_branch()
 	---@diagnostic disable-next-line: undefined-field
-	local branch = "nil"
-	if vim.b.gitsigns_status_dict ~= nil then
-		branch = vim.b.gitsigns_status_dict.head
-	end
+	local branch = vim.b.git_branch or "nil"
 	return set_hl("#", "StatuslineAlt") .. set_hl(branch, "StatusLineNC")
 end
 
@@ -147,12 +214,11 @@ end
 ---@return string
 function M.get_diffs()
 	---@diagnostic disable-next-line: undefined-field
-	local diffs = "nil"
-	if vim.b.gitsigns_status_dict ~= nil then
-		diffs = vim.b.gitsigns_status_dict
-		local added = diffs.added or 0
-		local changed = diffs.changed or 0
-		local removed = diffs.removed or 0
+	local diffs = vim.b.minidiff_summary
+	if diffs ~= nil then
+		local added = diffs.add or 0
+		local changed = diffs.change or 0
+		local removed = diffs.delete or 0
 		if added == 0 and removed == 0 and changed == 0 then
 			return "clean"
 		end
@@ -163,7 +229,7 @@ function M.get_diffs()
 			set_hl("-" .. tostring(removed), "StatuslineRed")
 		)
 	end
-	return diffs
+	return "nil"
 end
 
 function M.get_filepath()

@@ -16,6 +16,21 @@ return {
 				end,
 				desc = "Toggle treesitter highlighting",
 			},
+			{
+				"an",
+				desc = "Increment TS node",
+				mode = { "o", "x" },
+			},
+			{
+				"aN",
+				desc = "Increment TS scope",
+				mode = { "o", "x" },
+			},
+			{
+				"in",
+				desc = "Decrement TS node",
+				mode = { "o", "x" },
+			},
 		},
 		cmd = {
 			"TSInstall",
