@@ -40,13 +40,11 @@ treesitter_sources:
   - "c"
   - "cpp"
   - "bibtex"
-  - "css"
   - "json"
   - "json5"
   - "hjson"
   - "vim"
   - "java"
-  - "javascript"
   - "cmake"
   - "ssh_config"
   - "latex"
@@ -66,14 +64,12 @@ treesitter_sources:
   - "passwd"
   - "php"
   - "rasi"
-  - "scss"
   - "sxhkdrc"
   - "yaml"
   - "toml"
   - "comment"
   - "org"
   - "rust"
-  - "norg"
   - "xml"
   - "go"
   - "gomod"
@@ -197,7 +193,6 @@ null_diagnostics_sources:
 # !~~ (4d) CODE ACTIONS SOURCES ~~!
 
 null_code_actions_sources:
-  - "gitsigns"
   - "impl"
   - "gomodifytags"
 

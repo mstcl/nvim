@@ -37,13 +37,11 @@ M.treesitter_sources = {
 	"c",
 	"cpp",
 	"bibtex",
-	"css",
 	"json",
 	"json5",
 	"hjson",
 	"vim",
 	"java",
-	"javascript",
 	"cmake",
 	"ssh_config",
 	"latex",
@@ -63,14 +61,12 @@ M.treesitter_sources = {
 	"passwd",
 	"php",
 	"rasi",
-	"scss",
 	"sxhkdrc",
 	"yaml",
 	"toml",
 	"comment",
 	"org",
 	"rust",
-	"norg",
 	"xml",
 	"go",
 	"gomod",
@@ -188,7 +184,6 @@ M.null_diagnostics_sources = {
 }
 
 M.null_code_action_sources = {
-	"gitsigns",
 	"impl",
 	"gomodifytags",
 }
