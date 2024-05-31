@@ -306,7 +306,6 @@ return {
 				},
 			},
 			plugins = {
-				gitsigns = { enabled = false },
 				options = {
 					enabled = true,
 					ruler = false,
@@ -363,15 +362,6 @@ return {
 		},
 		version = false,
 
-		opts = {},
-	},
-	{
-		-- View git diff
-		"sindrets/diffview.nvim",
-		cmd = {
-			"DiffviewOpen",
-			"DiffviewFileHistory",
-		},
 		opts = {},
 	},
 	{
@@ -691,76 +681,78 @@ return {
 		},
 	},
 	{
-		-- Git status in signcolumn
-		"lewis6991/gitsigns.nvim",
+		-- Git signs and diffs
+		"echasnovski/mini.diff",
+		version = false,
 		event = "BufReadPre",
 		keys = {
 			{
-				"<C-M>g",
+				"<C-M>gs",
 				function()
-					vim.cmd("Gitsigns toggle_signs")
-					vim.notify("Toggled git signs", vim.log.levels.INFO)
+					vim.g.minidiff_disable = not vim.g.minipairs_disable
+					if vim.g.minidiff_disable then
+						vim.notify("Disabled auto-pairs", vim.log.levels.INFO)
+					else
+						vim.notify("Enabled auto-pairs", vim.log.levels.INFO)
+					end
 				end,
-				desc = "Toggle gitsigns",
-			},
-			{
-				"ih",
-				":<C-U>Gitsigns select_hunk<CR>",
-				desc = "Select hunk",
-				mode = { "o", "x" },
+				desc = "Toggle diff sigsn",
 			},
 			{
 				"[g",
-				"<cmd>Gitsigns prev_hunk<cr><cmd>Gitsigns preview_hunk<cr>",
 				desc = "Previous hunk",
 			},
 			{
 				"]g",
-				"<cmd>Gitsigns next_hunk<cr><cmd>Gitsigns preview_hunk<cr>",
 				desc = "Next hunk",
 			},
 			{
-				"<leader>gh",
-				"<cmd>Gitsigns preview_hunk_inline<cr>",
-				desc = "Preview hunk inline",
-			},
-			{
-				"<leader>gS",
-				"<cmd>Gitsigns stage_hunk<cr>",
-				desc = "Stage hunk",
-			},
-			{
-				"<leader>gS",
-				function()
-					require("gitsigns").stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+				"<C-M>gh",
+				function ()
+					require("mini.diff").toggle_overlay()
 				end,
+				desc = "Preview git hunks inline",
+			},
+			{
+				"gh",
 				desc = "Stage hunk",
-				mode = { "v" },
+			},
+			{
+				"gH",
+				desc = "Reset hunk",
 			},
 		},
-		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = {
-			numhl = false,
-			linehl = false,
-			signcolumn = true,
-			watch_gitdir = {
-				interval = 1000,
-				follow_files = true,
-			},
-			signs = {
-				add = { hl = "DiffFGAdd", text = "▎", numhl = "DiffAdd", linehl = "DiffAdd" },
-				change = { hl = "DiffFGChange", text = "▎", numhl = "DiffChange", linehl = "DiffChange" },
-				delete = { hl = "DiffFGDelete", text = "▎", numhl = "DiffDelete", linehl = "DiffDelete" },
-				topdelete = { hl = "DiffFGDelete", text = "▎", numhl = "DiffDelete", linehl = "DiffDelete" },
-				changedelete = { hl = "DiffFGChange", text = "▎", numhl = "DiffChange", linehl = "DiffChange" },
-				untracked = { hl = "DiffFGAdd", text = "▎", numhl = "DiffAdd", linehl = "DiffAdd" },
-			},
-			current_line_blame = false,
-			sign_priority = 6,
-			update_debounce = 100,
-			status_formatter = nil,
-			word_diff = false,
-		},
+		init = function()
+			vim.api.nvim_set_hl(0, "MiniDiffSignAdd", { link = "DiffFGAdd" })
+			vim.api.nvim_set_hl(0, "MiniDiffSignChange", { link = "DiffFGChange" })
+			vim.api.nvim_set_hl(0, "MiniDiffSignDelete", { link = "DiffFGRemove" })
+		end,
+		opts = function()
+			return {
+				view = {
+					style = "sign",
+					signs = { add = "▎", change = "▎", delete = "▎" },
+				},
+				delay = {
+					text_change = 100,
+				},
+				mappings = {
+					-- Apply hunks inside a visual/operator region
+					apply = "gh",
+					reset = "gH",
+					textobject = "gh",
+					goto_first = "[G",
+					goto_prev = "[g",
+					goto_next = "]g",
+					goto_last = "]G",
+				},
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("mini.diff").setup(opts)
+			end
+		end,
 	},
 	{
 		-- Global manage session
