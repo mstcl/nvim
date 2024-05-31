@@ -1,3 +1,4 @@
+-- vim.treesitter.stop()
 local setlocal = vim.opt_local
 
 setlocal.shiftwidth = 4
