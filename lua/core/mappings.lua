@@ -59,11 +59,12 @@ map("n", "<C-M>n", function()
 end, { desc = "Toggle non-text characters" })
 
 map("n", "<C-M>cl", function()
-	vim.wo.cursorline = not vim.wo.cursorline
-	if not vim.wo.cursorline then
-		vim.notify("Disabled cursorline", vim.log.levels.INFO)
-	else
+	if vim.wo.cursorlineopt == "number" then
+		vim.wo.cursorlineopt = "both"
 		vim.notify("Enabled cursorline", vim.log.levels.INFO)
+	else
+		vim.wo.cursorlineopt = "number"
+		vim.notify("Disabled cursorline", vim.log.levels.INFO)
 	end
 end, { desc = "Toggle cursorline" })
 
