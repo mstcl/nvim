@@ -91,7 +91,9 @@ highlight CurSearch guifg=NONE guibg=#d1ccde guisp=NONE blend=NONE gui=NONE
 highlight CursorColumn guifg=NONE guibg=#493f37 guisp=NONE blend=NONE gui=NONE
 highlight CursorLine guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight! link NeogitCursorLine CursorLine
+highlight CursorLineFold guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight CursorLineNr guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight CursorLineSign guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Define guifg=#26126d guibg=NONE guisp=NONE blend=NONE gui=italic
 highlight! link @constant.macro Define
 highlight! link @define Define
@@ -109,6 +111,7 @@ highlight! link @markup.heading.4.marker Delimiter
 highlight! link @markup.heading.5.marker Delimiter
 highlight! link @markup.heading.6.marker Delimiter
 highlight! link @punctuation Delimiter
+highlight! link @punctuation.delimiter.yaml Delimiter
 highlight DiagnosticFloatingOk guifg=#184e1e guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticSignOk DiagnosticFloatingOk
 highlight DiagnosticSignError guifg=#74351e guibg=#dcb892 guisp=NONE blend=NONE gui=NONE
@@ -156,8 +159,7 @@ highlight FloatFooter guifg=#493f37 guibg=#c8beb7 guisp=NONE blend=NONE gui=bold
 highlight FloatShadow guifg=NONE guibg=black guisp=NONE blend=80 gui=NONE
 highlight FloatShadowThrough guifg=NONE guibg=black guisp=NONE blend=100 gui=NONE
 highlight FloatTitle guifg=#493f37 guibg=#c8beb7 guisp=NONE blend=NONE gui=bold
-highlight FoldColumn guifg=#9e8d7f guibg=#e9e5e2 guisp=NONE blend=NONE gui=bold
-highlight! link CursorLineFold FoldColumn
+highlight FoldColumn guifg=#9e8d7f guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight Folded guifg=#9e8d7f guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight Function guifg=#26126d guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link @function Function
@@ -432,6 +434,7 @@ highlight @org.keyword.done guifg=#184e1e guibg=#d0d8cc guisp=NONE blend=NONE gu
 highlight @org.keyword.todo guifg=#630e49 guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight @punctuation.special guifg=#746458 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight @string.special.url guifg=#184e1e guibg=NONE guisp=NONE blend=NONE gui=underline
+highlight @string.yaml guifg=#184e1e guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight @variable.member guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight @variable.parameter guifg=#813b21 guibg=NONE guisp=NONE blend=NONE gui=NONE
 " PATCH END
