@@ -79,7 +79,7 @@ return {
 					enable = true,
 					use_languagetree = true,
 					additional_vim_regex_highlighting = { "org" },
-					disable = { "latex", "yaml", "yaml.ansible" },
+					disable = { "latex" },
 					is_supported = function()
 						if require("core.utils").big(vim.fn.expand("%")) then
 							return false
