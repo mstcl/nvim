@@ -3,6 +3,7 @@ local opt_local = vim.opt_local
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 local big = require("core.utils").big
+local exec = vim.api.nvim_command
 
 augroup("trim", {
 	"BufWritePre",
@@ -164,6 +165,32 @@ augroup("bigFile", {
 				vim.b.miniindentscope_disable = true
 				vim.b.miniindentscope_disable = true
 			end
+		end,
+	},
+})
+
+augroup("terminal", {
+	{ "TermOpen" },
+	{
+		pattern = "term://*",
+		callback = function()
+			exec("startinsert")
+			vim.wo.number = false
+			vim.wo.relativenumber = false
+			vim.wo.cursorline = false
+			vim.wo.statuscolumn = ""
+			-- Keymaps to leave
+			vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], { silent = true, buffer = 0 })
+			vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], { silent = true, buffer = 0 })
+			vim.keymap.set("t", "<C-Bslash>", [[<C-\><C-n>:lua require("core.terminal").Toggle()<CR>]], { silent = true, buffer = 0 })
+		end,
+	},
+}, {
+	{ "BufLeave" },
+	{
+		pattern = "term://*",
+		callback = function()
+			exec("stopinsert")
 		end,
 	},
 })
