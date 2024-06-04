@@ -33,7 +33,7 @@ map(
 	{ desc = "Clear screen & highlights" }
 )
 
-map("n", "<C-M>so", function ()
+map("n", "<C-M>so", function()
 	vim.opt.scrolloff = 999 - vim.o.scrolloff
 	vim.notify("Toggled sidescrolloff", vim.log.levels.INFO)
 end, { desc = "Toggle sidescrolloff" })
@@ -138,3 +138,6 @@ map("n", "gx", function()
 		old_gx.callback()
 	end
 end, { desc = old_gx.desc })
+
+-- open terminal
+map("n", "<C-Bslash>", function() require("core.terminal").Toggle() end)

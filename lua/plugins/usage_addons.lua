@@ -211,74 +211,6 @@ return {
 		end,
 	},
 	{
-		-- Terminal panel
-		"akinsho/toggleterm.nvim",
-		cmd = "ToggleTerm",
-		keys = {
-			{
-				"<C-Bslash>",
-				function()
-					local exec = vim.api.nvim_command
-					if vim.api.nvim_win_get_width(0) >= 150 then
-						exec("ToggleTerm direction=vertical")
-					else
-						exec("ToggleTerm direction=horizontal")
-					end
-				end,
-				desc = "Terminal",
-			},
-		},
-		opts = function()
-			return {
-				winbar = {
-					enabled = false,
-				},
-				size = function(term)
-					if term.direction == "horizontal" then
-						return 15
-					elseif term.direction == "vertical" then
-						return vim.o.columns * 0.4
-					end
-				end,
-				hide_numbers = true,
-				shade_filetypes = {},
-				autochdir = false,
-				shade_terminals = false,
-				highlights = {
-					Normal = {
-						link = "StatusLine",
-					},
-					StatusLine = {
-						link = "StatusLine",
-					},
-					StatusLineNC = {
-						link = "StatusLineNC",
-					},
-				},
-				direction = "vertical",
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("toggleterm").setup(opts)
-			end
-			augroup("toggleterm", {
-				{ "TermOpen" },
-				{
-					pattern = "term://*",
-					callback = function()
-						vim.wo.statuscolumn = ""
-						-- Keymaps to leave
-						local opts_b = { silent = true, buffer = 0 }
-						vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], opts_b)
-						vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts_b)
-						vim.keymap.set("t", "<C-Bslash>", [[<C-\><C-n>:ToggleTerm<CR>]], opts_b)
-					end,
-				},
-			})
-		end,
-	},
-	{
 		-- Distraction-free editing mode
 		"folke/zen-mode.nvim",
 		keys = {
@@ -553,9 +485,9 @@ return {
 			end
 			return {
 				items = {
-					starter.sections.recent_files(5, true, false),
+					starter.sections.recent_files(3, true, false),
 					starter.sections.recent_files(3, false, false),
-					starter.sections.sessions(3),
+					starter.sections.sessions(8),
 					quick(),
 				},
 				content_hooks = {
