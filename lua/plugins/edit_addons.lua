@@ -49,12 +49,6 @@ return {
 					},
 				},
 			},
-			{
-				"aspeddro/cmp-pandoc.nvim",
-				opts = {
-					filetypes = { "pandoc", "markdown", "rmd", "quarto" },
-				},
-			},
 		},
 		opts = function()
 			local cmp = require("cmp")
@@ -167,7 +161,6 @@ return {
 						group_index = 1,
 						max_item_count = 7,
 					},
-					{ name = "cmp_pandoc", priority = 9 },
 					{
 						name = "rg",
 						keyword_length = 3,

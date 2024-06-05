@@ -275,17 +275,6 @@ return {
 		},
 	},
 	{
-		-- Dim all but current paragraph object
-		"folke/twilight.nvim",
-		cmd = "Twilight",
-		opts = {
-			context = 5,
-			exclude = {
-				"markdown",
-			},
-		},
-	},
-	{
 		-- Utility to align text by delimiters
 		"echasnovski/mini.align",
 		keys = {
