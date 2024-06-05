@@ -1,4 +1,3 @@
 spell
 .luarc.json
-lazy-lock.json
 lua/variables.lua
