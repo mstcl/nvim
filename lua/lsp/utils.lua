@@ -73,7 +73,7 @@ end
 function M.configure_builtin_diagnostic()
 	vim.diagnostic.config({
 		codelens = {
-			enabled = true,
+			enabled = false,
 		},
 		---@return boolean|fun()
 		virtual_text = function()
