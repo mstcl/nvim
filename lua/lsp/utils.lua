@@ -3,17 +3,31 @@ local conf = require("core.variables")
 local M = {}
 
 function M.on_attach(client, bufnr)
+	-- Prevent LSP from overwriting treesitter color settings
+	vim.highlight.priorities.semantic_tokens = 95
+
 	-- setup mappings
 	require("lsp.mappings").setup(client, bufnr)
 
+	-- inlay hints
 	if client.server_capabilities.inlayHintProvider then
 		vim.lsp.inlay_hint.enable(conf.lsp_features.inlay_hints)
+	end
+
+	-- code lens
+	if client.server_capabilities.codeLensProvider then
+		vim.lsp.codelens.refresh()
+		vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+			buffer = bufnr,
+			callback = vim.lsp.codelens.refresh,
+		})
 	end
 
 	if client.server_capabilities.documentSymbolProvider then
 		require("nvim-navic").attach(client, bufnr)
 	end
 
+	-- Workarounds for golsp
 	if client.name == "gopls" then
 		if not client.server_capabilities.semanticTokensProvider then
 			local semantic = client.config.capabilities.textDocument.semanticTokens
