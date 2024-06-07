@@ -13,7 +13,7 @@ lsp_enabled: true # enable lsp core, which is mason, lspconfig, none-ls
 # which means the setting only turns them on/off by default.
 
 lsp_features:
-  virtual_text: false # virtual text diagnostic.
+  virtual_text: false # virtual text diagnostic (toggle-able).
   inlay_hints: false # default inlay hints (toggle-able).
 
 ui_features:
