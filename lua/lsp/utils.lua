@@ -59,20 +59,26 @@ M.handlers = {
 	}),
 }
 
+---@return table
+function M.virtual_text_configs()
+	return {
+		spacing = 4,
+		source = "if_many",
+		prefix = "●",
+		suffix = " ",
+	}
+end
+
 -- Configure builtin diagnostics
 function M.configure_builtin_diagnostic()
 	vim.diagnostic.config({
+		codelens = {
+			enabled = true,
+		},
 		---@return boolean|fun()
 		virtual_text = function()
 			if require("core.variables").lsp_features.virtual_text then
-				return {
-					spacing = 4,
-					prefix = "",
-					format = function(diagnostic)
-						return string.format(require("core.variables").lsp_vt_signs[diagnostic.severity])
-					end,
-					suffix = " ",
-				}
+				return M.virtual_text_configs()
 			end
 			return false
 		end,
