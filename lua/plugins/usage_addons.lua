@@ -68,7 +68,7 @@ return {
 			},
 			{
 				"<leader>/",
-				"<cmd>FzfLua live_grep path_shorten=true<cr>",
+				"<cmd>FzfLua live_grep path_shorten=true multiline=2<cr>",
 				desc = "Grep workspace",
 			},
 			{
