@@ -629,7 +629,7 @@ return {
 			},
 			{
 				"<C-M>gh",
-				function ()
+				function()
 					require("mini.diff").toggle_overlay()
 				end,
 				desc = "Preview git hunks inline",
