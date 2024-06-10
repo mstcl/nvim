@@ -56,6 +56,10 @@ function M.setup(client, bufnr)
 		)
 	end
 
+	if client.server_capabilities.codeLensProvider then
+		map({ "n" }, "gl", vim.lsp.codelens.run, { desc = "Pick code lens", buffer = bufnr })
+	end
+
 	if client.server_capabilities.declarationProvider then
 		map("n", "gD", vim.lsp.buf.declaration, { desc = "Symbol declaration", buffer = bufnr })
 	end
