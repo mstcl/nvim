@@ -262,15 +262,19 @@ return {
 				vim.api.nvim_set_hl(0, "ZenBg", { link = "Normal" })
 				vim.g.zen_indent_cache = vim.b.miniindentscope_disable
 				vim.g.zen_notify_cache = vim.b.mininotify_disable
+				vim.g.showbreak = vim.o.showbreak
+
 				vim.b.miniindentscope_disable = true
 				vim.b.mininotify_disable = true
 				vim.g.zen_foldcolumn_cache = vim.g.foldcolumn
 				vim.g.foldcolumn = false
+				vim.o.showbreak = ""
 			end,
 			on_close = function(_)
 				vim.b.mininotify_disable = vim.g.zen_notify_cache
 				vim.b.miniindentscope_disable = vim.g.zen_indent_cache
 				vim.g.foldcolumn = vim.g.zen_foldcolumn_cache
+				vim.o.showbreak = vim.g.showbreak
 			end,
 		},
 	},
