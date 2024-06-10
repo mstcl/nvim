@@ -112,15 +112,9 @@ highlight! link @markup.heading.5.marker Delimiter
 highlight! link @markup.heading.6.marker Delimiter
 highlight! link @punctuation Delimiter
 highlight! link @punctuation.delimiter.yaml Delimiter
-highlight DiagnosticFloatingOk guifg=#184e1e guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight! link DiagnosticSignOk DiagnosticFloatingOk
-highlight DiagnosticSignError guifg=#74351e guibg=#dcb892 guisp=NONE blend=NONE gui=NONE
 highlight! link LspDiagnosticsSignError DiagnosticSignError
-highlight DiagnosticSignHint guifg=#630e49 guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight! link LspDiagnosticsSignHint DiagnosticSignHint
-highlight DiagnosticSignInfo guifg=#26126d guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight! link LspDiagnosticsSignInformation DiagnosticSignInfo
-highlight DiagnosticSignWarn guifg=#573e1a guibg=#d6c890 guisp=NONE blend=NONE gui=NONE
 highlight! link LspDiagnosticsSignWarning DiagnosticSignWarn
 highlight DiagnosticUnderlineOk guifg=NONE guibg=NONE guisp=#184e1e blend=NONE gui=undercurl
 highlight DiagnosticUnnecessary guifg=NONE guibg=NONE guisp=#574b42 blend=NONE gui=underdotted
@@ -144,9 +138,11 @@ highlight! link @module Directory
 highlight! link @org.agenda.scheduled Directory
 highlight Error guifg=#74351e guibg=#dcb892 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticError Error
+highlight! link DiagnosticSignError Error
 highlight! link @comment.error Error
 highlight ErrorMsg guifg=#74351e guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingError ErrorMsg
+highlight! link DiagnosticVirtualTextError ErrorMsg
 highlight! link debugBreakpoint ErrorMsg
 highlight! link @function.macro ErrorMsg
 highlight Exception guifg=#630e49 guibg=NONE guisp=NONE blend=NONE gui=bold
@@ -169,9 +165,11 @@ highlight! link @lsp.type.function Function
 highlight! link @lsp.type.method Function
 highlight Hint guifg=#630e49 guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticHint Hint
+highlight! link DiagnosticSignHint Hint
 highlight! link @comment.hint Hint
 highlight HintMsg guifg=#630e49 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingHint HintMsg
+highlight! link DiagnosticVirtualTextHint HintMsg
 highlight Identifier guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link Ignore Identifier
 highlight! link Operator Identifier
@@ -189,10 +187,12 @@ highlight Include guifg=#793454 guibg=NONE guisp=NONE blend=NONE gui=italic
 highlight! link @keyword.import Include
 highlight Info guifg=#26126d guibg=#d1ccde guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticInfo Info
+highlight! link DiagnosticSignInfo Info
 highlight! link @comment.note Info
 highlight! link @comment.ok Info
 highlight InfoMsg guifg=#26126d guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingInfo InfoMsg
+highlight! link DiagnosticVirtualTextInfo InfoMsg
 highlight Keyword guifg=#630e49 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Label guifg=#793454 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight LineNr guifg=#bdb1a8 guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -222,8 +222,10 @@ highlight! link MiniStarterItemPrefix MiniStarterCurrent
 highlight MiniStarterHeader guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link MiniStarterFooter MiniStarterHeader
 highlight! link MiniStarterItem MiniStarterHeader
-highlight MiniStarterQuery guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight MoreMsg guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link DiagnosticFloatingOk MoreMsg
+highlight! link DiagnosticSignOk MoreMsg
+highlight! link DiagnosticVirtualTextOk MoreMsg
 highlight NavicSeparator guifg=#837163 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight NeogitDiffContext guifg=#837163 guibg=#e9e5e2 guisp=NONE blend=NONE gui=NONE
 highlight NeogitDiffContextCursor guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
@@ -276,6 +278,7 @@ highlight! link Substitute Search
 highlight SignColumn guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Special guifg=#26126d guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link DressingSelectIdx Special
+highlight! link MiniStarterQuery Special
 highlight! link @lsp.type.keyword.yaml.ansible Special
 highlight! link @string.special.symbol Special
 highlight SpecialComment guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=bold
@@ -387,11 +390,13 @@ highlight! link WinSeparator VertSplit
 highlight Visual guifg=NONE guibg=#c8beb7 guisp=NONE blend=NONE gui=NONE
 highlight! link VisualNOS Visual
 highlight Warning guifg=#573e1a guibg=#d6c890 guisp=NONE blend=NONE gui=NONE
+highlight! link DiagnosticSignWarn Warning
 highlight! link DiagnosticWarn Warning
 highlight! link @comment.warning Warning
 highlight WarningMsg guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link Debug WarningMsg
 highlight! link DiagnosticFloatingWarn WarningMsg
+highlight! link DiagnosticVirtualTextWarn WarningMsg
 highlight! link ModeMsg WarningMsg
 highlight WhichKey guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight WhichKeyBorder guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
