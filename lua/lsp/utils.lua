@@ -15,13 +15,13 @@ function M.on_attach(client, bufnr)
 	end
 
 	-- code lens
-	if client.server_capabilities.codeLensProvider then
-		vim.lsp.codelens.refresh()
-		vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-			buffer = bufnr,
-			callback = vim.lsp.codelens.refresh,
-		})
-	end
+	-- if client.server_capabilities.codeLensProvider then
+	-- 	vim.lsp.codelens.refresh()
+	-- 	vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+	-- 		buffer = bufnr,
+	-- 		callback = vim.lsp.codelens.refresh,
+	-- 	})
+	-- end
 
 	if client.server_capabilities.documentSymbolProvider then
 		require("nvim-navic").attach(client, bufnr)
