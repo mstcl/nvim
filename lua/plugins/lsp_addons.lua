@@ -2,6 +2,7 @@ local lsp_defaults = require("lsp.utils")
 local on_attach = lsp_defaults.on_attach
 local handlers = lsp_defaults.handlers
 local capabilities = lsp_defaults.capabilities
+local border = require("core.variables").border
 
 local conf = require("core.variables")
 local cond = conf.lsp_enabled
@@ -499,7 +500,7 @@ return {
 			return {
 				lsp = {
 					hover = {
-						border = "single",
+						border = border,
 					},
 				},
 				buffers = {

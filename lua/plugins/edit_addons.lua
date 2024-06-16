@@ -1,4 +1,5 @@
 local cond = require("core.variables").edit_features
+local border = require("core.variables").border
 
 -- Plugins that add extra functionality with keybindings or while editing
 return {
@@ -64,11 +65,11 @@ return {
 				},
 				confirm_opts = {
 					behavior = cmp.ConfirmBehavior.Replace,
-					select = true,
+					select = false,
 				},
-				preselect = cmp.PreselectMode.Item,
+				preselect = cmp.PreselectMode.None,
 				completion = {
-					completeopt = "menu,menuone,noinsert",
+					completeopt = "menu,menuone,noinsert,noselect",
 				},
 				sorting = {
 					priority_weight = 1.0,
@@ -79,7 +80,7 @@ return {
 					["<C-E>"] = cmp.mapping.complete_common_string(),
 					["<CR>"] = function(fallback)
 						if cmp.core.view:visible() or vim.fn.pumvisible() == 1 then
-							if cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }) then
+							if cmp.confirm() then
 								return
 							end
 						end
@@ -128,7 +129,7 @@ return {
 						scrollbar = false,
 					},
 					documentation = {
-						border = "single",
+						border = border,
 						winhighlight = "NormalFloat:CmpDocumentation,FloatBorder:CmpDocumentationBorder",
 						max_width = 120,
 						max_height = math.floor(vim.o.lines * 0.3),
@@ -210,7 +211,7 @@ return {
 		"echasnovski/mini.surround",
 		version = false,
 		keys = {
-			{ "gsa", desc = "Add surrounding", mode = { "n", "v" } },
+			{ "gsa", desc = "Add surrounding",        mode = { "n", "v" } },
 			{ "gsd", desc = "Delete surrounding" },
 			{ "gsf", desc = "Find right surrounding" },
 			{ "gsF", desc = "Find left surrounding" },
@@ -278,16 +279,16 @@ return {
 		-- Keybindings to move lines and blocks
 		"fedepujol/move.nvim",
 		keys = {
-			{ "<A-j>", ":MoveBlock(1)<cr>", mode = "v", desc = "Move block down" },
-			{ "<A-k>", ":MoveBlock(-1)<cr>", mode = "v", desc = "Move block up" },
+			{ "<A-j>", ":MoveBlock(1)<cr>",   mode = "v", desc = "Move block down" },
+			{ "<A-k>", ":MoveBlock(-1)<cr>",  mode = "v", desc = "Move block up" },
 			{ "<A-h>", ":MoveHBlocK(-1)<cr>", mode = "v", desc = "Move block left" },
-			{ "<A-l>", ":MoveHBlock(1)<cr>", mode = "v", desc = "Move block right" },
-			{ "<A-j>", ":MoveLine(1)<cr>", mode = "n", desc = "Move line up" },
-			{ "<A-k>", ":MoveLine(-1)<cr>", mode = "n", desc = "Move line down" },
-			{ "<A-h>", ":MoveHChar(-1)<cr>", mode = "n", desc = "Move char left" },
-			{ "<A-l>", ":MoveHChar(1)<cr>", mode = "n", desc = "Move char right" },
-			{ "<A-f>", ":MoveWord(1)<cr>", mode = "n", desc = "Move word forward" },
-			{ "<A-b>", ":MoveWord(-1)<cr>", mode = "n", desc = "Move word backward" },
+			{ "<A-l>", ":MoveHBlock(1)<cr>",  mode = "v", desc = "Move block right" },
+			{ "<A-j>", ":MoveLine(1)<cr>",    mode = "n", desc = "Move line up" },
+			{ "<A-k>", ":MoveLine(-1)<cr>",   mode = "n", desc = "Move line down" },
+			{ "<A-h>", ":MoveHChar(-1)<cr>",  mode = "n", desc = "Move char left" },
+			{ "<A-l>", ":MoveHChar(1)<cr>",   mode = "n", desc = "Move char right" },
+			{ "<A-f>", ":MoveWord(1)<cr>",    mode = "n", desc = "Move word forward" },
+			{ "<A-b>", ":MoveWord(-1)<cr>",   mode = "n", desc = "Move word backward" },
 		},
 		opts = function()
 			return {
@@ -480,7 +481,7 @@ return {
 						}
 						return { from = from, to = to }
 					end,
-					u = ai.gen_spec.function_call(), -- u for "Usage"
+					u = ai.gen_spec.function_call(),            -- u for "Usage"
 					U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
 				},
 			}
