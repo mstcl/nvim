@@ -292,6 +292,7 @@ return {
 		init = function()
 			vim.g.loaded_netrw = 1
 			vim.g.loaded_netrwPlugin = 1
+			-- Open oil when running nvim on a directory
 			vim.api.nvim_create_autocmd("BufWinEnter", {
 				nested = true,
 				callback = function(info)
@@ -314,6 +315,7 @@ return {
 		end,
 		opts = {
 			default_file_explorer = true,
+			experimental_watch_for_changes = true,
 			keymaps = {
 				["g?"] = "actions.show_help",
 				["<CR>"] = "actions.select",
@@ -333,26 +335,31 @@ return {
 				{
 					"type",
 					icons = {
-						directory = "d",
+						directory = "+",
 						fifo = "p",
-						file = "-",
+						file = "·",
 						link = "l",
 						socket = "s",
 					},
+					highlight = "Special",
 				},
-				{ "permissions" },
-				{ "size",       highlight = "Special" },
-				{ "mtime",      highlight = "Number" },
+				{ "permissions", highlight = "Number" },
 			},
 			float = {
-				padding = 4,
-				border = "single",
+				padding = 0,
+				border = border,
+				max_width = math.floor(vim.api.nvim_win_get_width(0) * 0.4),
+				max_height = math.floor(vim.api.nvim_win_get_height(0) * 0.4),
+				override = function(conf)
+					conf.style = "minimal"
+					return conf
+				end,
 			},
 			preview = {
-				border = "single",
+				border = border,
 			},
 			progress = {
-				border = "single",
+				border = border,
 			},
 			win_options = {
 				number = false,
@@ -362,10 +369,10 @@ return {
 				statuscolumn = "",
 			},
 			keymaps_help = {
-				border = "single",
+				border = border,
 			},
 			ssh = {
-				border = "single",
+				border = border,
 			},
 			cleanup_delay_ms = false,
 			delete_to_trash = true,
@@ -576,25 +583,25 @@ return {
 		},
 		opts = {
 			form = {
-				border = "single",
+				border = border,
 				win_opts = {
 					winblend = 0,
 				},
 			},
 			confirm = {
-				border = "single",
+				border = border,
 				win_opts = {
 					winblend = 0,
 				},
 			},
 			task_win = {
-				border = "single",
+				border = border,
 				win_opts = {
 					winblend = 0,
 				},
 			},
 			help_win = {
-				border = "single",
+				border = border,
 				win_opts = {
 					winblend = 0,
 				},
