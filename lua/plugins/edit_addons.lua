@@ -65,11 +65,11 @@ return {
 				},
 				confirm_opts = {
 					behavior = cmp.ConfirmBehavior.Replace,
-					select = true,
+					select = false,
 				},
-				preselect = cmp.PreselectMode.Item,
+				preselect = cmp.PreselectMode.None,
 				completion = {
-					completeopt = "menu,menuone,noinsert",
+					completeopt = "menu,menuone,noinsert,noselect",
 				},
 				sorting = {
 					priority_weight = 1.0,
@@ -80,7 +80,7 @@ return {
 					["<C-E>"] = cmp.mapping.complete_common_string(),
 					["<CR>"] = function(fallback)
 						if cmp.core.view:visible() or vim.fn.pumvisible() == 1 then
-							if cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }) then
+							if cmp.confirm() then
 								return
 							end
 						end
