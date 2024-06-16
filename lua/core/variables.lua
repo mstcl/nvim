@@ -195,4 +195,6 @@ M.org_agenda_files = {
 
 M.zk_wiki = "~/shared/wiki"
 
+M.border = "single"
+
 return M
