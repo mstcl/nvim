@@ -28,7 +28,7 @@
     - name: Install python dependencies for neovim
       tags: packages
       ansible.builtin.pip:
-        requirements: "{{ playbook_dir }}/requirements.txt"
+        requirements: "{{ playbook_dir }}/requirements/core.txt"
         state: present
         virtualenv: "~/.venv/nvim"
 
@@ -36,7 +36,7 @@
       tags: plugins
       when: syntax_features.quarto
       ansible.builtin.pip:
-        requirements: "{{ playbook_dir }}/requirements_python_stack.txt"
+        requirements: "{{ playbook_dir }}/requirements/python.txt"
         state: present
         virtualenv: "~/.venv/nvim"
 
