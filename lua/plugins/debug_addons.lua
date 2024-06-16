@@ -1,4 +1,5 @@
 local cond = require("core.variables").dap_enabled
+local border = require("core.variables").border
 
 -- Plugins that add debugging into nvim
 return {
@@ -118,7 +119,7 @@ return {
 			floating = {
 				max_height = nil,
 				max_width = nil,
-				border = "single",
+				border = border,
 				mappings = {
 					close = { "q", "<Esc>" },
 				},
