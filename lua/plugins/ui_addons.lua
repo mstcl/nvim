@@ -1,5 +1,6 @@
 local augroup = require("core.utils").augroup
 local cond = require("core.variables").ui_features
+local border = require("core.variables").border
 
 -- Plugins that modify UI
 return {
@@ -35,7 +36,7 @@ return {
 				prompt_align = "left",
 				start_in_insert = true,
 				relative = "editor",
-				border = "single",
+				border = border,
 				prefer_width = 20,
 				max_width = nil,
 				min_width = 10,

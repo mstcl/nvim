@@ -1,4 +1,5 @@
 local augroup = require("core.utils").augroup
+local border = require("core.variables").border
 
 -- Plugins which add additional ways to use nvim
 return {
@@ -107,7 +108,7 @@ return {
 						layout = "flex",
 						flip_columns = 120,
 					},
-					border = "single",
+					border = border,
 				},
 				hls = {
 					normal = "TelescopeNormal",

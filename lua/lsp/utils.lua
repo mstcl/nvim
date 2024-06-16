@@ -1,5 +1,6 @@
 local lsp = vim.lsp
 local conf = require("core.variables")
+local border = require("core.variables").border
 local M = {}
 
 function M.on_attach(client, bufnr)
@@ -53,7 +54,7 @@ function M.on_attach(client, bufnr)
 end
 
 M.handlers = {
-	["textDocument/hover"] = lsp.with(lsp.handlers.hover, { border = "single" }),
+	["textDocument/hover"] = lsp.with(lsp.handlers.hover, { border = border }),
 	["textDocument/publishDiagnostics"] = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
 		update_in_insert = false,
 	}),
@@ -92,7 +93,7 @@ function M.configure_builtin_diagnostic()
 				"InsertEnter",
 				"FocusLost",
 			},
-			border = "single",
+			border = border,
 			source = "if_many",
 			focus = false,
 		},

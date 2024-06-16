@@ -1,4 +1,5 @@
 local cond = require("core.variables").edit_features
+local border = require("core.variables").border
 
 -- Plugins that add extra functionality with keybindings or while editing
 return {
@@ -128,7 +129,7 @@ return {
 						scrollbar = false,
 					},
 					documentation = {
-						border = "single",
+						border = border,
 						winhighlight = "NormalFloat:CmpDocumentation,FloatBorder:CmpDocumentationBorder",
 						max_width = 120,
 						max_height = math.floor(vim.o.lines * 0.3),
