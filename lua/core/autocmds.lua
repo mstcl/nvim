@@ -170,7 +170,7 @@ augroup("bigFile", {
 })
 
 augroup("terminal", {
-	{ "TermOpen" },
+	{ "TermOpen", "BufWinEnter", "WinEnter" },
 	{
 		pattern = "term://*",
 		callback = function()

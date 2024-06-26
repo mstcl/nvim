@@ -17,10 +17,12 @@ function M.on_attach(client, bufnr)
 
 	-- code lens
 	-- if client.server_capabilities.codeLensProvider then
-	-- 	vim.lsp.codelens.refresh()
+	-- 	vim.lsp.codelens.refresh({ buffer = bufnr, client = client })
 	-- 	vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
 	-- 		buffer = bufnr,
-	-- 		callback = vim.lsp.codelens.refresh,
+	-- 		callback = function()
+	-- 			vim.lsp.codelens.refresh({ buffer = bufnr, client = client })
+	-- 		end,
 	-- 	})
 	-- end
 
@@ -54,7 +56,11 @@ function M.on_attach(client, bufnr)
 end
 
 M.handlers = {
-	["textDocument/hover"] = lsp.with(lsp.handlers.hover, { border = border }),
+	["textDocument/hover"] = lsp.with(lsp.handlers.hover, {
+		border = border,
+		title = "Information",
+		max_width = 35,
+	}),
 	["textDocument/publishDiagnostics"] = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
 		update_in_insert = false,
 	}),
