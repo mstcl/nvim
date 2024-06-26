@@ -79,12 +79,12 @@ return {
 			},
 			{
 				"gr",
-				"<cmd>FzfLua lsp_references path_shorten=true<cr>",
+				"<cmd>FzfLua lsp_references path_shorten=true ignore_current_line=true<cr>",
 				desc = "Symbol references",
 			},
 			{
 				"gI",
-				"<cmd>FzfLua lsp_implementations path_shorten=true<cr>",
+				"<cmd>FzfLua lsp_implementations path_shorten=true ignore_current_line=true<cr>",
 				desc = "Symbol implementation",
 			},
 		},
@@ -181,6 +181,10 @@ return {
 					},
 				},
 				lsp = {
+					symbol_fmt = function(s)
+						return s:lower() .. "\t"
+					end,
+					child_prefix = false,
 					winopts = {
 						width = 0.3,
 						height = 0.5,
