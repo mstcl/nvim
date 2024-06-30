@@ -111,7 +111,7 @@ map("x", "<", "<gv", { desc = "Unindent" })
 map("x", ">", ">gv", { desc = "Indent" })
 
 -- Folding
-map("n", "<Tab>", "za", { desc = "Toggle current fold" })
+map("n", "<S-Tab>", "za", { desc = "Toggle current fold" })
 
 -- Better search
 map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
