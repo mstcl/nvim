@@ -425,6 +425,14 @@ return {
 							filetypes = { "markdown", "quarto", "org", "tex" },
 						})
 					)
+				elseif source == "golangci_lint" then
+					table.insert(
+						null_sources,
+						null_ls.builtins.diagnostics[source].with({
+							args = { "run", "--fix=false", "--out-format=json" },
+							extra_args = { "--enable", "goconst,gocritic,gosec,wsl,sloglint,unconvert,unparam" },
+						})
+					)
 				else
 					table.insert(null_sources, null_ls.builtins.diagnostics[source])
 				end
