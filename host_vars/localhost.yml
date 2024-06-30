@@ -77,6 +77,7 @@ treesitter_sources:
   - "gowork"
   - "gotmpl"
   - "make"
+  - "terraform"
 
 # ~~ (2) VANITY ~~
 
@@ -155,6 +156,7 @@ lsp_sources:
   - "yamlls"
   - "zk"
   - "dockerls"
+  - "terraformls"
 
 # ~~ (4) NONE-LS SOURCES ~~
 
@@ -172,6 +174,7 @@ null_formatting_sources:
   - "cbfmt"
   - "goimports"
   - "gofumpt"
+  - "terraform_fmt"
 
 # !~~ (4b) HOVER SOURCES ~~!
 
@@ -189,6 +192,8 @@ null_diagnostics_sources:
   - "ansiblelint"
   - "mypy"
   - "golangci_lint"
+  - "tfsec"
+  - "terraform_validate"
 
 # !~~ (4d) CODE ACTIONS SOURCES ~~!
 

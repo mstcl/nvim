@@ -156,6 +156,7 @@ M.lsp_sources = {
 	"yamlls",
 	"zk",
 	"dockerls",
+	"terraformls",
 }
 
 M.null_formatting_sources = {
@@ -166,6 +167,7 @@ M.null_formatting_sources = {
 	"cbfmt",
 	"goimports",
 	"gofumpt",
+	"terraform_fmt",
 }
 
 M.null_hover_sources = {
@@ -181,6 +183,8 @@ M.null_diagnostics_sources = {
 	"ansiblelint",
 	"mypy",
 	"golangci_lint",
+	"tfsec",
+	"terraform_validate",
 }
 
 M.null_code_action_sources = {
