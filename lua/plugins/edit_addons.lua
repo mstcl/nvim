@@ -199,12 +199,7 @@ return {
 		-- Allows mapping custom escape keys without ruining typing experience.
 		"max397574/better-escape.nvim",
 		event = "InsertCharPre",
-		opts = {
-			mapping = { "jk" },
-			timeout = vim.o.timeoutlen,
-			clear_empty_lines = false,
-			keys = "<Esc>",
-		},
+		opts = {},
 	},
 	{
 		-- Add motions to surround objects with brackets etc.
