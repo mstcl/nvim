@@ -299,12 +299,6 @@ return {
 				end,
 			})
 		end,
-		config = function()
-			local wk = require("which-key")
-			wk.register({
-				["m"] = { name = "Molten operations" },
-			})
-		end,
 	},
 	{
 		-- Convert ipython notebooks to something sane
@@ -437,10 +431,6 @@ return {
 			},
 		},
 		config = function()
-			local wk = require("which-key")
-			wk.register({
-				["<leader>n"] = { name = "Notes (zk) commands" },
-			})
 			require("zk").setup({
 				picker = "fzf_lua",
 				auto_attach = {

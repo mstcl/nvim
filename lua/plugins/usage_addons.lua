@@ -1,5 +1,6 @@
 local augroup = require("core.utils").augroup
 local border = require("core.variables").border
+local conf = require("core.variables")
 
 -- Plugins which add additional ways to use nvim
 return {
@@ -288,7 +289,7 @@ return {
 		"echasnovski/mini.align",
 		keys = {
 			{ "gaa", mode = "v" },
-			{ "gA",  mode = "v" },
+			{ "gA", mode = "v" },
 		},
 		version = false,
 
@@ -397,51 +398,46 @@ return {
 		keys = {
 			{
 				"<C-M>k",
-				"<cmd>WhichKey<cr>",
+				function()
+					require("which-key").show()
+				end,
 				desc = "List all keymaps",
 			},
 		},
 		opts = function()
 			return {
-				presets = {
-					operators = false,
-					motions = false,
-				},
-				key_labels = {
-					["<space>"] = "␣",
-					["<cr>"] = "↵",
-					["<tab>"] = "↹",
-					["<Left>"] = "←",
-					["<Right>"] = "→",
-					["<Up>"] = "↑",
-					["<Down>"] = "↓",
-					["<leader>"] = ",",
-					["<c-w>"] = "<C-W>",
-				},
+				delay = 400,
 				ignore_missing = false,
 				icons = {
-					breadcrumb = "▸",
-					separator = "⟫",
+					separator = "▸",
+					breadcrumb = "»",
+					colors = false,
+					rules = false,
 				},
 				triggers_blacklist = {
 					i = { "j", "k" },
 					v = { "j", "k" },
 					n = { "d", "y" },
 				},
+				sort = { "alphanum" },
 			}
 		end,
 		config = function(_, opts)
 			local wk = require("which-key")
-			wk.register({
-				["<leader>"] = { name = "Leader commands (pickers & LSP)" },
-				["<leader>g"] = { name = "Git commands" },
-				["<C-M>"] = { name = "Toggle components" },
-				["<C-S>"] = { name = "Split windows" },
-				["["] = { name = "Previous" },
-				["]"] = { name = "Next" },
-				["z"] = { name = "Folds, spelling & align" },
-				["g"] = { name = "LSP, comment, case & navigation" },
-				["gs"] = { name = "Surround" },
+			wk.add({
+				{ "<leader>", group = "Leader commands (pickers & LSP)" },
+				{ "<leader>g", group = "Git commands" },
+				{ "<C-M>", group = "Toggle components" },
+				{ "<C-S>", group = "Split windows" },
+				{ "[", group = "Previous" },
+				{ "]", group = "Next" },
+				{ "z", group = "Folds, spelling & align" },
+				{ "g", group = "LSP, comment, case & navigation" },
+				{ "gs", group = "Surround" },
+				{ "<leader>n", group = "Notes (zk) commands", cond = conf.syntax_features.markdown },
+				{ "m", group = "Molten operations", cond = conf.syntax_features.quarto },
+				{ "<leader>d", group = "DAP commands", cond = conf.dap_enabled },
+				{ "go", group = "Otter (code block) symbols", cond = conf.lsp_enabled },
 			})
 			if opts then
 				wk.setup(opts)

@@ -55,12 +55,6 @@ return {
 				desc = "Toggle DAP ui",
 			},
 		},
-		init = function()
-			local wk = require("which-key")
-			wk.register({
-				["<leader>d"] = { name = "DAP commands" },
-			})
-		end,
 	},
 	{
 		-- Show debugging variable values as virtual text
