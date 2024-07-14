@@ -517,10 +517,6 @@ return {
 			}
 		end,
 		config = function(_, opts)
-			local wk = require("which-key")
-			wk.register({
-				["go"] = { name = "Otter (code block) symbols" },
-			})
 			if opts then
 				require("otter").setup(opts)
 			end
