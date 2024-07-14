@@ -13,6 +13,7 @@ vim.filetype.add({
 		[".zshrc"] = "sh",
 		[".zshenv"] = "sh",
 		[".zprofile"] = "sh",
+		[".envrc"] = "sh",
 	},
 	pattern = {
 		[".*/waybar/config"] = "jsonc",
