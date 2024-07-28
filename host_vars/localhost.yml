@@ -78,6 +78,7 @@ treesitter_sources:
   - "gotmpl"
   - "make"
   - "terraform"
+  - "query"
 
 # ~~ (2) VANITY ~~
 

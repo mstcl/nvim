@@ -74,6 +74,8 @@ M.treesitter_sources = {
 	"gowork",
 	"gotmpl",
 	"make",
+	"terraform",
+	"query",
 }
 
 M.dap_signs = {
