@@ -403,17 +403,11 @@ return {
 		opts = function()
 			return {
 				delay = 400,
-				ignore_missing = false,
 				icons = {
 					separator = "▸",
 					breadcrumb = "»",
 					colors = false,
 					rules = false,
-				},
-				triggers_blacklist = {
-					i = { "j", "k" },
-					v = { "j", "k" },
-					n = { "d", "y" },
 				},
 				sort = { "alphanum" },
 			}
