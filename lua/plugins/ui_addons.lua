@@ -92,6 +92,7 @@ return {
 				cursorline = true,
 			},
 			window = {
+				zindex = 20,
 				margin = {
 					horizontal = 0,
 					vertical = 0,
