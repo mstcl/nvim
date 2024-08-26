@@ -429,7 +429,7 @@ return {
 					table.insert(
 						null_sources,
 						null_ls.builtins.diagnostics[source].with({
-							args = { "run", "--fix=false", "--out-format=json" },
+							args = { "run", "--fix=false", "--out-format=json", "--concurency=4" },
 							extra_args = { "--enable", "goconst,gocritic,gosec,wsl,sloglint,unconvert,unparam" },
 						})
 					)
