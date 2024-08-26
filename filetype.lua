@@ -1,6 +1,7 @@
 vim.filetype.add({
 	extension = {
 		sbat = "sh",
+		d2 = "d2",
 		conf = "config",
 		rasi = "rasi",
 		rofi = "rasi",
