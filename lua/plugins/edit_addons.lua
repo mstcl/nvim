@@ -71,6 +71,10 @@ return {
 				completion = {
 					completeopt = "menu,menuone,noinsert,noselect",
 				},
+				performance = {
+					debounce = 0,
+					throttle = 0,
+				},
 				sorting = {
 					priority_weight = 1.0,
 				},
