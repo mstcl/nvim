@@ -79,7 +79,7 @@ treesitter_sources:
   - "make"
   - "terraform"
   - "query"
-  - "d2"
+  - "sql"
 
 # ~~ (2) VANITY ~~
 
