@@ -7,7 +7,6 @@ highlight! link @boolean Boolean
 highlight Character guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link SpecialKey Character
 highlight! link @character Character
-highlight! link @string.escape Character
 highlight CmpBorder guifg=#9e8d7f guibg=#e9e5e2 guisp=NONE blend=NONE gui=NONE
 highlight CmpDocumentation guifg=NONE guibg=#bdb2a9 guisp=NONE blend=NONE gui=NONE
 highlight CmpDocumentationBorder guifg=#bdb2a9 guibg=#bdb2a9 guisp=NONE blend=NONE gui=NONE
@@ -409,6 +408,7 @@ highlight WinBar guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight! link TelescopePreviewNormal WinBar
 highlight! link WinBarNC WinBar
 highlight lCursor guifg=bg guibg=fg guisp=NONE blend=NONE gui=NONE
+highlight @character.printf guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight @comment.todo guifg=#735057 guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight @error guifg=#7c4034 guibg=NONE guisp=#7c4034 blend=NONE gui=undercurl
 highlight @function.builtin guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=bold
@@ -439,6 +439,7 @@ highlight @org.headline.level6 guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gu
 highlight @org.keyword.done guifg=#464c3a guibg=#d0d8cc guisp=NONE blend=NONE gui=NONE
 highlight @org.keyword.todo guifg=#735057 guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight @punctuation.special guifg=#746458 guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight @string.escape guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight @string.special.url guifg=#464c3a guibg=NONE guisp=NONE blend=NONE gui=underline
 highlight @string.yaml guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight @variable.member guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
