@@ -80,6 +80,7 @@ treesitter_sources:
   - "terraform"
   - "query"
   - "sql"
+  - "printf"
 
 # ~~ (2) VANITY ~~
 

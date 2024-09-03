@@ -77,6 +77,7 @@ M.treesitter_sources = {
 	"terraform",
 	"query",
 	"sql",
+	"printf",
 }
 
 M.dap_signs = {
