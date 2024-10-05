@@ -116,7 +116,7 @@ return {
 					pattern = "*",
 					desc = "Lazy load tabline",
 					callback = function()
-						if vim.bo.filetype ~= "starter" and vim.o.showtabline == 0 then
+						if vim.bo.filetype ~= "ministarter" and vim.o.showtabline == 0 then
 							vim.o.showtabline = 2
 							require("mini.tabline").setup(opts)
 							vim.api.nvim_set_hl(0, "MiniTablineFill", { link = "TablineFill" })
@@ -170,7 +170,7 @@ return {
 					pattern = {
 						"fzf",
 						"toggleterm",
-						"starter",
+						"ministarter",
 						"lazy",
 					},
 					desc = "Disable indentscope",

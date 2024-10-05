@@ -103,7 +103,7 @@ augroup("loadUI", {
 		pattern = "*",
 		desc = "Lazy load UI",
 		callback = function()
-			if vim.bo.filetype ~= "starter" then
+			if vim.bo.filetype ~= "ministarter" then
 				if vim.o.laststatus == 0 then
 					vim.o.laststatus = 3
 				end
