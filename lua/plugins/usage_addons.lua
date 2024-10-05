@@ -289,7 +289,7 @@ return {
 		"echasnovski/mini.align",
 		keys = {
 			{ "gaa", mode = "v" },
-			{ "gA", mode = "v" },
+			{ "gA",  mode = "v" },
 		},
 		version = false,
 
@@ -419,19 +419,19 @@ return {
 		config = function(_, opts)
 			local wk = require("which-key")
 			wk.add({
-				{ "<leader>", group = "Leader commands (pickers & LSP)" },
+				{ "<leader>",  group = "Leader commands (pickers & LSP)" },
 				{ "<leader>g", group = "Git commands" },
-				{ "<C-M>", group = "Toggle components" },
-				{ "<C-S>", group = "Split windows" },
-				{ "[", group = "Previous" },
-				{ "]", group = "Next" },
-				{ "z", group = "Folds, spelling & align" },
-				{ "g", group = "LSP, comment, case & navigation" },
-				{ "gs", group = "Surround" },
-				{ "<leader>n", group = "Notes (zk) commands", cond = conf.syntax_features.markdown },
-				{ "m", group = "Molten operations", cond = conf.syntax_features.quarto },
-				{ "<leader>d", group = "DAP commands", cond = conf.dap_enabled },
-				{ "go", group = "Otter (code block) symbols", cond = conf.lsp_enabled },
+				{ "<C-M>",     group = "Toggle components" },
+				{ "<C-S>",     group = "Split windows" },
+				{ "[",         group = "Previous" },
+				{ "]",         group = "Next" },
+				{ "z",         group = "Folds, spelling & align" },
+				{ "g",         group = "LSP, comment, case & navigation" },
+				{ "gs",        group = "Surround" },
+				{ "<leader>n", group = "Notes (zk) commands",            cond = conf.syntax_features.markdown },
+				{ "m",         group = "Molten operations",              cond = conf.syntax_features.quarto },
+				{ "<leader>d", group = "DAP commands",                   cond = conf.dap_enabled },
+				{ "go",        group = "Otter (code block) symbols",     cond = conf.lsp_enabled },
 			})
 			if opts then
 				wk.setup(opts)
@@ -498,6 +498,34 @@ return {
 				require("mini.starter").setup(opts)
 			end
 		end,
+	},
+	{
+		"FabijanZulj/blame.nvim",
+		cmd = "BlameToggle",
+		keys = {
+			{
+				"<C-M>b",
+				function()
+					vim.cmd("BlameToggle window")
+					vim.notify("Toggled blame", vim.log.levels.INFO)
+				end,
+				desc = "Blame split",
+			},
+		},
+		opts = {
+			blame_options = { "-w" },
+			focus_blame = false,
+			colors = {
+
+				"#7c4034",
+				"#464c3a",
+				"#543227",
+				"#545468",
+				"#735057",
+				"#673d58",
+				"#493f37",
+			},
+		},
 	},
 	{
 		"NeogitOrg/neogit",
