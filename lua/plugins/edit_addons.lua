@@ -5,7 +5,8 @@ local border = require("core.variables").border
 return {
 	{
 		-- Autocompletion menu & plugins
-		"hrsh7th/nvim-cmp",
+		"iguanacucumber/magazine.nvim",
+		name = "nvim-cmp",
 		version = false,
 		event = { "InsertEnter" },
 		keys = {
