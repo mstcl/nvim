@@ -158,11 +158,11 @@ set.fillchars = {
 	diff = "╱",
 }
 set.listchars = {
-	tab = "  ▸",
+	tab = "  »",
 	extends = "›",
 	precedes = "‹",
 	nbsp = "∩",
-	eol = "¶",
+	eol = "¬",
 	trail = "×",
 	lead = " ",
 	space = "·",
