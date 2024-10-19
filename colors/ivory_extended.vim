@@ -387,7 +387,7 @@ highlight! link @markup.underline Underlined
 highlight! link @string.special.uri Underlined
 highlight VertSplit guifg=#ded8d3 guibg=#e9e5e2 guisp=NONE blend=NONE gui=NONE
 highlight! link WinSeparator VertSplit
-highlight Visual guifg=NONE guibg=#cec6bf guisp=NONE blend=NONE gui=NONE
+highlight Visual guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight! link VisualNOS Visual
 highlight Warning guifg=#573e1a guibg=#d6c890 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticSignWarn Warning
