@@ -1,5 +1,4 @@
 local augroup = require("core.utils").augroup
-local opt_local = vim.opt_local
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 local big = require("core.utils").big
@@ -55,7 +54,7 @@ augroup("editing", {
 		callback = function()
 			local vals = { "c", "r", "o" }
 			for _, val in ipairs(vals) do
-				opt_local.formatoptions:remove(val)
+				vim.opt_local.formatoptions:remove(val)
 			end
 		end,
 	},
@@ -76,9 +75,9 @@ augroup("textOpts", {
 		desc = "Enable text editing options, spellcheck and spell correction on certain filetypes",
 		pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd", "*.typ" },
 		callback = function()
-			opt_local.list = false
-			opt_local.spell = true
-			opt_local.cursorline = false
+			vim.opt_local.list = false
+			vim.opt_local.spell = true
+			vim.opt_local.cursorline = false
 			map("i", "<C-L>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
 		end,
 	},
@@ -182,7 +181,12 @@ augroup("terminal", {
 			-- Keymaps to leave
 			vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], { silent = true, buffer = 0 })
 			vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], { silent = true, buffer = 0 })
-			vim.keymap.set("t", "<C-Bslash>", [[<C-\><C-n>:lua require("core.terminal").Toggle()<CR>]], { silent = true, buffer = 0 })
+			vim.keymap.set(
+				"t",
+				"<C-Bslash>",
+				[[<C-\><C-n>:lua require("core.terminal").Toggle()<CR>]],
+				{ silent = true, buffer = 0 }
+			)
 		end,
 	},
 }, {
@@ -191,6 +195,24 @@ augroup("terminal", {
 		pattern = "term://*",
 		callback = function()
 			exec("stopinsert")
+		end,
+	},
+})
+
+augroup("visual", {
+	{ "ModeChanged" },
+	{
+		pattern = { "*:[vV\x16]*", "[vV\x16]*:*" },
+		callback = function()
+			vim.wo.list = true
+		end,
+	},
+}, {
+	{ "ModeChanged" },
+	{
+		pattern = { "[vV\x16]*:*" },
+		callback = function()
+			vim.wo.list = false
 		end,
 	},
 })
