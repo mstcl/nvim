@@ -105,7 +105,7 @@ set.sidescrolloff = 5
 set.scrolloff = 1
 
 -- Wrap & textwidth
-set.wrap = true
+set.wrap = false
 set.whichwrap = set.whichwrap + "<>[]hl"
 set.wrapmargin = 0
 set.textwidth = 0
