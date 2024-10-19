@@ -8,8 +8,8 @@ highlight Character guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link SpecialKey Character
 highlight! link @character Character
 highlight CmpBorder guifg=#9e8d7f guibg=#e9e5e2 guisp=NONE blend=NONE gui=NONE
-highlight CmpDocumentation guifg=NONE guibg=#bdb2a9 guisp=NONE blend=NONE gui=NONE
-highlight CmpDocumentationBorder guifg=#bdb2a9 guibg=#bdb2a9 guisp=NONE blend=NONE gui=NONE
+highlight CmpDocumentation guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
+highlight CmpDocumentationBorder guifg=#ded8d3 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight CmpItemAbbr guifg=#746458 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight CmpItemAbbrDefault guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight CmpItemAbbrDeprecated guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=strikethrough
@@ -149,11 +149,11 @@ highlight FlashBackdrop guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight FlashLabel guifg=#545468 guibg=#ced3dd guisp=NONE blend=NONE gui=NONE
 highlight FlashPromptIcon guifg=#ded8d3 guibg=#834c40 guisp=NONE blend=NONE gui=bold
 highlight! link @number.float Float
-highlight FloatBorder guifg=#cec6bf guibg=#cec6bf guisp=NONE blend=NONE gui=NONE
-highlight FloatFooter guifg=#493f37 guibg=#cec6bf guisp=NONE blend=NONE gui=bold
+highlight FloatBorder guifg=#ded8d3 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
+highlight FloatFooter guifg=#493f37 guibg=#ded8d3 guisp=NONE blend=NONE gui=bold
 highlight FloatShadow guifg=NONE guibg=black guisp=NONE blend=80 gui=NONE
 highlight FloatShadowThrough guifg=NONE guibg=black guisp=NONE blend=100 gui=NONE
-highlight FloatTitle guifg=#493f37 guibg=#cec6bf guisp=NONE blend=NONE gui=bold
+highlight FloatTitle guifg=#493f37 guibg=#ded8d3 guisp=NONE blend=NONE gui=bold
 highlight FoldColumn guifg=#9e8d7f guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight Folded guifg=#9e8d7f guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight Function guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
@@ -235,7 +235,7 @@ highlight! link EndOfBuffer NonText
 highlight! link Ignore NonText
 highlight! link MiniStarterInactive NonText
 highlight! link Whitespace NonText
-highlight NormalFloat guifg=#493f37 guibg=#cec6bf guisp=NONE blend=NONE gui=NONE
+highlight NormalFloat guifg=#493f37 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight NullLsInfoBorder guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight NullLsInfoHeader guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight NullLsInfoSources guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
