@@ -25,7 +25,7 @@ return {
 			},
 			{
 				"<leader>b",
-				"<cmd>FzfLua buffers path_shorten=true<cr>",
+				"<cmd>FzfLua buffers<cr>",
 				desc = "Buffer list",
 			},
 			{
@@ -135,6 +135,7 @@ return {
 					tab_title = "Directory",
 					tab_marker = "Directory",
 					live_sym = "Boolean",
+					scrollbar = "NonText"
 				},
 				fzf_colors = {
 					["fg"] = { "fg", "TelescopeNormal" },
