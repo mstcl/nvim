@@ -352,6 +352,11 @@ return {
 			return {
 				default_mappings = false,
 				disable_diagnostics = true,
+				highlights = {
+					incoming = "DiffAdd",
+					current = "DiffText",
+					ancestor = "DiffChange"
+				},
 			}
 		end,
 		config = function(_, opts)
