@@ -115,9 +115,9 @@ end
 
 M.capabilities = lsp.protocol.make_client_capabilities()
 
-local ok, cmp_lsp = pcall(require, "cmp_nvim_lsp")
+local ok, blink = pcall(require, "blink.cmp")
 if ok and conf.edit_features.completion then
-	M.capabilities = cmp_lsp.default_capabilities(M.capabilities)
+	M.capabilities = blink.get_lsp_capabilities(M.capabilities)
 end
 M.capabilities.textDocument.completion.completionItem.snippetSupport = true
 M.capabilities.textDocument.foldingRange = {
