@@ -11,40 +11,6 @@ local sources = conf.lsp_sources
 -- Plugins that add to nvim LSP functionalities
 return {
 	{
-		"linrongbin16/lsp-progress.nvim",
-		event = "LspAttach",
-		cond = cond,
-		opts = {
-			series_format = function(title, message, percentage, _)
-				local builder = {}
-				local has_title = false
-				local has_message = false
-				if type(message) == "string" and string.len(message) > 0 then
-					has_message = true
-				end
-				if type(title) == "string" and string.len(title) > 0 then
-					has_title = true
-				end
-				if percentage and (has_title or has_message) then
-					table.insert(builder, string.format("%.0f%%", percentage))
-				end
-				return table.concat(builder, " ")
-			end,
-			client_format = function(client_name, _, series_messages)
-				return #series_messages > 0 and client_name .. " " .. table.concat(series_messages, " ") .. " " or nil
-			end,
-			format = function(client_messages)
-				if #client_messages > 0 then
-					return table.concat(client_messages, " ")
-				end
-				if #vim.lsp.get_clients() > 0 then
-					return ""
-				end
-				return ""
-			end,
-		},
-	},
-	{
 		-- Code tools forge
 		"williamboman/mason.nvim",
 		event = { "BufReadPre", "BufNewFile" },
