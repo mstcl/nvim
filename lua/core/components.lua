@@ -346,6 +346,7 @@ M.components = {
 	filepath = [[%{%v:lua.require'core.components'.get_filepath()%}]],
 	filename = [[%{%v:lua.require'core.components'.get_filename()%}]],
 	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%2c %2p%#statuslinealt#%%":""%}]],
+	cmd = [[%S]],
 	mode = [[%{%v:lua.require'core.components'.get_mode()%}]],
 	cwd = [[%{%v:lua.require'core.components'.get_cwd()%}]],
 	indentation =

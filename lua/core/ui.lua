@@ -39,6 +39,8 @@ _G.get_statusline = function()
 		components.close_bracket,
 		components.hl_main,
 		components.padding,
+		components.symbol,
+		components.padding,
 		components.diagnostics,
 		components.truncate,
 		-- Messy middle bit
@@ -56,11 +58,11 @@ _G.get_statusline = function()
 		components.fenc,
 		-- Right most
 		components.align,
+		--
 		components.hl_alt,
-		components.progress,
+		components.cmd,
 		--
-		components.symbol,
-		--
+		components.hl_alt,
 		components.pos,
 		--
 		components.padding,

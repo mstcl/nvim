@@ -49,6 +49,7 @@ set.cursorlineopt = "number"
 set.hidden = true
 set.showmode = false
 set.showcmd = true
+set.showcmdloc = "statusline"
 set.cmdheight = 0
 set.ruler = true
 set.showtabline = 0
