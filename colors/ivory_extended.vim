@@ -73,6 +73,7 @@ highlight CmpItemMenuDefault guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=
 highlight ColorColumn guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight! link debugPC ColorColumn
 highlight Comment guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link BlinkCmpGhostText Comment
 highlight! link MiniStarterItem Comment
 highlight! link @comment Comment
 highlight! link @lsp.type.comment Comment
@@ -120,6 +121,7 @@ highlight DiagnosticUnderlineOk guifg=NONE guibg=NONE guisp=#464c3a blend=NONE g
 highlight DiagnosticUnnecessary guifg=NONE guibg=NONE guisp=#574b42 blend=NONE gui=underdotted
 highlight DiffAdd guifg=#637337 guibg=#dae5cd guisp=NONE blend=NONE gui=NONE
 highlight! link Added DiffAdd
+highlight! link NeogitDiffAdd DiffAdd
 highlight! link diffAdded DiffAdd
 highlight DiffChange guifg=#735057 guibg=#e1d2d6 guisp=NONE blend=NONE gui=NONE
 highlight! link Changed DiffChange
@@ -223,12 +225,13 @@ highlight! link DiagnosticSignOk MoreMsg
 highlight! link DiagnosticVirtualTextOk MoreMsg
 highlight! link DiagnosticOk MsgArea
 highlight NavicSeparator guifg=#837163 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
-highlight NeogitDiffContext guifg=#837163 guibg=#e9e5e2 guisp=NONE blend=NONE gui=NONE
+highlight NeogitDiffContext guifg=NONE guibg=#e9e5e2 guisp=NONE blend=NONE gui=NONE
 highlight NeogitDiffContextCursor guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight NeogitDiffContextHighlight guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
-highlight NeogitHunkHeader guifg=#837163 guibg=#e9e5e2 guisp=NONE blend=NONE gui=NONE
-highlight NeogitHunkHeaderCursor guifg=#352e2e guibg=#ded8d3 guisp=NONE blend=NONE gui=bold
-highlight NeogitHunkHeaderHighlight guifg=#352e2e guibg=#ded8d3 guisp=NONE blend=NONE gui=bold
+highlight NeogitDiffHeader guifg=#79241f guibg=#cec6bf guisp=NONE blend=NONE gui=bold
+highlight NeogitHunkHeader guifg=#79241f guibg=#e9e5e2 guisp=NONE blend=NONE gui=NONE
+highlight NeogitHunkHeaderCursor guifg=#79241f guibg=#ded8d3 guisp=NONE blend=NONE gui=bold
+highlight NeogitHunkHeaderHighlight guifg=#79241f guibg=#ded8d3 guisp=NONE blend=NONE gui=bold
 highlight NeogitSectionHeader guifg=#545468 guibg=#ced3dd guisp=NONE blend=NONE gui=bold
 highlight NonText guifg=#cec6bf guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link EndOfBuffer NonText
@@ -246,16 +249,16 @@ highlight! link Type Number
 highlight! link @markup.math Number
 highlight! link @number Number
 highlight Operator guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight Pmenu guifg=#493f37 guibg=#cec6bf guisp=NONE blend=NONE gui=NONE
+highlight Pmenu guifg=#493f37 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight! link PmenuExtra Pmenu
 highlight! link PmenuKind Pmenu
 highlight! link WhichKeyFloat Pmenu
-highlight PmenuSbar guifg=#bdb2a9 guibg=#cec6bf guisp=NONE blend=NONE gui=NONE
-highlight PmenuSel guifg=#493f37 guibg=#bdb2a9 guisp=NONE blend=NONE gui=bold
+highlight PmenuSbar guifg=#bdb2a9 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
+highlight PmenuSel guifg=#493f37 guibg=#cec6bf guisp=NONE blend=NONE gui=bold
 highlight! link PmenuExtraSel PmenuSel
 highlight! link PmenuKindSel PmenuSel
 highlight! link WildMenu PmenuSel
-highlight PmenuThumb guifg=#837163 guibg=#837163 guisp=NONE blend=NONE gui=NONE
+highlight PmenuThumb guifg=#bdb2a9 guibg=#bdb2a9 guisp=NONE blend=NONE gui=NONE
 highlight PreProc guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link @keyword.directive PreProc
 highlight Question guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
