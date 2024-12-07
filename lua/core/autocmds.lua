@@ -123,19 +123,13 @@ augroup("rooter", {
 			if not big(vim.fn.expand("%")) then
 				local root = vim.fs.root(args.buf, {
 					".git",
-					"Makefile",
-					".hg",
-					"project.json",
-					".svn",
 					"pyproject.toml",
 					"README.md",
 					"go.mod",
-					".envrc",
-					".editorconfig",
 				})
 				if root then
 					---@diagnostic disable-next-line: undefined-field
-					vim.uv.chdir(root)
+					vim.fn.chdir(root)
 				end
 			end
 		end,

@@ -121,8 +121,8 @@ return {
 					preview_border = "TelescopePreviewBorder",
 					preview_title = "TelescopePreviewTitle",
 					cursor = "Cursor",
-					cursorline = "TelescopePreviewLine",
-					cursorlinenr = "TelescopePreviewLine",
+					cursorline = "TelescopeSelection",
+					cursorlinenr = "TelescopeSelection",
 					search = "IncSearch",
 					header_bind = "Directory",
 					header_text = "Boolean",
@@ -135,14 +135,18 @@ return {
 					tab_title = "Directory",
 					tab_marker = "Directory",
 					live_sym = "Boolean",
-					scrollbar = "NonText"
+					scrollbar = "NonText",
 				},
 				fzf_colors = {
 					["fg"] = { "fg", "TelescopeNormal" },
+					["fg+"] = { "fg", "TelescopeSelection" },
 					["bg"] = { "bg", "TelescopeNormal" },
+					["bg+"] = { "bg", "TelescopeSelection" },
 					["info"] = { "fg", "TelescopeNormal" },
 					["border"] = { "fg", "TelescopeBorder" },
 					["gutter"] = { "bg", "TelescopeNormal" },
+					["preview-bg"] = { "bg", "TelescopePreviewNormal" },
+					["preview-border"] = { "bg", "TelescopePreviewBorder" },
 				},
 				keymap = {
 					builtin = {
@@ -290,10 +294,9 @@ return {
 		"echasnovski/mini.align",
 		keys = {
 			{ "gaa", mode = "v" },
-			{ "gA",  mode = "v" },
+			{ "gA", mode = "v" },
 		},
 		version = false,
-
 		opts = {},
 	},
 	{
@@ -420,19 +423,19 @@ return {
 		config = function(_, opts)
 			local wk = require("which-key")
 			wk.add({
-				{ "<leader>",  group = "Leader commands (pickers & LSP)" },
+				{ "<leader>", group = "Leader commands (pickers & LSP)" },
 				{ "<leader>g", group = "Git commands" },
-				{ "<C-M>",     group = "Toggle components" },
-				{ "<C-S>",     group = "Split windows" },
-				{ "[",         group = "Previous" },
-				{ "]",         group = "Next" },
-				{ "z",         group = "Folds, spelling & align" },
-				{ "g",         group = "LSP, comment, case & navigation" },
-				{ "gs",        group = "Surround" },
-				{ "<leader>n", group = "Notes (zk) commands",            cond = conf.syntax_features.markdown },
-				{ "m",         group = "Molten operations",              cond = conf.syntax_features.quarto },
-				{ "<leader>d", group = "DAP commands",                   cond = conf.dap_enabled },
-				{ "go",        group = "Otter (code block) symbols",     cond = conf.lsp_enabled },
+				{ "<C-M>", group = "Toggle components" },
+				{ "<C-S>", group = "Split windows" },
+				{ "[", group = "Previous" },
+				{ "]", group = "Next" },
+				{ "z", group = "Folds, spelling & align" },
+				{ "g", group = "LSP, comment, case & navigation" },
+				{ "gs", group = "Surround" },
+				{ "<leader>n", group = "Notes (zk) commands", cond = conf.syntax_features.markdown },
+				{ "m", group = "Molten operations", cond = conf.syntax_features.quarto },
+				{ "<leader>d", group = "DAP commands", cond = conf.dap_enabled },
+				{ "go", group = "Otter (code block) symbols", cond = conf.lsp_enabled },
 			})
 			if opts then
 				wk.setup(opts)
@@ -540,13 +543,37 @@ return {
 		},
 		opts = function()
 			return {
+				disable_context_highlighting = true,
+				graph_style = "ascii",
+				disable_hint = true,
+				fetch_after_checkout = true,
+				disable_line_numbers = true,
+				disable_relative_line_numbers = true,
 				commit_editor = {
 					kind = "vsplit",
 				},
+				integrations = {
+					fzf_lua = true,
+				},
+				disable_signs = false,
 				signs = {
-					hunk = { "", "" },
+					hunk = { " ", " " },
 					item = { "▸", "▾" },
-					section = { "▸", "▾" },
+					section = { " ", " " },
+				},
+				auto_show_console_on = "error",
+				console_timeout = 6000,
+				sections = {
+					recent = {
+						folded = false,
+					},
+				},
+				status = {
+					show_head_commit_hash = true,
+					recent_commit_count = 15,
+					HEAD_padding = 10,
+					HEAD_folded = false,
+					mode_padding = 3,
 				},
 			}
 		end,
@@ -561,8 +588,6 @@ return {
 					callback = function()
 						vim.b.miniindentscope_disable = true
 						vim.wo.statuscolumn = "%!v:lua.get_statuscol()"
-						vim.wo.number = false
-						vim.wo.relativenumber = false
 						vim.g.foldcolumn = false
 						vim.wo.cursorline = false
 					end,

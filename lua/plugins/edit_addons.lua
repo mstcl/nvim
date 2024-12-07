@@ -261,7 +261,6 @@ return {
 		---@module 'blink.cmp'
 		---@type blink.cmp.Config
 		opts = {
-			kind_icons = require("core.variables").lsp_kind_icons,
 			keymap = {
 				preset = "default",
 				["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
@@ -276,19 +275,31 @@ return {
 				["<C-U>"] = { "scroll_documentation_up", "fallback" },
 				["<C-D>"] = { "scroll_documentation_down", "fallback" },
 			},
-			windows = {
-				documentation = {
-					auto_show = true,
-					max_width = 120,
-					max_height = math.floor(vim.o.lines * 0.3),
+			completion = {
+				accept = {
+					create_undo_point = true,
+					auto_brackets = {
+						enabled = true,
+						default_brackets = { "(", ")" },
+						override_brackets_for_filetypes = {},
+						kind_resolution = {
+							enabled = true,
+							blocked_filetypes = { "typescriptreact", "javascriptreact", "vue" },
+						},
+						semantic_token_resolution = {
+							enabled = true,
+							blocked_filetypes = {},
+							timeout_ms = 400,
+						},
+					},
 				},
-				ghost_text = {
-					enabled = true,
-				},
-				autocomplete = {
-					scrollbar = false,
+				list = {
 					selection = "manual",
+				},
+				menu = {
+					scrollbar = false,
 					draw = {
+						treesitter = false, -- performance issues
 						padding = { 0, 2 },
 						gap = 1,
 						columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
@@ -299,17 +310,27 @@ return {
 									return " " .. ctx.kind_icon .. " " .. ctx.icon_gap
 								end,
 								highlight = function(ctx)
-									return require("blink.cmp.utils").get_tailwind_hl(ctx) or "BlinkCmpKind" .. ctx.kind
+									return require("blink.cmp.completion.windows.render.tailwind").get_hl(ctx)
+										or "BlinkCmpKind" .. ctx.kind
 								end,
 							},
 						},
 					},
 				},
+				documentation = {
+					auto_show = true,
+					max_width = 120,
+					max_height = math.floor(vim.o.lines * 0.3),
+				},
+				ghost_text = {
+					enabled = true,
+				},
 			},
-			highlight = {
+			appearance = {
 				use_nvim_cmp_as_default = true,
+				nerd_font_variant = "mono",
+				kind_icons = require("core.variables").lsp_kind_icons,
 			},
-			nerd_font_variant = "mono",
 			sources = {
 				completion = {
 					enabled_providers = {
@@ -385,7 +406,12 @@ return {
 				},
 			},
 			accept = { auto_brackets = { enabled = true } },
-			trigger = { signature_help = { enabled = true } },
+			signature = {
+				enabled = true,
+				window = {
+					direction_priority = { "s", "n" },
+				},
+			},
 		},
 		opts_extend = { "sources.completion.enabled_providers" },
 	},
