@@ -77,7 +77,6 @@ highlight! link BlinkCmpGhostText Comment
 highlight! link MiniStarterItem Comment
 highlight! link @comment Comment
 highlight! link @lsp.type.comment Comment
-highlight! link CmpItemAbbrMatch Conceal
 highlight! link @org.agenda.deadline Conceal
 highlight! link @punctuation.bracket Conceal
 highlight Conditional guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=italic
@@ -280,6 +279,7 @@ highlight Search guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=reverse
 highlight! link Substitute Search
 highlight SignColumn guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Special guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight! link CmpItemAbbrMatch Special
 highlight! link DressingSelectIdx Special
 highlight! link MiniStarterQuery Special
 highlight! link @lsp.type.keyword.yaml.ansible Special
