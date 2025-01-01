@@ -19,6 +19,8 @@ end
 ---@diagnostic disable-next-line: duplicate-set-field
 _G.get_statusline = function()
 	return table.concat({
+		components.padding,
+		components.modified,
 		components.mode,
 		components.padding,
 		components.hl_alt,
@@ -60,14 +62,17 @@ _G.get_statusline = function()
 		components.align,
 		--
 		components.hl_alt,
-		components.cmd,
+		components.info,
 		--
-		components.hl_alt,
-		components.pos,
-		--
+		components.padding,
 		components.padding,
 		components.indentation,
 		--
+		components.padding,
+		components.padding,
+		components.scrollbar,
+		--
+		components.padding,
 		components.padding,
 		components.hl_restore,
 	}, "")
