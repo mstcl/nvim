@@ -48,7 +48,7 @@ set.cursorlineopt = "number"
 -- Bars
 set.hidden = true
 set.showmode = false
-set.showcmd = true
+set.showcmd = false
 set.showcmdloc = "statusline"
 set.cmdheight = 0
 set.ruler = true

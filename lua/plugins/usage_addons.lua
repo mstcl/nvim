@@ -150,10 +150,8 @@ return {
 				},
 				keymap = {
 					builtin = {
-						-- neovim `:tmap` mappings for the fzf win
 						["<C-F>"] = "toggle-fullscreen",
 						["?"] = "toggle-preview",
-						-- Rotate preview clockwise/counter-clockwise
 						["<F1>"] = "toggle-preview-ccw",
 						["<F2>"] = "toggle-preview-cw",
 						["<C-P>"] = "preview-page-down",
@@ -162,6 +160,7 @@ return {
 					},
 					fzf = {
 						["ctrl-c"] = "abort",
+						["ctrl-q"] = "select-all+accept",
 						["ctrl-u"] = "unix-line-discard",
 						["ctrl-a"] = "beginning-of-line",
 						["ctrl-e"] = "end-of-line",
@@ -174,6 +173,9 @@ return {
 				-- Custom pickers
 				files = {
 					fzf_opts = { ["--ansi"] = false },
+				},
+				oldfiles = {
+					include_current_session = true,
 				},
 				commands = { sort_lastused = true },
 				manpages = { previewer = "man_native" },
@@ -200,16 +202,16 @@ return {
 				},
 				tabs = {
 					winopts = {
-						width = 0.3,
-						height = 0.3,
+						width = 0.5,
+						height = 0.5,
 						preview = { hidden = "hidden" },
 					},
 				},
 				buffers = {
 					sort_lastused = true,
 					winopts = {
-						width = 0.3,
-						height = 0.3,
+						width = 0.5,
+						height = 0.5,
 						preview = { hidden = "hidden" },
 					},
 				},

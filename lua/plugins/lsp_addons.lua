@@ -63,7 +63,7 @@ return {
 					lsp.yamlls.setup = {
 						on_attach = on_attach,
 						capabilities = capabilities,
-						filetypes = { "yaml.ansible" },
+						filetypes = { "yaml.ansible", "yaml", "yml" },
 						settings = {
 							redhat = { telemetry = { enabled = false } },
 							yaml = {

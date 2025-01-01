@@ -23,6 +23,8 @@ vim.filetype.add({
 		["go.work"] = "gowork",
 	},
 	pattern = {
+		[".*/.*.nomad.tpl"] = "gotmpl",
+		[".*/_.*.tpl"] = "gotmpl",
 		[".*/waybar/config"] = "jsonc",
 		[".*/dunst/dunstrc"] = "ini",
 		[".*/mako/config"] = "dosini",

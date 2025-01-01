@@ -301,7 +301,7 @@ local function show_message(client)
         win_update_config(client)
     end
     -- Write the message into the buffer
-    vim.wo[winid].winhl = 'Normal:Normal'
+    vim.wo[winid].winhl = 'Normal:NonText'
     guard(function()
         vim.api.nvim_buf_set_lines(client.bufnr, 0, 1, false, { client.message })
     end)

@@ -16,38 +16,65 @@ local function set_hl(str, hl, restore)
 end
 
 local modes = {
-	["n"] = "NORMAL",
-	["no"] = "NORMAL",
-	["v"] = "VISUAL",
-	["V"] = "VISUAL LINE",
-	[""] = "VISUAL BLOCK",
-	["s"] = "SELECT",
-	["S"] = "SELECT LINE",
-	[""] = "SELECT BLOCK",
-	["i"] = "INSERT",
-	["ic"] = "INSERT",
-	["R"] = "REPLACE",
-	["Rv"] = "VISUAL REPLACE",
-	["c"] = "COMMAND",
-	["cv"] = "VIM EX",
-	["ce"] = "EX",
-	["r"] = "PROMPT",
-	["rm"] = "MOAR",
-	["r?"] = "CONFIRM",
-	["!"] = "SHELL",
-	["t"] = "TERMINAL",
+	["n"] = "",
+	["no"] = "",
+	["v"] = "--VISUAL--",
+	["V"] = "--LINE--",
+	[""] = "--BLOCK--",
+	["s"] = "--SELECT--",
+	["S"] = "--LINE--",
+	[""] = "--BLOCK--",
+	["i"] = "--INSERT--",
+	["ic"] = "--INSERT--",
+	["R"] = "--REPLACE--",
+	["Rv"] = "--REPLACE--",
+	["c"] = "--COMMAND--",
+	["cv"] = "--VIM EX--",
+	["ce"] = "--EX--",
+	["r"] = "--PROMPT--",
+	["rm"] = "--MOAR--",
+	["r?"] = "--CONFIRM--",
+	["!"] = "--SHELL--",
+	["t"] = "--TERMINAL--",
 }
+
+local function group_number(num, sep)
+	if num < 999 then
+		return tostring(num)
+	else
+		num = tostring(num)
+		return num:reverse():gsub("(%d%d%d)", "%1" .. sep):reverse():gsub("^,", "")
+	end
+end
+
+---Get scrollbar
+---@return string
+function M.get_scrollbar()
+	local sbar_chars = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
+
+	local cur_line = vim.api.nvim_win_get_cursor(0)[1]
+	local lines = vim.api.nvim_buf_line_count(0)
+
+	local i = math.floor((cur_line - 1) / lines * #sbar_chars) + 1
+	local sbar = string.rep(sbar_chars[i], 2)
+
+	return set_hl(sbar, "StatuslineScrollbar")
+end
+
+---Get modified status
+---@return string
+function M.get_modified()
+	local hl = vim.bo.mod and "StatuslineModifiedInv" or "Statusline"
+	return set_hl(" ● ", hl)
+end
 
 ---Get current mode
 ---@return string
 function M.get_mode()
-	local hl = vim.bo.mod and "StatuslineModified" or "StatuslineMode"
+	local hl = "Statusline"
 	local mode = vim.fn.mode()
 	local mode_str = (mode == "n" and (vim.bo.ro or not vim.bo.ma)) and "RO" or modes[mode]
-	if mode == "n" then
-		mode_str = string.upper(M.get_cwd_name())
-	end
-	return set_hl(string.format(" %s ", mode_str), hl)
+	return set_hl(string.format("%s", mode_str), hl)
 end
 
 ---Get LSP progress
@@ -247,7 +274,10 @@ function M.get_filepath()
 		return ""
 	end
 
-	return string.format("%%<%s/", fpath)
+	local secondary = set_hl(string.format("/%%<%s/", fpath), "StatuslineAlt")
+	local root = set_hl(M.get_cwd_name(), "StatuslineNC")
+
+	return root .. secondary
 end
 
 function M.get_filename()
@@ -320,6 +350,27 @@ function M.get_symbol()
 	return "%#statuslinealt#(" .. symbol .. "%#statuslinealt#)"
 end
 
+---Get line count
+local function get_vlinecount()
+	local raw_count = vim.fn.line(".") - vim.fn.line("v")
+	raw_count = raw_count < 0 and raw_count - 1 or raw_count + 1
+
+	return group_number(math.abs(raw_count), ",")
+end
+
+--- Get wordcount for current buffer or visual selection
+--- @return string word count
+function M.get_fileinfo()
+	local lines = group_number(vim.api.nvim_buf_line_count(0), ",")
+	local mode = vim.fn.mode()
+
+	if mode == "v" or mode == "V" then
+		return get_vlinecount() .. " lines selected"
+	else
+		return lines .. " lines"
+	end
+end
+
 -- Components
 M.components = {
 	-- LSP symbol
@@ -347,10 +398,12 @@ M.components = {
 	filename = [[%{%v:lua.require'core.components'.get_filename()%}]],
 	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%2c %2p%#statuslinealt#%%":""%}]],
 	cmd = [[%S]],
+	modified = [[%{%v:lua.require'core.components'.get_modified()%}]],
+	scrollbar = [[%{%v:lua.require'core.components'.get_scrollbar()%}]],
 	mode = [[%{%v:lua.require'core.components'.get_mode()%}]],
 	cwd = [[%{%v:lua.require'core.components'.get_cwd()%}]],
-	indentation =
-	[[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
+	info = [[%{%v:lua.require'core.components'.get_fileinfo()%}]],
+	indentation = [[%{%&expandtab?"%#statuslinenc#shift%#statuslinealt#:":"%#statuslinenc#tab%#statuslinealt#:"%}%#statuslinenc#%{&shiftwidth}]],
 	ft = [[%{%v:lua.require'core.components'.get_filetype()%}]],
 	fformat = [[%{%v:lua.require'core.components'.get_fformat()%}]],
 	fenc = [[%{%v:lua.require'core.components'.get_ffenc()%}]],
