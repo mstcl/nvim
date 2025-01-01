@@ -299,7 +299,7 @@ return {
 				menu = {
 					scrollbar = false,
 					draw = {
-						treesitter = false, -- performance issues
+						treesitter = { "lsp" }, -- performance issues
 						padding = { 0, 2 },
 						gap = 1,
 						columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
@@ -319,8 +319,10 @@ return {
 				},
 				documentation = {
 					auto_show = true,
-					max_width = 120,
-					max_height = math.floor(vim.o.lines * 0.3),
+					window = {
+						max_width = 120,
+						max_height = math.floor(vim.o.lines * 0.3),
+					},
 				},
 				ghost_text = {
 					enabled = true,
@@ -332,14 +334,12 @@ return {
 				kind_icons = require("core.variables").lsp_kind_icons,
 			},
 			sources = {
-				completion = {
-					enabled_providers = {
-						"lsp",
-						"path",
-						"snippets",
-						"buffer",
-						"ripgrep",
-					},
+				default = {
+					"lsp",
+					"path",
+					"snippets",
+					"buffer",
+					"ripgrep",
 				},
 				providers = {
 					ripgrep = {
@@ -362,7 +362,7 @@ return {
 						should_show_items = true,
 						max_items = nil,
 						min_keyword_length = 0,
-						fallback_for = {},
+						fallbacks = { "buffer" },
 						score_offset = 2,
 						override = nil,
 					},
@@ -401,11 +401,9 @@ return {
 						module = "blink.cmp.sources.buffer",
 						max_items = 3,
 						min_keyword_length = 3,
-						fallback_for = { "lsp" },
 					},
 				},
 			},
-			accept = { auto_brackets = { enabled = true } },
 			signature = {
 				enabled = true,
 				window = {
