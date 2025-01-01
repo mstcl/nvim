@@ -223,7 +223,7 @@ highlight! link DiagnosticFloatingOk MoreMsg
 highlight! link DiagnosticSignOk MoreMsg
 highlight! link DiagnosticVirtualTextOk MoreMsg
 highlight! link DiagnosticOk MsgArea
-highlight NavicSeparator guifg=#837163 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
+highlight NavicSeparator guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight NeogitDiffContext guifg=NONE guibg=#e9e5e2 guisp=NONE blend=NONE gui=NONE
 highlight NeogitDiffContextCursor guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight NeogitDiffContextHighlight guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
@@ -295,24 +295,26 @@ highlight! link DiagnosticUnderlineWarn SpellLocal
 highlight SpellRare guifg=NONE guibg=NONE guisp=#545468 blend=NONE gui=undercurl
 highlight! link DiagnosticUnderlineInfo SpellRare
 highlight Statement guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight StatusLine guifg=#352e2e guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
+highlight StatusLine guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link MsgArea StatusLine
 highlight! link MsgSeparator StatusLine
 highlight! link StatusLineTerm StatusLine
-highlight StatusLineNC guifg=#574b42 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
+highlight StatusLineNC guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link NavicText StatusLineNC
 highlight! link StatusLineTermNC StatusLineNC
-highlight Statusline guifg=#352e2e guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
-highlight StatuslineAlt guifg=#837163 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
-highlight StatuslineBlue guifg=#545468 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
-highlight StatuslineGreen guifg=#464c3a guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
-highlight StatuslineMagenta guifg=#673d58 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
+highlight Statusline guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight StatuslineAlt guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight StatuslineBlue guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight StatuslineGreen guifg=#464c3a guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight StatuslineMagenta guifg=#673d58 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StatuslineMode guifg=#ded8d3 guibg=#352e2e guisp=NONE blend=NONE gui=bold
 highlight StatuslineModified guifg=#ded8d3 guibg=#79241f guisp=NONE blend=NONE gui=bold
-highlight StatuslineOrange guifg=#543227 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
-highlight StatuslinePink guifg=#735057 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
-highlight StatuslineRed guifg=#735057 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
-highlight StatuslineYellow guifg=#573e1a guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
+highlight StatuslineModifiedInv guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight StatuslineOrange guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight StatuslinePink guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight StatuslineRed guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight StatuslineScrollbar guifg=#79241f guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
+highlight StatuslineYellow guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StorageClass guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link Structure StorageClass
 highlight! link @keyword.storage StorageClass

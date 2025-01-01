@@ -17,7 +17,7 @@ lsp_features:
   inlay_hints: false # default inlay hints (toggle-able).
 
 ui_features:
-  animate: true # non-blocking smooth scrolling (toggle-able).
+  animate: false # non-blocking smooth scrolling (toggle-able).
   indent_lines: true # show fancy indent lines (toggle-able).
   tabline: false # display a bar at the top showing opened buffers.
 

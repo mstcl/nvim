@@ -16,7 +16,7 @@ M.edit_features = {
 }
 
 M.ui_features = {
-	animate = true,
+	animate = false,
 	indent_lines = true,
 	tabline = false,
 }
@@ -152,7 +152,7 @@ M.lsp_sources = {
 	"jedi_language_server",
 	"vimls",
 	"cssls",
-	"typst_lsp",
+	"tinymist",
 	"ruff",
 	"texlab",
 	"lua_ls",
@@ -172,6 +172,7 @@ M.null_formatting_sources = {
 	"goimports",
 	"gofumpt",
 	"terraform_fmt",
+	"hclfmt",
 }
 
 M.null_hover_sources = {
