@@ -19,6 +19,8 @@ M.ui_features = {
 	animate = false,
 	indent_lines = true,
 	tabline = false,
+	incline = false,
+	starter = false,
 }
 
 M.syntax_features = {
