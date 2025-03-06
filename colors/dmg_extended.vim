@@ -181,8 +181,6 @@ highlight! link @variable Identifier
 highlight IncSearch guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=reverse
 highlight! link Cursor IncSearch
 highlight! link MatchParen IncSearch
-highlight InclineNormal guifg=#ded8d3 guibg=#26126d guisp=NONE blend=NONE gui=bold
-highlight InclineNormalNC guifg=#746458 guibg=#ded8d3 guisp=NONE blend=NONE gui=bold
 highlight Include guifg=#793454 guibg=NONE guisp=NONE blend=NONE gui=italic
 highlight! link @keyword.import Include
 highlight Info guifg=#26126d guibg=#d1ccde guisp=NONE blend=NONE gui=NONE
@@ -216,12 +214,6 @@ highlight MasonHighlightSecondary guifg=#493f37 guibg=NONE guisp=NONE blend=NONE
 highlight MasonMuted guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight MasonMutedBlock guifg=#493f37 guibg=#bdb1a8 guisp=NONE blend=NONE gui=NONE
 highlight MasonMutedBlockBold guifg=#493f37 guibg=#bdb1a8 guisp=NONE blend=NONE gui=bold
-highlight MiniStarterCurrent guifg=#630e49 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight! link MiniStarterItemBullet MiniStarterCurrent
-highlight! link MiniStarterItemPrefix MiniStarterCurrent
-highlight MiniStarterHeader guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight! link MiniStarterFooter MiniStarterHeader
-highlight! link MiniStarterItem MiniStarterHeader
 highlight MoreMsg guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingOk MoreMsg
 highlight! link DiagnosticSignOk MoreMsg
@@ -236,7 +228,6 @@ highlight NeogitHunkHeaderHighlight guifg=#161e29 guibg=#ded8d3 guisp=NONE blend
 highlight NeogitSectionHeader guifg=#26126d guibg=#d1ccde guisp=NONE blend=NONE gui=bold
 highlight NonText guifg=#c8beb7 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link EndOfBuffer NonText
-highlight! link MiniStarterInactive NonText
 highlight! link Whitespace NonText
 highlight NormalFloat guifg=#493f37 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight NullLsInfoBorder guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -278,7 +269,6 @@ highlight! link Substitute Search
 highlight SignColumn guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Special guifg=#26126d guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link DressingSelectIdx Special
-highlight! link MiniStarterQuery Special
 highlight! link @lsp.type.keyword.yaml.ansible Special
 highlight! link @string.special.symbol Special
 highlight SpecialComment guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=bold

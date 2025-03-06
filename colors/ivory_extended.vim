@@ -74,7 +74,6 @@ highlight ColorColumn guifg=NONE guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight! link debugPC ColorColumn
 highlight Comment guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link BlinkCmpGhostText Comment
-highlight! link MiniStarterItem Comment
 highlight! link @comment Comment
 highlight! link @lsp.type.comment Comment
 highlight! link @org.agenda.deadline Conceal
@@ -95,7 +94,6 @@ highlight CursorLineFold guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight CursorLineNr guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight CursorLineSign guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Define guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=bold
-highlight! link MiniStarterCurrent Define
 highlight! link @constant.macro Define
 highlight! link @define Define
 highlight! link @type.definition Define
@@ -163,6 +161,7 @@ highlight! link @function.method Function
 highlight! link @lsp.type.decorator Function
 highlight! link @lsp.type.function Function
 highlight! link @lsp.type.method Function
+highlight FzfLuaLivePrompt guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Hint guifg=#735057 guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticHint Hint
 highlight! link DiagnosticSignHint Hint
@@ -179,8 +178,6 @@ highlight! link @variable Identifier
 highlight IncSearch guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=reverse
 highlight! link Cursor IncSearch
 highlight! link MatchParen IncSearch
-highlight InclineNormal guifg=#ded8d3 guibg=#79241f guisp=NONE blend=NONE gui=bold
-highlight InclineNormalNC guifg=#746458 guibg=#ded8d3 guisp=NONE blend=NONE gui=bold
 highlight Include guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=italic
 highlight! link @keyword.import Include
 highlight Info guifg=#545468 guibg=#ced3dd guisp=NONE blend=NONE gui=NONE
@@ -215,9 +212,6 @@ highlight MasonHighlightSecondary guifg=#493f37 guibg=NONE guisp=NONE blend=NONE
 highlight MasonMuted guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight MasonMutedBlock guifg=#493f37 guibg=#bdb2a9 guisp=NONE blend=NONE gui=NONE
 highlight MasonMutedBlockBold guifg=#493f37 guibg=#bdb2a9 guisp=NONE blend=NONE gui=bold
-highlight! link MiniStarterItemBullet MiniStarterCurrent
-highlight! link MiniStarterItemPrefix MiniStarterCurrent
-highlight! link MiniStarterFooter MiniStarterHeader
 highlight MoreMsg guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingOk MoreMsg
 highlight! link DiagnosticSignOk MoreMsg
@@ -235,7 +229,6 @@ highlight NeogitSectionHeader guifg=#545468 guibg=#ced3dd guisp=NONE blend=NONE 
 highlight NonText guifg=#cec6bf guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link EndOfBuffer NonText
 highlight! link Ignore NonText
-highlight! link MiniStarterInactive NonText
 highlight! link Whitespace NonText
 highlight NormalFloat guifg=#493f37 guibg=#ded8d3 guisp=NONE blend=NONE gui=NONE
 highlight NullLsInfoBorder guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -268,7 +261,6 @@ highlight RedrawDebugComposed guifg=NONE guibg=green guisp=NONE blend=NONE gui=N
 highlight RedrawDebugNormal guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=reverse
 highlight RedrawDebugRecompose guifg=NONE guibg=red guisp=NONE blend=NONE gui=NONE
 highlight Repeat guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight! link MiniStarterHeader Repeat
 highlight! link SpecialChar Repeat
 highlight! link @keyword Repeat
 highlight! link @keyword.function Repeat
@@ -281,7 +273,6 @@ highlight SignColumn guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Special guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link CmpItemAbbrMatch Special
 highlight! link DressingSelectIdx Special
-highlight! link MiniStarterQuery Special
 highlight! link @lsp.type.keyword.yaml.ansible Special
 highlight! link @string.special.symbol Special
 highlight SpecialComment guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=bold
