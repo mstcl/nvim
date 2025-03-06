@@ -1,6 +1,9 @@
 local augroup = require("core.utils").augroup
 local border = require("core.variables").border
 local conf = require("core.variables")
+local function override_event()
+  return {}
+end
 
 -- Plugins which add additional ways to use nvim
 return {
@@ -397,7 +400,8 @@ return {
 		-- Keymapping cheatsheet
 		"folke/which-key.nvim",
 		cond = true,
-		event = "BufReadPre",
+		lazy = false,
+		event = override_event,
 		keys = {
 			{
 				"<C-M>k",

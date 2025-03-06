@@ -1,6 +1,5 @@
 local augroup = require("core.utils").augroup
 local cond = require("core.variables").ui_features
-local border = require("core.variables").border
 
 -- Plugins that modify UI
 return {
