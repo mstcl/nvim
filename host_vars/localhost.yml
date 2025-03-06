@@ -20,6 +20,8 @@ ui_features:
   animate: false # non-blocking smooth scrolling (toggle-able).
   indent_lines: true # show fancy indent lines (toggle-able).
   tabline: false # display a bar at the top showing opened buffers.
+  incline: false # display a small overlay bar at the corner showing opened buffers
+  starter: false # display a custom start screen
 
 edit_features:
   completion: true # fancy text completion (toggle-able).

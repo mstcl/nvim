@@ -1,12 +1,74 @@
 local augroup = require("core.utils").augroup
 local border = require("core.variables").border
 local conf = require("core.variables")
-local function override_event()
-  return {}
-end
 
 -- Plugins which add additional ways to use nvim
 return {
+	{
+		-- Minimalist start screen
+		"echasnovski/mini.starter",
+		init = function()
+			vim.o.laststatus = 0
+		end,
+		cond = function()
+			if conf.ui_features.starter then
+				if vim.tbl_contains(vim.v.argv, "-R") then
+					return false
+				end
+				return true
+			else
+				return false
+			end
+		end,
+		priority = 100,
+		version = false,
+		opts = function()
+			local starter = require("mini.starter")
+			local quick = function()
+				return function()
+					local quick_tbl = {
+						{ action = "Lazy show", name = "Plugins", section = "Quick actions" },
+					}
+					if require("core.variables").syntax_features.org then
+						local org_agenda = function()
+							require("orgmode").action("agenda.prompt")
+						end
+						table.insert(quick_tbl, { action = org_agenda, name = "Agenda", section = "Quick actions" })
+					end
+					return quick_tbl
+				end
+			end
+			local greetings = function()
+				local hour = tonumber(vim.fn.strftime("%H"))
+				-- [04:00, 12:00) - morning, [12:00, 20:00) - day, [20:00, 04:00) - evening
+				local part_id = math.floor((hour + 4) / 8) + 1
+				local day_part = ({ "evening", "morning", "afternoon", "evening" })[part_id]
+				---@diagnostic disable-next-line: undefined-field
+				local username = vim.loop.os_get_passwd()["username"] or "USERNAME"
+
+				return ("Good %s, %s."):format(day_part, username)
+			end
+			return {
+				items = {
+					starter.sections.recent_files(3, true, false),
+					starter.sections.recent_files(3, false, false),
+					starter.sections.sessions(8),
+					quick(),
+				},
+				content_hooks = {
+					starter.gen_hook.adding_bullet(),
+					starter.gen_hook.aligning("center", "center"),
+				},
+				footer = "",
+				header = require("core.variables").starter_ascii .. greetings(),
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("mini.starter").setup(opts)
+			end
+		end,
+	},
 	{
 		-- Navigation and fuzzy pickers
 		"ibhagwan/fzf-lua",
@@ -404,8 +466,7 @@ return {
 		-- Keymapping cheatsheet
 		"folke/which-key.nvim",
 		cond = true,
-		lazy = false,
-		event = override_event,
+		event = "BufReadPre",
 		keys = {
 			{
 				"<C-M>k",

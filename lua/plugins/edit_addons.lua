@@ -1,4 +1,7 @@
 local cond = require("core.variables").edit_features
+local function override_event()
+  return {}
+end
 
 -- Plugins that add extra functionality with keybindings or while editing
 return {
