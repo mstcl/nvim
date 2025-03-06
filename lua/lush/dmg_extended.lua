@@ -4,12 +4,9 @@ local lush = require("lush")
 local extended = lush.merge({
 	require("dmg"),
 	require("dmg_statusline"),
-	require("dmg_dressing"),
-	require("dmg_mini_starter"),
 	require("dmg_telescope"),
 	require("dmg_whichkey"),
 	require("dmg_neogit"),
-	require("dmg_incline"),
 	require("dmg_cmp"),
 	require("dmg_flash"),
 })
@@ -21,6 +18,20 @@ if conf.lsp_enabled then
 		require("dmg_dressing"),
 		require("dmg_null_ls"),
 		require("dmg_navic"),
+	})
+end
+
+if conf.ui_features.incline then
+	extended = lush.merge({
+		extended,
+		require("dmg_incline"),
+	})
+end
+
+if conf.ui_features.starter then
+	extended = lush.merge({
+		extended,
+		require("dmg_mini_starter"),
 	})
 end
 
