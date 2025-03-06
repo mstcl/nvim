@@ -4,12 +4,9 @@ local lush = require("lush")
 local extended = lush.merge({
 	require("ivory"),
 	require("ivory_statusline"),
-	require("ivory_dressing"),
-	require("ivory_mini_starter"),
 	require("ivory_telescope"),
 	require("ivory_whichkey"),
 	require("ivory_neogit"),
-	require("ivory_incline"),
 	require("ivory_cmp"),
 	require("ivory_flash"),
 })
@@ -21,6 +18,20 @@ if conf.lsp_enabled then
 		require("ivory_dressing"),
 		require("ivory_null_ls"),
 		require("ivory_navic"),
+	})
+end
+
+if conf.ui_features.incline then
+	extended = lush.merge({
+		extended,
+		require("ivory_incline"),
+	})
+end
+
+if conf.ui_features.starter then
+	extended = lush.merge({
+		extended,
+		require("ivory_mini_starter"),
 	})
 end
 
