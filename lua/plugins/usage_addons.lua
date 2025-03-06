@@ -422,83 +422,22 @@ return {
 		config = function(_, opts)
 			local wk = require("which-key")
 			wk.add({
-				{ "<leader>", group = "Leader commands (pickers & LSP)" },
+				{ "<leader>",  group = "Leader commands (pickers & LSP)" },
 				{ "<leader>g", group = "Git commands" },
-				{ "<C-M>", group = "Toggle components" },
-				{ "<C-S>", group = "Split windows" },
-				{ "[", group = "Previous" },
-				{ "]", group = "Next" },
-				{ "z", group = "Folds, spelling & align" },
-				{ "g", group = "LSP, comment, case & navigation" },
-				{ "gs", group = "Surround" },
-				{ "<leader>n", group = "Notes (zk) commands", cond = conf.syntax_features.markdown },
-				{ "m", group = "Molten operations", cond = conf.syntax_features.quarto },
-				{ "<leader>d", group = "DAP commands", cond = conf.dap_enabled },
-				{ "go", group = "Otter (code block) symbols", cond = conf.lsp_enabled },
+				{ "<C-M>",     group = "Toggle components" },
+				{ "<C-S>",     group = "Split windows" },
+				{ "[",         group = "Previous" },
+				{ "]",         group = "Next" },
+				{ "z",         group = "Folds, spelling & align" },
+				{ "g",         group = "LSP, comment, case & navigation" },
+				{ "gs",        group = "Surround" },
+				{ "<leader>n", group = "Notes (zk) commands",            cond = conf.syntax_features.markdown },
+				{ "m",         group = "Molten operations",              cond = conf.syntax_features.quarto },
+				{ "<leader>d", group = "DAP commands",                   cond = conf.dap_enabled },
+				{ "go",        group = "Otter (code block) symbols",     cond = conf.lsp_enabled },
 			})
 			if opts then
 				wk.setup(opts)
-			end
-		end,
-	},
-	{
-		-- Minimalist start screen
-		"echasnovski/mini.starter",
-		init = function()
-			vim.o.laststatus = 0
-		end,
-		cond = function()
-			if vim.tbl_contains(vim.v.argv, "-R") then
-				return false
-			end
-			return true
-		end,
-		priority = 100,
-		version = false,
-		opts = function()
-			local starter = require("mini.starter")
-			local quick = function()
-				return function()
-					local quick_tbl = {
-						{ action = "Lazy show", name = "Plugins", section = "Quick actions" },
-					}
-					if require("core.variables").syntax_features.org then
-						local org_agenda = function()
-							require("orgmode").action("agenda.prompt")
-						end
-						table.insert(quick_tbl, { action = org_agenda, name = "Agenda", section = "Quick actions" })
-					end
-					return quick_tbl
-				end
-			end
-			local greetings = function()
-				local hour = tonumber(vim.fn.strftime("%H"))
-				-- [04:00, 12:00) - morning, [12:00, 20:00) - day, [20:00, 04:00) - evening
-				local part_id = math.floor((hour + 4) / 8) + 1
-				local day_part = ({ "evening", "morning", "afternoon", "evening" })[part_id]
-				---@diagnostic disable-next-line: undefined-field
-				local username = vim.loop.os_get_passwd()["username"] or "USERNAME"
-
-				return ("Good %s, %s."):format(day_part, username)
-			end
-			return {
-				items = {
-					starter.sections.recent_files(3, true, false),
-					starter.sections.recent_files(3, false, false),
-					starter.sections.sessions(8),
-					quick(),
-				},
-				content_hooks = {
-					starter.gen_hook.adding_bullet(),
-					starter.gen_hook.aligning("center", "center"),
-				},
-				footer = "",
-				header = require("core.variables").starter_ascii .. greetings(),
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("mini.starter").setup(opts)
 			end
 		end,
 	},
@@ -733,33 +672,5 @@ return {
 				require("mini.diff").setup(opts)
 			end
 		end,
-	},
-	{
-		-- Global manage session
-		"echasnovski/mini.sessions",
-		version = false,
-		event = "VimEnter",
-		keys = {
-			{
-				"<leader>s",
-				function()
-					vim.ui.input({ prompot = "Session name:" }, function(name)
-						if name == nil then
-							return
-						end
-						name = name or vim.fn.getcwd():gsub("/", "-")
-						require("mini.sessions").write(name)
-						vim.notify("Saved session: " .. name, vim.log.levels.INFO)
-					end)
-				end,
-				desc = "Save session",
-			},
-		},
-		build = {
-			"mkdir -p ~/.cache/nvim/sessions",
-		},
-		opts = {
-			directory = "~/.cache/nvim/sessions",
-		},
 	},
 }
