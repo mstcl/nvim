@@ -98,6 +98,7 @@ return {
 				},
 				fzf_opts = { ["--margin"] = "0,0", ["--info"] = "inline-right" },
 				winopts = {
+					backdrop = 100,
 					col = 0.5,
 					row = 0.35,
 					width = 0.65,
@@ -107,7 +108,7 @@ return {
 						vertical = "up:45%",
 						horizontal = "right:55%",
 						layout = "flex",
-						flip_columns = 120,
+						flip_columns = 100,
 					},
 					border = border,
 				},
@@ -292,7 +293,7 @@ return {
 		"echasnovski/mini.align",
 		keys = {
 			{ "gaa", mode = "v" },
-			{ "gA", mode = "v" },
+			{ "gA",  mode = "v" },
 		},
 		version = false,
 		opts = {},
