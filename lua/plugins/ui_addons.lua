@@ -1,6 +1,5 @@
 local augroup = require("core.utils").augroup
 local cond = require("core.variables").ui_features
-local border = require("core.variables").border
 
 -- Plugins that modify UI
 return {
@@ -13,55 +12,6 @@ return {
 			-- Lush colorschemes to extend/modify
 			"mstcl/dmg",
 			"mstcl/ivory",
-		},
-	},
-	{
-		-- Add nice input dialogs to prompt
-		"stevearc/dressing.nvim",
-		init = function()
-			---@diagnostic disable-next-line: duplicate-set-field
-			vim.ui.select = function(...)
-				require("lazy").load({ plugins = { "dressing.nvim" } })
-				return vim.ui.select(...)
-			end
-			---@diagnostic disable-next-line: duplicate-set-field
-			vim.ui.input = function(...)
-				require("lazy").load({ plugins = { "dressing.nvim" } })
-				return vim.ui.input(...)
-			end
-		end,
-		opts = {
-			input = {
-				insert_only = false,
-				prompt_align = "left",
-				start_in_insert = true,
-				relative = "editor",
-				border = border,
-				prefer_width = 20,
-				max_width = nil,
-				min_width = 10,
-				get_config = nil,
-				win_options = {
-					winblend = 0,
-				},
-			},
-			override = {
-				anchor = "SW",
-			},
-			select = {
-				backend = "fzf_lua",
-				fzf_lua = {
-					winopts = {
-						height = 0.5,
-						width = 0.25,
-						preview = {
-							hidden = "hidden",
-							vertical = "up:45%",
-							layout = "vertical",
-						},
-					},
-				},
-			},
 		},
 	},
 	{

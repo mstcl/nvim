@@ -13,7 +13,7 @@ return {
 		"echasnovski/mini.surround",
 		version = false,
 		keys = {
-			{ "gsa", desc = "Add surrounding", mode = { "n", "v" } },
+			{ "gsa", desc = "Add surrounding",        mode = { "n", "v" } },
 			{ "gsd", desc = "Delete surrounding" },
 			{ "gsf", desc = "Find right surrounding" },
 			{ "gsF", desc = "Find left surrounding" },
@@ -81,16 +81,16 @@ return {
 		-- Keybindings to move lines and blocks
 		"fedepujol/move.nvim",
 		keys = {
-			{ "<A-j>", ":MoveBlock(1)<cr>", mode = "v", desc = "Move block down" },
-			{ "<A-k>", ":MoveBlock(-1)<cr>", mode = "v", desc = "Move block up" },
+			{ "<A-j>", ":MoveBlock(1)<cr>",   mode = "v", desc = "Move block down" },
+			{ "<A-k>", ":MoveBlock(-1)<cr>",  mode = "v", desc = "Move block up" },
 			{ "<A-h>", ":MoveHBlocK(-1)<cr>", mode = "v", desc = "Move block left" },
-			{ "<A-l>", ":MoveHBlock(1)<cr>", mode = "v", desc = "Move block right" },
-			{ "<A-j>", ":MoveLine(1)<cr>", mode = "n", desc = "Move line up" },
-			{ "<A-k>", ":MoveLine(-1)<cr>", mode = "n", desc = "Move line down" },
-			{ "<A-h>", ":MoveHChar(-1)<cr>", mode = "n", desc = "Move char left" },
-			{ "<A-l>", ":MoveHChar(1)<cr>", mode = "n", desc = "Move char right" },
-			{ "<A-f>", ":MoveWord(1)<cr>", mode = "n", desc = "Move word forward" },
-			{ "<A-b>", ":MoveWord(-1)<cr>", mode = "n", desc = "Move word backward" },
+			{ "<A-l>", ":MoveHBlock(1)<cr>",  mode = "v", desc = "Move block right" },
+			{ "<A-j>", ":MoveLine(1)<cr>",    mode = "n", desc = "Move line up" },
+			{ "<A-k>", ":MoveLine(-1)<cr>",   mode = "n", desc = "Move line down" },
+			{ "<A-h>", ":MoveHChar(-1)<cr>",  mode = "n", desc = "Move char left" },
+			{ "<A-l>", ":MoveHChar(1)<cr>",   mode = "n", desc = "Move char right" },
+			{ "<A-f>", ":MoveWord(1)<cr>",    mode = "n", desc = "Move word forward" },
+			{ "<A-b>", ":MoveWord(-1)<cr>",   mode = "n", desc = "Move word backward" },
 		},
 		opts = function()
 			return {
@@ -294,7 +294,10 @@ return {
 					},
 				},
 				list = {
-					selection = "manual",
+					selection = {
+						preselect = false,
+						auto_insert = false,
+					},
 				},
 				menu = {
 					scrollbar = false,
@@ -310,8 +313,7 @@ return {
 									return " " .. ctx.kind_icon .. " " .. ctx.icon_gap
 								end,
 								highlight = function(ctx)
-									return require("blink.cmp.completion.windows.render.tailwind").get_hl(ctx)
-										or "BlinkCmpKind" .. ctx.kind
+									return ctx.kind_hl
 								end,
 							},
 						},
