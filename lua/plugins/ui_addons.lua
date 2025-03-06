@@ -35,6 +35,7 @@ return {
 	{
 		-- Winbar/bufferline alternative
 		"b0o/incline.nvim",
+		cond = cond.incline,
 		event = "BufReadPost",
 		opts = {
 			hide = {

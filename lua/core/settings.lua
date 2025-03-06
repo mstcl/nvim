@@ -92,7 +92,7 @@ vim.g.foldcolumn = true
 set.number = true
 set.relativenumber = true
 set.signcolumn = "auto"
-set.shortmess = set.shortmess + "OosatTcICFSW"
+set.shortmess = set.shortmess + "OosatTcCFSW"
 
 -- Window
 set.splitkeep = "screen" -- less jarring splitting
