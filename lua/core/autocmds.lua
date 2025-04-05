@@ -192,21 +192,3 @@ augroup("terminal", {
 		end,
 	},
 })
-
-augroup("visual", {
-	{ "ModeChanged" },
-	{
-		pattern = { "*:[vV\x16]*", "[vV\x16]*:*" },
-		callback = function()
-			vim.wo.list = true
-		end,
-	},
-}, {
-	{ "ModeChanged" },
-	{
-		pattern = { "[vV\x16]*:*" },
-		callback = function()
-			vim.wo.list = false
-		end,
-	},
-})

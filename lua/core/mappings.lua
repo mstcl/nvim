@@ -137,7 +137,7 @@ map("n", "gx", function()
 	else
 		old_gx.callback()
 	end
-end, { desc = old_gx.desc })
+end, { desc = "Follow word with xdg-open" })
 
 -- open terminal
 map("n", "<C-Bslash>", function() require("core.terminal").Toggle() end)

@@ -236,4 +236,19 @@ return {
 			end
 		end,
 	},
+	{
+		"mcauley-penney/visual-whitespace.nvim",
+		config = function(_, opts)
+			fg = vim.api.nvim_get_hl(0, { name = "NonText" }).fg
+			bg = vim.api.nvim_get_hl(0, { name = "Visual" }).bg
+			vim.api.nvim_set_hl(0, "VisualNonText", {
+				bg = string.format("#%06x", bg),
+				fg = string.format("#%06x", fg),
+			})
+			if opts then
+				require("visual-whitespace").setup(opts)
+			end
+		end,
+		event = { "ModeChanged" },
+	},
 }
