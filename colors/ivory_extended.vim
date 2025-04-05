@@ -110,9 +110,14 @@ highlight! link @markup.heading.5.marker Delimiter
 highlight! link @markup.heading.6.marker Delimiter
 highlight! link @punctuation Delimiter
 highlight! link @punctuation.delimiter.yaml Delimiter
+highlight DiagnosticSignError guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link LspDiagnosticsSignError DiagnosticSignError
+highlight DiagnosticSignHint guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link LspDiagnosticsSignHint DiagnosticSignHint
+highlight DiagnosticSignInfo guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link LspDiagnosticsSignInformation DiagnosticSignInfo
+highlight DiagnosticSignOk guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight DiagnosticSignWarn guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link LspDiagnosticsSignWarning DiagnosticSignWarn
 highlight DiagnosticUnderlineOk guifg=NONE guibg=NONE guisp=#464c3a blend=NONE gui=undercurl
 highlight DiagnosticUnnecessary guifg=NONE guibg=NONE guisp=#574b42 blend=NONE gui=underdotted
@@ -136,7 +141,6 @@ highlight! link @module Directory
 highlight! link @org.agenda.scheduled Directory
 highlight Error guifg=#79241f guibg=#dcb2a7 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticError Error
-highlight! link DiagnosticSignError Error
 highlight! link @comment.error Error
 highlight ErrorMsg guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingError ErrorMsg
@@ -164,7 +168,6 @@ highlight! link @lsp.type.method Function
 highlight FzfLuaLivePrompt guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Hint guifg=#735057 guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticHint Hint
-highlight! link DiagnosticSignHint Hint
 highlight! link @comment.hint Hint
 highlight HintMsg guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingHint HintMsg
@@ -182,7 +185,6 @@ highlight Include guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=italic
 highlight! link @keyword.import Include
 highlight Info guifg=#545468 guibg=#dfe1e6 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticInfo Info
-highlight! link DiagnosticSignInfo Info
 highlight! link @comment.info Info
 highlight! link @comment.note Info
 highlight! link @comment.ok Info
@@ -214,7 +216,6 @@ highlight MasonMutedBlock guifg=#493f37 guibg=#d7d3cb guisp=NONE blend=NONE gui=
 highlight MasonMutedBlockBold guifg=#493f37 guibg=#d7d3cb guisp=NONE blend=NONE gui=bold
 highlight MoreMsg guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingOk MoreMsg
-highlight! link DiagnosticSignOk MoreMsg
 highlight! link DiagnosticVirtualTextOk MoreMsg
 highlight! link DiagnosticOk MsgArea
 highlight NavicSeparator guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -386,7 +387,6 @@ highlight! link WinSeparator VertSplit
 highlight Visual guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight! link VisualNOS Visual
 highlight Warning guifg=#573e1a guibg=#d6c890 guisp=NONE blend=NONE gui=NONE
-highlight! link DiagnosticSignWarn Warning
 highlight! link DiagnosticWarn Warning
 highlight! link @comment.warning Warning
 highlight WarningMsg guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
