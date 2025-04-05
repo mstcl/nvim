@@ -104,7 +104,7 @@ return {
 				desc = "Zoxide",
 			},
 			{
-				"<leader>c",
+				"g0",
 				"<cmd>FzfLua lsp_document_symbols<cr>",
 				desc = "Code symbols (document)",
 			},
@@ -144,12 +144,12 @@ return {
 				desc = "Grep buffer",
 			},
 			{
-				"gr",
+				"grr",
 				"<cmd>FzfLua lsp_references path_shorten=true ignore_current_line=true<cr>",
 				desc = "Symbol references",
 			},
 			{
-				"gI",
+				"gri",
 				"<cmd>FzfLua lsp_implementations path_shorten=true ignore_current_line=true<cr>",
 				desc = "Symbol implementation",
 			},
@@ -246,25 +246,11 @@ return {
 				commands = { sort_lastused = true },
 				manpages = { previewer = "man_native" },
 				helptags = { previewer = "help_native" },
-				diagnostics = {
-					winopts = {
-						width = 0.3,
-						height = 0.5,
-						vertical = "up:80%",
-						preview = { layout = "vertical" },
-					},
-				},
 				lsp = {
 					symbol_fmt = function(s)
 						return s:lower() .. "\t"
 					end,
 					child_prefix = false,
-					winopts = {
-						width = 0.3,
-						height = 0.5,
-						vertical = "up:80%",
-						preview = { layout = "vertical" },
-					},
 				},
 				tabs = {
 					winopts = {
@@ -481,6 +467,9 @@ return {
 					colors = false,
 					rules = false,
 				},
+				layout = {
+					height = { min = 1 },
+				},
 				sort = { "alphanum" },
 			}
 		end,
@@ -558,7 +547,7 @@ return {
 				integrations = {
 					fzf_lua = true,
 				},
-				disable_signs = false,
+				disable_signs = true,
 				signs = {
 					hunk = { " ", " " },
 					item = { "▸", "▾" },

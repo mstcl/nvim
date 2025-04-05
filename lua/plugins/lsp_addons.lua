@@ -436,7 +436,7 @@ return {
 			{
 				"<C-K>",
 				"<cmd>lua require('otter').ask_hover<cr>",
-				desc = "Otter hover",
+				desc = "Otter symbol documentation",
 				buffer = true,
 			},
 			{

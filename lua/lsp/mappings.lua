@@ -75,7 +75,11 @@ function M.setup(client, bufnr)
 	end
 
 	if client.server_capabilities.renameProvider then
-		map("n", "gR", vim.lsp.buf.rename, { desc = "Rename symbol", buffer = bufnr })
+		map("n", "grn", vim.lsp.buf.rename, { desc = "Rename symbol", buffer = bufnr })
+	end
+
+	if client.server_capabilities.renameProvider then
+		map("n", "gra", vim.lsp.buf.code_action, { desc = "Code actions", buffer = bufnr })
 	end
 end
 
