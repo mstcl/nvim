@@ -1,6 +1,6 @@
 local cond = require("core.variables").edit_features
 local function override_event()
-  return {}
+	return {}
 end
 
 -- Plugins that add extra functionality with keybindings or while editing
@@ -257,8 +257,10 @@ return {
 		cond = cond.completion,
 		lazy = false,
 		dependencies = {
-			"rafamadriz/friendly-snippets",
-			"mikavilpas/blink-ripgrep.nvim",
+			{ "rafamadriz/friendly-snippets" },
+			{ "mikavilpas/blink-ripgrep.nvim" },
+			{ "samiulsami/cmp-go-deep",       dependencies = { "kkharji/sqlite.lua" } },
+			{ "saghen/blink.compat" },
 		},
 		version = "v1.*",
 		---@module 'blink.cmp'
@@ -344,9 +346,22 @@ return {
 					"path",
 					"snippets",
 					"buffer",
+					"go_deep",
 					"ripgrep",
 				},
 				providers = {
+					go_deep = {
+						name = "go_deep",
+						module = "blink.compat.source",
+						min_keyword_length = 3,
+						max_items = 5,
+						---@module "cmp_go_deep"
+						---@type cmp_go_deep.Options
+						opts = {
+							get_documentation_implementation = "hover",
+							get_package_name_implementation = "regex",
+						},
+					},
 					ripgrep = {
 						module = "blink-ripgrep",
 						name = "Ripgrep",
