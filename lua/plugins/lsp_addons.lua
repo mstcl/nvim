@@ -1,11 +1,11 @@
 local border = require("core.variables").border
 local condition = require("core.variables").lsp_enabled
 local on_attach = require("lsp.utils").on_attach
-local lsp_sources = require("core.variables").lsp_sources
-local formatting_sources = require("core.variables").formatting_sources
-local hover_sources = require("core.variables").hover_sources
-local diagnostics_sources = require("core.variables").diagnostics_sources
-local code_action_sources = require("core.variables").code_action_sources
+local LSP_SOURCES = require("core.variables").lsp_sources
+local FORMATTING_SOURCES = require("core.variables").formatting_sources
+local HOVER_SOURCES = require("core.variables").hover_sources
+local DIAGNOSTICS_SOURCES = require("core.variables").diagnostics_sources
+local CODE_ACTION_SOURCES = require("core.variables").code_action_sources
 
 -- Plugins that add to nvim LSP functionalities
 return {
@@ -47,7 +47,7 @@ return {
 		-- Mason tool install
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		opt = {
-			ensure_installed = lsp_sources,
+			ensure_installed = LSP_SOURCES,
 		}
 	},
 	{
@@ -59,7 +59,7 @@ return {
 		opts = function()
 			local null_ls = require("null-ls")
 			local null_sources = {}
-			for _, source in ipairs(formatting_sources) do
+			for _, source in ipairs(FORMATTING_SOURCES) do
 				if source == "mdformat" then
 					table.insert(
 						null_sources,
@@ -78,10 +78,10 @@ return {
 					table.insert(null_sources, null_ls.builtins.formatting[source])
 				end
 			end
-			for _, source in ipairs(hover_sources) do
+			for _, source in ipairs(HOVER_SOURCES) do
 				table.insert(null_sources, null_ls.builtins.hover[source])
 			end
-			for _, source in ipairs(diagnostics_sources) do
+			for _, source in ipairs(DIAGNOSTICS_SOURCES) do
 				if source == "commitlint" then
 					table.insert(
 						null_sources,
@@ -114,7 +114,7 @@ return {
 					table.insert(null_sources, null_ls.builtins.diagnostics[source])
 				end
 			end
-			for _, source in ipairs(code_action_sources) do
+			for _, source in ipairs(CODE_ACTION_SOURCES) do
 				if source == "proselint" then
 					table.insert(
 						null_sources,
