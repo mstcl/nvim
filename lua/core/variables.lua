@@ -30,8 +30,7 @@ M.syntax_features = {
 	markdown = true,
 }
 
-M.frecency_workspaces = {
-}
+M.frecency_workspaces = {}
 
 M.treesitter_sources = {
 	"python",
@@ -83,18 +82,18 @@ M.treesitter_sources = {
 }
 
 M.dap_signs = {
-      Breakpoint = "⚑",
-      BreakpointCondition = "⚑",
-      LogPoint = "★",
-      Stopped = "☛",
-      BreakpointRejected = "☒",
+	Breakpoint = "⚑",
+	BreakpointCondition = "⚑",
+	LogPoint = "★",
+	Stopped = "☛",
+	BreakpointRejected = "☒",
 }
 
 M.lsp_signs = {
-      Error = "*",
-      Warn = "!",
-      Hint = "?",
-      Info = "i",
+	Error = "*",
+	Warn = "!",
+	Hint = "?",
+	Info = "i",
 }
 
 M.lsp_vt_signs = {
@@ -105,46 +104,46 @@ M.lsp_vt_signs = {
 }
 
 M.lsp_kind_icons = {
-      Array = "※",
-      Boolean = "B",
-      Calendar = "C",
-      Class = "@",
-      Collapsed = "▶",
-      Color = "%",
-      Constructor = "#",
-      Constant = "π",
-      Copilot = "*",
-      Enum = "ζ",
-      EnumMember = "@",
-      Event = "!",
-      Field = "—",
-      File = "•",
-      Folder = "+",
-      Function = "f",
-      Interface = "†",
-      Key = "*",
-      Keyword = "*",
-      Method = "f",
-      Module = "M",
-      Namespace = "ξ",
-      Null = "Ø",
-      Number = "#",
-      Object = "ß",
-      Operator = "⁑",
-      Package = "P",
-      Property = "✓",
-      Reference = "→",
-      Snippet = "*",
-      String = "T",
-      Struct = "@",
-      Table = "※",
-      Tag = "#",
-      TypeParameter = ":",
-      Variable = "Ψ",
-      Text = "T",
-      Unit = "$",
-      Value = "λ",
-      Watch = "W",
+	Array = "※",
+	Boolean = "B",
+	Calendar = "C",
+	Class = "@",
+	Collapsed = "▶",
+	Color = "%",
+	Constructor = "#",
+	Constant = "π",
+	Copilot = "*",
+	Enum = "ζ",
+	EnumMember = "@",
+	Event = "!",
+	Field = "—",
+	File = "•",
+	Folder = "+",
+	Function = "f",
+	Interface = "†",
+	Key = "*",
+	Keyword = "*",
+	Method = "f",
+	Module = "M",
+	Namespace = "ξ",
+	Null = "Ø",
+	Number = "#",
+	Object = "ß",
+	Operator = "⁑",
+	Package = "P",
+	Property = "✓",
+	Reference = "→",
+	Snippet = "*",
+	String = "T",
+	Struct = "@",
+	Table = "※",
+	Tag = "#",
+	TypeParameter = ":",
+	Variable = "Ψ",
+	Text = "T",
+	Unit = "$",
+	Value = "λ",
+	Watch = "W",
 }
 
 M.lsp_sources = {
@@ -201,8 +200,7 @@ M.null_code_action_sources = {
 
 M.starter_ascii = "  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n"
 
-M.org_agenda_files = {
-}
+M.org_agenda_files = {}
 
 M.zk_wiki = "~/shared/wiki"
 
