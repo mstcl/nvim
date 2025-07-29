@@ -1,9 +1,11 @@
-local lsp_defaults = require("lsp.utils")
-local on_attach = lsp_defaults.on_attach
 local border = require("core.variables").border
-
-local conf = require("core.variables")
-local cond = conf.lsp_enabled
+local condition = require("core.variables").lsp_enabled
+local on_attach = require("lsp.utils").on_attach
+local lsp_sources = require("core.variables").lsp_sources
+local formatting_sources = require("core.variables").formatting_sources
+local hover_sources = require("core.variables").hover_sources
+local diagnostics_sources = require("core.variables").diagnostics_sources
+local code_action_sources = require("core.variables").code_action_sources
 
 -- Plugins that add to nvim LSP functionalities
 return {
@@ -19,7 +21,7 @@ return {
 			"MasonUninstallAll",
 			"MasonLog",
 		},
-		cond = cond,
+		cond = condition,
 		opts = {
 			log_level = vim.log.levels.ERROR,
 			ui = {
@@ -35,26 +37,29 @@ return {
 		-- Bridge none-ls and mason
 		"jay-babu/mason-null-ls.nvim",
 		event = { "BufReadPre", "BufNewFile" },
-		cond = cond,
+		cond = condition,
 		opts = {
 			ensure_installed = nil,
 			automatic_installation = true,
 		},
 	},
 	{
+		-- Mason tool install
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
+		opt = {
+			ensure_installed = lsp_sources,
+		}
+	},
+	{
 		-- Linter/formatter/diagnostic manager
 		"nvimtools/none-ls.nvim",
-		cond = cond,
+		cond = condition,
 		event = "BufRead",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = function()
 			local null_ls = require("null-ls")
 			local null_sources = {}
-			local fmt_sources = conf.null_formatting_sources
-			local hover_sources = conf.null_hover_sources
-			local diagnostics_sources = conf.null_diagnostics_sources
-			local code_action_sources = conf.null_code_action_sources
-			for _, source in ipairs(fmt_sources) do
+			for _, source in ipairs(formatting_sources) do
 				if source == "mdformat" then
 					table.insert(
 						null_sources,
@@ -135,7 +140,7 @@ return {
 	{
 		-- LSP completion in code blocks
 		"jmbuhr/otter.nvim",
-		cond = cond,
+		cond = condition,
 		dependencies = { "neovim/nvim-lspconfig" },
 		ft = { "quarto", "markdown" },
 		keys = {

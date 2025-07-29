@@ -160,7 +160,7 @@ M.lsp_sources = {
 	"terraformls",
 }
 
-M.null_formatting_sources = {
+M.formatting_sources = {
 	"prettierd",
 	"shfmt",
 	"mdformat",
@@ -172,12 +172,12 @@ M.null_formatting_sources = {
 	"hclfmt",
 }
 
-M.null_hover_sources = {
+M.hover_sources = {
 	"dictionary",
 	"printenv",
 }
 
-M.null_diagnostics_sources = {
+M.diagnostics_sources = {
 	"hadolint",
 	"commitlint",
 	"ansiblelint",
@@ -187,7 +187,7 @@ M.null_diagnostics_sources = {
 	"terraform_validate",
 }
 
-M.null_code_action_sources = {
+M.code_action_sources = {
 	"impl",
 	"gomodifytags",
 }
