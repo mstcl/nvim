@@ -1,6 +1,7 @@
 local augroup = require("core.utils").augroup
 local border = require("core.variables").border
 local conf = require("core.variables")
+local condition = require("core.variables").ui_features
 
 -- Plugins which add additional ways to use nvim
 return {
@@ -11,7 +12,7 @@ return {
 			vim.o.laststatus = 0
 		end,
 		cond = function()
-			if conf.ui_features.starter then
+			if condition.starter then
 				if vim.tbl_contains(vim.v.argv, "-R") then
 					return false
 				end
@@ -447,7 +448,6 @@ return {
 	{
 		-- Keymapping cheatsheet
 		"folke/which-key.nvim",
-		cond = true,
 		event = "BufReadPre",
 		keys = {
 			{
@@ -587,14 +587,6 @@ return {
 				},
 			})
 		end,
-	},
-	{
-		-- Discard inactive buffers
-		"chrisgrieser/nvim-early-retirement",
-		event = "BufReadPre",
-		opts = {
-			notificationOnAutoClose = true,
-		},
 	},
 	{
 		-- Search and replace

@@ -1,4 +1,4 @@
-local cond = require("core.variables").dap_enabled
+local condition = require("core.variables").dap_enabled
 local border = require("core.variables").border
 
 -- Plugins that add debugging into nvim
@@ -6,7 +6,7 @@ return {
 	{
 		-- Python debugger
 		"mfussenegger/nvim-dap-python",
-		cond = cond,
+		cond = condition,
 		ft = "python",
 		config = function()
 			require("dap-python").setup()
@@ -15,7 +15,7 @@ return {
 	{
 		-- General debugging engine
 		"mfussenegger/nvim-dap",
-		cond = cond,
+		cond = condition,
 		ft = "python",
 		keys = {
 			{
@@ -40,7 +40,7 @@ return {
 			},
 			{
 				"<leader>db",
-				function ()
+				function()
 					vim.cmd("DapToggleBreakpoint")
 					vim.notify("Toggled DAP breakpoint", vim.log.levels.INFO)
 				end,
@@ -48,7 +48,7 @@ return {
 			},
 			{
 				"<C-M>d",
-				function ()
+				function()
 					vim.cmd("lua require('dapui').toggle()")
 					vim.notify("Toggled DAP ui", vim.log.levels.INFO)
 				end,
@@ -59,7 +59,7 @@ return {
 	{
 		-- Show debugging variable values as virtual text
 		"theHamsta/nvim-dap-virtual-text",
-		cond = cond,
+		cond = condition,
 		dependencies = { "mfussenegger/nvim-dap" },
 		opts = {
 			enabled = true,
@@ -77,7 +77,7 @@ return {
 	{
 		-- Show available DAP information panels
 		"rcarriga/nvim-dap-ui",
-		cond = cond,
+		cond = condition,
 		ft = "python",
 		dependencies = {
 			"mfussenegger/nvim-dap",

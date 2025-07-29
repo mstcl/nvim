@@ -1,5 +1,5 @@
 local augroup = require("core.utils").augroup
-local cond = require("core.variables").ui_features
+local condition = require("core.variables").ui_features
 
 -- Plugins that modify UI
 return {
@@ -35,7 +35,7 @@ return {
 	{
 		-- Winbar/bufferline alternative
 		"b0o/incline.nvim",
-		cond = cond.incline,
+		cond = condition.incline,
 		event = "BufReadPost",
 		opts = {
 			hide = {
@@ -110,7 +110,7 @@ return {
 		config = function(_, opts)
 			if opts then
 				require("mini.indentscope").setup(opts)
-				vim.g.miniindentscope_disable = not cond.indent_lines
+				vim.g.miniindentscope_disable = not condition.indent_lines
 			end
 		end,
 		init = function()
@@ -232,7 +232,7 @@ return {
 		config = function(_, opts)
 			if opts then
 				require("mini.animate").setup(opts)
-				vim.g.minianimate_disable = not cond.animate
+				vim.g.minianimate_disable = not condition.animate
 			end
 		end,
 	},
@@ -253,6 +253,7 @@ return {
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-context",
+		lazy = vim.fn.argc(-1) == 0,
 		opts = {},
 	},
 }

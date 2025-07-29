@@ -1,7 +1,4 @@
-local cond = require("core.variables").edit_features
-local function override_event()
-	return {}
-end
+local condition = require("core.variables").edit_features
 
 -- Plugins that add extra functionality with keybindings or while editing
 return {
@@ -114,6 +111,7 @@ return {
 	{
 		-- Jump around the buffer
 		"folke/flash.nvim",
+		cond = condition.flash,
 		keys = {
 			{
 				"S",
@@ -254,7 +252,7 @@ return {
 	{
 		-- Auto completion
 		"saghen/blink.cmp",
-		cond = cond.completion,
+		cond = condition.completion,
 		lazy = false,
 		dependencies = {
 			{ "rafamadriz/friendly-snippets" },
@@ -436,5 +434,14 @@ return {
 			},
 		},
 		opts_extend = { "sources.completion.enabled_providers" },
+	},
+	{
+		-- Discard inactive buffers
+		"chrisgrieser/nvim-early-retirement",
+		cond = condition.retirement,
+		event = "BufReadPre",
+		opts = {
+			notificationOnAutoClose = true,
+		},
 	},
 }

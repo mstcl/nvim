@@ -13,6 +13,8 @@ M.lsp_features = {
 }
 M.edit_features = {
 	completion = true,
+	flash = false,
+	retirement = false,
 }
 
 M.ui_features = {
