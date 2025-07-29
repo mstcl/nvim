@@ -11,5 +11,8 @@ require("core.autocmds")
 require("core.mappings")
 require("core.ui")
 
+-- Lsp setup
+require("lsp")
+
 -- Overrides
 require("core.override")

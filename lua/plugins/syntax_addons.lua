@@ -442,18 +442,7 @@ return {
 					enabled = true,
 					filetypes = { "markdown" },
 				},
-				lsp = {
-					config = {
-						cmd = { "zk", "lsp" },
-						name = "kz",
-						on_attach = require("lsp.utils").on_attach,
-						capabilities = require("lsp.utils").capabilities,
-						handlers = require("lsp.utils").handlers,
-						flags = {
-							debounce_text_changes = 150,
-						},
-					},
-				},
+				lsp = {},
 			})
 		end,
 	},

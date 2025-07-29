@@ -112,25 +112,32 @@ function M.configure_builtin_diagnostic()
 			]])
 end
 
-M.capabilities = lsp.protocol.make_client_capabilities()
+-- Override default capabilities
+function M.create_capabilities()
+	local capabilities = lsp.protocol.make_client_capabilities()
+	capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities({}, false))
+	capabilities = vim.tbl_deep_extend("force", capabilities, {
+		textDocument = {
+			foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true,
+			},
+			completionItem = {
+				snippetSupport = true,
+			},
+		},
+		workspace = {
+			fileOperations = {
+				didRename = true,
+				willRename = true,
+			},
+			didChangeWatchedFiles = {
+				dynamicRegistration = true,
+			},
+		},
+	})
 
-local ok, blink = pcall(require, "blink.cmp")
-if ok and conf.edit_features.completion then
-	M.capabilities = blink.get_lsp_capabilities(M.capabilities)
+	return capabilities
 end
-M.capabilities.textDocument.completion.completionItem.snippetSupport = true
-M.capabilities.textDocument.foldingRange = {
-	dynamicRegistration = false,
-	lineFoldingOnly = true,
-}
-M.capabilities.workspace = {
-	fileOperations = {
-		didRename = true,
-		willRename = true,
-	},
-	didChangeWatchedFiles = {
-		dynamicRegistration = true,
-	},
-}
 
 return M
