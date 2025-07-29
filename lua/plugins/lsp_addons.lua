@@ -488,30 +488,4 @@ return {
 			end
 		end,
 	},
-	{
-		-- LSP symbol components
-		"SmiteshP/nvim-navic",
-		event = "BufReadPre",
-		cond = cond,
-		opts = function()
-			local function get_kinds()
-				local kinds = conf.lsp_kind_icons
-				local new_kinds = {}
-				for k, _ in pairs(kinds) do
-					new_kinds[k] = ""
-				end
-				return new_kinds
-			end
-			return {
-				icons = get_kinds(),
-				depth_limit = 4,
-				highlight = true,
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("nvim-navic").setup(opts)
-			end
-		end,
-	},
 }

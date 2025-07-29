@@ -339,17 +339,6 @@ function M.get_ffenc()
 	return "[" .. fe .. "]"
 end
 
-function M.get_symbol()
-	if not require("core.variables").lsp_enabled then
-		return ""
-	end
-	local symbol = require("nvim-navic").get_location()
-	if symbol == "" then
-		return ""
-	end
-	return "%#statuslinealt#(" .. symbol .. "%#statuslinealt#)"
-end
-
 ---Get line count
 local function get_vlinecount()
 	local raw_count = vim.fn.line(".") - vim.fn.line("v")

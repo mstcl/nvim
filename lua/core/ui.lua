@@ -41,7 +41,6 @@ _G.get_statusline = function()
 		components.close_bracket,
 		components.hl_main,
 		components.padding,
-		components.symbol,
 		components.padding,
 		components.diagnostics,
 		components.truncate,
