@@ -369,7 +369,11 @@ return {
 						---@type blink-ripgrep.Options
 						opts = {
 							prefix_min_len = 3,
-							context_size = 5,
+							backend = {
+								ripgrep = {
+									context_size = 5,
+								},
+							},
 						},
 						max_items = 3,
 						min_keyword_length = 3,
