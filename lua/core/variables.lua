@@ -148,14 +148,10 @@ M.lsp_kind_icons = {
 
 M.lsp_sources = {
 	"ansiblels",
-	"clangd",
 	"bashls",
 	"jedi_language_server",
-	"vimls",
 	"cssls",
-	"tinymist",
 	"ruff",
-	"texlab",
 	"lua_ls",
 	"gopls",
 	"yamlls",
@@ -184,8 +180,6 @@ M.null_hover_sources = {
 M.null_diagnostics_sources = {
 	"hadolint",
 	"commitlint",
-	"cppcheck",
-	"vint",
 	"ansiblelint",
 	"mypy",
 	"golangci_lint",
