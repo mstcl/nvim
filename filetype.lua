@@ -5,6 +5,7 @@ vim.filetype.add({
 		s = "asm",
 		conf = "config",
 		rasi = "rasi",
+		tftpl = "hcl",
 		rofi = "rasi",
 		wofi = "rasi",
 		tmpl = "gotmpl",
