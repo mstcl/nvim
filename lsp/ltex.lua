@@ -4,12 +4,45 @@ for word in io.open(vim.fn.stdpath("config") .. "/spell/en.utf-8.add", "r"):line
 	table.insert(spell_words, word)
 end
 return {
-	cmd = { vim.fn.expand("$HOME/.local/share/nvim/mason/bin/ltex-ls") },
-	filetypes = { "bib", "gitcommit", "markdown", "org", "plaintex", "rst", "rnoweb", "tex", "pandoc", "quarto", "rmd", "context", "html", "xhtml", "mail", "text" },
+	cmd = { "ltex-ls" },
+	filetypes = {
+		"bib",
+		"gitcommit",
+		"markdown",
+		"org",
+		"plaintex",
+		"rst",
+		"rnoweb",
+		"tex",
+		"pandoc",
+		"quarto",
+		"rmd",
+		"context",
+		"html",
+		"xhtml",
+		"mail",
+		"text",
+	},
 	root_markers = { ".git" },
 	settings = {
 		ltex = {
-			enabled = { "bibtex", "gitcommit", "markdown", "org", "tex", "restructuredtext", "rsweave", "latex", "quarto", "rmd", "context", "html", "xhtml", "mail", "plaintext" }
-		}
+			enabled = {
+				"bibtex",
+				"gitcommit",
+				"markdown",
+				"org",
+				"tex",
+				"restructuredtext",
+				"rsweave",
+				"latex",
+				"quarto",
+				"rmd",
+				"context",
+				"html",
+				"xhtml",
+				"mail",
+				"plaintext",
+			},
+		},
 	},
 }

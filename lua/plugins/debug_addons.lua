@@ -3,8 +3,7 @@ local border = require("core.variables").border
 
 -- Plugins that add debugging into nvim
 return {
-	{
-		-- Python debugger
+	{ -- (nvim-dap-python) Python debugger
 		"mfussenegger/nvim-dap-python",
 		cond = condition,
 		ft = "python",
@@ -12,8 +11,7 @@ return {
 			require("dap-python").setup()
 		end,
 	},
-	{
-		-- General debugging engine
+	{ -- (nvim-dap) General debugging engine
 		"mfussenegger/nvim-dap",
 		cond = condition,
 		ft = "python",
@@ -56,8 +54,7 @@ return {
 			},
 		},
 	},
-	{
-		-- Show debugging variable values as virtual text
+	{ -- (nvim-dap-virtual-text) Show debugging variable values as virtual text
 		"theHamsta/nvim-dap-virtual-text",
 		cond = condition,
 		dependencies = { "mfussenegger/nvim-dap" },
@@ -74,8 +71,7 @@ return {
 			virt_text_win_col = nil,
 		},
 	},
-	{
-		-- Show available DAP information panels
+	{ -- (nvim-dap-ui) Show available DAP information panels
 		"rcarriga/nvim-dap-ui",
 		cond = condition,
 		ft = "python",
@@ -85,7 +81,7 @@ return {
 		},
 		keys = {
 			{
-				"<C-M>d"
+				"<C-M>d",
 			},
 		},
 		opts = {
@@ -99,7 +95,7 @@ return {
 			},
 			sidebar = {
 				elements = {
-					{ id = "scopes",      size = 0.25 },
+					{ id = "scopes", size = 0.25 },
 					{ id = "breakpoints", size = 0.25 },
 				},
 				size = 25,

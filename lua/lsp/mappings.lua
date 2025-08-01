@@ -65,7 +65,7 @@ function M.setup(client, bufnr)
 	end
 
 	if client.server_capabilities.documentFormattingProvider then
-		map({ "n", "v" }, "gF", vim.lsp.buf.format, { desc = "Format code", buffer = bufnr })
+		map({ "n", "v" }, "gF", require("conform").format, { desc = "Format code", buffer = bufnr })
 	end
 
 	if client.server_capabilities.hoverProvider then

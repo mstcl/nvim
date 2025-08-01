@@ -12,14 +12,14 @@ M.lsp_features = {
 	inlay_hints = false,
 }
 M.edit_features = {
-	completion = true,
+	completion = true, -- completion by default
 	flash = false,
 	retirement = false,
 }
 
 M.ui_features = {
 	animate = false,
-	indent_lines = true,
+	indent_lines = true, -- indentscope enabled by default
 	tabline = false,
 	incline = false,
 	starter = false,
@@ -28,8 +28,9 @@ M.ui_features = {
 M.syntax_features = {
 	typst = false,
 	quarto = false,
-	tex = true,
+	tex = false,
 	markdown = true,
+	notebook = false,
 }
 
 M.frecency_workspaces = {}
@@ -149,29 +150,30 @@ M.lsp_kind_icons = {
 }
 
 M.lsp_sources = {
-	"ansiblels",
-	"bashls",
-	"jedi_language_server",
-	"cssls",
-	"ruff",
-	"lua_ls",
-	"gopls",
-	"yamlls",
-	"zk",
-	"dockerls",
-	"terraformls",
+	ansiblels = "ansible-language-server",
+	bashls = "bash-language-server",
+	jedi_language_server = "jedi-language-server",
+	cssls = "css-lsp",
+	ruff = "ruff",
+	lua_ls = "lua-language-server",
+	gopls = "gopls",
+	yamlls = "yaml-language-server",
+	zk = "zk",
+	dockerls = "dockerfile-language-server",
+	terraformls = "terraform-ls",
 }
 
 M.formatting_sources = {
-	"prettierd",
-	"shfmt",
-	"mdformat",
-	"stylua",
-	"cbfmt",
-	"goimports",
-	"gofumpt",
-	"terraform_fmt",
-	"hclfmt",
+	prettierd = "prettierd",
+	shfmt = "shfmt",
+	mdformat = "mdformat",
+	stylua = "stylua",
+	cbfmt = "cbfmt",
+	goimports = "goimports",
+	gofumpt = "gofumpt",
+	terraform_fmt = "",
+	hclfmt = "hclfmt",
+	opa = "opa",
 }
 
 M.hover_sources = {
@@ -180,18 +182,18 @@ M.hover_sources = {
 }
 
 M.diagnostics_sources = {
-	"hadolint",
-	"commitlint",
-	"ansiblelint",
-	"mypy",
-	"golangci_lint",
-	"tfsec",
-	"terraform_validate",
+	hadolint = "hadolint",
+	commitlint = "commitlint",
+	ansiblelint = "ansible-lint",
+	mypy = "mypy",
+	golangci_lint = "golangci-lint",
+	tfsec = "tfsec",
+	terraform_validate = "",
 }
 
 M.code_action_sources = {
-	"impl",
-	"gomodifytags",
+	impl = "impl",
+	gomodifytags = "gomodifytags",
 }
 
 M.starter_ascii = "  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n"
@@ -201,5 +203,25 @@ M.org_agenda_files = {}
 M.zk_wiki = "~/shared/wiki"
 
 M.border = "single"
+
+function M.get_compatible_sources(source_map)
+	local sources = {}
+	for k, _ in pairs(source_map) do
+		table.insert(sources, k)
+	end
+
+	return sources
+end
+
+function M.get_mason_sources(source_map)
+	local sources = {}
+	for _, v in pairs(source_map) do
+		if v ~= "" then
+			table.insert(sources, v)
+		end
+	end
+
+	return sources
+end
 
 return M

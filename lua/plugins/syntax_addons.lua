@@ -1,9 +1,9 @@
 local augroup = require("core.utils").augroup
 local conf = require("core.variables")
+
 -- Plugins to extend syntax, either natively or with treesitter
 return {
-	{
-		-- Treesitter engine
+	{ -- (nvim-treesitter) Treesitter engine
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
 		lazy = vim.fn.argc(-1) == 0,
@@ -186,14 +186,12 @@ return {
 			end)
 		end,
 	},
-	{
-		-- Concealing in tex
+	{ -- (tex-coneal) Concealing in latex files *
 		"KeitaNakamura/tex-conceal.vim",
 		cond = conf.syntax_features.tex,
 		ft = { "tex" },
 	},
-	{
-		-- Quarto syntax
+	{ -- (quarto-nvim) Quarto syntax *
 		"quarto-dev/quarto-nvim",
 		dev = false,
 		cond = conf.syntax_features.quarto,
@@ -214,8 +212,7 @@ return {
 			},
 		},
 	},
-	{
-		-- Typst syntax
+	{ -- (typst.nvim) Typst syntax *
 		"kaarmu/typst.vim",
 		cond = conf.syntax_features.typst,
 		event = "Filetype",
@@ -223,12 +220,12 @@ return {
 			vim.g.typst_pdf_viewer = "sioyek"
 		end,
 	},
-	{
-		-- Python notebooks
+	{ -- (molten-nvim) Python notebooks *
 		"benlubas/molten-nvim",
 		ft = "quarto",
 		version = "^1.0.0",
 		build = ":UpdateRemotePlugins",
+		cond = conf.syntax_features.quarto or conf.syntax_features.notebook,
 		keys = {
 			{
 				"me",
@@ -237,11 +234,11 @@ return {
 				desc = "Evaluate cell (visual)",
 				buffer = true,
 			},
-			{ "md", "<cmd>MoltenDelete<cr>",            desc = "Delete cell",      buffer = true },
-			{ "mh", "<cmd>MoltenHideOutput<cr>",        desc = "Hide cell output", buffer = true },
+			{ "md", "<cmd>MoltenDelete<cr>", desc = "Delete cell", buffer = true },
+			{ "mh", "<cmd>MoltenHideOutput<cr>", desc = "Hide cell output", buffer = true },
 			{ "mo", ":noautocmd MoltenEnterOutput<cr>", desc = "Open cell output", buffer = true },
-			{ "]e", "<cmd>MoltenNext<cr>",              desc = "Next cell",        buffer = true },
-			{ "[e", "<cmd>MoltenPrev<cr>",              desc = "Next cell",        buffer = true },
+			{ "]e", "<cmd>MoltenNext<cr>", desc = "Next cell", buffer = true },
+			{ "[e", "<cmd>MoltenPrev<cr>", desc = "Next cell", buffer = true },
 		},
 		cond = conf.syntax_features.quarto,
 		init = function()
@@ -300,89 +297,17 @@ return {
 			})
 		end,
 	},
-	{
-		-- Convert ipython notebooks to something sane
+	{ -- (jupytext.nvim) Convert ipython notebooks to something sane *
 		"GCBallesteros/jupytext.nvim",
 		event = "VeryLazy",
-		cond = conf.syntax_features.quarto,
+		cond = conf.syntax_features.quarto or conf.syntax_features.notebook,
 		opts = {
 			style = "quarto",
 			output_extension = "qmd",
 			force_ft = "quarto",
 		},
 	},
-	{
-		-- Git conflicts helper
-		"akinsho/git-conflict.nvim",
-		version = "*",
-		event = "BufReadPre",
-		keys = {
-			{
-				"co",
-				"<Plug>(git-conflict-ours)",
-				desc = "Choose ours (conflict)",
-			},
-			{
-				"ct",
-				"<Plug>(git-conflict-theirs)",
-				desc = "Choose theirs (conflict)",
-			},
-			{
-				"cb",
-				"<Plug>(git-conflict-both)",
-				desc = "Choose both (conflict)",
-			},
-			{
-				"cn",
-				"<Plug>(git-conflict-none)",
-				desc = "Choose none (conflict)",
-			},
-			{
-				"]x",
-				"<Plug>(git-conflict-next-conflict)",
-				desc = "Next conflict",
-			},
-			{
-				"[x",
-				"<Plug>(git-conflict-prev-conflict)",
-				desc = "Previous conflict",
-			},
-		},
-		opts = function()
-			return {
-				default_mappings = false,
-				disable_diagnostics = true,
-				highlights = {
-					incoming = "DiffAdd",
-					current = "DiffText",
-					ancestor = "DiffChange"
-				},
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("git-conflict").setup(opts)
-			end
-		end,
-	},
-	{
-		-- Display wordcount under section header
-		"dimfeld/section-wordcount.nvim",
-		ft = { "markdown", "quarto" },
-		cond = conf.syntax_features.markdown,
-		opts = {
-			highlight = "NonText",
-			virt_text_pos = "eol",
-		},
-		config = function(_, opts)
-			if opts then
-				require("section-wordcount").setup(opts)
-			end
-			require("section-wordcount").wordcounter({})
-		end,
-	},
-	{
-		-- Markdown note taking assistant
+	{ -- (zk-nvim) Markdown note taking assistant *
 		"zk-org/zk-nvim",
 		ft = "markdown",
 		cond = conf.syntax_features.markdown,
@@ -446,8 +371,7 @@ return {
 			})
 		end,
 	},
-	{
-		-- D2 diagram
+	{ -- (d2-vim) D2 diagram
 		"terrastruct/d2-vim",
 		ft = { "d2" },
 	},

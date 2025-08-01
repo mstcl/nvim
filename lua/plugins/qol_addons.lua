@@ -5,73 +5,7 @@ local condition = require("core.variables").ui_features
 
 -- Plugins which add additional ways to use nvim
 return {
-	{
-		-- Minimalist start screen
-		"echasnovski/mini.starter",
-		init = function()
-			vim.o.laststatus = 0
-		end,
-		cond = function()
-			if condition.starter then
-				if vim.tbl_contains(vim.v.argv, "-R") then
-					return false
-				end
-				return true
-			else
-				return false
-			end
-		end,
-		priority = 100,
-		version = false,
-		opts = function()
-			local starter = require("mini.starter")
-			local quick = function()
-				return function()
-					local quick_tbl = {
-						{ action = "Lazy show", name = "Plugins", section = "Quick actions" },
-					}
-					if require("core.variables").syntax_features.org then
-						local org_agenda = function()
-							require("orgmode").action("agenda.prompt")
-						end
-						table.insert(quick_tbl, { action = org_agenda, name = "Agenda", section = "Quick actions" })
-					end
-					return quick_tbl
-				end
-			end
-			local greetings = function()
-				local hour = tonumber(vim.fn.strftime("%H"))
-				-- [04:00, 12:00) - morning, [12:00, 20:00) - day, [20:00, 04:00) - evening
-				local part_id = math.floor((hour + 4) / 8) + 1
-				local day_part = ({ "evening", "morning", "afternoon", "evening" })[part_id]
-				---@diagnostic disable-next-line: undefined-field
-				local username = vim.loop.os_get_passwd()["username"] or "USERNAME"
-
-				return ("Good %s, %s."):format(day_part, username)
-			end
-			return {
-				items = {
-					starter.sections.recent_files(3, true, false),
-					starter.sections.recent_files(3, false, false),
-					starter.sections.sessions(8),
-					quick(),
-				},
-				content_hooks = {
-					starter.gen_hook.adding_bullet(),
-					starter.gen_hook.aligning("center", "center"),
-				},
-				footer = "",
-				header = require("core.variables").starter_ascii .. greetings(),
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("mini.starter").setup(opts)
-			end
-		end,
-	},
-	{
-		-- Navigation and fuzzy pickers
+	{ -- (fzf-lua) Navigation and fuzzy pickers
 		"ibhagwan/fzf-lua",
 		keys = {
 			{
@@ -276,8 +210,7 @@ return {
 			end
 		end,
 	},
-	{
-		-- Distraction-free editing mode
+	{ -- (zen-mode.nvim) Distraction-free editing mode
 		"folke/zen-mode.nvim",
 		keys = {
 			{
@@ -340,18 +273,16 @@ return {
 			end,
 		},
 	},
-	{
-		-- Utility to align text by delimiters
+	{ -- (mini.align) Utility to align text by delimiters
 		"echasnovski/mini.align",
 		keys = {
 			{ "gaa", mode = "v" },
-			{ "gA",  mode = "v" },
+			{ "gA", mode = "v" },
 		},
 		version = false,
 		opts = {},
 	},
-	{
-		-- Buffer-like file browser
+	{ -- (oil.nvim) Buffer-like file browser
 		"stevearc/oil.nvim",
 		cmd = "Oil",
 		init = function()
@@ -445,8 +376,7 @@ return {
 			prompt_save_on_select_new_entry = true,
 		},
 	},
-	{
-		-- Keymapping cheatsheet
+	{ -- (which-key.nvim) Keymapping cheatsheet
 		"folke/which-key.nvim",
 		event = "BufReadPre",
 		keys = {
@@ -476,26 +406,26 @@ return {
 		config = function(_, opts)
 			local wk = require("which-key")
 			wk.add({
-				{ "<leader>",  group = "Leader commands (pickers & LSP)" },
+				{ "<leader>", group = "Leader commands (pickers & LSP)" },
 				{ "<leader>g", group = "Git commands" },
-				{ "<C-M>",     group = "Toggle components" },
-				{ "<C-S>",     group = "Split windows" },
-				{ "[",         group = "Previous" },
-				{ "]",         group = "Next" },
-				{ "z",         group = "Folds, spelling & align" },
-				{ "g",         group = "LSP, comment, case & navigation" },
-				{ "gs",        group = "Surround" },
-				{ "<leader>n", group = "Notes (zk) commands",            cond = conf.syntax_features.markdown },
-				{ "m",         group = "Molten operations",              cond = conf.syntax_features.quarto },
-				{ "<leader>d", group = "DAP commands",                   cond = conf.dap_enabled },
-				{ "go",        group = "Otter (code block) symbols",     cond = conf.lsp_enabled },
+				{ "<C-M>", group = "Toggle components" },
+				{ "<C-S>", group = "Split windows" },
+				{ "[", group = "Previous" },
+				{ "]", group = "Next" },
+				{ "z", group = "Folds, spelling & align" },
+				{ "g", group = "LSP, comment, case & navigation" },
+				{ "gs", group = "Surround" },
+				{ "<leader>n", group = "Notes (zk) commands", cond = conf.syntax_features.markdown },
+				{ "m", group = "Molten operations", cond = conf.syntax_features.quarto },
+				{ "<leader>d", group = "DAP commands", cond = conf.dap_enabled },
+				{ "go", group = "Otter (code block) symbols", cond = conf.lsp_enabled },
 			})
 			if opts then
 				wk.setup(opts)
 			end
 		end,
 	},
-	{
+	{ -- (blame.nvim) Git blame sidebar
 		"FabijanZulj/blame.nvim",
 		cmd = "BlameToggle",
 		keys = {
@@ -523,7 +453,7 @@ return {
 			},
 		},
 	},
-	{
+	{ -- (neogit) magit clone
 		"NeogitOrg/neogit",
 		cmd = "Neogit",
 		dependencies = { "nvim-lua/plenary.nvim" },
@@ -588,8 +518,7 @@ return {
 			})
 		end,
 	},
-	{
-		-- Search and replace
+	{ -- (grug-far.nvim) Search and replace
 		"MagicDuck/grug-far.nvim",
 		cmd = { "GrugFar" },
 		opts = {
@@ -601,8 +530,7 @@ return {
 			},
 		},
 	},
-	{
-		-- Code runner
+	{ -- (overseer.nvim) Code runner
 		"stevearc/overseer.nvim",
 		keys = {
 			{
@@ -646,8 +574,7 @@ return {
 			},
 		},
 	},
-	{
-		-- Git signs and diffs
+	{ -- (mini.diff) Git signs and diffs
 		"echasnovski/mini.diff",
 		version = false,
 		event = "BufReadPre",
@@ -718,6 +645,74 @@ return {
 			if opts then
 				require("mini.diff").setup(opts)
 			end
+		end,
+	},
+	{ -- (git-conflict.nvim) Git conflicts helper
+		"akinsho/git-conflict.nvim",
+		version = "*",
+		event = "BufReadPre",
+		keys = {
+			{
+				"co",
+				"<Plug>(git-conflict-ours)",
+				desc = "Choose ours (conflict)",
+			},
+			{
+				"ct",
+				"<Plug>(git-conflict-theirs)",
+				desc = "Choose theirs (conflict)",
+			},
+			{
+				"cb",
+				"<Plug>(git-conflict-both)",
+				desc = "Choose both (conflict)",
+			},
+			{
+				"cn",
+				"<Plug>(git-conflict-none)",
+				desc = "Choose none (conflict)",
+			},
+			{
+				"]x",
+				"<Plug>(git-conflict-next-conflict)",
+				desc = "Next conflict",
+			},
+			{
+				"[x",
+				"<Plug>(git-conflict-prev-conflict)",
+				desc = "Previous conflict",
+			},
+		},
+		opts = function()
+			return {
+				default_mappings = false,
+				disable_diagnostics = true,
+				highlights = {
+					incoming = "DiffAdd",
+					current = "DiffText",
+					ancestor = "DiffChange",
+				},
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("git-conflict").setup(opts)
+			end
+		end,
+	},
+	{ -- (section-wordcount.nvim) Display wordcount under section header
+		"dimfeld/section-wordcount.nvim",
+		ft = { "markdown", "quarto" },
+		cond = conf.syntax_features.markdown,
+		opts = {
+			highlight = "NonText",
+			virt_text_pos = "eol",
+		},
+		config = function(_, opts)
+			if opts then
+				require("section-wordcount").setup(opts)
+			end
+			require("section-wordcount").wordcounter({})
 		end,
 	},
 }

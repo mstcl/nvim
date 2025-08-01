@@ -1,6 +1,6 @@
 ---@type vim.lsp.Config
 return {
-	cmd = { vim.fn.expand("$HOME/.local/share/nvim/mason/bin/gopls") },
+	cmd = { "gopls" },
 	filetypes = { "go", "gomod", "gowork", "gotmpl", "gosum" },
 	root_markers = { "go.mod", "go.work", ".git" },
 	settings = {

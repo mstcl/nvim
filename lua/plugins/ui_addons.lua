@@ -3,8 +3,7 @@ local condition = require("core.variables").ui_features
 
 -- Plugins that modify UI
 return {
-	{
-		-- Colorscheme building
+	{ -- (shipwright.nvim & lush.nvim) Colorscheme building
 		"rktjmp/shipwright.nvim",
 		cmd = "Shipwright",
 		dependencies = {
@@ -14,8 +13,7 @@ return {
 			"mstcl/ivory",
 		},
 	},
-	{
-		-- Highlight color blocks
+	{ -- (nvim-highlight-colors) Highlight color blocks
 		"brenoprata10/nvim-highlight-colors",
 		event = { "BufRead" },
 		cmd = { "HighlightColors" },
@@ -32,8 +30,7 @@ return {
 			enable_named_colors = false,
 		},
 	},
-	{
-		-- Winbar/bufferline alternative
+	{ -- (incline.nvim) Winbar/bufferline alternative *
 		"b0o/incline.nvim",
 		cond = condition.incline,
 		event = "BufReadPost",
@@ -51,8 +48,7 @@ return {
 			},
 		},
 	},
-	{
-		-- Tabline and bufferline
+	{ -- (mini.tabline) Tabline and bufferline *
 		"echasnovski/mini.tabline",
 		version = false,
 
@@ -77,8 +73,7 @@ return {
 			})
 		end,
 	},
-	{
-		-- Indent lines
+	{ -- (mini.indentscope) Indent lines *
 		"echasnovski/mini.indentscope",
 		version = false,
 		keys = {
@@ -132,8 +127,7 @@ return {
 			})
 		end,
 	},
-	{
-		-- Show notifications (for cmdheight = 0)
+	{ -- (mini.notify) Show notifications (for cmdheight = 0)
 		"echasnovski/mini.notify",
 		version = false,
 		keys = {
@@ -170,8 +164,7 @@ return {
 			end
 		end,
 	},
-	{
-		-- Animations
+	{ -- (mini.animate) Animations *
 		"echasnovski/mini.animate",
 		keys = {
 			{
@@ -236,8 +229,73 @@ return {
 			end
 		end,
 	},
-	{
+	{ -- (mini.starter) Minimalist start screen *
+		"echasnovski/mini.starter",
+		init = function()
+			vim.o.laststatus = 0
+		end,
+		cond = function()
+			if condition.starter then
+				if vim.tbl_contains(vim.v.argv, "-R") then
+					return false
+				end
+				return true
+			else
+				return false
+			end
+		end,
+		priority = 100,
+		version = false,
+		opts = function()
+			local starter = require("mini.starter")
+			local quick = function()
+				return function()
+					local quick_tbl = {
+						{ action = "Lazy show", name = "Plugins", section = "Quick actions" },
+					}
+					if require("core.variables").syntax_features.org then
+						local org_agenda = function()
+							require("orgmode").action("agenda.prompt")
+						end
+						table.insert(quick_tbl, { action = org_agenda, name = "Agenda", section = "Quick actions" })
+					end
+					return quick_tbl
+				end
+			end
+			local greetings = function()
+				local hour = tonumber(vim.fn.strftime("%H"))
+				-- [04:00, 12:00) - morning, [12:00, 20:00) - day, [20:00, 04:00) - evening
+				local part_id = math.floor((hour + 4) / 8) + 1
+				local day_part = ({ "evening", "morning", "afternoon", "evening" })[part_id]
+				---@diagnostic disable-next-line: undefined-field
+				local username = vim.loop.os_get_passwd()["username"] or "USERNAME"
+
+				return ("Good %s, %s."):format(day_part, username)
+			end
+			return {
+				items = {
+					starter.sections.recent_files(3, true, false),
+					starter.sections.recent_files(3, false, false),
+					starter.sections.sessions(8),
+					quick(),
+				},
+				content_hooks = {
+					starter.gen_hook.adding_bullet(),
+					starter.gen_hook.aligning("center", "center"),
+				},
+				footer = "",
+				header = require("core.variables").starter_ascii .. greetings(),
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("mini.starter").setup(opts)
+			end
+		end,
+	},
+	{ -- (visual-whitespace.nvim) Whitespace shows on visual selection
 		"mcauley-penney/visual-whitespace.nvim",
+		event = { "ModeChanged" },
 		config = function(_, opts)
 			local fg = vim.api.nvim_get_hl(0, { name = "NonText" }).fg
 			local bg = vim.api.nvim_get_hl(0, { name = "Visual" }).bg
@@ -249,9 +307,8 @@ return {
 				require("visual-whitespace").setup(opts)
 			end
 		end,
-		event = { "ModeChanged" },
 	},
-	{
+	{ -- (nvim-treesitter-context) Treesitter context in-buffer
 		"nvim-treesitter/nvim-treesitter-context",
 		lazy = vim.fn.argc(-1) == 0,
 		opts = {},

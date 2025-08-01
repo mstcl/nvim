@@ -1,7 +1,7 @@
 ---@type vim.lsp.Config
 return {
 	cmd = {
-		vim.fn.expand("$HOME/.local/share/nvim/mason/bin/lua-language-server"),
+		"lua-language-server",
 		"-E",
 		vim.fn.expand("$HOME/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua"),
 	},

@@ -7,10 +7,17 @@ local HOVER_SOURCES = require("core.variables").hover_sources
 local DIAGNOSTICS_SOURCES = require("core.variables").diagnostics_sources
 local CODE_ACTION_SOURCES = require("core.variables").code_action_sources
 
+local FORMATTING_MASON_SOURCES = require("core.variables").get_mason_sources(FORMATTING_SOURCES)
+local DIAGNOSTICS_MASON_SOURCES = require("core.variables").get_mason_sources(DIAGNOSTICS_SOURCES)
+local CODE_ACTION_MASON_SOURCES = require("core.variables").get_mason_sources(CODE_ACTION_SOURCES)
+local LSP_MASON_SOURCES = require("core.variables").get_mason_sources(LSP_SOURCES)
+
+local DIAGNOSTICS_COMPATIBLE_SOURCES = require("core.variables").get_compatible_sources(DIAGNOSTICS_SOURCES)
+local CODE_ACTION_COMPATIBLE_SOURCES = require("core.variables").get_compatible_sources(CODE_ACTION_SOURCES)
+
 -- Plugins that add to nvim LSP functionalities
 return {
-	{
-		-- Code tools forge
+	{ -- (mason.nvim) Code tools forge
 		"williamboman/mason.nvim",
 		event = { "BufReadPre", "BufNewFile" },
 		cmd = {
@@ -33,25 +40,24 @@ return {
 			},
 		},
 	},
-	{
-		-- Bridge none-ls and mason
-		"jay-babu/mason-null-ls.nvim",
-		event = { "BufReadPre", "BufNewFile" },
-		cond = condition,
-		opts = {
-			ensure_installed = nil,
-			automatic_installation = true,
-		},
-	},
-	{
-		-- Mason tool install
+	{ -- (mason-tool-installer.nvim) Mason tool install
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
-		opt = {
-			ensure_installed = LSP_SOURCES,
-		}
+		cmd = { "MasonToolsUpdate", "MasonToolsInstall" },
+		cond = condition,
+		config = function()
+			require("mason-tool-installer").setup({
+				run_on_start = true,
+				ensure_installed = vim.tbl_deep_extend(
+					"force",
+					FORMATTING_MASON_SOURCES,
+					DIAGNOSTICS_MASON_SOURCES,
+					CODE_ACTION_MASON_SOURCES,
+					LSP_MASON_SOURCES
+				),
+			})
+		end,
 	},
-	{
-		-- Linter/formatter/diagnostic manager
+	{ -- (none-ls.nvim) Linter/diagnostic
 		"nvimtools/none-ls.nvim",
 		cond = condition,
 		event = "BufRead",
@@ -59,29 +65,12 @@ return {
 		opts = function()
 			local null_ls = require("null-ls")
 			local null_sources = {}
-			for _, source in ipairs(FORMATTING_SOURCES) do
-				if source == "mdformat" then
-					table.insert(
-						null_sources,
-						null_ls.builtins.formatting[source].with({
-							filetypes = { "markdown", "quarto" },
-						})
-					)
-				elseif source == "cbfmt" then
-					table.insert(
-						null_sources,
-						null_ls.builtins.formatting[source].with({
-							filetypes = { "markdown", "quarto", "org" },
-						})
-					)
-				else
-					table.insert(null_sources, null_ls.builtins.formatting[source])
-				end
-			end
+
 			for _, source in ipairs(HOVER_SOURCES) do
 				table.insert(null_sources, null_ls.builtins.hover[source])
 			end
-			for _, source in ipairs(DIAGNOSTICS_SOURCES) do
+
+			for _, source in ipairs(DIAGNOSTICS_COMPATIBLE_SOURCES) do
 				if source == "commitlint" then
 					table.insert(
 						null_sources,
@@ -114,7 +103,8 @@ return {
 					table.insert(null_sources, null_ls.builtins.diagnostics[source])
 				end
 			end
-			for _, source in ipairs(CODE_ACTION_SOURCES) do
+
+			for _, source in ipairs(CODE_ACTION_COMPATIBLE_SOURCES) do
 				if source == "proselint" then
 					table.insert(
 						null_sources,
@@ -137,8 +127,7 @@ return {
 			end
 		end,
 	},
-	{
-		-- LSP completion in code blocks
+	{ -- (otter.nvim) LSP completion in code blocks
 		"jmbuhr/otter.nvim",
 		cond = condition,
 		dependencies = { "neovim/nvim-lspconfig" },
@@ -198,5 +187,53 @@ return {
 				require("otter").setup(opts)
 			end
 		end,
+	},
+	{ -- (conform.nvim) Formatter
+		"stevearc/conform.nvim",
+		event = { "BufWritePre" },
+		cmd = { "ConformInfo" },
+		---@module "conform"
+		---@type conform.setupOpts
+		opts = {
+			quiet = true,
+			default_format_opts = { lsp_format = "fallback" },
+			formatters_by_ft = {
+				typescript = { "prettierd" },
+				typescriptreact = { "prettierd" },
+				javascript = { "prettierd" },
+				javascriptreact = { "prettierd" },
+				html = { "prettierd" },
+				css = { "prettierd" },
+				scss = { "prettierd" },
+				lua = { "stylua", lsp_format = "prefer" },
+				markdown = { "mdformat", "prettierd", "cbfmt" },
+				quarto = { "mdformat", "prettierd", "cbfmt" },
+				yaml = { "prettier" },
+				graphql = { "prettier" },
+				vue = { "prettier" },
+				angular = { "prettier" },
+				less = { "prettier" },
+				flow = { "prettier" },
+				sh = { "shfmt" },
+				bash = { "shfmt" },
+				zsh = { "shfmt" },
+				go = { "goimports", "gofumpt", "gofmt" },
+				terraform = { "terraform_fmt" },
+				hcl = { "hcl" },
+				python = { "ruff_format", "ruff_organize_imports", "ruff_fix" },
+				opa = { "opa_fmt" },
+			},
+			format_on_save = {
+				timeout_ms = 500,
+				lsp_format = "fallback",
+			},
+			formatters = {
+				prettier = {
+					prepend_args = function()
+						return { "--no-semi", "--single-quote", "--no-bracket-spacing", "--print-width", "80" }
+					end,
+				},
+			},
+		},
 	},
 }

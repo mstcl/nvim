@@ -2,18 +2,16 @@ local condition = require("core.variables").edit_features
 
 -- Plugins that add extra functionality with keybindings or while editing
 return {
-	{
-		-- Allows mapping custom escape keys without ruining typing experience.
+	{ -- (better-escape.nvim) Allows mapping custom escape keys without ruining typing experience.
 		"max397574/better-escape.nvim",
 		event = "InsertCharPre",
 		opts = {},
 	},
-	{
-		-- Add motions to surround objects with brackets etc.
+	{ -- (mini.surround) Add motions to surround objects with brackets etc.
 		"echasnovski/mini.surround",
 		version = false,
 		keys = {
-			{ "gsa", desc = "Add surrounding",        mode = { "n", "v" } },
+			{ "gsa", desc = "Add surrounding", mode = { "n", "v" } },
 			{ "gsd", desc = "Delete surrounding" },
 			{ "gsf", desc = "Find right surrounding" },
 			{ "gsF", desc = "Find left surrounding" },
@@ -33,8 +31,7 @@ return {
 			},
 		},
 	},
-	{
-		-- Bracketed motions for prev and next
+	{ -- (mini.bracketed) Bracketed motions for prev and next
 		"echasnovski/mini.bracketed",
 		version = false,
 		keys = {
@@ -77,20 +74,19 @@ return {
 			yank = { suffix = "" },
 		},
 	},
-	{
-		-- Keybindings to move lines and blocks
+	{ -- (move.nvim) Keybindings to move lines and blocks
 		"fedepujol/move.nvim",
 		keys = {
-			{ "<A-j>", ":MoveBlock(1)<cr>",   mode = "v", desc = "Move block down" },
-			{ "<A-k>", ":MoveBlock(-1)<cr>",  mode = "v", desc = "Move block up" },
+			{ "<A-j>", ":MoveBlock(1)<cr>", mode = "v", desc = "Move block down" },
+			{ "<A-k>", ":MoveBlock(-1)<cr>", mode = "v", desc = "Move block up" },
 			{ "<A-h>", ":MoveHBlocK(-1)<cr>", mode = "v", desc = "Move block left" },
-			{ "<A-l>", ":MoveHBlock(1)<cr>",  mode = "v", desc = "Move block right" },
-			{ "<A-j>", ":MoveLine(1)<cr>",    mode = "n", desc = "Move line up" },
-			{ "<A-k>", ":MoveLine(-1)<cr>",   mode = "n", desc = "Move line down" },
-			{ "<A-h>", ":MoveHChar(-1)<cr>",  mode = "n", desc = "Move char left" },
-			{ "<A-l>", ":MoveHChar(1)<cr>",   mode = "n", desc = "Move char right" },
-			{ "<A-f>", ":MoveWord(1)<cr>",    mode = "n", desc = "Move word forward" },
-			{ "<A-b>", ":MoveWord(-1)<cr>",   mode = "n", desc = "Move word backward" },
+			{ "<A-l>", ":MoveHBlock(1)<cr>", mode = "v", desc = "Move block right" },
+			{ "<A-j>", ":MoveLine(1)<cr>", mode = "n", desc = "Move line up" },
+			{ "<A-k>", ":MoveLine(-1)<cr>", mode = "n", desc = "Move line down" },
+			{ "<A-h>", ":MoveHChar(-1)<cr>", mode = "n", desc = "Move char left" },
+			{ "<A-l>", ":MoveHChar(1)<cr>", mode = "n", desc = "Move char right" },
+			{ "<A-f>", ":MoveWord(1)<cr>", mode = "n", desc = "Move word forward" },
+			{ "<A-b>", ":MoveWord(-1)<cr>", mode = "n", desc = "Move word backward" },
 		},
 		opts = function()
 			return {
@@ -108,8 +104,7 @@ return {
 			end
 		end,
 	},
-	{
-		-- Jump around the buffer
+	{ -- (flash.nvim) Jump around the buffer *
 		"folke/flash.nvim",
 		cond = condition.flash,
 		keys = {
@@ -179,14 +174,12 @@ return {
 			end
 		end,
 	},
-	{
-		-- Tab out of parentheses
+	{ -- (neotab.nvim) Tab out of parentheses
 		"kawre/neotab.nvim",
 		event = "InsertEnter",
 		opts = {},
 	},
-	{
-		-- Toggling booleans and more
+	{ -- (boole.nvim) Toggling booleans and more
 		"nat-418/boole.nvim",
 		keys = {
 			{
@@ -210,8 +203,7 @@ return {
 			},
 		},
 	},
-	{
-		-- Better word movement
+	{ -- (nvim-spider) Better word movement
 		"chrisgrieser/nvim-spider",
 		keys = {
 			{ "e", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x" } },
@@ -219,8 +211,7 @@ return {
 			{ "w", "<cmd>lua require('spider').motion('w')<CR>", mode = { "n", "o", "x" } },
 		},
 	},
-	{
-		-- Auto pairs
+	{ -- (mini.pairs) Auto pairs
 		"echasnovski/mini.pairs",
 		event = "InsertEnter",
 		opts = {
@@ -249,15 +240,14 @@ return {
 			},
 		},
 	},
-	{
-		-- Auto completion
+	{ -- (blink.cmp) Auto completion *
 		"saghen/blink.cmp",
 		cond = condition.completion,
 		lazy = false,
 		dependencies = {
 			{ "rafamadriz/friendly-snippets" },
 			{ "mikavilpas/blink-ripgrep.nvim" },
-			{ "samiulsami/cmp-go-deep",       dependencies = { "kkharji/sqlite.lua" } },
+			{ "samiulsami/cmp-go-deep", dependencies = { "kkharji/sqlite.lua" } },
 			{ "saghen/blink.compat" },
 		},
 		version = "v1.*",
@@ -435,8 +425,7 @@ return {
 		},
 		opts_extend = { "sources.completion.enabled_providers" },
 	},
-	{
-		-- Discard inactive buffers
+	{ -- (nvim-early-retirement) Discard inactive buffers *
 		"chrisgrieser/nvim-early-retirement",
 		cond = condition.retirement,
 		event = "BufReadPre",
