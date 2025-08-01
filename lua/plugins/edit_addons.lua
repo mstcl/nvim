@@ -433,4 +433,52 @@ return {
 			notificationOnAutoClose = true,
 		},
 	},
+	{ -- (conform.nvim) Formatter
+		"stevearc/conform.nvim",
+		event = { "BufWritePre" },
+		cmd = { "ConformInfo" },
+		---@module "conform"
+		---@type conform.setupOpts
+		opts = {
+			quiet = true,
+			default_format_opts = { lsp_format = "fallback" },
+			formatters_by_ft = {
+				typescript = { "prettierd" },
+				typescriptreact = { "prettierd" },
+				javascript = { "prettierd" },
+				javascriptreact = { "prettierd" },
+				html = { "prettierd" },
+				css = { "prettierd" },
+				scss = { "prettierd" },
+				lua = { "stylua", lsp_format = "prefer" },
+				markdown = { "mdformat", "prettierd", "cbfmt" },
+				quarto = { "mdformat", "prettierd", "cbfmt" },
+				yaml = { "prettierd" },
+				graphql = { "prettierd" },
+				vue = { "prettierd" },
+				angular = { "prettierd" },
+				less = { "prettierd" },
+				flow = { "prettierd" },
+				sh = { "shfmt" },
+				bash = { "shfmt" },
+				zsh = { "shfmt" },
+				go = { "goimports", "gofumpt", "gofmt", "golines" },
+				terraform = { "terraform_fmt" },
+				hcl = { "hcl" },
+				python = { "ruff_format", "ruff_organize_imports", "ruff_fix" },
+				opa = { "opa_fmt" },
+			},
+			format_on_save = {
+				timeout_ms = 500,
+				lsp_format = "fallback",
+			},
+			formatters = {
+				prettier = {
+					prepend_args = function()
+						return { "--no-semi", "--single-quote", "--no-bracket-spacing", "--print-width", "80" }
+					end,
+				},
+			},
+		},
+	},
 }

@@ -171,6 +171,7 @@ M.formatting_sources = {
 	cbfmt = "cbfmt",
 	goimports = "goimports",
 	gofumpt = "gofumpt",
+	golines = "golines",
 	terraform_fmt = "",
 	hclfmt = "hclfmt",
 	opa = "opa",
