@@ -198,69 +198,6 @@ return {
 			end
 		end,
 	},
-	{ -- (zen-mode.nvim) Distraction-free editing mode
-		"folke/zen-mode.nvim",
-		keys = {
-			{
-				"<C-M>z",
-				function()
-					vim.cmd("ZenMode")
-				end,
-				desc = "Toggle Zen Mode",
-			},
-		},
-		cmd = "ZenMode",
-		opts = {
-			window = {
-				backdrop = 0,
-				width = 0.9,
-				height = 0.9,
-				options = {
-					signcolumn = "no",
-					number = false,
-					relativenumber = false,
-					cursorline = false,
-					cursorcolumn = false,
-					list = false,
-				},
-			},
-			plugins = {
-				options = {
-					enabled = true,
-					ruler = false,
-					showcmd = false,
-					laststatus = 0,
-				},
-				twilight = { enabled = false },
-				kitty = {
-					enabled = true,
-					font = "+4",
-				},
-				wezterm = {
-					enabled = true,
-					font = "+4",
-				},
-				alacritty = {
-					enabled = true,
-					font = "16",
-				},
-			},
-			on_open = function(_)
-				vim.api.nvim_set_hl(0, "ZenBg", { link = "Normal" })
-				vim.g.zen_indent_cache = vim.b.miniindentscope_disable
-				vim.g.zen_notify_cache = vim.b.mininotify_disable
-				vim.b.miniindentscope_disable = true
-				vim.b.mininotify_disable = true
-				vim.g.zen_foldcolumn_cache = vim.g.foldcolumn
-				vim.g.foldcolumn = false
-			end,
-			on_close = function(_)
-				vim.b.mininotify_disable = vim.g.zen_notify_cache
-				vim.b.miniindentscope_disable = vim.g.zen_indent_cache
-				vim.g.foldcolumn = vim.g.zen_foldcolumn_cache
-			end,
-		},
-	},
 	{ -- (mini.align) Utility to align text by delimiters
 		"echasnovski/mini.align",
 		keys = {
