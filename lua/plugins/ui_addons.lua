@@ -19,7 +19,7 @@ return {
 		cmd = { "HighlightColors" },
 		keys = {
 			{
-				"<C-M>hh",
+				"<C-M>h",
 				"<cmd>HighlightColors Toggle<cr>",
 				desc = "Toggle highlighting colours",
 			},

@@ -89,6 +89,7 @@ set.foldnestmax = 4
 
 -- Statuscolumn
 vim.g.foldcolumn = true
+set.laststatus = 3
 set.number = true
 set.relativenumber = true
 set.signcolumn = "auto"

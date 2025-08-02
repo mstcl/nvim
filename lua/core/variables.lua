@@ -9,6 +9,7 @@ M.dap_enabled = false
 M.lsp_enabled = true
 M.lsp_features = {
 	virtual_text = false,
+	virtual_lines = true,
 	inlay_hints = false,
 }
 M.edit_features = {

@@ -53,26 +53,20 @@ function M.on_attach(client, bufnr)
 	end
 end
 
-M.handlers = {
-	["textDocument/hover"] = lsp.with(lsp.handlers.hover, {
-		border = border,
-		title = "Information",
-		max_width = 35,
-	}),
-	["textDocument/publishDiagnostics"] = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
-		update_in_insert = false,
-	}),
-}
-
 ---@return table
 function M.virtual_text_configs()
 	return {
-		current_line = true,
+		current_line = false,
 		spacing = 4,
 		source = "if_many",
 		prefix = "●",
 		suffix = " ",
 	}
+end
+
+---@return table
+function M.virtual_lines_configs()
+	return { current_line = false }
 end
 
 -- Configure builtin diagnostics
@@ -81,6 +75,15 @@ function M.configure_builtin_diagnostic()
 		codelens = {
 			enabled = false,
 		},
+
+		---@return boolean|fun()
+		virtual_lines = function()
+			if require("core.variables").lsp_features.virtual_lines then
+				return M.virtual_lines_configs()
+			end
+			return false
+		end,
+
 		---@return boolean|fun()
 		virtual_text = function()
 			if require("core.variables").lsp_features.virtual_text then

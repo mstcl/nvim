@@ -2,8 +2,6 @@ local map = vim.keymap.set
 local exec = vim.api.nvim_command
 
 -- Remove mappings
-map("n", "Q", "")
-map("n", "gQ", "")
 map("n", "<leader>p", "<cmd>Lazy show<cr>", { desc = "Plugins manager (lazy)" })
 
 map({ "n", "v" }, "<space>", ":", { remap = false, desc = "Command", silent = true })
@@ -140,4 +138,6 @@ map("n", "gx", function()
 end, { desc = "Follow word with xdg-open" })
 
 -- open terminal
-map("n", "<C-Bslash>", function() require("core.terminal").Toggle() end)
+map("n", "<C-Bslash>", function()
+	require("core.terminal").Toggle()
+end)

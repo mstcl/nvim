@@ -90,6 +90,7 @@ highlight CurSearch guifg=NONE guibg=#dfe1e6 guisp=NONE blend=NONE gui=NONE
 highlight CursorColumn guifg=NONE guibg=#493f37 guisp=NONE blend=NONE gui=NONE
 highlight CursorLine guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight! link NeogitCursorLine CursorLine
+highlight! link QuickFixLine CursorLine
 highlight CursorLineFold guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight CursorLineNr guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight CursorLineSign guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -144,6 +145,7 @@ highlight! link DiagnosticError Error
 highlight! link @comment.error Error
 highlight ErrorMsg guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingError ErrorMsg
+highlight! link DiagnosticVirtualLinesError ErrorMsg
 highlight! link DiagnosticVirtualTextError ErrorMsg
 highlight! link debugBreakpoint ErrorMsg
 highlight! link @function.macro ErrorMsg
@@ -152,11 +154,11 @@ highlight FlashBackdrop guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight FlashLabel guifg=#545468 guibg=#dfe1e6 guisp=NONE blend=NONE gui=NONE
 highlight FlashPromptIcon guifg=#edeae4 guibg=#834c40 guisp=NONE blend=NONE gui=bold
 highlight! link @number.float Float
-highlight FloatBorder guifg=#edeae4 guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
-highlight FloatFooter guifg=#493f37 guibg=#edeae4 guisp=NONE blend=NONE gui=bold
+highlight FloatBorder guifg=#e5e1d9 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
+highlight FloatFooter guifg=#493f37 guibg=#e5e1d9 guisp=NONE blend=NONE gui=bold
 highlight FloatShadow guifg=NONE guibg=black guisp=NONE blend=80 gui=NONE
 highlight FloatShadowThrough guifg=NONE guibg=black guisp=NONE blend=100 gui=NONE
-highlight FloatTitle guifg=#493f37 guibg=#edeae4 guisp=NONE blend=NONE gui=bold
+highlight FloatTitle guifg=#493f37 guibg=#e5e1d9 guisp=NONE blend=NONE gui=bold
 highlight FoldColumn guifg=#9e8d7f guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight Folded guifg=#9e8d7f guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight Function guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
@@ -171,6 +173,7 @@ highlight! link DiagnosticHint Hint
 highlight! link @comment.hint Hint
 highlight HintMsg guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingHint HintMsg
+highlight! link DiagnosticVirtualLinesHint HintMsg
 highlight! link DiagnosticVirtualTextHint HintMsg
 highlight Identifier guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link @lsp.type.parameter Identifier
@@ -190,6 +193,7 @@ highlight! link @comment.note Info
 highlight! link @comment.ok Info
 highlight InfoMsg guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingInfo InfoMsg
+highlight! link DiagnosticVirtualLinesInfo InfoMsg
 highlight! link DiagnosticVirtualTextInfo InfoMsg
 highlight Keyword guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Label guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=bold
@@ -200,6 +204,7 @@ highlight LspInfoList guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInfoTip guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInfoTitle guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInlayHint guifg=#837163 guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
+highlight LspSignatureActiveParameter guifg=NONE guibg=#e5e1d9 guisp=NONE blend=NONE gui=bold
 highlight Macro guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=italic
 highlight! link @lsp.type.macro Macro
 highlight! link @macro Macro
@@ -216,6 +221,7 @@ highlight MasonMutedBlock guifg=#493f37 guibg=#d7d3cb guisp=NONE blend=NONE gui=
 highlight MasonMutedBlockBold guifg=#493f37 guibg=#d7d3cb guisp=NONE blend=NONE gui=bold
 highlight MoreMsg guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticFloatingOk MoreMsg
+highlight! link DiagnosticVirtualLinesOk MoreMsg
 highlight! link DiagnosticVirtualTextOk MoreMsg
 highlight! link DiagnosticOk MsgArea
 highlight NavicSeparator guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -231,7 +237,7 @@ highlight NonText guifg=#e5e1d9 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link EndOfBuffer NonText
 highlight! link Ignore NonText
 highlight! link Whitespace NonText
-highlight NormalFloat guifg=#493f37 guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
+highlight NormalFloat guifg=#493f37 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight NullLsInfoBorder guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight NullLsInfoHeader guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight NullLsInfoSources guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -256,7 +262,6 @@ highlight PreProc guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link @keyword.directive PreProc
 highlight Question guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link @property Question
-highlight QuickFixLine guifg=NONE guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight RedrawDebugClear guifg=NONE guibg=yellow guisp=NONE blend=NONE gui=NONE
 highlight RedrawDebugComposed guifg=NONE guibg=green guisp=NONE blend=NONE gui=NONE
 highlight RedrawDebugNormal guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=reverse
@@ -392,6 +397,7 @@ highlight! link @comment.warning Warning
 highlight WarningMsg guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link Debug WarningMsg
 highlight! link DiagnosticFloatingWarn WarningMsg
+highlight! link DiagnosticVirtualLinesWarn WarningMsg
 highlight! link DiagnosticVirtualTextWarn WarningMsg
 highlight! link ModeMsg WarningMsg
 highlight WhichKey guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE

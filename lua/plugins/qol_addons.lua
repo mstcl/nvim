@@ -2,6 +2,7 @@ local augroup = require("core.utils").augroup
 local border = require("core.variables").border
 local conf = require("core.variables")
 local condition = require("core.variables").ui_features
+local LSP_SIGNS = require("core.variables").lsp_signs
 
 -- Plugins which add additional ways to use nvim
 return {
@@ -39,16 +40,6 @@ return {
 				desc = "Zoxide",
 			},
 			{
-				"g0",
-				"<cmd>FzfLua lsp_document_symbols<cr>",
-				desc = "Code symbols (document)",
-			},
-			{
-				"<leader>w",
-				"<cmd>FzfLua lsp_workspace_diagnostics path_shorten=true<cr>",
-				desc = "Workspace diagnostics",
-			},
-			{
 				"<leader>gC",
 				"<cmd>FzfLua git_bcommits<cr>",
 				desc = "Git commits (buffer)",
@@ -77,16 +68,6 @@ return {
 				"<leader><bslash>",
 				"<cmd>FzfLua lgrep_curbuf<cr>",
 				desc = "Grep buffer",
-			},
-			{
-				"grr",
-				"<cmd>FzfLua lsp_references path_shorten=true ignore_current_line=true<cr>",
-				desc = "Symbol references",
-			},
-			{
-				"gri",
-				"<cmd>FzfLua lsp_implementations path_shorten=true ignore_current_line=true<cr>",
-				desc = "Symbol implementation",
 			},
 		},
 		opts = function()
@@ -385,7 +366,7 @@ return {
 				function()
 					require("which-key").show()
 				end,
-				desc = "List all keymaps",
+				desc = "Toggle which-key",
 			},
 		},
 		opts = function()
@@ -409,12 +390,19 @@ return {
 				{ "<leader>", group = "Leader commands (pickers & LSP)" },
 				{ "<leader>g", group = "Git commands" },
 				{ "<C-M>", group = "Toggle components" },
+				{ "<C-M>a", group = "Toggle animate/autopairs" },
+				{ "<C-M>g", group = "Toggle git components" },
+				{ "<C-M>c", group = "Toggle cursorcolumn/line" },
+				{ "<C-M>i", group = "Toggle inlayhints/indentscope" },
+				{ "<C-M>s", group = "Toggle sidescrolloff/spellcheck" },
+				{ "<C-M>v", group = "Toggle virtual-text/lines" },
 				{ "<C-S>", group = "Split windows" },
 				{ "[", group = "Previous" },
 				{ "]", group = "Next" },
 				{ "z", group = "Folds, spelling & align" },
 				{ "g", group = "LSP, comment, case & navigation" },
 				{ "gs", group = "Surround" },
+				{ "gr", group = "LSP symbol actions" },
 				{ "<leader>n", group = "Notes (zk) commands", cond = conf.syntax_features.markdown },
 				{ "m", group = "Molten operations", cond = conf.syntax_features.quarto },
 				{ "<leader>d", group = "DAP commands", cond = conf.dap_enabled },
@@ -435,7 +423,7 @@ return {
 					vim.cmd("BlameToggle window")
 					vim.notify("Toggled blame", vim.log.levels.INFO)
 				end,
-				desc = "Blame split",
+				desc = "Toggle blame split",
 			},
 		},
 		opts = {
@@ -530,6 +518,37 @@ return {
 			},
 		},
 	},
+	{ -- (quicker.nvim) Quickfix list QOL
+		"stevearc/quicker.nvim",
+		event = "FileType qf",
+		---@module "quicker"
+		---@type quicker.SetupOptions
+		opts = {
+			type_icons = {
+				E = LSP_SIGNS.Error,
+				W = LSP_SIGNS.Warn,
+				I = LSP_SIGNS.Info,
+				N = LSP_SIGNS.Info,
+				H = LSP_SIGNS.Hint,
+			},
+			keys = {
+				{
+					">",
+					function()
+						require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+					end,
+					desc = "Expand quickfix context",
+				},
+				{
+					"<",
+					function()
+						require("quicker").collapse()
+					end,
+					desc = "Collapse quickfix context",
+				},
+			},
+		},
+	},
 	{ -- (overseer.nvim) Code runner
 		"stevearc/overseer.nvim",
 		keys = {
@@ -547,32 +566,26 @@ return {
 				desc = "Run tasks",
 			},
 		},
-		opts = {
-			form = {
+		opts = function()
+			local default_win_opts = {
 				border = border,
 				win_opts = {
 					winblend = 0,
 				},
-			},
-			confirm = {
-				border = border,
-				win_opts = {
-					winblend = 0,
-				},
-			},
-			task_win = {
-				border = border,
-				win_opts = {
-					winblend = 0,
-				},
-			},
-			help_win = {
-				border = border,
-				win_opts = {
-					winblend = 0,
-				},
-			},
-		},
+			}
+
+			return {
+				form = default_win_opts,
+				confirm = default_win_opts,
+				task_win = default_win_opts,
+				help_win = default_win_opts,
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("overseer").setup(opts)
+			end
+		end,
 	},
 	{ -- (mini.diff) Git signs and diffs
 		"echasnovski/mini.diff",
