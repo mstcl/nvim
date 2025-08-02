@@ -1,7 +1,7 @@
 ---@type vim.lsp.Config
 -- return {
--- 	cmd = { vim.fn.expand("$HOME/.local/share/nvim/mason/bin/yaml-language-server") },
--- 	filetypes = { "yaml.ansible", "yaml", "yml" },
+-- 	cmd = {},
+-- 	filetypes = {},
 -- 	root_markers = { ".git" },
 -- 	settings = {
 -- 	},
