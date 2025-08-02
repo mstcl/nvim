@@ -25,12 +25,13 @@ require("lazy").setup({
 	},
 	install = {
 		missing = true,
-		colorscheme = { "default" },
+		colorscheme = { "ivory" },
 	},
 	ui = {
 		size = { width = 0.8, height = 0.8 },
 		wrap = true,
-		border = "none",
+		border = "rounded",
+		title = " Plugin manager ",
 		title_pos = "center", ---@type "center" | "left" | "right"
 		pills = true, ---@type boolean
 		icons = {
@@ -59,6 +60,7 @@ require("lazy").setup({
 		},
 		browser = nil, ---@type string?
 		throttle = 20,
+		backdrop = 100,
 	},
 	diff = {},
 	checker = {
