@@ -76,6 +76,7 @@ return {
 				defaults = {
 					git_icons = false,
 					file_icons = false,
+					formatter = "path.filename_first",
 				},
 				fzf_opts = { ["--margin"] = "0,0", ["--info"] = "inline-right" },
 				winopts = {
@@ -153,12 +154,7 @@ return {
 					},
 				},
 				-- Custom pickers
-				files = {
-					fzf_opts = { ["--ansi"] = false },
-				},
-				oldfiles = {
-					include_current_session = true,
-				},
+				oldfiles = { include_current_session = true },
 				commands = { sort_lastused = true },
 				manpages = { previewer = "man_native" },
 				helptags = { previewer = "help_native" },
