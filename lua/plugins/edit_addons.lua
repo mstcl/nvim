@@ -293,6 +293,7 @@ return {
 					},
 				},
 				menu = {
+					border = "none",
 					scrollbar = false,
 					draw = {
 						treesitter = { "lsp" }, -- performance issues
@@ -317,6 +318,7 @@ return {
 					window = {
 						max_width = 120,
 						max_height = math.floor(vim.o.lines * 0.3),
+						winhighlight = "Normal:BlinkCmpDoc,FloatBorder:FloatBorder,EndOfBuffer:BlinkCmpDoc",
 					},
 				},
 				ghost_text = {
@@ -418,9 +420,7 @@ return {
 			},
 			signature = {
 				enabled = true,
-				window = {
-					direction_priority = { "s", "n" },
-				},
+				window = { direction_priority = { "s", "n" } },
 			},
 		},
 		opts_extend = { "sources.completion.enabled_providers" },

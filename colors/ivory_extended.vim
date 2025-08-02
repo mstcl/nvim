@@ -154,11 +154,14 @@ highlight FlashBackdrop guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight FlashLabel guifg=#545468 guibg=#dfe1e6 guisp=NONE blend=NONE gui=NONE
 highlight FlashPromptIcon guifg=#edeae4 guibg=#834c40 guisp=NONE blend=NONE gui=bold
 highlight! link @number.float Float
-highlight FloatBorder guifg=#e5e1d9 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
-highlight FloatFooter guifg=#493f37 guibg=#e5e1d9 guisp=NONE blend=NONE gui=bold
+highlight FloatBorder guifg=#e5e1d9 guibg=#f1efeb guisp=NONE blend=NONE gui=NONE
+highlight! link BlinkCmpSignatureHelpBorder FloatBorder
+highlight! link TelescopeBorder FloatBorder
+highlight! link TelescopePreviewBorder FloatBorder
+highlight FloatFooter guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight FloatShadow guifg=NONE guibg=black guisp=NONE blend=80 gui=NONE
 highlight FloatShadowThrough guifg=NONE guibg=black guisp=NONE blend=100 gui=NONE
-highlight FloatTitle guifg=#493f37 guibg=#e5e1d9 guisp=NONE blend=NONE gui=bold
+highlight FloatTitle guifg=#e5e1d9 guibg=#79241f guisp=NONE blend=NONE gui=bold
 highlight FoldColumn guifg=#9e8d7f guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight Folded guifg=#9e8d7f guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight Function guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
@@ -204,7 +207,7 @@ highlight LspInfoList guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInfoTip guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInfoTitle guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInlayHint guifg=#837163 guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
-highlight LspSignatureActiveParameter guifg=NONE guibg=#e5e1d9 guisp=NONE blend=NONE gui=bold
+highlight LspSignatureActiveParameter guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight Macro guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=italic
 highlight! link @lsp.type.macro Macro
 highlight! link @macro Macro
@@ -237,7 +240,9 @@ highlight NonText guifg=#e5e1d9 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link EndOfBuffer NonText
 highlight! link Ignore NonText
 highlight! link Whitespace NonText
-highlight NormalFloat guifg=#493f37 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
+highlight NormalFloat guifg=#493f37 guibg=#f1efeb guisp=NONE blend=NONE gui=NONE
+highlight! link TelescopeNormal NormalFloat
+highlight! link TelescopePreviewNormal NormalFloat
 highlight NullLsInfoBorder guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight NullLsInfoHeader guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight NullLsInfoSources guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -323,16 +328,13 @@ highlight TSQueryLinterError guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NON
 highlight TabLine guifg=#746458 guibg=#d7d3cb guisp=NONE blend=NONE gui=NONE
 highlight TabLineFill guifg=NONE guibg=#d7d3cb guisp=NONE blend=NONE gui=NONE
 highlight TabLineSel guifg=#574b42 guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
-highlight TelescopeBorder guifg=#e5e1d9 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight TelescopeBufferLoaded guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight TelescopeFrecencyScores guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight TelescopeMatching guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight TelescopeMultiIcon guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight TelescopeMultiSelection guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
-highlight TelescopeNormal guifg=#574b42 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight TelescopePathSeparator guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight TelescopePreviewBlock guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight TelescopePreviewBorder guifg=#edeae4 guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight TelescopePreviewCharDev guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight TelescopePreviewDate guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight TelescopePreviewDirectory guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -378,7 +380,7 @@ highlight TelescopeResultsSpecialComment guifg=NONE guibg=NONE guisp=NONE blend=
 highlight TelescopeResultsStruct guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight TelescopeResultsTitle guifg=#e5e1d9 guibg=#464c3a guisp=NONE blend=NONE gui=bold
 highlight TelescopeResultsVariable guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight TelescopeSelection guifg=#352e2e guibg=#d7d3cb guisp=NONE blend=NONE gui=bold
+highlight TelescopeSelection guifg=#352e2e guibg=#e5e1d9 guisp=NONE blend=NONE gui=bold
 highlight TelescopeSelectionCaret guifg=#352e2e guibg=#d7d3cb guisp=NONE blend=NONE gui=NONE
 highlight TelescopeTitle guifg=#edeae4 guibg=#79241f guisp=NONE blend=NONE gui=bold
 highlight TermCursor guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=reverse
@@ -407,7 +409,6 @@ highlight WhichKeyGroup guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight WhichKeySeparator guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight WhichKeyValue guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight WinBar guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
-highlight! link TelescopePreviewNormal WinBar
 highlight! link WinBarNC WinBar
 highlight lCursor guifg=bg guibg=fg guisp=NONE blend=NONE gui=NONE
 highlight @character.printf guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold

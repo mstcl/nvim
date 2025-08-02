@@ -204,7 +204,7 @@ M.org_agenda_files = {}
 
 M.zk_wiki = "~/shared/wiki"
 
-M.border = "single"
+M.border = "rounded"
 
 function M.get_compatible_sources(source_map)
 	local sources = {}
