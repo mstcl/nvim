@@ -1,7 +1,6 @@
 local map = vim.keymap.set
 local exec = vim.api.nvim_command
 
--- Remove mappings
 map("n", "<leader>p", "<cmd>Lazy show<cr>", { desc = "Plugins manager (lazy)" })
 
 map({ "n", "v" }, "<space>", ":", { remap = false, desc = "Command", silent = true })

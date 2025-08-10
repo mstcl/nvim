@@ -11,11 +11,6 @@ return {
 		lazy = false,
 		keys = {
 			{
-				"<leader>h",
-				"<cmd>FzfLua oldfiles<cr>",
-				desc = "Browse history",
-			},
-			{
 				"<leader>l",
 				"<cmd>FzfLua resume<cr>",
 				desc = "Last picker (resume)",
@@ -29,11 +24,6 @@ return {
 				"<leader>b",
 				"<cmd>FzfLua buffers<cr>",
 				desc = "Buffer list",
-			},
-			{
-				"<leader>f",
-				"<cmd>FzfLua files<cr>",
-				desc = "Find files",
 			},
 			{
 				"<leader>z",

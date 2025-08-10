@@ -451,7 +451,7 @@ return {
 				css = { "prettierd" },
 				scss = { "prettierd" },
 				lua = { "stylua", lsp_format = "prefer" },
-				markdown = { "mdformat", "prettierd", "cbfmt" },
+				markdown = { "prettierd", "cbfmt" },
 				quarto = { "mdformat", "prettierd", "cbfmt" },
 				yaml = { "prettierd" },
 				graphql = { "prettierd" },
