@@ -171,6 +171,7 @@ highlight! link @lsp.type.decorator Function
 highlight! link @lsp.type.function Function
 highlight! link @lsp.type.method Function
 highlight FzfLuaLivePrompt guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight FzfLuaTitleFlags guifg=#edeae4 guibg=#834c40 guisp=NONE blend=NONE gui=bold
 highlight Hint guifg=#735057 guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticHint Hint
 highlight! link @comment.hint Hint
