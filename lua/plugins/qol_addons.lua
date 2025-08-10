@@ -188,6 +188,25 @@ return {
 			end
 		end,
 	},
+	{ -- (fzf-lua-frecency.nvim) Frecency plugin for fzf-lua
+		"elanmed/fzf-lua-frecency.nvim",
+		lazy = false,
+		keys = {
+			{
+				"<leader>h",
+				"<cmd>FzfLua frecency<cr>",
+				desc = "Browse history",
+			},
+			{
+				"<leader>f",
+				"<cmd>FzfLua frecency cwd_only=true<cr>",
+				desc = "Find files",
+			},
+		},
+		opts = {
+			display_score = false,
+		},
+	},
 	{ -- (mini.align) Utility to align text by delimiters
 		"echasnovski/mini.align",
 		keys = {
