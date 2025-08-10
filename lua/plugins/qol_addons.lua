@@ -344,6 +344,7 @@ return {
 				{ "<leader>g", group = "Git commands" },
 				{ "<C-M>", group = "Toggle components" },
 				{ "<C-M>a", group = "Toggle animate/autopairs" },
+				{ "<C-M>b", group = "Toggle blame" },
 				{ "<C-M>g", group = "Toggle git components" },
 				{ "<C-M>c", group = "Toggle cursorcolumn/line" },
 				{ "<C-M>i", group = "Toggle inlayhints/indentscope" },
@@ -381,7 +382,10 @@ return {
 		},
 		opts = {
 			blame_options = { "-w" },
+			date_format = "%r",
+			merge_consecutive = true,
 			focus_blame = false,
+			virtual_style = "float",
 			colors = {
 
 				"#7c4034",
