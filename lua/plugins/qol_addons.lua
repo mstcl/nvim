@@ -371,7 +371,7 @@ return {
 		cmd = "BlameToggle",
 		keys = {
 			{
-				"<C-M>b",
+				"<C-M>bw",
 				function()
 					vim.cmd("BlameToggle window")
 					vim.notify("Toggled blame", vim.log.levels.INFO)
@@ -392,6 +392,26 @@ return {
 				"#673d58",
 				"#493f37",
 			},
+		},
+	},
+	{ -- (git-blame.nvim) Git blame virtual text
+		"f-person/git-blame.nvim",
+		cmd = "GitBlameToggle",
+		keys = {
+			{
+				"<C-M>bl",
+				function()
+					vim.cmd("GitBlameToggle")
+					vim.notify("Toggled blame", vim.log.levels.INFO)
+				end,
+				desc = "Toggle blame virtual",
+			},
+		},
+		opts = {
+			enabled = false,
+			message_template = "    <summary> • <date> • <author> • <<sha>>",
+			date_format = "%r",
+			message_when_not_committed = "",
 		},
 	},
 	{ -- (neogit) magit clone
@@ -679,6 +699,23 @@ return {
 				require("section-wordcount").setup(opts)
 			end
 			require("section-wordcount").wordcounter({})
+		end,
+	},
+	{ -- (undotree) Undo tree plugins to make undotree friendlier
+		"mbbill/undotree",
+		keys = {
+			{
+				"<C-M>u",
+				"<cmd>UndotreeToggle<cr>",
+				desc = "Toggle undotree",
+			},
+		},
+		config = function()
+			vim.g.undotree_WindowLayout = 2
+			vim.g.undotree_SplitWidth = 38
+			vim.g.undotree_DiffpanelHeight = 6
+			vim.g.undotree_DiffAutoOpen = 10
+			vim.g.undotree_TreeVertShape = "┃"
 		end,
 	},
 }
