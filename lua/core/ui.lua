@@ -62,17 +62,21 @@ _G.get_statusline = function()
 		--
 		components.hl_alt,
 		components.info,
-		--
 		components.padding,
+		--
 		components.padding,
 		components.indentation,
-		--
 		components.padding,
+		--
 		components.padding,
 		components.scrollbar,
+		components.padding,
 		--
+		components.hl_modified,
 		components.padding,
+		components.cwd,
 		components.padding,
+		---
 		components.hl_restore,
 	}, "")
 end

@@ -316,7 +316,7 @@ highlight StatuslineModifiedInv guifg=#79241f guibg=NONE guisp=NONE blend=NONE g
 highlight StatuslineOrange guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StatuslinePink guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StatuslineRed guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight StatuslineScrollbar guifg=#79241f guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
+highlight StatuslineScrollbar guifg=#79241f guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight StatuslineYellow guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StorageClass guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link Structure StorageClass

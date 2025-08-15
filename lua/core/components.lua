@@ -367,6 +367,7 @@ M.components = {
 	-- Highlights
 	hl_main = [[%#statuslinenc#]],
 	hl_strong = [[%#statusline#]],
+	hl_modified = [[%#statuslinemodified#]],
 	hl_alt = [[%#statuslinealt#]],
 	hl_orange = [[%#statuslineorange#]],
 	hl_restore = [[%*]],
