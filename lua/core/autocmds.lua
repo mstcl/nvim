@@ -174,7 +174,7 @@ augroup("terminal", {
 			vim.wo.statuscolumn = ""
 			-- Keymaps to leave
 			vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], { silent = true, buffer = 0 })
-			vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], { silent = true, buffer = 0 })
+			vim.keymap.set("t", "<C-s><C-w>", [[<C-\><C-n><C-w>]], { silent = true, buffer = 0 })
 			vim.keymap.set(
 				"t",
 				"<C-Bslash>",
