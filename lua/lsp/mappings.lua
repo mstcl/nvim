@@ -5,6 +5,7 @@ local M = {}
 
 -- LSP mappings for native LSP
 function M.setup(client, bufnr)
+	map("n", "gd", vim.lsp.buf.definition, { desc = "[LSP] Symbol defintion", buffer = bufnr })
 	map("n", "grd", vim.lsp.buf.definition, { desc = "[LSP] Symbol defintion", buffer = bufnr })
 	map("n", "gO", vim.lsp.buf.document_symbol, { desc = "[LSP] Document symbol", buffer = bufnr })
 	map("n", "gW", vim.diagnostic.setqflist, { desc = "[LSP] Workspace diagnostic", buffer = bufnr })
