@@ -9,6 +9,7 @@ local extended = lush.merge({
 	require("ivory_neogit"),
 	require("ivory_cmp"),
 	require("ivory_flash"),
+	require("ivory_aerial"),
 })
 
 if conf.lsp_enabled then

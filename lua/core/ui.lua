@@ -72,11 +72,6 @@ _G.get_statusline = function()
 		components.scrollbar,
 		components.padding,
 		--
-		components.hl_modified,
-		components.padding,
-		components.cwd,
-		components.padding,
-		---
 		components.hl_restore,
 	}, "")
 end

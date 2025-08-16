@@ -124,7 +124,7 @@ M.lsp_kind_icons = {
 	File = "•",
 	Folder = "+",
 	Function = "f",
-	Interface = "†",
+	Interface = "⦿",
 	Key = "*",
 	Keyword = "*",
 	Method = "f",
@@ -150,6 +150,12 @@ M.lsp_kind_icons = {
 	Watch = "W",
 }
 
+-- Create a new table
+M.lsp_kind_icons_padded = {}
+
+for key, value in pairs(M.lsp_kind_icons) do
+	M.lsp_kind_icons_padded[key] = " " .. value
+end
 M.lsp_sources = {
 	ansiblels = "ansible-language-server",
 	bashls = "bash-language-server",

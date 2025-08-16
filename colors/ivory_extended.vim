@@ -2,7 +2,13 @@
 let g:colors_name="ivory_extended"
 set background=light
 highlight Normal guifg=#352e2e guibg=#f1efeb guisp=NONE blend=NONE gui=NONE
+highlight AerialLine guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight AerialLineNC guifg=#746458 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight AerialNormal guifg=#746458 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Boolean guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link AerialBooleanIcon Boolean
+highlight! link AerialFunctionIcon Boolean
+highlight! link AerialMethodIcon Boolean
 highlight! link @boolean Boolean
 highlight Character guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link SpecialKey Character
@@ -11,7 +17,7 @@ highlight CmpBorder guifg=#9e8d7f guibg=#f1efeb guisp=NONE blend=NONE gui=NONE
 highlight CmpDocumentation guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight CmpDocumentationBorder guifg=#edeae4 guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight CmpItemAbbr guifg=#746458 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight CmpItemAbbrDefault guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight CmpItemAbbrDefault guifg=#746458 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight CmpItemAbbrDeprecated guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=strikethrough
 highlight CmpItemAbbrDeprecatedDefault guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight CmpItemAbbrMatchDefault guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -69,7 +75,7 @@ highlight CmpItemKindVariable guifg=#e5e1d9 guibg=#545468 guisp=NONE blend=NONE 
 highlight! link CmpItemKindClass CmpItemKindVariable
 highlight! link CmpItemKindFile CmpItemKindVariable
 highlight! link CmpItemKindValue CmpItemKindVariable
-highlight CmpItemMenuDefault guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight CmpItemMenuDefault guifg=#746458 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight ColorColumn guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight! link debugPC ColorColumn
 highlight Comment guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -84,6 +90,7 @@ highlight! link Typedef Conditional
 highlight! link @constant.builtin Conditional
 highlight! link @keyword.conditional Conditional
 highlight Constant guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link AerialConstantIcon Constant
 highlight! link @constant Constant
 highlight! link @lsp.type.enumMember Constant
 highlight CurSearch guifg=NONE guibg=#dfe1e6 guisp=NONE blend=NONE gui=NONE
@@ -91,6 +98,8 @@ highlight CursorColumn guifg=NONE guibg=#493f37 guisp=NONE blend=NONE gui=NONE
 highlight CursorLine guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight! link NeogitCursorLine CursorLine
 highlight! link QuickFixLine CursorLine
+highlight! link TreesitterContext CursorLine
+highlight! link TreesitterContextLineNumber CursorLine
 highlight CursorLineFold guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight CursorLineNr guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight CursorLineSign guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -135,9 +144,11 @@ highlight! link diffRemoved DiffDelete
 highlight DiffFGAdd guifg=#686d63 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight DiffFGChange guifg=#97757B guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight DiffFGDelete guifg=#834c40 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight DiffFGRemove guifg=#834c40 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight DiffFGText guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight DiffText guifg=#493f37 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight Directory guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight! link AerialNamespaceIcon Directory
 highlight! link @module Directory
 highlight! link @org.agenda.scheduled Directory
 highlight Error guifg=#79241f guibg=#dcb2a7 guisp=NONE blend=NONE gui=NONE
@@ -165,6 +176,7 @@ highlight FloatTitle guifg=#e5e1d9 guibg=#79241f guisp=NONE blend=NONE gui=bold
 highlight FoldColumn guifg=#9e8d7f guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight Folded guifg=#9e8d7f guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight Function guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight! link CmpItemAbbrMatch Function
 highlight! link @function Function
 highlight! link @function.method Function
 highlight! link @lsp.type.decorator Function
@@ -180,6 +192,7 @@ highlight! link DiagnosticFloatingHint HintMsg
 highlight! link DiagnosticVirtualLinesHint HintMsg
 highlight! link DiagnosticVirtualTextHint HintMsg
 highlight Identifier guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link AerialVariableIcon Identifier
 highlight! link @lsp.type.parameter Identifier
 highlight! link @lsp.type.property Identifier
 highlight! link @lsp.type.variable Identifier
@@ -283,7 +296,6 @@ highlight Search guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=reverse
 highlight! link Substitute Search
 highlight SignColumn guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Special guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold
-highlight! link CmpItemAbbrMatch Special
 highlight! link DressingSelectIdx Special
 highlight! link @lsp.type.keyword.yaml.ansible Special
 highlight! link @string.special.symbol Special
@@ -306,7 +318,7 @@ highlight StatusLineNC guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link NavicText StatusLineNC
 highlight! link StatusLineTermNC StatusLineNC
 highlight Statusline guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight StatuslineAlt guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight StatuslineAlt guifg=#9e8d7f guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StatuslineBlue guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StatuslineGreen guifg=#464c3a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StatuslineMagenta guifg=#673d58 guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -322,6 +334,7 @@ highlight StorageClass guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link Structure StorageClass
 highlight! link @keyword.storage StorageClass
 highlight String guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=italic
+highlight! link AerialStringIcon String
 highlight! link @string String
 highlight TSPlaygroundFocus guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight TSPlaygroundLang guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE

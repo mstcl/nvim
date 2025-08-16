@@ -50,15 +50,13 @@ end
 ---Get scrollbar
 ---@return string
 function M.get_scrollbar()
-	local sbar_chars = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
+	local sbar_chars = { "▔", "🮂", "🬂", "🮃", "▀", "▄", "▃", "🬭", "▂", "▁" }
 
-	local cur_line = vim.api.nvim_win_get_cursor(0)[1]
-	local lines = vim.api.nvim_buf_line_count(0)
+	local cur = vim.api.nvim_win_get_cursor(0)[1]
+	local total = vim.api.nvim_buf_line_count(0)
+	local idx = math.floor((cur - 1) / total * #sbar_chars) + 1
 
-	local i = math.floor((cur_line - 1) / lines * #sbar_chars) + 1
-	local sbar = string.rep(sbar_chars[i], 2)
-
-	return set_hl(sbar, "StatuslineScrollbar")
+	return set_hl(sbar_chars[idx]:rep(2), "StatuslineScrollbar")
 end
 
 ---Get modified status
@@ -243,7 +241,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 function M.get_git_branch()
 	---@diagnostic disable-next-line: undefined-field
 	local branch = vim.b.git_branch or "nil"
-	return set_hl("#", "StatuslineAlt") .. set_hl(branch, "StatusLineNC")
+	return set_hl("@", "StatuslineAlt") .. set_hl(branch, "StatusLineNC")
 end
 
 ---Get git diffs for current buffer
@@ -270,12 +268,14 @@ end
 
 function M.get_filepath()
 	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
+
 	if fpath == "" or fpath == "." or vim.bo.buftype == "terminal" then
-		return ""
+		local root = set_hl(M.get_cwd_name(), "StatuslineAlt")
+		return root .. set_hl("/", "StatuslineAlt")
 	end
 
-	local secondary = set_hl(string.format("/%%<%s/", fpath), "StatuslineAlt")
 	local root = set_hl(M.get_cwd_name(), "StatuslineNC")
+	local secondary = set_hl(string.format("/%%<%s/", fpath), "StatuslineAlt")
 
 	return root .. secondary
 end
@@ -356,7 +356,7 @@ function M.get_fileinfo()
 	if mode == "v" or mode == "V" then
 		return get_vlinecount() .. " lines selected"
 	else
-		return lines .. " lines"
+		return "≡ " .. lines .. " lines"
 	end
 end
 
@@ -369,6 +369,7 @@ M.components = {
 	hl_strong = [[%#statusline#]],
 	hl_modified = [[%#statuslinemodified#]],
 	hl_alt = [[%#statuslinealt#]],
+	hl_mode = [[%#statuslinemode#]],
 	hl_orange = [[%#statuslineorange#]],
 	hl_restore = [[%*]],
 	-- LSP

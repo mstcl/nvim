@@ -46,6 +46,17 @@ augroup("stay", {
 	},
 })
 
+augroup("altWinHighlight", {
+	"FileType",
+	{
+		desc = "Set background of Aerial window",
+		pattern = { "aerial" },
+		callback = function()
+			vim.wo.winhighlight = "Normal:CursorLine"
+		end,
+	},
+})
+
 augroup("editing", {
 	"BufEnter",
 	{

@@ -310,7 +310,7 @@ return {
 	},
 	{ -- (nvim-treesitter-context) Treesitter context in-buffer
 		"nvim-treesitter/nvim-treesitter-context",
-		lazy = vim.fn.argc(-1) == 0,
+		event = "BufReadPre",
 		opts = {},
 	},
 }

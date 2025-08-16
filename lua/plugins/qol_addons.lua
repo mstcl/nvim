@@ -497,7 +497,7 @@ return {
 	},
 	{ -- (quicker.nvim) Quickfix list QOL
 		"stevearc/quicker.nvim",
-		event = "FileType qf",
+		lazy = false,
 		---@module "quicker"
 		---@type quicker.SetupOptions
 		opts = {
@@ -614,7 +614,7 @@ return {
 			return {
 				view = {
 					style = "sign",
-					signs = { add = "▎", change = "▎", delete = "▎" },
+					signs = { add = "┃", change = "┋", delete = "~" },
 				},
 				delay = {
 					text_change = 100,
@@ -710,7 +710,10 @@ return {
 		keys = {
 			{
 				"<C-M>u",
-				"<cmd>UndotreeToggle<cr>",
+				function()
+					vim.cmd("UndotreeToggle")
+					vim.notify("Toggled undotree", vim.log.levels.INFO)
+				end,
 				desc = "Toggle undotree",
 			},
 		},
@@ -721,5 +724,61 @@ return {
 			vim.g.undotree_DiffAutoOpen = 10
 			vim.g.undotree_TreeVertShape = "┃"
 		end,
+	},
+	{
+		"stevearc/aerial.nvim",
+		lazy = false,
+		keys = {
+			{
+				"}",
+				"<cmd>AerialNext<CR>",
+				desc = "Next symbol",
+			},
+			{
+				"{",
+				"<cmd>AerialPrev<CR>",
+				desc = "Previous symbol",
+			},
+			{
+				"<C-M>l",
+				function()
+					vim.cmd("AerialToggle")
+					vim.notify("Toggled outline", vim.log.levels.INFO)
+				end,
+				desc = "Toggle outline",
+			},
+		},
+		opts = {
+			icons = require("core.variables").lsp_kind_icons,
+			guides = {
+				nested_top = " │ ",
+				mid_item = " ├─",
+				last_item = " └─",
+				whitespace = "   ",
+			},
+			ignore = {
+				unlisted_buffers = false,
+				diff_windows = true,
+				buftypes = "special",
+				wintypes = "special",
+			},
+			close_automatic_events = {
+				"unfocus",
+				"switch_buffer",
+				"unsupported",
+			},
+			open_automatic = true,
+			open_automatic = function()
+				local aerial = require("aerial")
+				return vim.api.nvim_win_get_width(0) > 80 and not aerial.was_closed()
+			end,
+			show_guides = true,
+			layout = {
+				placement = "edge",
+				close_on_select = false,
+				max_width = 30,
+				min_width = 30,
+			},
+		},
 	},
 }
