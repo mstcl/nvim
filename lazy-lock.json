@@ -1,6 +1,6 @@
 {
   "aerial.nvim": { "branch": "master", "commit": "62a5a3149b66444a245c052e431c30568ae173e3" },
-  "baleia.nvim": { "branch": "main", "commit": "880e97c02edf3148ba2bdc6305ac03eb3c3711e0" },
+  "baleia.nvim": { "branch": "main", "commit": "1b25eac3ac03659c3d3af75c7455e179e5f197f7" },
   "better-escape.nvim": { "branch": "master", "commit": "19a38aab94961016430905ebec30d272a01e9742" },
   "blame.nvim": { "branch": "main", "commit": "b87b8c820e4cec06fbbd2f946b7b35c45906ee0c" },
   "blink-ripgrep.nvim": { "branch": "main", "commit": "da53e523ca28bdc4aedda5cfcac7aec6120779da" },

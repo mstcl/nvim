@@ -149,6 +149,7 @@ highlight DiffFGText guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight DiffText guifg=#493f37 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight Directory guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link AerialNamespaceIcon Directory
+highlight! link NeogitBranch Directory
 highlight! link @module Directory
 highlight! link @org.agenda.scheduled Directory
 highlight Error guifg=#79241f guibg=#dcb2a7 guisp=NONE blend=NONE gui=NONE
@@ -242,14 +243,26 @@ highlight! link DiagnosticVirtualLinesOk MoreMsg
 highlight! link DiagnosticVirtualTextOk MoreMsg
 highlight! link DiagnosticOk MsgArea
 highlight NavicSeparator guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight NeogitBranchHead guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold,underline
 highlight NeogitDiffContext guifg=NONE guibg=#f1efeb guisp=NONE blend=NONE gui=NONE
 highlight NeogitDiffContextCursor guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight NeogitDiffContextHighlight guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
-highlight NeogitDiffHeader guifg=#79241f guibg=#e5e1d9 guisp=NONE blend=NONE gui=bold
-highlight NeogitHunkHeader guifg=#79241f guibg=#f1efeb guisp=NONE blend=NONE gui=NONE
+highlight NeogitDiffHeader guifg=#e5e1d9 guibg=#545468 guisp=NONE blend=NONE gui=bold
+highlight NeogitHunkHeader guifg=#837163 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight NeogitHunkHeaderCursor guifg=#79241f guibg=#edeae4 guisp=NONE blend=NONE gui=bold
 highlight NeogitHunkHeaderHighlight guifg=#79241f guibg=#edeae4 guisp=NONE blend=NONE gui=bold
-highlight NeogitSectionHeader guifg=#545468 guibg=#dfe1e6 guisp=NONE blend=NONE gui=bold
+highlight NeogitPopupOptionDisabled guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link NeogitPopupActionDisabled NeogitPopupOptionDisabled
+highlight! link NeogitPopupConfigDisabled NeogitPopupOptionDisabled
+highlight! link NeogitPopupSwitchDisabled NeogitPopupOptionDisabled
+highlight NeogitPopupOptionEnabled guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight! link NeogitPopupConfigEnabled NeogitPopupOptionEnabled
+highlight! link NeogitPopupSwitchEnabled NeogitPopupOptionEnabled
+highlight NeogitPopupOptionKey guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link NeogitPopupActionKey NeogitPopupOptionKey
+highlight! link NeogitPopupConfigKey NeogitPopupOptionKey
+highlight! link NeogitPopupSwitchKey NeogitPopupOptionKey
+highlight NeogitSectionHeader guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight NonText guifg=#e5e1d9 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link EndOfBuffer NonText
 highlight! link Ignore NonText

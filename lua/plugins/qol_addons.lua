@@ -41,21 +41,6 @@ return {
 				desc = "Git commits (buffer)",
 			},
 			{
-				"<leader>gb",
-				"<cmd>FzfLua git_branches<cr>",
-				desc = "Git branches",
-			},
-			{
-				"<leader>gc",
-				"<cmd>FzfLua git_commits<cr>",
-				desc = "Git commits",
-			},
-			{
-				"<leader>gs",
-				"<cmd>FzfLua git_status<cr>",
-				desc = "Git status",
-			},
-			{
 				"<leader>/",
 				"<cmd>FzfLua live_grep path_shorten=true multiline=2<cr>",
 				desc = "Grep workspace",
@@ -426,40 +411,68 @@ return {
 	{ -- (neogit) magit clone
 		"NeogitOrg/neogit",
 		cmd = "Neogit",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			{
+				"m00qek/baleia.nvim",
+				config = function()
+					vim.g.baleia = require("baleia").setup({})
+				end,
+			},
+		},
 		keys = {
 			{
+				"<leader>gc",
+				"<cmd>Neogit commit kind=tab<cr>",
+				desc = "Neogit commits",
+			},
+			{
+				"<leader>gl",
+				"<cmd>Neogit log kind=tab<cr>",
+				desc = "Neogit logs",
+			},
+			{
+				"<leader>gb",
+				"<cmd>Neogit branch<cr>",
+				desc = "Neogit branches",
+			},
+			{
 				"<leader>gg",
-				"<cmd>Neogit kind=auto<cr>",
+				"<cmd>Neogit kind=tab<cr>",
 				desc = "Neogit",
 			},
 		},
 		opts = function()
 			return {
 				disable_context_highlighting = true,
-				graph_style = "ascii",
-				disable_hint = true,
-				fetch_after_checkout = true,
 				disable_line_numbers = true,
 				disable_relative_line_numbers = true,
-				commit_editor = {
-					kind = "vsplit",
+				disable_signs = false,
+				disable_hint = true,
+				graph_style = "unicode",
+				fetch_after_checkout = true,
+				auto_show_console_on = "error",
+				console_timeout = 6000,
+				log_pager = {
+					"delta",
+					"--width",
+					"120",
+					"--file-style",
+					"omit",
+					"--hunk-header-style",
+					"omit",
 				},
-				integrations = {
-					fzf_lua = true,
-				},
-				disable_signs = true,
+				commit_view = { kind = "replace" },
+				commit_editor = { kind = "vsplit", staged_diff_split_kind = "vsplit" },
+				integrations = { fzf_lua = true },
 				signs = {
 					hunk = { " ", " " },
 					item = { "▸", "▾" },
 					section = { " ", " " },
 				},
-				auto_show_console_on = "error",
-				console_timeout = 6000,
 				sections = {
-					recent = {
-						folded = false,
-					},
+					recent = { folded = false },
+					untracked = { folded = true },
 				},
 				status = {
 					show_head_commit_hash = true,
@@ -730,7 +743,7 @@ return {
 			vim.g.undotree_TreeVertShape = "┃"
 		end,
 	},
-	{
+	{ -- (aerial.nvim) code outline
 		"stevearc/aerial.nvim",
 		lazy = false,
 		keys = {
