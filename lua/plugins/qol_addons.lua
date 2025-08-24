@@ -6,6 +6,11 @@ local LSP_SIGNS = require("core.variables").lsp_signs
 
 -- Plugins which add additional ways to use nvim
 return {
+	{ -- (lazy-patcher) lazy nvim plugin patcher
+		"one-d-wide/lazy-patcher.nvim",
+		ft = "lazy",
+		config = true,
+	},
 	{ -- (fzf-lua) Navigation and fuzzy pickers
 		"ibhagwan/fzf-lua",
 		lazy = false,

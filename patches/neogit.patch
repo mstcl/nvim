@@ -1,0 +1,379 @@
+diff --git a/README.md b/README.md
+index ecf42db4..7436a447 100644
+--- a/README.md
++++ b/README.md
+@@ -47,6 +47,7 @@ Here's an example spec for [Lazy](https://github.com/folke/lazy.nvim), but you'r
+   dependencies = {
+     "nvim-lua/plenary.nvim",         -- required
+     "sindrets/diffview.nvim",        -- optional - Diff integration
++    "m00qek/baleia.nvim",            -- optional - Required for a custom log pager
+ 
+     -- Only one of these is needed.
+     "nvim-telescope/telescope.nvim", -- optional
+@@ -97,6 +98,8 @@ neogit.setup {
+   -- Show relative date by default. When set, use `strftime` to display dates
+   commit_date_format = nil,
+   log_date_format = nil,
++  -- When set, used to format the diff. Requires *baleia* to colorize text with ANSI escape sequences. An example for `Delta` is `{ 'delta', '--width', '117' }`. For `Delta`, hyperlinks must be disabled in its git config section, for text to be colorized properly. It's recommended to set `disable_context_highlighting = true`, otherwise when the cursor is in the hunk, we lose background highlighting
++  log_pager = nil,
+   -- Show message with spinning animation when a git command is running.
+   process_spinner = false,
+   -- Used to generate URL's for branch popup action "pull request".
+diff --git a/doc/neogit.txt b/doc/neogit.txt
+index 5d1cb027..a046249f 100644
+--- a/doc/neogit.txt
++++ b/doc/neogit.txt
+@@ -113,6 +113,11 @@ to Neovim users.
+     -- Show relative date by default. When set, use `strftime` to display dates
+     commit_date_format = nil,
+     log_date_format = nil,
++    -- When set, used to format the diff. Requires `baleia` to colorize text with ANSI escape sequences. An example for
++    -- `Delta` is `{ 'delta', '--width', '117' }`. For `Delta`, hyperlinks must be disabled in its git config section,
++    -- for text to be colorized properly. It's recommended to set `disable_context_highlighting = true`, otherwise when
++    -- the cursor is in the hunk, we lose background highlighting
++    log_pager = nil,
+     -- Used to generate URL's for branch popup action "pull request".
+     git_services = {
+         ["github.com"] = "https://github.com/${owner}/${repository}/compare/${branch_name}?expand=1",
+diff --git a/lua/neogit/buffers/common.lua b/lua/neogit/buffers/common.lua
+index 2fd54566..40959902 100644
+--- a/lua/neogit/buffers/common.lua
++++ b/lua/neogit/buffers/common.lua
+@@ -25,21 +25,16 @@ M.Diff = Component.new(function(diff)
+   }, { foldable = true, folded = false, context = true })
+ end)
+ 
+--- Use vim iter api?
+ M.DiffHunks = Component.new(function(diff)
+-  local hunk_props = vim
+-    .iter(diff.hunks)
+-    :map(function(hunk)
+-      hunk.content = vim.iter(diff.lines):slice(hunk.diff_from + 1, hunk.diff_to):totable()
+-
+-      return {
+-        header = diff.lines[hunk.diff_from],
+-        content = hunk.content,
+-        hunk = hunk,
+-        folded = hunk._folded,
+-      }
+-    end)
+-    :totable()
++  local hunk_props = {}
++  for i, hunk in ipairs(diff.hunks) do
++    table.insert(hunk_props, {
++      header = diff.lines[hunk.diff_from],
++      content = diff.pager_contents[i],
++      hunk = hunk,
++      folded = hunk._folded,
++    })
++  end
+ 
+   return col.tag("DiffContent") {
+     col.tag("DiffInfo")(map(diff.info, text)),
+@@ -88,7 +83,13 @@ M.Hunk = Component.new(function(props)
+   return col.tag("Hunk")({
+     text.line_hl("NeogitHunkHeader")(props.header),
+     col.tag("HunkContent")(map(props.content, HunkLine)),
+-  }, { foldable = true, folded = props.folded or false, context = true, hunk = props.hunk })
++  }, {
++    ansi_hl = config.values.log_pager ~= nil,
++    foldable = true,
++    folded = props.folded or false,
++    context = true,
++    hunk = props.hunk,
++  })
+ end)
+ 
+ M.List = Component.new(function(props)
+diff --git a/lua/neogit/config.lua b/lua/neogit/config.lua
+index 67d79e6c..89707e62 100644
+--- a/lua/neogit/config.lua
++++ b/lua/neogit/config.lua
+@@ -334,6 +334,7 @@ end
+ ---@field graph_style? NeogitGraphStyle Style for graph
+ ---@field commit_date_format? string Commit date format
+ ---@field log_date_format? string Log date format
++---@field log_pager? [string] Log pager
+ ---@field disable_hint? boolean Remove the top hint in the Status buffer
+ ---@field disable_context_highlighting? boolean Disable context highlights based on cursor position
+ ---@field disable_signs? boolean Special signs to draw for sections etc. in Neogit
+@@ -389,6 +390,7 @@ function M.get_default_values()
+     graph_style = "ascii",
+     commit_date_format = nil,
+     log_date_format = nil,
++    log_pager = nil,
+     process_spinner = false,
+     filewatcher = {
+       enabled = true,
+diff --git a/lua/neogit/lib/buffer.lua b/lua/neogit/lib/buffer.lua
+index 562e7e5a..340e614f 100644
+--- a/lua/neogit/lib/buffer.lua
++++ b/lua/neogit/lib/buffer.lua
+@@ -152,6 +152,26 @@ function Buffer:set_line_highlights(highlights)
+   end
+ end
+ 
++function Buffer:set_ansi_highlights(highlights)
++  for _, hl in ipairs(highlights) do
++    local first_line, last_line = unpack(hl)
++    local text = self:get_lines(first_line, last_line, false)
++
++    for i, line in ipairs(text) do
++      if line:match("\27%[0K\27%[0m$") then
++        -- Handle "Erase in Line". We don't support coloring the rest of the line.
++        line = line:gsub("\27%[0K\27%[0m$", "")
++        if i < #text then
++          text[i + 1] = "\27[0m" .. text[i + 1]
++        end
++      end
++      text[i] = line
++    end
++
++    vim.g.baleia.buf_set_lines(self.handle, first_line, last_line, false, text)
++  end
++end
++
+ function Buffer:set_folds(folds)
+   self:set_window_option("foldmethod", "manual")
+ 
+diff --git a/lua/neogit/lib/git/diff.lua b/lua/neogit/lib/git/diff.lua
+index 64d3be1f..ccf7609a 100644
+--- a/lua/neogit/lib/git/diff.lua
++++ b/lua/neogit/lib/git/diff.lua
+@@ -1,6 +1,7 @@
+ local a = require("plenary.async")
+ local git = require("neogit.lib.git")
+ local util = require("neogit.lib.util")
++local config = require("neogit.config")
+ local logger = require("neogit.logger")
+ 
+ local insert = table.insert
+@@ -18,6 +19,7 @@ local sha256 = vim.fn.sha256
+ ---@field info table
+ ---@field stats table
+ ---@field hunks Hunk
++---@field pager_contents string[]
+ ---
+ ---@class DiffStats
+ ---@field additions number
+@@ -166,10 +168,10 @@ local function build_hunks(lines)
+ 
+       if line:match("^@@@") then
+         -- Combined diff header
+-        index_from, index_len, disk_from, disk_len = line:match("@@@* %-(%d+),?(%d*) .* %+(%d+),?(%d*) @@@*")
++        index_from, index_len, disk_from, disk_len = line:match("^@@@* %-(%d+),?(%d*) .* %+(%d+),?(%d*) @@@*")
+       else
+         -- Normal diff header
+-        index_from, index_len, disk_from, disk_len = line:match("@@ %-(%d+),?(%d*) %+(%d+),?(%d*) @@")
++        index_from, index_len, disk_from, disk_len = line:match("^@@ %-(%d+),?(%d*) %+(%d+),?(%d*) @@")
+       end
+ 
+       if index_from then
+@@ -215,6 +217,41 @@ local function build_hunks(lines)
+   return hunks
+ end
+ 
++---@param diff_header string[]
++---@param lines string[]
++---@param hunks Hunk[]
++---@return string[][]
++local function build_pager_contents(diff_header, lines, hunks)
++  local res = {}
++  local jobs = {}
++  vim.iter(hunks):each(function(hunk)
++    local header = lines[hunk.diff_from]
++    local content = vim.list_slice(lines, hunk.diff_from + 1, hunk.diff_to)
++    if config.values.log_pager == nil then
++      insert(res, content)
++      return
++    end
++
++    local job = vim.system(config.values.log_pager, { stdin = true })
++    for _, part in ipairs { diff_header, { header }, content } do
++      for _, line in ipairs(part) do
++        job:write(line .. "\n")
++      end
++    end
++    job:write()
++    insert(jobs, job)
++  end)
++
++  if config.values.log_pager ~= nil then
++    vim.iter(jobs):each(function(job)
++      local content = vim.split(job:wait().stdout, "\n")
++      insert(res, content)
++    end)
++  end
++
++  return res
++end
++
+ ---@param raw_diff string[]
+ ---@param raw_stats string[]
+ ---@return Diff
+@@ -222,6 +259,7 @@ local function parse_diff(raw_diff, raw_stats)
+   local header, start_idx = build_diff_header(raw_diff)
+   local lines = build_lines(raw_diff, start_idx)
+   local hunks = build_hunks(lines)
++  local pager_contents = build_pager_contents(header, lines, hunks)
+   local kind, info = build_kind(header)
+   local file = build_file(header, kind)
+   local stats = parse_diff_stats(raw_stats or {})
+@@ -238,6 +276,7 @@ local function parse_diff(raw_diff, raw_stats)
+     info = info,
+     stats = stats,
+     hunks = hunks,
++    pager_contents = pager_contents,
+   }
+ end
+ 
+diff --git a/lua/neogit/lib/ui/component.lua b/lua/neogit/lib/ui/component.lua
+index ae737977..15c8f237 100644
+--- a/lua/neogit/lib/ui/component.lua
++++ b/lua/neogit/lib/ui/component.lua
+@@ -13,6 +13,7 @@ local default_component_options = {
+ 
+ ---@class ComponentOptions
+ ---@field line_hl string
++---@field ansi_hl boolean
+ ---@field highlight string
+ ---@field align_right integer|nil
+ ---@field padding_left integer
+diff --git a/lua/neogit/lib/ui/init.lua b/lua/neogit/lib/ui/init.lua
+index f2d6bfb1..ccfa852f 100644
+--- a/lua/neogit/lib/ui/init.lua
++++ b/lua/neogit/lib/ui/init.lua
+@@ -729,6 +729,7 @@ function Ui:update()
+     self.buf:set_highlights(renderer.buffer.highlight)
+     self.buf:set_extmarks(renderer.buffer.extmark)
+     self.buf:set_line_highlights(renderer.buffer.line_highlight)
++    self.buf:set_ansi_highlights(renderer.buffer.ansi_highlight)
+     self.buf:set_folds(renderer.buffer.fold)
+ 
+     self.statuscolumn = {}
+diff --git a/lua/neogit/lib/ui/renderer.lua b/lua/neogit/lib/ui/renderer.lua
+index 72127856..e5120bb6 100644
+--- a/lua/neogit/lib/ui/renderer.lua
++++ b/lua/neogit/lib/ui/renderer.lua
+@@ -70,6 +70,7 @@ end
+ ---@field line string[]
+ ---@field highlight table[]
+ ---@field line_highlight table[]
++---@field ansi_highlight table[]
+ ---@field extmark table[]
+ ---@field fold table[]
+ 
+@@ -103,6 +104,7 @@ function Renderer:new(layout, buffer)
+       line = {},
+       highlight = {},
+       line_highlight = {},
++      ansi_highlight = {},
+       extmark = {},
+       fold = {},
+     },
+@@ -207,6 +209,13 @@ function Renderer:_render_child(child)
+     table.insert(self.buffer.line_highlight, { #self.buffer.line - 1, line_hl })
+   end
+ 
++  if child.options.ansi_hl then
++    table.insert(self.buffer.ansi_highlight, {
++      #self.buffer.line - (child.position.row_end - child.position.row_start),
++      #self.buffer.line,
++    })
++  end
++
+   if child.options.virtual_text then
+     table.insert(self.buffer.extmark, {
+       self.namespace,
+diff --git a/tests/specs/neogit/lib/git/log_spec.lua b/tests/specs/neogit/lib/git/log_spec.lua
+index f3618c35..fd0a8fbc 100644
+--- a/tests/specs/neogit/lib/git/log_spec.lua
++++ b/tests/specs/neogit/lib/git/log_spec.lua
+@@ -232,6 +232,67 @@ describe("lib.git.log.parse", function()
+             " ",
+             " ---@param selection Selection",
+           },
++          pager_contents = {
++            {
++              " ---@param first_line number",
++              " ---@param last_line number",
++              " ---@param partial boolean",
++              "----@return SelectedHunk[],string[]",
++              "+---@return SelectedHunk[]",
++              " function M.get_item_hunks(item, first_line, last_line, partial)",
++              "   if item.folded or item.hunks == nil then",
++              "-    return {}, {}",
++              "+    return {}",
++              "   end",
++              " ",
++              "   local hunks = {}",
++              "-  local lines = {}",
++              " ",
++              "   for _, h in ipairs(item.hunks) do",
++              "-    -- Transform to be relative to the current item/file",
++              "-    local first_line = first_line - item.first",
++              "-    local last_line = last_line - item.first",
++              "-",
++              "-    if h.diff_from <= last_line and h.diff_to >= first_line then",
++              "-      -- Relative to the hunk",
++              "+    if h.first <= last_line and h.last >= first_line then",
++              "       local from, to",
++              "+",
++              "       if partial then",
++              "-        from = h.diff_from + math.max(first_line - h.diff_from, 0)",
++              "-        to = math.min(last_line, h.diff_to)",
++              "+        local length = last_line - first_line",
++              "+        from = h.diff_from + math.max((first_line - item.first) - h.diff_from, 0)",
++              "+        to = from + length",
++              "       else",
++              "         from = h.diff_from + 1",
++              "         to = h.diff_to",
++              "       end",
++              " ",
++              "       local hunk_lines = {}",
++              "-",
++              "       for i = from, to do",
++              "         table.insert(hunk_lines, item.diff.lines[i])",
++              "       end",
++            },
++            {
++              "       setmetatable(o, o)",
++              " ",
++              "       table.insert(hunks, o)",
++              "-",
++              "-      for i = from, to do",
++              "-        table.insert(lines, item.diff.lines[i + h.diff_from])",
++              "-      end",
++              "     end",
++              "   end",
++              " ",
++              "-  return hunks, lines",
++              "+  return hunks",
++              " end",
++              " ",
++              " ---@param selection Selection",
++            },
++          },
+           stats = {
+             additions = 0,
+             deletions = 0,
+@@ -320,6 +381,19 @@ describe("lib.git.log.parse", function()
+             ' of this software and associated documentation files (the "Software"), to deal',
+             " in the Software without restriction, including without limitation the rights",
+           },
++          pager_contents = {
++            {
++              " MIT License",
++              " ",
++              "+hello",
++              " Copyright (c) 2020 TimUntersberger",
++              " ",
++              "+world",
++              " Permission is hereby granted, free of charge, to any person obtaining a copy",
++              ' of this software and associated documentation files (the "Software"), to deal',
++              " in the Software without restriction, including without limitation the rights",
++            },
++          },
+           stats = {
+             additions = 0,
+             deletions = 0,
