@@ -1,5 +1,6 @@
 local augroup = require("core.utils").augroup
 local condition = require("core.variables").ui_features
+local big = require("core.utils").big
 
 -- Plugins that modify UI
 return {

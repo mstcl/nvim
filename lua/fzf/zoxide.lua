@@ -9,14 +9,12 @@ local opts = {
 	winopts = {
 		title = " Zoxide ",
 		title_pos = "center",
-		height = 0.5,
-		width = 0.3,
 	},
 }
 
 local M = {}
 
-M.exec = function ()
+M.exec = function()
 	fzf_lua.fzf_exec("zoxide query -l", opts)
 end
 

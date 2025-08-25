@@ -30,8 +30,13 @@ return {
 				desc = "Installed pickers",
 			},
 			{
+				"<leader>t",
+				"<cmd>FzfLua tabs<cr>",
+				desc = "Tab list",
+			},
+			{
 				"<leader>b",
-				"<cmd>FzfLua buffers<cr>",
+				"<cmd>FzfLua buffers cwd_only=true<cr>",
 				desc = "Buffer list",
 			},
 			{
@@ -306,7 +311,7 @@ return {
 	},
 	{ -- (which-key.nvim) Keymapping cheatsheet
 		"folke/which-key.nvim",
-		event = "BufReadPre",
+		event = "VeryLazy",
 		keys = {
 			{
 				"<C-M>k",
@@ -318,15 +323,15 @@ return {
 		},
 		opts = function()
 			return {
+				win = {
+					border = border,
+				},
 				delay = 400,
 				icons = {
 					separator = "▸",
 					breadcrumb = "»",
 					colors = false,
 					rules = false,
-				},
-				layout = {
-					height = { min = 1 },
 				},
 				sort = { "alphanum" },
 			}

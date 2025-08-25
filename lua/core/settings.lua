@@ -45,7 +45,7 @@ set.ttimeoutlen = 10
 set.cursorline = true
 set.cursorlineopt = "number"
 
--- Bars
+-- UI components
 set.hidden = true
 set.showmode = false
 set.showcmd = false
@@ -100,6 +100,8 @@ set.splitkeep = "screen" -- less jarring splitting
 set.splitbelow = true
 set.splitright = true
 set.jumpoptions = "stack,view"
+set.viewoptions = "folds,cursor,unix,curdir"
+vim.go.tabclose = "left"
 
 -- Scrolling
 set.scrolljump = 1
