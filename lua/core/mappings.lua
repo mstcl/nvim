@@ -118,12 +118,11 @@ map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search R
 map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 
--- Buffer traversal
-map("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
-map("n", "[b", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
-map("n", "]B", "<cmd>blast<cr>", { desc = "Last buffer" })
-map("n", "[B", "<cmd>bfirst<cr>", { desc = "First buffer" })
-map("n", "<C-Q>", "<cmd>confirm bdelete<cr>", { desc = "Delete buffer" })
+-- Tab mappings
+map("n", "]t", "gt", { desc = "Next tabpage" })
+map("n", "[t", "gT", { desc = "Previous tabpage" })
+map("n", "<C-T>n", "<cmd>tabnew<cr>", { desc = "New tab" })
+map("n", "<C-T>c", "<cmd>tabclose<cr>", { desc = "Close tab" })
 
 -- save original gx to use as fallback
 local old_gx = vim.fn.maparg("gx", "n", nil, true)

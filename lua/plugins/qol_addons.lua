@@ -155,6 +155,7 @@ return {
 					child_prefix = false,
 				},
 				tabs = {
+					cwd_prompt = true,
 					winopts = {
 						width = 0.5,
 						height = 0.5,
@@ -162,6 +163,7 @@ return {
 					},
 				},
 				buffers = {
+					cwd_prompt = true,
 					sort_lastused = true,
 					winopts = {
 						width = 0.5,
@@ -204,6 +206,7 @@ return {
 		},
 		opts = {
 			display_score = false,
+			cwd_prompt = true,
 		},
 	},
 	{ -- (mini.align) Utility to align text by delimiters
@@ -350,6 +353,7 @@ return {
 				{ "<C-M>s", group = "Toggle sidescrolloff/spellcheck" },
 				{ "<C-M>v", group = "Toggle virtual-text/lines" },
 				{ "<C-S>", group = "Split windows" },
+				{ "<C-T>", group = "Tabpage new/close" },
 				{ "[", group = "Previous" },
 				{ "]", group = "Next" },
 				{ "z", group = "Folds, spelling & align" },
@@ -792,16 +796,19 @@ return {
 				"switch_buffer",
 				"unsupported",
 			},
-			open_automatic = function()
+			open_automatic = function(bufnr)
 				local aerial = require("aerial")
-				return vim.api.nvim_win_get_width(0) > 80 and not aerial.was_closed()
+				return vim.api.nvim_win_get_width(0) > 80
+					and aerial.num_symbols(bufnr) > 4
+					and not aerial.was_closed()
+					and vim.api.nvim_buf_line_count(bufnr) > 80
 			end,
 			show_guides = true,
 			layout = {
 				placement = "edge",
 				close_on_select = false,
-				max_width = 30,
-				min_width = 30,
+				max_width = 28,
+				min_width = 28,
 			},
 		},
 	},
