@@ -115,7 +115,7 @@ return {
 						"fzf",
 						"toggleterm",
 						"ministarter",
-						"git-signs-*",
+						"gitsigns-*",
 						"lazy",
 						"Neogit*",
 						"Diffview*",
@@ -235,6 +235,20 @@ return {
 		"echasnovski/mini.starter",
 		init = function()
 			vim.o.laststatus = 0
+			augroup("loadUI", {
+				{ "BufReadPre" },
+				{
+					pattern = "*",
+					desc = "Ministarter ui",
+					callback = function()
+						if vim.bo.filetype ~= "ministarter" then
+							if vim.o.laststatus == 0 then
+								vim.o.laststatus = 3
+							end
+						end
+					end,
+				},
+			})
 		end,
 		cond = function()
 			if condition.starter then

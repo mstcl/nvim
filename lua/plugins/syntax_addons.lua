@@ -240,7 +240,6 @@ return {
 			{ "]e", "<cmd>MoltenNext<cr>", desc = "Next cell", buffer = true },
 			{ "[e", "<cmd>MoltenPrev<cr>", desc = "Next cell", buffer = true },
 		},
-		cond = conf.syntax_features.quarto,
 		init = function()
 			vim.g.molten_image_provider = "none"
 			vim.g.molten_wrap_output = true

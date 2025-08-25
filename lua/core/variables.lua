@@ -231,4 +231,19 @@ function M.get_mason_sources(source_map)
 	return sources
 end
 
+M.oil_columns = {
+	types = {
+		"type",
+		icons = {
+			directory = "+",
+			fifo = "p",
+			file = "·",
+			link = "l",
+			socket = "s",
+		},
+		highlight = "Special",
+	},
+	permissions = { "permissions", highlight = "Number" },
+}
+
 return M

@@ -245,72 +245,64 @@ return {
 				end,
 			})
 		end,
-		opts = {
-			default_file_explorer = true,
-			experimental_watch_for_changes = true,
-			keymaps = {
-				["g?"] = "actions.show_help",
-				["<CR>"] = "actions.select",
-				["<C-s>v"] = "actions.select_vsplit",
-				["<C-s>h"] = "actions.select_split",
-				["<C-t>"] = "actions.select_tab",
-				["<C-p>"] = "actions.preview",
-				["q"] = "actions.close",
-				["<C-l>"] = "actions.refresh",
-				["-"] = "actions.parent",
-				["_"] = "actions.open_cwd",
-				["`"] = "actions.cd",
-				["~"] = "actions.tcd",
-				["<C-h>"] = "actions.toggle_hidden",
-			},
-			columns = {
-				{
-					"type",
-					icons = {
-						directory = "+",
-						fifo = "p",
-						file = "·",
-						link = "l",
-						socket = "s",
+		opts = function()
+			local detail = false
+			return {
+				default_file_explorer = true,
+				experimental_watch_for_changes = true,
+				keymaps = {
+					["g?"] = "actions.show_help",
+					["<CR>"] = "actions.select",
+					["<C-s>v"] = "actions.select_vsplit",
+					["<C-s>h"] = "actions.select_split",
+					["<C-t>"] = "actions.select_tab",
+					["<C-p>"] = "actions.preview",
+					["q"] = "actions.close",
+					["<C-l>"] = "actions.refresh",
+					["-"] = "actions.parent",
+					["_"] = "actions.open_cwd",
+					["`"] = "actions.cd",
+					["~"] = "actions.tcd",
+					["<C-h>"] = "actions.toggle_hidden",
+					["gd"] = {
+						desc = "Toggle file detail view",
+						callback = function()
+							detail = not detail
+							if detail then
+								require("oil").set_columns({ conf.oil_columns.types, conf.oil_columns.permissions })
+							else
+								require("oil").set_columns({})
+							end
+						end,
 					},
-					highlight = "Special",
 				},
-				{ "permissions", highlight = "Number" },
-			},
-			float = {
-				padding = 0,
-				border = border,
-				max_width = math.floor(vim.api.nvim_win_get_width(0) * 0.4),
-				max_height = math.floor(vim.api.nvim_win_get_height(0) * 0.4),
-				override = function(conf)
-					conf.style = "minimal"
-					return conf
-				end,
-			},
-			preview = {
-				border = border,
-			},
-			progress = {
-				border = border,
-			},
-			win_options = {
-				number = false,
-				relativenumber = false,
-				signcolumn = "no",
-				foldcolumn = "0",
-				statuscolumn = "",
-			},
-			keymaps_help = {
-				border = border,
-			},
-			ssh = {
-				border = border,
-			},
-			cleanup_delay_ms = false,
-			delete_to_trash = true,
-			skip_confirm_for_simple_edits = true,
-			prompt_save_on_select_new_entry = true,
-		},
+				columns = {},
+				float = {
+					padding = 0,
+					border = border,
+					max_width = math.floor(vim.api.nvim_win_get_width(0) * 0.8),
+					max_height = math.floor(vim.api.nvim_win_get_height(0) * 0.8),
+				},
+				preview = { border = border },
+				progress = { border = border },
+				win_options = {
+					number = false,
+					relativenumber = true,
+					signcolumn = "no",
+					foldcolumn = "0",
+					statuscolumn = "",
+				},
+				keymaps_help = { border = border },
+				ssh = { border = border },
+				cleanup_delay_ms = false,
+				delete_to_trash = true,
+				skip_confirm_for_simple_edits = true,
+				prompt_save_on_select_new_entry = true,
+			}
+		end,
+		config = function(_, opts)
+			require("oil").setup(opts)
+		end,
 	},
 	{ -- (which-key.nvim) Keymapping cheatsheet
 		"folke/which-key.nvim",

@@ -6,10 +6,16 @@ require("core.lazy")
 
 -- Core setup
 require("core.settings")
-require("core.commands")
+
+-- UI setup
+require("core.ui")
+set_statusline()
+set_statuscol()
+
+-- Autocommands, mappings, and commands
 require("core.autocmds")
 require("core.mappings")
-require("core.ui")
+require("core.commands")
 
 -- Lsp setup
 require("lsp")

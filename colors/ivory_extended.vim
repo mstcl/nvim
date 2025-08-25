@@ -348,6 +348,7 @@ highlight StatuslineBlue guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StatuslineGreen guifg=#464c3a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StatuslineMagenta guifg=#673d58 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StatuslineMode guifg=#edeae4 guibg=#352e2e guisp=NONE blend=NONE gui=bold
+highlight StatuslineModeInv guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight StatuslineModified guifg=#edeae4 guibg=#79241f guisp=NONE blend=NONE gui=bold
 highlight StatuslineModifiedInv guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight StatuslineOrange guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=NONE

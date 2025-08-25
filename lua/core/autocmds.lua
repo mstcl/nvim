@@ -4,25 +4,6 @@ local opts = { noremap = true, silent = true }
 local big = require("core.utils").big
 local exec = vim.api.nvim_command
 
-augroup("loadUI", {
-	{ "BufReadPre" },
-	{
-		pattern = "*",
-		desc = "Lazy load UI",
-		callback = function()
-			if vim.bo.filetype ~= "ministarter" then
-				if vim.o.laststatus == 0 then
-					vim.o.laststatus = 3
-				end
-				if vim.o.statusline == "" and not big(vim.fn.expand("%")) then
-					vim.o.statusline = "%!v:lua.get_statusline()"
-					vim.o.statuscolumn = "%!v:lua.get_statuscol()"
-				end
-			end
-		end,
-	},
-})
-
 augroup("trim", {
 	"BufWritePre",
 	{
@@ -102,17 +83,15 @@ augroup("rooter", {
 	{
 		desc = "Set cwd to project root directory",
 		callback = function(args)
-			if not big(vim.fn.expand("%")) then
-				local root = vim.fs.root(args.buf, {
-					".git",
-					"pyproject.toml",
-					"README.md",
-					"go.mod",
-				})
-				if root then
-					---@diagnostic disable-next-line: undefined-field
-					vim.fn.chdir(root)
-				end
+			local root = vim.fs.root(args.buf, {
+				".git",
+				"pyproject.toml",
+				"README.md",
+				"go.mod",
+			})
+			if root then
+				---@diagnostic disable-next-line: undefined-field
+				vim.fn.chdir(root)
 			end
 		end,
 	},

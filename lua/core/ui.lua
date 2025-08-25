@@ -16,11 +16,14 @@ _G.get_statuscol = function()
 	return utils.lnumfunc(args) .. "%=%s" .. utils.get_fold(vim.v.lnum)
 end
 
+_G.set_statuscol = function()
+	vim.o.statuscolumn = "%!v:lua.get_statuscol()"
+end
+
 ---@diagnostic disable-next-line: duplicate-set-field
 _G.get_statusline = function()
 	return table.concat({
-		components.padding,
-		components.modified,
+		" ",
 		components.mode,
 		components.padding,
 		components.hl_alt,
@@ -68,10 +71,10 @@ _G.get_statusline = function()
 		components.indentation,
 		components.padding,
 		--
-		components.padding,
-		components.scrollbar,
-		components.padding,
-		--
 		components.hl_restore,
 	}, "")
+end
+
+_G.set_statusline = function()
+	vim.o.statusline = "%!v:lua.get_statusline()"
 end
