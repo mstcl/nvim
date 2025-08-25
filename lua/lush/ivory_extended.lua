@@ -7,6 +7,8 @@ local extended = lush.merge({
 	require("ivory_telescope"),
 	require("ivory_whichkey"),
 	require("ivory_neogit"),
+	require("ivory_mini_indentscope"),
+	require("ivory_diffview"),
 	require("ivory_gitsigns"),
 	require("ivory_cmp"),
 	require("ivory_flash"),
@@ -41,6 +43,7 @@ if conf.ui_features.tabline then
 	extended = lush.merge({
 		extended,
 		require("ivory_bufferline"),
+		require("ivory_mini_tabline"),
 	})
 end
 

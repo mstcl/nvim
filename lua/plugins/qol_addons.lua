@@ -357,9 +357,10 @@ return {
 				{ "gh", group = "Git hunk actions" },
 				{ "gs", group = "Surround" },
 				{ "gr", group = "LSP symbol actions" },
+				{ "<leader>d", group = "Diffview/DAP" },
+				{ "<leader>db", group = "DAP commands", cond = conf.dap_enabled },
 				{ "<leader>n", group = "Notes (zk) commands", cond = conf.syntax_features.markdown },
 				{ "m", group = "Molten operations", cond = conf.syntax_features.quarto },
-				{ "<leader>d", group = "DAP commands", cond = conf.dap_enabled },
 				{ "go", group = "Otter (code block) symbols", cond = conf.lsp_enabled },
 			})
 			if opts then
@@ -596,7 +597,7 @@ return {
 				desc = "Toggle Overseer",
 			},
 			{
-				"<leader>m",
+				"<leader>r",
 				"<cmd>OverseerRun<cr>",
 				desc = "Run tasks",
 			},
@@ -621,6 +622,45 @@ return {
 				require("overseer").setup(opts)
 			end
 		end,
+	},
+	{ -- (diffview.nvim) Powerful diff and merge tool
+		"sindrets/diffview.nvim",
+		cmd = "DiffviewOpen",
+		keys = {
+			{
+				"<leader>dh",
+				"<cmd>DiffviewFileHistory<cr>",
+				desc = "Open diffview history",
+			},
+			{
+				"<leader>dd",
+				"<cmd>DiffviewOpen<cr>",
+				desc = "Open diffview",
+			},
+			{
+				"<leader>dc",
+				"<cmd>DiffviewClose<cr>",
+				desc = "Close diffview",
+			},
+		},
+		opts = {
+			signs = {
+				fold_closed = "▸",
+				fold_open = "▾",
+				done = "✓",
+			},
+			file_panel = {
+				listing_style = "list",
+				win_config = {
+					position = "left",
+					width = 40,
+					win_opts = {},
+				},
+			},
+			use_icons = false,
+			show_help_hints = false,
+			enhanced_diff_hl = true,
+		},
 	},
 	{ -- (git-conflict.nvim) Git conflicts helper
 		"akinsho/git-conflict.nvim",
@@ -734,7 +774,7 @@ return {
 			},
 		},
 		opts = {
-			icons = require("core.variables").lsp_kind_icons,
+			icons = require("core.variables").lsp_kind_icons_padded,
 			guides = {
 				nested_top = " │ ",
 				mid_item = " ├─",
@@ -752,7 +792,6 @@ return {
 				"switch_buffer",
 				"unsupported",
 			},
-			open_automatic = true,
 			open_automatic = function()
 				local aerial = require("aerial")
 				return vim.api.nvim_win_get_width(0) > 80 and not aerial.was_closed()

@@ -131,22 +131,22 @@ highlight DiagnosticSignWarn guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=
 highlight! link LspDiagnosticsSignWarning DiagnosticSignWarn
 highlight DiagnosticUnderlineOk guifg=NONE guibg=NONE guisp=#464c3a blend=NONE gui=undercurl
 highlight DiagnosticUnnecessary guifg=NONE guibg=NONE guisp=#574b42 blend=NONE gui=underdotted
-highlight DiffAdd guifg=#686d63 guibg=#d5dbcd guisp=NONE blend=NONE gui=NONE
+highlight DiffAdd guifg=NONE guibg=#d5dbcd guisp=NONE blend=NONE gui=NONE
 highlight! link Added DiffAdd
 highlight! link NeogitDiffAdd DiffAdd
 highlight! link diffAdded DiffAdd
-highlight DiffChange guifg=#97757B guibg=#f1e8ea guisp=NONE blend=NONE gui=NONE
+highlight DiffChange guifg=NONE guibg=#f1e8ea guisp=NONE blend=NONE gui=NONE
 highlight! link Changed DiffChange
-highlight DiffDelete guifg=#834c40 guibg=#ecd5d3 guisp=NONE blend=NONE gui=NONE
+highlight! link diffChanged DiffChange
+highlight DiffDelete guifg=NONE guibg=#ecd5d3 guisp=NONE blend=NONE gui=NONE
 highlight! link Removed DiffDelete
 highlight! link Todo DiffDelete
 highlight! link diffRemoved DiffDelete
-highlight DiffFGAdd guifg=#686d63 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight DiffFGChange guifg=#97757B guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight DiffFGDelete guifg=#834c40 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight DiffFGRemove guifg=#834c40 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight DiffFGText guifg=#493f37 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight DiffText guifg=#493f37 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
+highlight DiffText guifg=NONE guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
+highlight DiffviewFilePanelCounter guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight DiffviewFilePanelRootPath guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight DiffviewFilePanelSelected guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight DiffviewFilePanelTitle guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight Directory guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link AerialNamespaceIcon Directory
 highlight! link NeogitBranch Directory
@@ -186,8 +186,19 @@ highlight! link @lsp.type.method Function
 highlight FzfLuaLivePrompt guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight FzfLuaTitleFlags guifg=#edeae4 guibg=#834c40 guisp=NONE blend=NONE gui=bold
 highlight GitSignsAdd guifg=#686d63 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link DiffviewFilePanelInsertions GitSignsAdd
+highlight! link DiffviewStatusAdded GitSignsAdd
 highlight GitSignsChange guifg=#97757B guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link DiffviewStatusCopied GitSignsChange
+highlight! link DiffviewStatusModified GitSignsChange
+highlight! link DiffviewStatusRenamed GitSignsChange
+highlight! link DiffviewStatusTypeChange GitSignsChange
+highlight! link DiffviewStatusUnmerged GitSignsChange
 highlight GitSignsDelete guifg=#834c40 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link DiffviewFilePanelDeletions GitSignsDelete
+highlight! link DiffviewStatusBroken GitSignsDelete
+highlight! link DiffviewStatusDeleted GitSignsDelete
+highlight! link DiffviewStatusUnknown GitSignsDelete
 highlight Hint guifg=#735057 guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticHint Hint
 highlight! link @comment.hint Hint
@@ -268,8 +279,10 @@ highlight! link NeogitPopupConfigKey NeogitPopupOptionKey
 highlight! link NeogitPopupSwitchKey NeogitPopupOptionKey
 highlight NeogitSectionHeader guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight NonText guifg=#e5e1d9 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link DiffviewDiffDeleteDim NonText
 highlight! link EndOfBuffer NonText
 highlight! link Ignore NonText
+highlight! link MiniIndentscopeSymbol NonText
 highlight! link Whitespace NonText
 highlight NormalFloat guifg=#493f37 guibg=#f1efeb guisp=NONE blend=NONE gui=NONE
 highlight! link TelescopeNormal NormalFloat
@@ -297,6 +310,7 @@ highlight PmenuThumb guifg=#d7d3cb guibg=#d7d3cb guisp=NONE blend=NONE gui=NONE
 highlight PreProc guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link @keyword.directive PreProc
 highlight Question guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link DiffviewStatusUntracked Question
 highlight! link @property Question
 highlight RedrawDebugClear guifg=NONE guibg=yellow guisp=NONE blend=NONE gui=NONE
 highlight RedrawDebugComposed guifg=NONE guibg=green guisp=NONE blend=NONE gui=NONE

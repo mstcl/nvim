@@ -35,10 +35,23 @@ augroup("trim", {
 augroup("altWinHighlight", {
 	"FileType",
 	{
-		desc = "Set background of Aerial window",
+		desc = "Set background for alt windows",
 		pattern = { "aerial" },
 		callback = function()
 			vim.wo.winhighlight = "Normal:CursorLine"
+		end,
+	},
+}, {
+	"BufEnter",
+	{
+		desc = "Set background for alt windows",
+		pattern = "*",
+		callback = function()
+			local filetypes = { "DiffviewFiles", "DiffviewFileHistory" }
+			local current_ft = vim.bo.filetype
+			if vim.tbl_contains(filetypes, current_ft) then
+				vim.wo.winhighlight = "Normal:CursorLine"
+			end
 		end,
 	},
 })

@@ -289,7 +289,7 @@ local function show_message(client)
 				focusable = false,
 				style = "minimal",
 				noautocmd = true,
-				border = "none",
+				border = "rounded",
 			})
 		end)
 		if not success then

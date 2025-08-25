@@ -67,7 +67,6 @@ return {
 						if vim.bo.filetype ~= "ministarter" and vim.o.showtabline == 0 then
 							vim.o.showtabline = 2
 							require("mini.tabline").setup(opts)
-							vim.api.nvim_set_hl(0, "MiniTablineFill", { link = "TablineFill" })
 						end
 					end,
 				},
@@ -110,7 +109,6 @@ return {
 			end
 		end,
 		init = function()
-			vim.api.nvim_set_hl(0, "MiniIndentscopeSymbol", { link = "NonText" })
 			augroup("indentLinesDisable", {
 				{ "Filetype" },
 				{
@@ -118,7 +116,11 @@ return {
 						"fzf",
 						"toggleterm",
 						"ministarter",
+						"git-signs-*",
 						"lazy",
+						"Neogit*",
+						"Diffview*",
+						"aerial",
 					},
 					desc = "Disable indentscope",
 					callback = function()

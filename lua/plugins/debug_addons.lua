@@ -17,40 +17,32 @@ return {
 		ft = "python",
 		keys = {
 			{
-				"<leader>dc",
+				"<leader>dbc",
 				"<cmd>DapContinue<cr>",
 				desc = "Debug: Continue",
 			},
 			{
-				"<leader>do",
+				"<leader>dbo",
 				"<cmd>DapStepOver<cr>",
 				desc = "Debug: Step over",
 			},
 			{
-				"<leader>dO",
+				"<leader>dbO",
 				"<cmd>DapStepOut<cr>",
 				desc = "Debug: Step out",
 			},
 			{
-				"<leader>di",
+				"<leader>dbi",
 				"<cmd>DapStepIn<cr>",
 				desc = "Debug: Step into",
 			},
 			{
-				"<leader>db",
+				"<leader>dbk",
 				function()
 					vim.cmd("DapToggleBreakpoint")
 					vim.notify("Toggled DAP breakpoint", vim.log.levels.INFO)
 				end,
 				desc = "Debug: breakpoint toggle",
-			},
-			{
-				"<C-M>d",
-				function()
-					vim.cmd("lua require('dapui').toggle()")
-					vim.notify("Toggled DAP ui", vim.log.levels.INFO)
-				end,
-				desc = "Toggle DAP ui",
 			},
 		},
 	},
@@ -81,7 +73,12 @@ return {
 		},
 		keys = {
 			{
-				"<C-M>d",
+				"<C-M>dbb",
+				function()
+					vim.cmd("lua require('dapui').toggle()")
+					vim.notify("Toggled DAP ui", vim.log.levels.INFO)
+				end,
+				desc = "Toggle DAP ui",
 			},
 		},
 		opts = {
