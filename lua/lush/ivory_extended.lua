@@ -11,7 +11,6 @@ local extended = lush.merge({
 	require("ivory_diffview"),
 	require("ivory_gitsigns"),
 	require("ivory_cmp"),
-	require("ivory_flash"),
 	require("ivory_aerial"),
 })
 
@@ -19,9 +18,7 @@ if conf.lsp_enabled then
 	extended = lush.merge({
 		extended,
 		require("ivory_mason"),
-		require("ivory_dressing"),
 		require("ivory_null_ls"),
-		require("ivory_navic"),
 	})
 end
 
