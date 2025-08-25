@@ -314,4 +314,15 @@ return {
 		event = "BufReadPre",
 		opts = {},
 	},
+	{ -- (tiny-glimmer.nvim) Cute animations
+		"rachartier/tiny-glimmer.nvim",
+		event = "VeryLazy",
+		priority = 10,
+		opts = {
+			overwrite = {
+				undo = { enabled = true },
+				redo = { enabled = true },
+			},
+		},
+	},
 }
