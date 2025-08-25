@@ -162,9 +162,6 @@ highlight! link DiagnosticVirtualTextError ErrorMsg
 highlight! link debugBreakpoint ErrorMsg
 highlight! link @function.macro ErrorMsg
 highlight Exception guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=bold
-highlight FlashBackdrop guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight FlashLabel guifg=#545468 guibg=#dfe1e6 guisp=NONE blend=NONE gui=NONE
-highlight FlashPromptIcon guifg=#edeae4 guibg=#834c40 guisp=NONE blend=NONE gui=bold
 highlight! link @number.float Float
 highlight FloatBorder guifg=#e5e1d9 guibg=#f1efeb guisp=NONE blend=NONE gui=NONE
 highlight! link BlinkCmpSignatureHelpBorder FloatBorder
@@ -257,7 +254,6 @@ highlight! link DiagnosticFloatingOk MoreMsg
 highlight! link DiagnosticVirtualLinesOk MoreMsg
 highlight! link DiagnosticVirtualTextOk MoreMsg
 highlight! link DiagnosticOk MsgArea
-highlight NavicSeparator guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight NeogitBranchHead guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold,underline
 highlight NeogitDiffContext guifg=NONE guibg=#f1efeb guisp=NONE blend=NONE gui=NONE
 highlight NeogitDiffContextCursor guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
@@ -327,7 +323,6 @@ highlight Search guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=reverse
 highlight! link Substitute Search
 highlight SignColumn guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Special guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold
-highlight! link DressingSelectIdx Special
 highlight! link @lsp.type.keyword.yaml.ansible Special
 highlight! link @string.special.symbol Special
 highlight SpecialComment guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=bold
@@ -346,7 +341,6 @@ highlight! link MsgArea StatusLine
 highlight! link MsgSeparator StatusLine
 highlight! link StatusLineTerm StatusLine
 highlight StatusLineNC guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight! link NavicText StatusLineNC
 highlight! link StatusLineTermNC StatusLineNC
 highlight Statusline guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight StatuslineAlt guifg=#9e8d7f guibg=NONE guisp=NONE blend=NONE gui=NONE

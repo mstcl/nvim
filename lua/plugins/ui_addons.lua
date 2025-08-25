@@ -10,7 +10,6 @@ return {
 		dependencies = {
 			"rktjmp/lush.nvim",
 			-- Lush colorschemes to extend/modify
-			"mstcl/dmg",
 			"mstcl/ivory",
 		},
 	},
