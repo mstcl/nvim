@@ -1,11 +1,15 @@
 local augroup = require("core.utils").augroup
 local border = require("core.variables").border
 local conf = require("core.variables")
-local condition = require("core.variables").ui_features
 local LSP_SIGNS = require("core.variables").lsp_signs
 
 -- Plugins which add additional ways to use nvim
 return {
+	{ -- (remember.nvim) jump to last place in a buffer
+		"vladdoster/remember.nvim",
+		lazy = false,
+		config = true,
+	},
 	{ -- (lazy-patcher) lazy nvim plugin patcher
 		"one-d-wide/lazy-patcher.nvim",
 		ft = "lazy",
@@ -345,6 +349,7 @@ return {
 				{ "]", group = "Next" },
 				{ "z", group = "Folds, spelling & align" },
 				{ "g", group = "LSP, comment, case & navigation" },
+				{ "gh", group = "Git hunk actions" },
 				{ "gs", group = "Surround" },
 				{ "gr", group = "LSP symbol actions" },
 				{ "<leader>n", group = "Notes (zk) commands", cond = conf.syntax_features.markdown },
@@ -357,56 +362,86 @@ return {
 			end
 		end,
 	},
-	{ -- (blame.nvim) Git blame sidebar
-		"FabijanZulj/blame.nvim",
-		cmd = "BlameToggle",
+	{ -- (gitsigns.nvim) blame and diff for git
+		"lewis6991/gitsigns.nvim",
+		event = "BufReadPre",
 		keys = {
 			{
-				"<C-M>bw",
+				"<C-M>gs",
 				function()
-					vim.cmd("BlameToggle window")
-					vim.notify("Toggled blame", vim.log.levels.INFO)
+					vim.cmd("Gitsigns toggle_signs")
+					vim.notify("Toggled gitsigns", vim.log.levels.INFO)
 				end,
-				desc = "Toggle blame split",
+				desc = "Toggle gitdiff signs",
 			},
-		},
-		opts = {
-			blame_options = { "-w" },
-			date_format = "%r",
-			merge_consecutive = true,
-			focus_blame = false,
-			virtual_style = "float",
-			colors = {
-
-				"#7c4034",
-				"#464c3a",
-				"#543227",
-				"#545468",
-				"#735057",
-				"#673d58",
-				"#493f37",
+			{
+				"[g",
+				"<cmd>Gitsigns prev_hunk<cr>",
+				desc = "Previous hunk",
 			},
-		},
-	},
-	{ -- (git-blame.nvim) Git blame virtual text
-		"f-person/git-blame.nvim",
-		cmd = "GitBlameToggle",
-		keys = {
+			{
+				"]g",
+				"<cmd>Gitsigns next_hunk<cr>",
+				desc = "Next hunk",
+			},
+			{
+				"ghp",
+				"<cmd>Gitsigns preview_hunk_inline<cr>",
+				desc = "Git preview hunks inline",
+			},
+			{
+				"ghs",
+				"<cmd>Gitsigns stage_hunk<cr>",
+				desc = "Git stage hunk",
+			},
+			{
+				"ghu",
+				"<cmd>Gitsigns undo_stage_hunk<cr>",
+				desc = "Git undo stage hunk",
+			},
+			{
+				"ghr",
+				"<cmd>Gitsigns reset_hunk<cr>",
+				desc = "Reset hunk",
+			},
 			{
 				"<C-M>bl",
 				function()
-					vim.cmd("GitBlameToggle")
-					vim.notify("Toggled blame", vim.log.levels.INFO)
+					vim.cmd("Gitsigns toggle_current_line_blame")
+					vim.notify("Toggled blame line", vim.log.levels.INFO)
 				end,
 				desc = "Toggle blame virtual",
 			},
+			{
+				"<C-M>bw",
+				function()
+					vim.cmd("Gitsigns blame")
+					vim.notify("Toggle blame window", vim.log.levels.INFO)
+				end,
+				desc = "Toggle blame window",
+			},
 		},
-		opts = {
-			enabled = false,
-			message_template = "    <summary> • <date> • <author> • <<sha>>",
-			date_format = "%r",
-			message_when_not_committed = "",
-		},
+		opts = function()
+			return {
+				signs = {
+					change = { text = "┋" },
+					delete = { text = "~" },
+				},
+				signs_staged = {
+					change = { text = "┋" },
+					delete = { text = "~" },
+				},
+				current_line_blame_formatter = "    <summary> • <author> • <author_time:%R> • <abbrev_sha>",
+				current_line_blame_opts = {
+					delay = 100,
+				},
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("gitsigns").setup(opts)
+			end
+		end,
 	},
 	{ -- (neogit) magit clone
 		"NeogitOrg/neogit",
@@ -579,79 +614,6 @@ return {
 		config = function(_, opts)
 			if opts then
 				require("overseer").setup(opts)
-			end
-		end,
-	},
-	{ -- (mini.diff) Git signs and diffs
-		"echasnovski/mini.diff",
-		version = false,
-		event = "BufReadPre",
-		keys = {
-			{
-				"<C-M>gs",
-				function()
-					vim.g.minidiff_disable = not vim.g.minipairs_disable
-					if vim.g.minidiff_disable then
-						vim.notify("Disabled auto-pairs", vim.log.levels.INFO)
-					else
-						vim.notify("Enabled auto-pairs", vim.log.levels.INFO)
-					end
-				end,
-				desc = "Toggle diff sigsn",
-			},
-			{
-				"[g",
-				desc = "Previous hunk",
-			},
-			{
-				"]g",
-				desc = "Next hunk",
-			},
-			{
-				"<C-M>gh",
-				function()
-					require("mini.diff").toggle_overlay()
-				end,
-				desc = "Preview git hunks inline",
-			},
-			{
-				"gh",
-				desc = "Stage hunk",
-			},
-			{
-				"gH",
-				desc = "Reset hunk",
-			},
-		},
-		init = function()
-			vim.api.nvim_set_hl(0, "MiniDiffSignAdd", { link = "DiffFGAdd" })
-			vim.api.nvim_set_hl(0, "MiniDiffSignChange", { link = "DiffFGChange" })
-			vim.api.nvim_set_hl(0, "MiniDiffSignDelete", { link = "DiffFGRemove" })
-		end,
-		opts = function()
-			return {
-				view = {
-					style = "sign",
-					signs = { add = "┃", change = "┋", delete = "~" },
-				},
-				delay = {
-					text_change = 100,
-				},
-				mappings = {
-					-- Apply hunks inside a visual/operator region
-					apply = "gh",
-					reset = "gH",
-					textobject = "gh",
-					goto_first = "[G",
-					goto_prev = "[g",
-					goto_next = "]g",
-					goto_last = "]G",
-				},
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("mini.diff").setup(opts)
 			end
 		end,
 	},

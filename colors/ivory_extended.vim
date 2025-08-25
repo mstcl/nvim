@@ -185,6 +185,9 @@ highlight! link @lsp.type.function Function
 highlight! link @lsp.type.method Function
 highlight FzfLuaLivePrompt guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight FzfLuaTitleFlags guifg=#edeae4 guibg=#834c40 guisp=NONE blend=NONE gui=bold
+highlight GitSignsAdd guifg=#686d63 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight GitSignsChange guifg=#97757B guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight GitSignsDelete guifg=#834c40 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Hint guifg=#735057 guibg=#dbc4c8 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticHint Hint
 highlight! link @comment.hint Hint
@@ -216,6 +219,7 @@ highlight! link DiagnosticVirtualTextInfo InfoMsg
 highlight Keyword guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Label guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight LineNr guifg=#9e8d7f guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight! link GitSignsCurrentLineBlame LineNr
 highlight LspInfoBorder guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInfoFiletype guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInfoList guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE

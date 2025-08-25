@@ -7,6 +7,7 @@ local extended = lush.merge({
 	require("ivory_telescope"),
 	require("ivory_whichkey"),
 	require("ivory_neogit"),
+	require("ivory_gitsigns"),
 	require("ivory_cmp"),
 	require("ivory_flash"),
 	require("ivory_aerial"),
