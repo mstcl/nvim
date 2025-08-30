@@ -195,7 +195,7 @@ return {
 		keys = {
 			{
 				"<leader>h",
-				"<cmd>FzfLua frecency<cr>",
+				"<cmd>FzfLua oldfiles<cr>",
 				desc = "Browse history",
 			},
 			{
