@@ -1,14 +1,5 @@
-From 2899d9b581b92e950c2be2e6fce35b6c673f962a Mon Sep 17 00:00:00 2001
-From: Iraq Jaber <iraq+github@zitadel.com>
-Date: Thu, 21 Aug 2025 13:01:16 +0100
-Subject: [PATCH] feat(blame): blame window toggle
-
----
- lua/gitsigns/actions/blame.lua | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
-
 diff --git a/lua/gitsigns/actions/blame.lua b/lua/gitsigns/actions/blame.lua
-index 48b5d354f..23ec9e9d0 100644
+index 48b5d35..23ec9e9 100644
 --- a/lua/gitsigns/actions/blame.lua
 +++ b/lua/gitsigns/actions/blame.lua
 @@ -332,6 +332,22 @@ local function pmap(mode, lhs, cb, opts)

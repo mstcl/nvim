@@ -1,6 +1,5 @@
 local augroup = require("core.utils").augroup
 local condition = require("core.variables").ui_features
-local big = require("core.utils").big
 
 -- Plugins that modify UI
 return {
@@ -92,7 +91,7 @@ return {
 		event = "BufReadPre",
 		opts = {
 			draw = {
-				delay = 50,
+				delay = 20,
 			},
 			mappings = {
 				goto_top = "",
@@ -103,6 +102,7 @@ return {
 		},
 		config = function(_, opts)
 			if opts then
+				opts.draw.animation = require("mini.indentscope").gen_animation.none()
 				require("mini.indentscope").setup(opts)
 				vim.g.miniindentscope_disable = not condition.indent_lines
 			end
