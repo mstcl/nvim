@@ -13,9 +13,10 @@ _G.get_statuscol = function()
 	args.nu = vim.api.nvim_get_option_value("nu", { win = win })
 	args.rnu = vim.api.nvim_get_option_value("rnu", { win = win })
 
-	return utils.lnumfunc(args) .. "%=%s" .. utils.get_fold(vim.v.lnum)
+	return "%=%s" .. utils.lnumfunc(args) .. utils.get_fold(vim.v.lnum)
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 _G.set_statuscol = function()
 	vim.o.statuscolumn = "%!v:lua.get_statuscol()"
 end

@@ -92,7 +92,7 @@ vim.g.foldcolumn = true
 set.laststatus = 3
 set.number = true
 set.relativenumber = true
-set.signcolumn = "auto"
+set.signcolumn = "yes"
 set.shortmess = set.shortmess + "OosatTcCFSW"
 
 -- Window
