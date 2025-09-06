@@ -131,6 +131,7 @@ augroup("terminal", {
 		pattern = "term://*",
 		callback = function()
 			exec("startinsert")
+			vim.b.miniindentscope_disable = true
 			vim.wo.number = false
 			vim.wo.relativenumber = false
 			vim.wo.cursorline = false

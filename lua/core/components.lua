@@ -159,19 +159,40 @@ if require("core.variables").lsp_enabled then
 end
 
 ---Get diagnostics for current buffer
+-- Padding and brackets added
 ---@return string
 function M.get_lsp_diagnostic()
 	if not require("core.variables").lsp_enabled then
 		return ""
 	end
+
 	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
 		return ""
 	end
-	if vim.b.diagnostic_str_cache then
-		return vim.b.diagnostic_str_cache
+
+	local cog_icon = set_hl("󰒓 ", "StatusLineAlt")
+	local clients = vim.lsp.get_clients()
+	local placeholder = set_hl("ok", "StatuslineNC")
+
+	if #clients == 0 then
+		return ""
 	end
+
+	if vim.b.diagnostic_str_cache then
+		if vim.b.diagnostic_str_cache ~= "" then
+			return M.get_open_bracket()
+				.. cog_icon
+				.. vim.b.diagnostic_str_cache
+				.. M.get_close_bracket()
+				.. M.get_padding()
+		else
+			return M.get_open_bracket() .. cog_icon .. placeholder .. M.get_close_bracket() .. M.get_padding()
+		end
+	end
+
 	local str = ""
 	local buf_cnt = vim.b.diagnostic_cnt_cache or {}
+
 	for severity_nr, _ in ipairs({ "Error", "Warn", "Info", "Hint" }) do
 		local cnt = buf_cnt[severity_nr] or 0
 		if cnt > 0 then
@@ -183,8 +204,14 @@ function M.get_lsp_diagnostic()
 	if str:find("%S") then
 		str = str
 	end
+
 	vim.b.diagnostic_str_cache = str
-	return str
+
+	if str ~= "" then
+		return M.get_open_bracket() .. cog_icon .. str .. M.get_close_bracket() .. M.get_padding()
+	else
+		return M.get_open_bracket() .. cog_icon .. placeholder .. M.get_close_bracket() .. M.get_padding()
+	end
 end
 
 ---Get cwd
@@ -281,7 +308,20 @@ function M.get_git_branch()
 	return set_hl("@", "StatuslineAlt") .. set_hl(branch, "StatusLineNC")
 end
 
+---Get current git branch with space
+---@return string
+function M.get_git_branch_2()
+	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+		return ""
+	end
+
+	---@diagnostic disable-next-line: undefined-field
+	local branch = vim.b.gitsigns_head or "nil"
+	return set_hl("󰘬 ", "StatuslineAlt") .. set_hl(branch, "StatusLineNC")
+end
+
 ---Get git diffs for current buffer
+-- Padding and brackets added
 ---@return string
 function M.get_diffs()
 	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
@@ -290,46 +330,68 @@ function M.get_diffs()
 
 	---@diagnostic disable-next-line: undefined-field
 	local diffs = vim.b.gitsigns_status_dict
+	local git_icon = set_hl(" ", "StatuslineAlt")
+
 	if diffs ~= nil then
 		local added = diffs.added or 0
 		local changed = diffs.changed or 0
 		local removed = diffs.removed or 0
 		if added == 0 and removed == 0 and changed == 0 then
-			return "clean"
+			return M.get_open_bracket()
+				.. git_icon
+				.. set_hl("clean", "StatuslineNC")
+				.. M.get_close_bracket()
+				.. M.get_padding()
 		end
-		return string.format(
-			"%s%s%s",
-			set_hl("+" .. tostring(added), "StatuslineGreen"),
-			set_hl("~" .. tostring(changed), "StatuslineMagenta"),
-			set_hl("-" .. tostring(removed), "StatuslineRed")
-		)
+
+		return M.get_open_bracket()
+			.. git_icon
+			.. string.format(
+				"%s%s%s",
+				set_hl("+" .. tostring(added), "StatuslineGreen"),
+				set_hl("~" .. tostring(changed), "StatuslineMagenta"),
+				set_hl("-" .. tostring(removed), "StatuslineRed")
+			)
+			.. M.get_close_bracket()
+			.. M.get_padding()
 	end
-	return "nil"
+
+	return ""
 end
 
+---Get file root
+---@return string
+function M.get_root()
+	return set_hl(M.get_cwd_name(), "StatuslineNC")
+end
+
+---Get file path with root
+---@return string
 function M.get_filepath()
 	local ft = vim.bo.filetype
 	if vim.tbl_contains(ignore_filetypes, ft) and ft ~= "oil" then
 		return ""
 	end
 
-	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
-
-	if fpath == "" or fpath == "." or vim.bo.buftype == "terminal" then
-		local root = set_hl(M.get_cwd_name(), "StatuslineAlt")
-		return root .. set_hl("/", "StatuslineAlt")
-	end
-
 	local root = set_hl(M.get_cwd_name(), "StatuslineNC")
-	local secondary = set_hl(string.format("/%%<%s/", fpath), "StatuslineAlt")
+	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
+	local prefix = set_hl("@ ", "StatuslineAlt")
 
 	if ft == "oil" then
 		return set_hl(string.format(" %s ", string.sub(fpath, 7)), "StatuslineModified")
 	end
 
-	return root .. secondary
+	if fpath == "" or fpath == "." or vim.bo.buftype == "terminal" then
+		return prefix .. root
+	end
+
+	local secondary = set_hl(string.format("/%%<%s", fpath), "StatuslineNC")
+
+	return prefix .. root .. secondary
 end
 
+---Get filename
+---@return string
 function M.get_filename()
 	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
 		return ""
@@ -342,13 +404,29 @@ function M.get_filename()
 	if fname == "" or vim.bo.buftype == "terminal" then
 		return "nil"
 	end
-	return fname
+	return set_hl(fname, "StatuslineNC")
 end
 
+---Get file icon
+---@return string
+function M.get_icon()
+	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+		return ""
+	end
+
+	local fname = vim.fn.expand("%:t")
+	local extension = vim.fn.fnamemodify(fname, ":e")
+	local icon, highlight = require("nvim-web-devicons").get_icon(fname, extension, { default = true })
+
+	return set_hl(icon, highlight)
+end
+
+---Get filetype for all files
+---@return string
 function M.get_filetype()
 	local ft = vim.bo.filetype
 	if vim.bo.buftype == "terminal" then
-		return set_hl(" TERMINAL ", "StatuslineModeInv")
+		return set_hl("TERMINAL", "StatuslineModeInv")
 	elseif ft == "oil" then
 		return ""
 	elseif ft == "" then
@@ -356,7 +434,24 @@ function M.get_filetype()
 	elseif vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
 		return set_hl(string.format("%s", ft:upper()), "StatuslineModeInv")
 	else
-		return (ft:gsub("^%l", string.upper))
+		return set_hl((ft:gsub("^%l", string.upper)), "StatuslineNC")
+	end
+end
+
+---Get filetype for only ignored filetypes
+---@return string
+function M.get_filetype_2()
+	local ft = vim.bo.filetype
+	if vim.bo.buftype == "terminal" then
+		return set_hl("TERMINAL", "StatuslineModeInv")
+	elseif ft == "oil" then
+		return ""
+	elseif ft == "" then
+		return "[No Name]"
+	elseif vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+		return set_hl(string.format("%s", ft:upper()), "StatuslineModeInv")
+	else
+		return ""
 	end
 end
 
@@ -448,14 +543,14 @@ function M.get_open_bracket()
 	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
 		return ""
 	end
-	return "("
+	return set_hl("(", "StatusLineAlt")
 end
 
 function M.get_close_bracket()
 	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
 		return ""
 	end
-	return ")"
+	return set_hl(")", "StatusLineAlt")
 end
 
 function M.get_padding()
@@ -479,6 +574,13 @@ function M.get_indentation()
 	)
 end
 
+function M.get_delimiter()
+	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+		return ""
+	end
+	return set_hl("·", "StatuslineAlt")
+end
+
 -- Components
 M.components = {
 	-- LSP symbol
@@ -496,6 +598,7 @@ M.components = {
 	progress = [[%{%v:lua.require'core.components'.get_lsp_progress()%}]],
 	-- Git
 	branch = [[%{%v:lua.require'core.components'.get_git_branch()%}]],
+	branch2 = [[%{%v:lua.require'core.components'.get_git_branch_2()%}]],
 	diffs = [[%{%v:lua.require'core.components'.get_diffs()%}]],
 	-- Misc
 	align = [[%=]],
@@ -503,9 +606,12 @@ M.components = {
 	open_bracket = [[%{%v:lua.require'core.components'.get_open_bracket()%}]],
 	close_bracket = [[%{%v:lua.require'core.components'.get_close_bracket()%}]],
 	padding = [[%{%v:lua.require'core.components'.get_padding()%}]],
+	delimiter = [[%{%v:lua.require'core.components'.get_delimiter()%}]],
 	-- General
+	root = [[%{%v:lua.require'core.components'.get_root()%}]],
 	filepath = [[%{%v:lua.require'core.components'.get_filepath()%}]],
 	filename = [[%{%v:lua.require'core.components'.get_filename()%}]],
+	icon = [[%{%v:lua.require'core.components'.get_icon()%}]],
 	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%2c %2p%#statuslinealt#%%":""%}]],
 	cmd = [[%S]],
 	modified = [[%{%v:lua.require'core.components'.get_modified()%}]],
@@ -515,6 +621,7 @@ M.components = {
 	info = [[%{%v:lua.require'core.components'.get_fileinfo()%}]],
 	indentation = [[%{%v:lua.require'core.components'.get_indentation()%}]],
 	ft = [[%{%v:lua.require'core.components'.get_filetype()%}]],
+	ft2 = [[%{%v:lua.require'core.components'.get_filetype_2()%}]],
 	fformat = [[%{%v:lua.require'core.components'.get_fformat()%}]],
 	fenc = [[%{%v:lua.require'core.components'.get_ffenc()%}]],
 	search = [[%{%v:lua.require'core.components'.get_search_counts()%}]],

@@ -1,5 +1,6 @@
 local augroup = require("core.utils").augroup
-local condition = require("core.variables").ui_features
+local conf = require("core.variables")
+local condition = conf.ui_features
 
 -- Plugins that modify UI
 return {
@@ -54,7 +55,7 @@ return {
 		opts = {
 			show_icons = true,
 		},
-		cond = require("core.variables").ui_features.tabline,
+		cond = conf.ui_features.tabline,
 		init = function(_, opts)
 			augroup("loadTabline", {
 				{ "BufReadPre" },
@@ -313,7 +314,7 @@ return {
 		"mcauley-penney/visual-whitespace.nvim",
 		event = { "ModeChanged" },
 		config = function(_, opts)
-			local fg = vim.api.nvim_get_hl(0, { name = "NonText" }).fg
+			local fg = vim.api.nvim_get_hl(0, { name = "Tabline" }).bg
 			local bg = vim.api.nvim_get_hl(0, { name = "Visual" }).bg
 			vim.api.nvim_set_hl(0, "VisualNonText", {
 				bg = string.format("#%06x", bg),

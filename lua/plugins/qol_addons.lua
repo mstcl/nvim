@@ -1,7 +1,6 @@
 local augroup = require("core.utils").augroup
-local border = require("core.variables").border
 local conf = require("core.variables")
-local LSP_SIGNS = require("core.variables").lsp_signs
+local LSP_SIGNS = conf.lsp_signs
 
 -- Plugins which add additional ways to use nvim
 return {
@@ -17,11 +16,16 @@ return {
 	},
 	{ -- (nvim-web-devicons) Icons
 		"nvim-tree/nvim-web-devicons",
-		opts = { variant = "light" },
+		opts = {
+			variant = "light",
+		},
 	},
 	{ -- (fzf-lua) Navigation and fuzzy pickers
 		"ibhagwan/fzf-lua",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
+		dependencies = {
+			"nvim-tree/nvim-web-devicons",
+			"elanmed/fzf-lua-frecency.nvim",
+		},
 		keys = {
 			{
 				"<leader>l",
@@ -80,7 +84,7 @@ return {
 						vertical = "up:45%",
 						horizontal = "right:55%",
 					},
-					border = border,
+					border = conf.border,
 				},
 				hls = {
 					normal = "TelescopeNormal",
@@ -188,7 +192,6 @@ return {
 	},
 	{ -- (fzf-lua-frecency.nvim) Frecency plugin for fzf-lua
 		"elanmed/fzf-lua-frecency.nvim",
-		lazy = false,
 		keys = {
 			{
 				"<leader>h",
@@ -285,12 +288,12 @@ return {
 				columns = { conf.oil_columns.icon },
 				float = {
 					padding = 0,
-					border = border,
+					border = conf.border,
 					max_width = math.floor(vim.api.nvim_win_get_width(0) * 0.8),
 					max_height = math.floor(vim.api.nvim_win_get_height(0) * 0.8),
 				},
-				preview = { border = border },
-				progress = { border = border },
+				preview = { border = conf.border },
+				progress = { border = conf.border },
 				win_options = {
 					number = false,
 					relativenumber = true,
@@ -298,8 +301,8 @@ return {
 					foldcolumn = "0",
 					statuscolumn = "",
 				},
-				keymaps_help = { border = border },
-				ssh = { border = border },
+				keymaps_help = { border = conf.border },
+				ssh = { border = conf.border },
 				cleanup_delay_ms = false,
 				delete_to_trash = true,
 				skip_confirm_for_simple_edits = true,
@@ -325,7 +328,7 @@ return {
 		opts = function()
 			return {
 				win = {
-					border = border,
+					border = conf.border,
 				},
 				delay = 400,
 				icons = {
@@ -487,6 +490,9 @@ return {
 		},
 		opts = function()
 			return {
+				git_services = {
+					["g.beee.ps"] = "https://g.beee.ps/${owner}/${repository}/compare/master...${branch_name}?expand=1",
+				},
 				disable_context_highlighting = true,
 				disable_line_numbers = true,
 				disable_relative_line_numbers = true,
@@ -550,7 +556,7 @@ return {
 		opts = {
 			disableBufferLineNumbers = true,
 			resultsSeparatorLineChar = "─",
-			spinnerStates = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
+			spinnerStates = conf.spinner,
 			icons = {
 				enabled = false,
 			},
@@ -558,7 +564,7 @@ return {
 	},
 	{ -- (quicker.nvim) Quickfix list QOL
 		"stevearc/quicker.nvim",
-		lazy = false,
+		event = "FileType qf",
 		---@module "quicker"
 		---@type quicker.SetupOptions
 		opts = {
@@ -606,7 +612,7 @@ return {
 		},
 		opts = function()
 			local default_win_opts = {
-				border = border,
+				border = conf.border,
 				win_opts = {
 					winblend = 0,
 				},
@@ -624,6 +630,64 @@ return {
 				require("overseer").setup(opts)
 			end
 		end,
+	},
+	{ -- (aerial.nvim) code outline
+		"stevearc/aerial.nvim",
+		event = "BufReadPost",
+		keys = {
+			{
+				"}",
+				"<cmd>AerialNext<CR>",
+				desc = "Next symbol",
+			},
+			{
+				"{",
+				"<cmd>AerialPrev<CR>",
+				desc = "Previous symbol",
+			},
+			{
+				"<C-M>l",
+				function()
+					vim.cmd("AerialToggle")
+					vim.notify("Toggled outline", vim.log.levels.INFO)
+				end,
+				desc = "Toggle outline",
+			},
+		},
+		opts = {
+			icons = conf.lsp_kind_icons_padded,
+			guides = {
+				nested_top = " │ ",
+				mid_item = " ├─",
+				last_item = " └─",
+				whitespace = "   ",
+			},
+			ignore = {
+				unlisted_buffers = false,
+				diff_windows = true,
+				buftypes = "special",
+				wintypes = "special",
+			},
+			close_automatic_events = {
+				"unfocus",
+				"switch_buffer",
+				"unsupported",
+			},
+			open_automatic = function(bufnr)
+				local aerial = require("aerial")
+				return vim.api.nvim_win_get_width(0) > 80
+					and aerial.num_symbols(bufnr) > 4
+					and not aerial.was_closed()
+					and vim.api.nvim_buf_line_count(bufnr) > 80
+			end,
+			show_guides = true,
+			layout = {
+				placement = "edge",
+				close_on_select = false,
+				max_width = 28,
+				min_width = 28,
+			},
+		},
 	},
 	{ -- (diffview.nvim) Powerful diff and merge tool
 		"sindrets/diffview.nvim",
@@ -751,63 +815,5 @@ return {
 			vim.g.undotree_DiffAutoOpen = 10
 			vim.g.undotree_TreeVertShape = "┃"
 		end,
-	},
-	{ -- (aerial.nvim) code outline
-		"stevearc/aerial.nvim",
-		lazy = false,
-		keys = {
-			{
-				"}",
-				"<cmd>AerialNext<CR>",
-				desc = "Next symbol",
-			},
-			{
-				"{",
-				"<cmd>AerialPrev<CR>",
-				desc = "Previous symbol",
-			},
-			{
-				"<C-M>l",
-				function()
-					vim.cmd("AerialToggle")
-					vim.notify("Toggled outline", vim.log.levels.INFO)
-				end,
-				desc = "Toggle outline",
-			},
-		},
-		opts = {
-			icons = require("core.variables").lsp_kind_icons_padded,
-			guides = {
-				nested_top = " │ ",
-				mid_item = " ├─",
-				last_item = " └─",
-				whitespace = "   ",
-			},
-			ignore = {
-				unlisted_buffers = false,
-				diff_windows = true,
-				buftypes = "special",
-				wintypes = "special",
-			},
-			close_automatic_events = {
-				"unfocus",
-				"switch_buffer",
-				"unsupported",
-			},
-			open_automatic = function(bufnr)
-				local aerial = require("aerial")
-				return vim.api.nvim_win_get_width(0) > 80
-					and aerial.num_symbols(bufnr) > 4
-					and not aerial.was_closed()
-					and vim.api.nvim_buf_line_count(bufnr) > 80
-			end,
-			show_guides = true,
-			layout = {
-				placement = "edge",
-				close_on_select = false,
-				max_width = 28,
-				min_width = 28,
-			},
-		},
 	},
 }

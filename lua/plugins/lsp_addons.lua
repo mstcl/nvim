@@ -1,19 +1,19 @@
-local border = require("core.variables").border
-local condition = require("core.variables").lsp_enabled
 local on_attach = require("lsp.utils").on_attach
-local LSP_SOURCES = require("core.variables").lsp_sources
-local FORMATTING_SOURCES = require("core.variables").formatting_sources
-local HOVER_SOURCES = require("core.variables").hover_sources
-local DIAGNOSTICS_SOURCES = require("core.variables").diagnostics_sources
-local CODE_ACTION_SOURCES = require("core.variables").code_action_sources
+local conf = require("core.variables")
+local condition = conf.lsp_enabled
+local LSP_SOURCES = conf.lsp_sources
+local FORMATTING_SOURCES = conf.formatting_sources
+local HOVER_SOURCES = conf.hover_sources
+local DIAGNOSTICS_SOURCES = conf.diagnostics_sources
+local CODE_ACTION_SOURCES = conf.code_action_sources
 
-local FORMATTING_MASON_SOURCES = require("core.variables").get_mason_sources(FORMATTING_SOURCES)
-local DIAGNOSTICS_MASON_SOURCES = require("core.variables").get_mason_sources(DIAGNOSTICS_SOURCES)
-local CODE_ACTION_MASON_SOURCES = require("core.variables").get_mason_sources(CODE_ACTION_SOURCES)
-local LSP_MASON_SOURCES = require("core.variables").get_mason_sources(LSP_SOURCES)
+local FORMATTING_MASON_SOURCES = conf.get_mason_sources(FORMATTING_SOURCES)
+local DIAGNOSTICS_MASON_SOURCES = conf.get_mason_sources(DIAGNOSTICS_SOURCES)
+local CODE_ACTION_MASON_SOURCES = conf.get_mason_sources(CODE_ACTION_SOURCES)
+local LSP_MASON_SOURCES = conf.get_mason_sources(LSP_SOURCES)
 
-local DIAGNOSTICS_COMPATIBLE_SOURCES = require("core.variables").get_compatible_sources(DIAGNOSTICS_SOURCES)
-local CODE_ACTION_COMPATIBLE_SOURCES = require("core.variables").get_compatible_sources(CODE_ACTION_SOURCES)
+local DIAGNOSTICS_COMPATIBLE_SOURCES = conf.get_compatible_sources(DIAGNOSTICS_SOURCES)
+local CODE_ACTION_COMPATIBLE_SOURCES = conf.get_compatible_sources(CODE_ACTION_SOURCES)
 
 -- Plugins that add to nvim LSP functionalities
 return {
@@ -176,7 +176,7 @@ return {
 			return {
 				lsp = {
 					hover = {
-						border = border,
+						border = conf.border,
 					},
 				},
 				buffers = {

@@ -106,6 +106,9 @@ M.lsp_vt_signs = {
 	[4] = "HINT", -- HINT
 }
 
+M.spinner = { "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
+M.done = " "
+
 M.lsp_kind_icons = {
 	Array = "󰅪",
 	Boolean = "B",

@@ -1,3 +1,5 @@
+local conf = require("core.variables")
+
 -----------------------------------------------
 -- The underlying principle behind LSP progress
 -----------------------------------------------
@@ -154,8 +156,8 @@
 -- statusline in the bottom-right corner.
 
 local icons = {
-	spinner = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
-	done = " ",
+	spinner = conf.spinner,
+	done = conf.done,
 }
 
 -- Maintain properties for each client receiving the progress notifications. It is indexed by the
@@ -222,7 +224,7 @@ local function win_update_config(client)
 		relative = "editor",
 		width = #client.message,
 		height = 1,
-		row = get_win_row(client.pos),
+		row = 10 - get_win_row(client.pos),
 		col = vim.o.columns - #client.message,
 	})
 end
@@ -284,12 +286,12 @@ local function show_message(client)
 				relative = "editor",
 				width = #client.message,
 				height = 1,
-				row = get_win_row(client.pos),
+				row = 10 - get_win_row(client.pos),
 				col = vim.o.columns - #client.message,
 				focusable = false,
 				style = "minimal",
 				noautocmd = true,
-				border = "rounded",
+				border = conf.border,
 			})
 		end)
 		if not success then

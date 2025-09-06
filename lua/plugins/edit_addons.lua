@@ -1,4 +1,5 @@
-local condition = require("core.variables").edit_features
+local conf = require("core.variables")
+local condition = conf.edit_features
 
 -- Plugins that add extra functionality with keybindings or while editing
 return {
@@ -240,7 +241,7 @@ return {
 	{ -- (blink.cmp) Auto completion *
 		"saghen/blink.cmp",
 		cond = condition.completion,
-		lazy = false,
+		event = "InsertEnter",
 		dependencies = {
 			{ "rafamadriz/friendly-snippets" },
 			{ "mikavilpas/blink-ripgrep.nvim" },
@@ -325,7 +326,7 @@ return {
 			appearance = {
 				use_nvim_cmp_as_default = true,
 				nerd_font_variant = "mono",
-				kind_icons = require("core.variables").lsp_kind_icons,
+				kind_icons = conf.lsp_kind_icons,
 			},
 			sources = {
 				default = {
