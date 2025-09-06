@@ -349,6 +349,8 @@ function M.get_filetype()
 	local ft = vim.bo.filetype
 	if vim.bo.buftype == "terminal" then
 		return set_hl(" TERMINAL ", "StatuslineModeInv")
+	elseif ft == "oil" then
+		return ""
 	elseif ft == "" then
 		return "[No Name]"
 	elseif vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then

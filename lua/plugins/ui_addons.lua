@@ -52,7 +52,7 @@ return {
 		version = false,
 
 		opts = {
-			show_icons = false,
+			show_icons = true,
 		},
 		cond = require("core.variables").ui_features.tabline,
 		init = function(_, opts)

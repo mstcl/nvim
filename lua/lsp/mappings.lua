@@ -6,11 +6,10 @@ local M = {}
 -- LSP mappings for native LSP
 function M.setup(client, bufnr)
 	map("n", "gd", vim.lsp.buf.definition, { desc = "[LSP] Symbol defintion", buffer = bufnr })
-	map("n", "grd", vim.lsp.buf.definition, { desc = "[LSP] Symbol defintion", buffer = bufnr })
-	map("n", "gO", vim.lsp.buf.document_symbol, { desc = "[LSP] Document symbol", buffer = bufnr })
-	map("n", "gW", vim.diagnostic.setqflist, { desc = "[LSP] Workspace diagnostic", buffer = bufnr })
+	map("n", "grd", vim.lsp.buf.type_definition, { desc = "[LSP] Symbol type definition", buffer = bufnr })
+	map("n", "grs", vim.lsp.buf.document_symbol, { desc = "[LSP] Document symbol", buffer = bufnr })
+	map("n", "grw", vim.diagnostic.setqflist, { desc = "[LSP] Workspace diagnostic", buffer = bufnr })
 	map("n", "grr", vim.lsp.buf.references, { desc = "[LSP] Symbol references", buffer = bufnr })
-	map("n", "grt", vim.lsp.buf.type_definition, { desc = "[LSP] Symbol type definition", buffer = bufnr })
 	map("n", "gri", vim.lsp.buf.implementation, { desc = "[LSP] Symbol implementation", buffer = bufnr })
 
 	map("n", "<C-M>vl", function()
@@ -88,7 +87,7 @@ function M.setup(client, bufnr)
 	end
 
 	if client.server_capabilities.codeLensProvider then
-		map({ "n" }, "gl", vim.lsp.codelens.run, { desc = "[LSP] Pick code lens", buffer = bufnr })
+		map({ "n" }, "grl", vim.lsp.codelens.run, { desc = "[LSP] Pick code lens", buffer = bufnr })
 	end
 
 	if client.server_capabilities.declarationProvider then

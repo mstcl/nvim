@@ -7,6 +7,11 @@ return {
 		event = "InsertCharPre",
 		opts = {},
 	},
+	{ -- (comfy-line-numbers) Better relative number
+		"mluders/comfy-line-numbers.nvim",
+		event = "BufReadPre",
+		opts = {},
+	},
 	{ -- (mini.surround) Add motions to surround objects with brackets etc.
 		"echasnovski/mini.surround",
 		version = false,

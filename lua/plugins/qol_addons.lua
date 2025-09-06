@@ -15,9 +15,13 @@ return {
 		ft = "lazy",
 		config = true,
 	},
+	{ -- (nvim-web-devicons) Icons
+		"nvim-tree/nvim-web-devicons",
+		opts = { variant = "light" },
+	},
 	{ -- (fzf-lua) Navigation and fuzzy pickers
 		"ibhagwan/fzf-lua",
-		lazy = false,
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 		keys = {
 			{
 				"<leader>l",
@@ -41,7 +45,7 @@ return {
 			},
 			{
 				"<leader>z",
-				"<cmd>lua require('fzf.zoxide').exec()<cr>",
+				"<cmd>FzfLua zoxide<cr>",
 				desc = "Zoxide",
 			},
 			{
@@ -65,22 +69,16 @@ return {
 				"default-title",
 				defaults = {
 					git_icons = false,
-					file_icons = false,
+					file_icons = true,
 					formatter = "path.filename_first",
 				},
-				fzf_opts = { ["--margin"] = "0,0", ["--info"] = "inline-right" },
+				fzf_opts = { ["--margin"] = "0,0", ["--info"] = "inline-right", ["--no-bold"] = "" },
 				winopts = {
 					backdrop = 100,
-					col = 0.5,
-					row = 0.4,
-					width = 0.65,
-					height = 0.75,
 					preview = {
-						hidden = "nohidden",
+						hidden = true,
 						vertical = "up:45%",
 						horizontal = "right:55%",
-						layout = "flex",
-						flip_columns = 100,
 					},
 					border = border,
 				},
@@ -143,8 +141,16 @@ return {
 						["ctrl-n"] = "preview-page-up",
 					},
 				},
-				-- Custom pickers
-				oldfiles = { include_current_session = true },
+				oldfiles = {
+					winopts = { preview = { hidden = false } },
+					include_current_session = true,
+				},
+				grep = {
+					winopts = {
+						fullscreen = true,
+						preview = { hidden = false },
+					},
+				},
 				commands = { sort_lastused = true },
 				manpages = { previewer = "man_native" },
 				helptags = { previewer = "help_native" },
@@ -155,21 +161,12 @@ return {
 					child_prefix = false,
 				},
 				tabs = {
+					tab_marker = "◀",
 					cwd_prompt = true,
-					winopts = {
-						width = 0.5,
-						height = 0.5,
-						preview = { hidden = "hidden" },
-					},
 				},
 				buffers = {
 					cwd_prompt = true,
 					sort_lastused = true,
-					winopts = {
-						width = 0.5,
-						height = 0.5,
-						preview = { hidden = "hidden" },
-					},
 				},
 			}
 		end,
@@ -207,6 +204,9 @@ return {
 		opts = {
 			display_score = false,
 			cwd_prompt = true,
+			winopts = {
+				preview = { hidden = "nohidden" },
+			},
 		},
 	},
 	{ -- (mini.align) Utility to align text by delimiters
@@ -220,7 +220,9 @@ return {
 	},
 	{ -- (oil.nvim) Buffer-like file browser
 		"stevearc/oil.nvim",
+		lazy = false,
 		cmd = "Oil",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 		init = function()
 			vim.g.loaded_netrw = 1
 			vim.g.loaded_netrwPlugin = 1
@@ -269,14 +271,18 @@ return {
 						callback = function()
 							detail = not detail
 							if detail then
-								require("oil").set_columns({ conf.oil_columns.types, conf.oil_columns.permissions })
+								require("oil").set_columns({
+									conf.oil_columns.types,
+									conf.oil_columns.permissions,
+									conf.oil_columns.icon,
+								})
 							else
-								require("oil").set_columns({})
+								require("oil").set_columns({ conf.oil_columns.icon })
 							end
 						end,
 					},
 				},
-				columns = {},
+				columns = { conf.oil_columns.icon },
 				float = {
 					padding = 0,
 					border = border,
@@ -653,7 +659,7 @@ return {
 					win_opts = {},
 				},
 			},
-			use_icons = false,
+			use_icons = true,
 			show_help_hints = false,
 			enhanced_diff_hl = true,
 		},
