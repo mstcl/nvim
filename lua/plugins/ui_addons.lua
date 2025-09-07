@@ -133,6 +133,7 @@ return {
 	{ -- (mini.notify) Show notifications (for cmdheight = 0)
 		"echasnovski/mini.notify",
 		version = false,
+		lazy = false,
 		keys = {
 			{
 				"<C-BS>",
@@ -145,25 +146,26 @@ return {
 		opts = {
 			content = {
 				format = function(notif)
-					return " " .. notif.msg .. " "
+					return " " .. "[" .. notif.level .. "]" .. " " .. notif.msg .. " "
 				end,
 			},
-			lsp_progress = {
-				enable = false,
-			},
-			window = {
-				config = {
-					border = "none",
-				},
-			},
+			lsp_progress = { enable = true },
+			window = { max_width_share = 1, winblend = 0, config = { border = conf.border } },
 		},
 		init = function()
+			vim.api.nvim_set_hl(0, "MiniNotifyTitle", { link = "DiagnosticOk" })
+			local opts = {
+				ERROR = { duration = 5000, hl_group = "DiagnosticOk" },
+				WARN = { duration = 5000, hl_group = "DiagnosticOk" },
+				INFO = { duration = 2000, hl_group = "DiagnosticOk" },
+				DEBUG = { duration = 0, hl_group = "DiagnosticOk" },
+				TRACE = { duration = 0, hl_group = "DiagnosticOk" },
+				OFF = { duration = 0, hl_group = "DiagnosticSignOk" },
+			}
+
 			---@diagnostic disable-next-line: duplicate-set-field
 			vim.notify = function(...)
-				if not require("lazy.core.config").plugins["mini.notify"]._.loaded then
-					require("lazy").load({ plugins = "mini.notify" })
-				end
-				require("mini.notify").make_notify()(...)
+				require("mini.notify").make_notify(opts)(...)
 			end
 		end,
 	},

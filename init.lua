@@ -13,9 +13,9 @@ set_statusline()
 set_statuscol()
 
 -- Autocommands, mappings, and commands
+require("core.commands")
 require("core.autocmds")
 require("core.mappings")
-require("core.commands")
 
 -- Lsp setup
 require("lsp")

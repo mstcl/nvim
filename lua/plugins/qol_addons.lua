@@ -679,6 +679,7 @@ return {
 					and aerial.num_symbols(bufnr) > 4
 					and not aerial.was_closed()
 					and vim.api.nvim_buf_line_count(bufnr) > 80
+					and not vim.g.pastemode
 			end,
 			show_guides = true,
 			layout = {

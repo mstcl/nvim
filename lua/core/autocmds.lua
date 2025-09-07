@@ -60,6 +60,8 @@ augroup("textOpts", {
 			vim.opt_local.list = false
 			vim.opt_local.spell = true
 			vim.opt_local.cursorline = false
+
+			-- Set keymap for spell autocorrect
 			map("i", "<C-L>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
 		end,
 	},
@@ -104,21 +106,13 @@ augroup("bigFile", {
 		pattern = "*",
 		callback = function()
 			if big(vim.fn.expand("%")) then
-				vim.opt_local.statusline = ""
+				vim.opt.statusline = ""
 				vim.opt_local.swapfile = false
 				vim.opt_local.foldmethod = "manual"
 				vim.opt_local.undolevels = -1
 				vim.opt_local.undoreload = 0
-				vim.opt_local.list = false
-				vim.opt_local.number = false
-				vim.opt_local.relativenumber = false
-				vim.opt_local.cursorline = false
-				vim.opt_local.foldcolumn = "0"
-				vim.opt_local.signcolumn = "no"
-				vim.opt_local.colorcolumn = "0"
-				vim.b.minianimate_disable = true
-				vim.b.miniindentscope_disable = true
-				vim.b.miniindentscope_disable = true
+
+				vim.cmd("MinimalMode")
 			end
 		end,
 	},
@@ -131,11 +125,8 @@ augroup("terminal", {
 		pattern = "term://*",
 		callback = function()
 			exec("startinsert")
-			vim.b.miniindentscope_disable = true
-			vim.wo.number = false
-			vim.wo.relativenumber = false
-			vim.wo.cursorline = false
-			vim.wo.statuscolumn = ""
+			vim.cmd("MinimalMode")
+
 			-- Keymaps to leave
 			vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], { silent = true, buffer = 0 })
 			vim.keymap.set(

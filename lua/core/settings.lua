@@ -106,14 +106,14 @@ vim.go.tabclose = "left"
 -- Scrolling
 set.scrolljump = 1
 set.sidescrolloff = 5
-set.scrolloff = 1
+set.scrolloff = 3
 
 -- Wrap & textwidth
 set.wrap = false
 set.whichwrap = set.whichwrap + "<>[]hl"
 set.wrapmargin = 0
 set.textwidth = 0
-set.colorcolumn = "0"
+set.colorcolumn = "80"
 set.linebreak = true
 
 -- Completion

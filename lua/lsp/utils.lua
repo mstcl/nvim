@@ -4,7 +4,7 @@ local border = require("core.variables").border
 local M = {}
 
 function M.on_attach(client, bufnr)
-	require("core.progress")
+	-- require("core.progress")
 
 	-- Prevent LSP from overwriting treesitter color settings
 	vim.highlight.priorities.semantic_tokens = 95

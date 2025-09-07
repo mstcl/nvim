@@ -1,99 +1,56 @@
 local map = vim.keymap.set
-local exec = vim.api.nvim_command
 
-map("n", "<leader>p", "<cmd>Lazy show<cr>", { desc = "Plugins manager (lazy)" })
+map("n", "<leader>p", function()
+	vim.cmd("Lazy show")
+end, { desc = "Lazy configuration" })
 
 map({ "n", "v" }, "<space>", ":", { remap = false, desc = "Command", silent = true })
 
 -- UI toggles
+map("n", "<C-L>", function()
+	vim.cmd("Clear")
+end, { desc = "Clear screen & highlights", noremap = false, silent = true })
 
 map("n", "<C-N>", function()
-	if vim.o.number then
-		if vim.o.relativenumber then
-			vim.o.number = false
-			vim.o.relativenumber = false
-			vim.notify("Number: off", vim.log.levels.INFO)
-		else
-			vim.o.relativenumber = true
-			vim.notify("Number: relative", vim.log.levels.INFO)
-		end
-	else
-		vim.o.number = true
-		vim.notify("Number: static", vim.log.levels.INFO)
-	end
-end, { desc = "Cycle number mode" })
-
-map(
-	"n",
-	"<C-L>",
-	":nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR><c-l>",
-	{ desc = "Clear screen & highlights" }
-)
+	vim.cmd("ToggleNumber")
+end, { desc = "Cycle number mode", noremap = false, silent = true })
 
 map("n", "<C-M>so", function()
-	vim.opt.scrolloff = 999 - vim.o.scrolloff
-	vim.notify("Toggled sidescrolloff", vim.log.levels.INFO)
-end, { desc = "Toggle sidescrolloff" })
+	vim.cmd("ToggleScrolloff")
+end, { desc = "Toggle scrolloff", noremap = false, silent = true })
 
 map("n", "<C-M>sp", function()
-	---@diagnostic disable-next-line: undefined-field
-	vim.opt_local.spell = not (vim.opt_local.spell:get())
-	---@diagnostic disable-next-line: undefined-field
-	if not (vim.opt_local.spell:get()) then
-		vim.notify("Disabled spellchecking", vim.log.levels.INFO)
-	else
-		vim.notify("Enabled spellchecking", vim.log.levels.INFO)
-	end
-end, { desc = "Toggle spell checking" })
+	vim.cmd("ToggleSpell")
+end, { desc = "Toggle spell checking", noremap = false, silent = true })
 
 map("n", "<C-M>n", function()
-	vim.wo.list = not vim.wo.list
-	if not vim.wo.list then
-		vim.notify("Disabled non-text characters", vim.log.levels.INFO)
-	else
-		vim.notify("Enabled non-text characters", vim.log.levels.INFO)
-	end
-end, { desc = "Toggle non-text characters" })
+	vim.cmd("ToggleList")
+end, { desc = "Toggle non-text characters", noremap = false, silent = true })
 
 map("n", "<C-M>cl", function()
-	if vim.wo.cursorlineopt == "number" then
-		vim.wo.cursorlineopt = "both"
-		vim.notify("Enabled cursorline", vim.log.levels.INFO)
-	else
-		vim.wo.cursorlineopt = "number"
-		vim.notify("Disabled cursorline", vim.log.levels.INFO)
-	end
-end, { desc = "Toggle cursorline" })
+	vim.cmd("ToggleCursorLine")
+end, { desc = "Toggle cursorline", noremap = false, silent = true })
 
 map("n", "<C-M>f", function()
-	vim.g.foldcolumn = not vim.g.foldcolumn
-	if not vim.g.foldcolumn then
-		vim.o.numberwidth = 3
-		vim.notify("Disabled foldcolumn", vim.log.levels.INFO)
-	else
-		vim.o.numberwidth = 4
-		vim.notify("Enabled foldcolumn", vim.log.levels.INFO)
-	end
-end, { desc = "Toggle foldcolumn" })
+	vim.cmd("ToggleFoldColumn")
+end, { desc = "Toggle foldcolumn", noremap = false, silent = true })
 
 map("n", "<C-M>cc", function()
-	if vim.wo.colorcolumn ~= "" then
-		vim.wo.colorcolumn = ""
-		vim.notify("Disabled cursorcolumn", vim.log.levels.INFO)
-	else
-		vim.wo.colorcolumn = "80"
-		vim.notify("Enabled cursorcolumn", vim.log.levels.INFO)
-	end
-end, { desc = "Toggle cursorcolumn" })
+	vim.cmd("ToggleColorColumn")
+end, { desc = "Toggle cursorcolumn", noremap = false, silent = true })
+
+map("n", "<C-M>p", function()
+	vim.cmd("PasteMode")
+end, { desc = "Enter paste mode", noremap = false, silent = true })
 
 -- Window splitting
 map("n", "<C-S>v", function()
-	exec("vs")
-end, { desc = "Split vertical" })
+	vim.cmd("vsplit")
+end, { desc = "Split vertical", noremap = false, silent = true })
 
 map("n", "<C-S>h", function()
-	exec("sp")
-end, { desc = "Split horizontal" })
+	vim.cmd("split")
+end, { desc = "Split horizontal", noremap = false, silent = true })
 
 -- Searching
 map("n", "n", "nzz", { desc = "Search previous result" })
@@ -138,4 +95,4 @@ end, { desc = "Follow word with xdg-open" })
 -- open terminal
 map("n", "<C-Bslash>", function()
 	require("core.terminal").Toggle()
-end)
+end, { desc = "Toggle terminal", noremap = false, silent = true })

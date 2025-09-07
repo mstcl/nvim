@@ -73,7 +73,8 @@ function M.get_fold(lnum)
 	return "%#NonText#%=" .. str .. " "
 end
 
---- Return line number in configured format.
+---Return line number in configured format.
+---@return string
 function M.lnumfunc(args)
 	if not args.rnu and not args.nu then
 		return ""
@@ -86,6 +87,13 @@ function M.lnumfunc(args)
 	local lnum = args.rnu and (args.relnum > 0 and args.relnum or (args.nu and args.lnum or 0)) or args.lnum
 
 	return pad_str(tostring(lnum), 4, "right") .. " "
+end
+
+---Send a notification with info level for a timeout (ms)
+---@param message string
+---@return nil
+function M.send_info_notification(message)
+	vim.notify(message, vim.log.levels.INFO, {})
 end
 
 return M
