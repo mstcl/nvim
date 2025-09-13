@@ -1,8 +1,8 @@
 local map = vim.keymap.set
 
-map("n", "<leader>p", function()
+map("n", "<leader>xl", function()
 	vim.cmd("Lazy show")
-end, { desc = "Lazy configuration" })
+end, { desc = "Toggle Lazy panel" })
 
 map({ "n", "v" }, "<space>", ":", { remap = false, desc = "Command", silent = true })
 
@@ -15,31 +15,31 @@ map("n", "<C-N>", function()
 	vim.cmd("ToggleNumber")
 end, { desc = "Cycle number mode", noremap = false, silent = true })
 
-map("n", "<C-M>so", function()
+map("n", "<leader>s", function()
 	vim.cmd("ToggleScrolloff")
 end, { desc = "Toggle scrolloff", noremap = false, silent = true })
 
-map("n", "<C-M>sp", function()
+map("n", "<leader>xs", function()
 	vim.cmd("ToggleSpell")
 end, { desc = "Toggle spell checking", noremap = false, silent = true })
 
-map("n", "<C-M>n", function()
+map("n", "<leader>xn", function()
 	vim.cmd("ToggleList")
 end, { desc = "Toggle non-text characters", noremap = false, silent = true })
 
-map("n", "<C-M>cl", function()
+map("n", "<leader>c", function()
 	vim.cmd("ToggleCursorLine")
 end, { desc = "Toggle cursorline", noremap = false, silent = true })
 
-map("n", "<C-M>f", function()
+map("n", "<leader>xf", function()
 	vim.cmd("ToggleFoldColumn")
 end, { desc = "Toggle foldcolumn", noremap = false, silent = true })
 
-map("n", "<C-M>cc", function()
+map("n", "<leader>xc", function()
 	vim.cmd("ToggleColorColumn")
 end, { desc = "Toggle cursorcolumn", noremap = false, silent = true })
 
-map("n", "<C-M>p", function()
+map("n", "<leader>xp", function()
 	vim.cmd("PasteMode")
 end, { desc = "Enter paste mode", noremap = false, silent = true })
 

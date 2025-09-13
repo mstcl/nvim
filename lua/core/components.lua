@@ -378,7 +378,7 @@ function M.get_filepath()
 	local prefix = set_hl("@ ", "StatuslineAlt")
 
 	if ft == "oil" then
-		return set_hl(string.format(" %s ", string.sub(fpath, 7)), "StatuslineModified")
+		return set_hl(string.format(" %s ", string.sub(fpath, 7)), "StatuslineMode")
 	end
 
 	if fpath == "" or fpath == "." or vim.bo.buftype == "terminal" then

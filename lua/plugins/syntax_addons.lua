@@ -9,10 +9,9 @@ return {
 		lazy = vim.fn.argc(-1) == 0,
 		keys = {
 			{
-				"<C-M>t",
+				"<leader>xt",
 				function()
 					vim.cmd("TSBufToggle highlight")
-					vim.notify("Toggled treesitter highlighting", vim.log.levels.INFO)
 				end,
 				desc = "Toggle treesitter highlighting",
 			},

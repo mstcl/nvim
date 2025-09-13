@@ -226,14 +226,9 @@ return {
 		},
 		keys = {
 			{
-				"<C-M>ap",
+				"<leader>xap",
 				function()
 					vim.g.minipairs_disable = not vim.g.minipairs_disable
-					if vim.g.minipairs_disable then
-						vim.notify("Disabled auto-pairs", vim.log.levels.INFO)
-					else
-						vim.notify("Enabled auto-pairs", vim.log.levels.INFO)
-					end
 				end,
 				desc = "Toggle auto-pairs",
 			},

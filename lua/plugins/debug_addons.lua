@@ -40,7 +40,6 @@ return {
 				"<leader>dbk",
 				function()
 					vim.cmd("DapToggleBreakpoint")
-					vim.notify("Toggled DAP breakpoint", vim.log.levels.INFO)
 				end,
 				desc = "Debug: breakpoint toggle",
 			},
@@ -73,10 +72,9 @@ return {
 		},
 		keys = {
 			{
-				"<C-M>dbb",
+				"<leader>xd",
 				function()
 					vim.cmd("lua require('dapui').toggle()")
-					vim.notify("Toggled DAP ui", vim.log.levels.INFO)
 				end,
 				desc = "Toggle DAP ui",
 			},

@@ -19,7 +19,7 @@ return {
 		cmd = { "HighlightColors" },
 		keys = {
 			{
-				"<C-M>h",
+				"<leader>xh",
 				"<cmd>HighlightColors Toggle<cr>",
 				desc = "Toggle highlighting colours",
 			},
@@ -77,14 +77,9 @@ return {
 		version = false,
 		keys = {
 			{
-				"<C-M>ii",
+				"<leader>xi",
 				function()
 					vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable
-					if vim.g.miniindentscope_disable then
-						vim.notify("Disabled indent scope", vim.log.levels.INFO)
-					else
-						vim.notify("Enabled indent scope", vim.log.levels.INFO)
-					end
 				end,
 				desc = "Toggle indentscope",
 			},
@@ -121,6 +116,7 @@ return {
 						"Neogit*",
 						"Diffview*",
 						"aerial",
+						"qf",
 					},
 					desc = "Disable indentscope",
 					callback = function()

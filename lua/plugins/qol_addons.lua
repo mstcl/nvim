@@ -28,19 +28,24 @@ return {
 		},
 		keys = {
 			{
-				"<leader>l",
+				"<leader>pl",
 				"<cmd>FzfLua resume<cr>",
-				desc = "Last picker (resume)",
+				desc = "Last picker",
 			},
 			{
-				"<leader>i",
+				"<leader>pp",
 				"<cmd>FzfLua builtin<cr>",
-				desc = "Installed pickers",
+				desc = "All pickers",
 			},
 			{
 				"<leader>t",
 				"<cmd>FzfLua tabs<cr>",
 				desc = "Tab list",
+			},
+			{
+				"<leader>h",
+				"<cmd>FzfLua oldfiles<cr>",
+				desc = "Browse history",
 			},
 			{
 				"<leader>b",
@@ -194,11 +199,6 @@ return {
 		"elanmed/fzf-lua-frecency.nvim",
 		keys = {
 			{
-				"<leader>h",
-				"<cmd>FzfLua oldfiles<cr>",
-				desc = "Browse history",
-			},
-			{
 				"<leader>f",
 				"<cmd>FzfLua frecency cwd_only=true<cr>",
 				desc = "Find files",
@@ -318,7 +318,7 @@ return {
 		event = "VeryLazy",
 		keys = {
 			{
-				"<C-M>k",
+				"<leader>w",
 				function()
 					require("which-key").show()
 				end,
@@ -329,44 +329,47 @@ return {
 			return {
 				win = {
 					border = conf.border,
+					no_overlap = false,
+					height = { min = 5, max = 25 },
 				},
 				delay = 400,
 				icons = {
 					separator = "▸",
 					breadcrumb = "»",
 					colors = false,
+					mappings = false,
 					rules = false,
 				},
+				show_help = false,
 				sort = { "alphanum" },
 			}
 		end,
 		config = function(_, opts)
 			local wk = require("which-key")
 			wk.add({
-				{ "<leader>", group = "Leader commands (pickers & LSP)" },
+				{ "<leader>", group = "Leader commands" },
 				{ "<leader>g", group = "Git commands" },
-				{ "<C-M>", group = "Toggle components" },
-				{ "<C-M>a", group = "Toggle animate/autopairs" },
-				{ "<C-M>b", group = "Toggle blame" },
-				{ "<C-M>g", group = "Toggle git components" },
-				{ "<C-M>c", group = "Toggle cursorcolumn/line" },
-				{ "<C-M>i", group = "Toggle inlayhints/indentscope" },
-				{ "<C-M>s", group = "Toggle sidescrolloff/spellcheck" },
-				{ "<C-M>v", group = "Toggle virtual-text/lines" },
+				{ "<leader>gh", group = "Git hunk actions" },
+				{ "<leader>p", group = "Picker commands" },
+				{ "<leader>x", group = "Extra commands" },
+				{ "<leader>xa", group = "Toggle animate/autopairs" },
+				{ "<leader>xb", group = "Toggle blame window/line" },
+				{ "<leader>xd", group = "Document symbols/diagnostics" },
+				{ "<leader>xw", group = "Workspace symbols/diagnostics" },
+				{ "<leader>v", group = "Toggle virtual-text/lines" },
 				{ "<C-S>", group = "Split windows" },
 				{ "<C-T>", group = "Tabpage new/close" },
 				{ "[", group = "Previous" },
 				{ "]", group = "Next" },
 				{ "z", group = "Folds, spelling & align" },
 				{ "g", group = "LSP, comment, case & navigation" },
-				{ "gh", group = "Git hunk actions" },
 				{ "gs", group = "Surround" },
 				{ "gr", group = "LSP symbol actions" },
-				{ "<leader>d", group = "Diffview/DAP" },
+				{ "<leader>d", group = "Diffview commands" },
 				{ "<leader>db", group = "DAP commands", cond = conf.dap_enabled },
-				{ "<leader>n", group = "Notes (zk) commands", cond = conf.syntax_features.markdown },
+				{ "<leader>n", group = "Notes commands (zk)", cond = conf.syntax_features.markdown },
 				{ "m", group = "Molten operations", cond = conf.syntax_features.quarto },
-				{ "go", group = "Otter (code block) symbols", cond = conf.lsp_enabled },
+				{ "go", group = "Otter symbols (code block)", cond = conf.lsp_enabled },
 			})
 			if opts then
 				wk.setup(opts)
@@ -378,10 +381,9 @@ return {
 		event = "BufReadPre",
 		keys = {
 			{
-				"<C-M>gs",
+				"<leader>gs",
 				function()
 					vim.cmd("Gitsigns toggle_signs")
-					vim.notify("Toggled gitsigns", vim.log.levels.INFO)
 				end,
 				desc = "Toggle gitdiff signs",
 			},
@@ -396,38 +398,36 @@ return {
 				desc = "Next hunk",
 			},
 			{
-				"ghp",
+				"<leader>ghp",
 				"<cmd>Gitsigns preview_hunk_inline<cr>",
 				desc = "Git preview hunks inline",
 			},
 			{
-				"ghs",
+				"<leader>ghs",
 				"<cmd>Gitsigns stage_hunk<cr>",
 				desc = "Git stage hunk",
 			},
 			{
-				"ghu",
+				"<leader>ghu",
 				"<cmd>Gitsigns undo_stage_hunk<cr>",
 				desc = "Git undo stage hunk",
 			},
 			{
-				"ghr",
+				"<leader>ghr",
 				"<cmd>Gitsigns reset_hunk<cr>",
 				desc = "Reset hunk",
 			},
 			{
-				"<C-M>bl",
+				"<leader>xbl",
 				function()
 					vim.cmd("Gitsigns toggle_current_line_blame")
-					vim.notify("Toggled blame line", vim.log.levels.INFO)
 				end,
 				desc = "Toggle blame virtual",
 			},
 			{
-				"<C-M>bw",
+				"<leader>xbw",
 				function()
 					vim.cmd("Gitsigns blame")
-					vim.notify("Toggle blame window", vim.log.levels.INFO)
 				end,
 				desc = "Toggle blame window",
 			},
@@ -564,7 +564,37 @@ return {
 	},
 	{ -- (quicker.nvim) Quickfix list QOL
 		"stevearc/quicker.nvim",
-		event = "FileType qf",
+		event = "BufReadPre",
+		keys = {
+			{
+				"<leader>q",
+				function()
+					require("quicker").toggle()
+				end,
+				desc = "Toggle quickfix",
+			},
+			{
+				"<leader>l",
+				function()
+					require("quicker").toggle({ loclist = true })
+				end,
+				desc = "Toggle location list",
+			},
+			{
+				">",
+				function()
+					require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+				end,
+				desc = "Expand quickfix context",
+			},
+			{
+				"<",
+				function()
+					require("quicker").collapse()
+				end,
+				desc = "Collapse quickfix context",
+			},
+		},
 		---@module "quicker"
 		---@type quicker.SetupOptions
 		opts = {
@@ -575,21 +605,23 @@ return {
 				N = LSP_SIGNS.Info,
 				H = LSP_SIGNS.Hint,
 			},
-			keys = {
-				{
-					">",
-					function()
-						require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
-					end,
-					desc = "Expand quickfix context",
-				},
-				{
-					"<",
-					function()
-						require("quicker").collapse()
-					end,
-					desc = "Collapse quickfix context",
-				},
+			borders = {
+				vert = " ┋ ",
+				strong_header = "━",
+				strong_cross = "━╋━",
+				strong_end = "━┫ ",
+				soft_header = "╌",
+				soft_cross = "╌╂╌",
+				soft_end = "╌┨ ",
+			},
+			opts = {
+				colorcolumn = "",
+				buflisted = false,
+				number = false,
+				relativenumber = false,
+				signcolumn = "auto",
+				winfixheight = true,
+				wrap = false,
 			},
 		},
 	},
@@ -597,17 +629,16 @@ return {
 		"stevearc/overseer.nvim",
 		keys = {
 			{
-				"<C-M>o",
+				"<leader>xo",
 				function()
 					vim.cmd("OverseerToggle")
-					vim.notify("Toggled overseer", vim.log.levels.INFO)
 				end,
 				desc = "Toggle Overseer",
 			},
 			{
 				"<leader>r",
 				"<cmd>OverseerRun<cr>",
-				desc = "Run tasks",
+				desc = "Run tasks (Overseer)",
 			},
 		},
 		opts = function()
@@ -646,12 +677,11 @@ return {
 				desc = "Previous symbol",
 			},
 			{
-				"<C-M>l",
+				"<leader>a",
 				function()
 					vim.cmd("AerialToggle")
-					vim.notify("Toggled outline", vim.log.levels.INFO)
 				end,
-				desc = "Toggle outline",
+				desc = "Toggle aerial",
 			},
 		},
 		opts = {
@@ -673,14 +703,14 @@ return {
 				"switch_buffer",
 				"unsupported",
 			},
-			open_automatic = function(bufnr)
-				local aerial = require("aerial")
-				return vim.api.nvim_win_get_width(0) > 80
-					and aerial.num_symbols(bufnr) > 4
-					and not aerial.was_closed()
-					and vim.api.nvim_buf_line_count(bufnr) > 80
-					and not vim.g.pastemode
-			end,
+			-- open_automatic = function(bufnr)
+			-- 	local aerial = require("aerial")
+			-- return vim.api.nvim_win_get_width(0) > 80
+			-- 	and aerial.num_symbols(bufnr) > 6
+			-- 	and not aerial.was_closed()
+			-- 	and vim.api.nvim_buf_line_count(bufnr) > 80
+			-- 	and not vim.g.pastemode
+			-- end,
 			show_guides = true,
 			layout = {
 				placement = "edge",
@@ -801,10 +831,9 @@ return {
 		"mbbill/undotree",
 		keys = {
 			{
-				"<C-M>u",
+				"<leader>u",
 				function()
 					vim.cmd("UndotreeToggle")
-					vim.notify("Toggled undotree", vim.log.levels.INFO)
 				end,
 				desc = "Toggle undotree",
 			},

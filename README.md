@@ -15,11 +15,3 @@ compiled to Vimscript in `colors` with extensions enabled.
 
 To build these colorschemes, navigate to `~/.config/nvim`, open up neovim and
 run `:Shipwright`.
-
-## Additional keymaps
-
-- `<C-M>` - Toggle modules
-- `<leader>` - Plugin, fuzzy picker keymaps
-- `g` - LSP lookups
-- `gs` - Surround
-- `[` & `]`- Go to prev/next (buffers, diagnostics, functions, conflicts, hunks)
