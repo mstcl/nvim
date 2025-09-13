@@ -687,20 +687,6 @@ return {
 				end,
 				desc = "location list toggle",
 			},
-			{
-				">",
-				function()
-					require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
-				end,
-				desc = "expand quickfix context",
-			},
-			{
-				"<",
-				function()
-					require("quicker").collapse()
-				end,
-				desc = "collapse quickfix context",
-			},
 		},
 		---@module "quicker"
 		---@type quicker.SetupOptions
@@ -729,6 +715,22 @@ return {
 				signcolumn = "auto",
 				winfixheight = true,
 				wrap = false,
+			},
+			keys = {
+				{
+					">",
+					function()
+						require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+					end,
+					desc = "cxpand quickfix context",
+				},
+				{
+					"<",
+					function()
+						require("quicker").collapse()
+					end,
+					desc = "collapse quickfix context",
+				},
 			},
 		},
 	},
