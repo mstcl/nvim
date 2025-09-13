@@ -134,44 +134,6 @@ return {
 		cond = condition,
 		dependencies = { "neovim/nvim-lspconfig" },
 		ft = { "quarto", "markdown" },
-		keys = {
-			{
-				"<C-K>",
-				"<cmd>lua require('otter').ask_hover<cr>",
-				desc = "Otter symbol documentation",
-				buffer = true,
-			},
-			{
-				"god",
-				"<cmd>lua require('otter').ask_definition<cr>",
-				desc = "Otter definition",
-				buffer = true,
-			},
-			{
-				"gop",
-				"<cmd>lua require('otter').ask_type_definition<cr>",
-				desc = "Otter type definition",
-				buffer = true,
-			},
-			{
-				"goR",
-				"<cmd>lua require('otter').ask_definition<cr>",
-				desc = "Otter rename",
-				buffer = true,
-			},
-			{
-				"gor",
-				"<cmd>lua require('otter').ask_definition<cr>",
-				desc = "Otter references",
-				buffer = true,
-			},
-			{
-				"goF",
-				"<cmd>lua require('otter').ask_definition<cr>",
-				desc = "Otter format code",
-				buffer = true,
-			},
-		},
 		opts = function()
 			return {
 				lsp = {

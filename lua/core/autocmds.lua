@@ -67,6 +67,17 @@ augroup("textOpts", {
 	},
 })
 
+augroup("activateOtter", {
+	{ "Filetype" },
+	{
+		desc = "Activate Otter",
+		pattern = { "markdown", "quarto" },
+		callback = function()
+			require("otter").activate()
+		end,
+	},
+})
+
 augroup("verticalHelp", {
 	{ "Filetype" },
 	{
