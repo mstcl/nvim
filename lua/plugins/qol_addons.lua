@@ -282,6 +282,22 @@ return {
 		lazy = false,
 		cmd = "Oil",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+		keys = {
+			{
+				"<leader>e",
+				function()
+					require("oil").open()
+				end,
+				desc = "explorer (oil)",
+			},
+			{
+				"<leader>E",
+				function()
+					require("oil").open_float()
+				end,
+				desc = "explorer float (oil)",
+			},
+		},
 		init = function()
 			vim.g.loaded_netrw = 1
 			vim.g.loaded_netrwPlugin = 1
@@ -343,10 +359,10 @@ return {
 				},
 				columns = { conf.oil_columns.icon },
 				float = {
-					padding = 0,
+					padding = 2,
 					border = conf.border,
-					max_width = math.floor(vim.api.nvim_win_get_width(0) * 0.8),
-					max_height = math.floor(vim.api.nvim_win_get_height(0) * 0.8),
+					max_width = math.floor(vim.api.nvim_win_get_width(0) * 0.7),
+					max_height = math.floor(vim.api.nvim_win_get_height(0) * 0.6),
 				},
 				preview = { border = conf.border },
 				progress = { border = conf.border },
@@ -356,6 +372,7 @@ return {
 					signcolumn = "no",
 					foldcolumn = "0",
 					statuscolumn = "",
+					colorcolumn = "",
 				},
 				keymaps_help = { border = conf.border },
 				ssh = { border = conf.border },
@@ -407,11 +424,9 @@ return {
 				{ "<leader>g", group = "git commands" },
 				{ "<leader>gh", group = "git hunk actions" },
 				{ "<leader>x", group = "extra commands" },
-				{ "<leader>xa", group = "animate/autopairs toggle" },
-				{ "<leader>xb", group = "blame window/line toggle" },
+				{ "<leader>B", group = "blame window/line toggle" },
 				{ "<leader>xd", group = "document symbols/diagnostics" },
 				{ "<leader>w", group = "workspace symbols/diagnostics" },
-				{ "<leader>v", group = "virtual-text/lines toggle" },
 				{ "<C-S>", group = "split windows" },
 				{ "<C-W>", group = "windows" },
 				{ "<C-T>", group = "tabpage new/close" },
@@ -493,14 +508,14 @@ return {
 				desc = "reset hunk",
 			},
 			{
-				"<leader>xbl",
+				"<leader>Bl",
 				function()
 					vim.cmd("Gitsigns toggle_current_line_blame")
 				end,
 				desc = "blame virtual toggle",
 			},
 			{
-				"<leader>xbw",
+				"<leader>Bw",
 				function()
 					vim.cmd("Gitsigns blame")
 				end,
@@ -719,20 +734,21 @@ return {
 	},
 	{ -- (overseer.nvim) Code runner
 		"stevearc/overseer.nvim",
+		dependencies = { "ibhagwan/fzf-lua" },
 		keys = {
 			{
-				"<leader>o",
+				"<leader>O",
 				function()
 					vim.cmd("OverseerToggle")
 				end,
 				desc = "overseer toggle",
 			},
 			{
-				"<leader>r",
+				"<leader>o",
 				function()
 					vim.cmd("OverseerRun")
 				end,
-				desc = "run tasks (overseer)",
+				desc = "overseer run",
 			},
 		},
 		opts = function()

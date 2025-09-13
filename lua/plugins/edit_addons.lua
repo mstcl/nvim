@@ -150,11 +150,11 @@ return {
 		},
 		keys = {
 			{
-				"<leader>xap",
+				"<leader>A",
 				function()
 					vim.g.minipairs_disable = not vim.g.minipairs_disable
 				end,
-				desc = "auto-pairs toggle",
+				desc = "autopairs toggle",
 			},
 		},
 	},

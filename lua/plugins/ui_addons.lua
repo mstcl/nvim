@@ -19,7 +19,7 @@ return {
 		cmd = { "HighlightColors" },
 		keys = {
 			{
-				"<leader>xh",
+				"<leader>H",
 				function()
 					vim.cmd("HighlightColors Toggle")
 				end,
@@ -37,7 +37,7 @@ return {
 		version = false,
 		keys = {
 			{
-				"<leader>xi",
+				"<leader>I",
 				function()
 					vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable
 				end,

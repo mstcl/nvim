@@ -1,6 +1,6 @@
 local map = vim.keymap.set
 
-map("n", "<leader>xl", function()
+map("n", "<leader>L", function()
 	vim.cmd("Lazy show")
 end, { desc = "lazy panel toggle" })
 

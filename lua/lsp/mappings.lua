@@ -36,7 +36,7 @@ function M.setup(client, bufnr)
 		{ desc = "workspace symbols (query)", buffer = bufnr, noremap = true }
 	)
 
-	map("n", "<leader>vl", function()
+	map("n", "<leader>v", function()
 		local config = vim.diagnostic.config()
 		if config == nil then
 			return
@@ -59,7 +59,7 @@ function M.setup(client, bufnr)
 			})
 		end
 	end, { desc = "virtual lines toggle" })
-	map("n", "<leader>vt", function()
+	map("n", "<leader>V", function()
 		local config = vim.diagnostic.config()
 		if config == nil then
 			return
