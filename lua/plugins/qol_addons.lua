@@ -378,7 +378,7 @@ return {
 				function()
 					require("which-key").show()
 				end,
-				desc = "Keymaps",
+				desc = "keymaps",
 			},
 		},
 		opts = function()
