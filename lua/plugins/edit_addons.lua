@@ -414,4 +414,20 @@ return {
 			},
 		},
 	},
+	{ -- (beam.nvim) Remote operation
+		"Piotr1215/beam.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+		event = "VeryLazy",
+		opts = function()
+			return {
+				prefix = "gb",
+				beam_scope = { enabled = false },
+				resolved_conflicts = { "m" },
+			}
+		end,
+		config = function(_, opts)
+			require("beam").setup(opts)
+			vim.cmd("BeamDiscoverNow")
+		end,
+	},
 }
