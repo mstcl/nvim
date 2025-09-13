@@ -112,6 +112,7 @@ highlight! link CmpItemMenu Delimiter
 highlight! link CmpWindowScrollThumb Delimiter
 highlight! link Conceal Delimiter
 highlight! link Noise Delimiter
+highlight! link NvimTreeIndentMarker Delimiter
 highlight! link @markup.heading.1.marker Delimiter
 highlight! link @markup.heading.2.marker Delimiter
 highlight! link @markup.heading.3.marker Delimiter
@@ -150,6 +151,7 @@ highlight DiffviewFilePanelTitle guifg=#543227 guibg=NONE guisp=NONE blend=NONE 
 highlight Directory guifg=#543227 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link AerialNamespaceIcon Directory
 highlight! link NeogitBranch Directory
+highlight! link NvimTreeFolderIcon Directory
 highlight! link @module Directory
 highlight! link @org.agenda.scheduled Directory
 highlight Error guifg=#79241f guibg=#dcb2a7 guisp=NONE blend=NONE gui=NONE
@@ -292,6 +294,7 @@ highlight! link Float Number
 highlight! link Type Number
 highlight! link @markup.math Number
 highlight! link @number Number
+highlight NvimTreeRootFolder guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight Operator guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Pmenu guifg=#493f37 guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight! link PmenuExtra Pmenu
