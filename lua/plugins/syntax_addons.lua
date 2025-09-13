@@ -1,4 +1,3 @@
-local augroup = require("core.utils").augroup
 local conf = require("core.variables")
 
 -- Plugins to extend syntax, either natively or with treesitter
@@ -24,7 +23,6 @@ return {
 			require("nvim-treesitter.query_predicates")
 		end,
 		opts = function()
-			local ensure_installed = conf.treesitter_sources
 			local function add(lang)
 				if type(ensure_installed) == "table" then
 					table.insert(ensure_installed, lang)

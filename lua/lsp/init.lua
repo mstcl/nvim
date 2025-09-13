@@ -6,6 +6,7 @@ utils.configure_builtin_diagnostic()
 vim.lsp.config("*", {
 	capabilities = utils.create_capabilities(),
 	on_attach = utils.on_attach,
+	---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
 	flags = { debounce_text_changes = 150 },
 })
 

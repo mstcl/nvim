@@ -15,6 +15,7 @@ local extended = lush.merge({
 	require("ivory_nvim_tree"),
 })
 
+---@diagnostic disable-next-line: unnecessary-if
 if conf.lsp_enabled then
 	extended = lush.merge({
 		extended,
@@ -23,6 +24,7 @@ if conf.lsp_enabled then
 	})
 end
 
+---@diagnostic disable-next-line: unnecessary-if
 if conf.dap_enabled then
 	extended = lush.merge({
 		extended,

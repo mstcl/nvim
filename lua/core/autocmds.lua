@@ -154,8 +154,8 @@ augroup("terminal", {
 			vim.cmd("MinimalMode")
 
 			-- Keymaps to leave
-			vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], { silent = true, buffer = 0 })
-			vim.keymap.set(
+			map("t", "<esc><esc>", [[<C-\><C-n>]], { silent = true, buffer = 0 })
+			map(
 				"t",
 				"<C-Bslash>",
 				[[<C-\><C-n>:lua require("core.terminal").Toggle()<CR>]],

@@ -14,16 +14,16 @@ function M.on_attach(client, bufnr)
 
 	-- inlay hints
 	if client.server_capabilities.inlayHintProvider then
-		vim.lsp.inlay_hint.enable(conf.lsp_features.inlay_hints)
+		lsp.inlay_hint.enable(conf.lsp_features.inlay_hints)
 	end
 
 	-- code lens
 	if client.server_capabilities.codeLensProvider then
-		vim.lsp.codelens.refresh({ buffer = bufnr, client = client })
+		lsp.codelens.refresh({ buffer = bufnr, client = client })
 		vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
 			buffer = bufnr,
 			callback = function()
-				vim.lsp.codelens.refresh({ buffer = bufnr, client = client })
+				lsp.codelens.refresh({ buffer = bufnr, client = client })
 			end,
 		})
 	end
@@ -78,7 +78,9 @@ function M.configure_builtin_diagnostic()
 
 		---@return boolean|fun()
 		virtual_lines = function()
+			---@diagnostic disable-next-line: unnecessary-if
 			if require("core.variables").lsp_features.virtual_lines then
+				---@diagnostic disable-next-line: return-type-mismatch
 				return M.virtual_lines_configs()
 			end
 			return false
@@ -86,7 +88,9 @@ function M.configure_builtin_diagnostic()
 
 		---@return boolean|fun()
 		virtual_text = function()
+			---@diagnostic disable-next-line: unnecessary-if
 			if require("core.variables").lsp_features.virtual_text then
+				---@diagnostic disable-next-line: return-type-mismatch
 				return M.virtual_text_configs()
 			end
 			return false
@@ -142,6 +146,10 @@ function M.create_capabilities()
 	return capabilities
 end
 
+local function escape_wildcards(path)
+	return path:gsub("([%[%]%?%*])", "\\%1")
+end
+
 function M.root_pattern(...)
 	local patterns = M.tbl_flatten({ ... })
 	return function(startpath)
@@ -149,6 +157,7 @@ function M.root_pattern(...)
 		for _, pattern in ipairs(patterns) do
 			local match = M.search_ancestors(startpath, function(path)
 				for _, p in ipairs(vim.fn.glob(table.concat({ escape_wildcards(path), pattern }, "/"), true, true)) do
+					---@diagnostic disable-next-line: undefined-field
 					if vim.uv.fs_stat(p) then
 						return path
 					end

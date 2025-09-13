@@ -42,7 +42,7 @@ function M.setup(client, bufnr)
 			return
 		end
 
-		---@diagnostic disable-next-line: undefined-field, missing-parameter
+		---@diagnostic disable-next-line: undefined-field, missing-parameter, need-check-nil
 		if config.virtual_lines() == false then
 			vim.diagnostic.config({
 				---@diagnostic disable-next-line: return-type-mismatch
@@ -65,7 +65,7 @@ function M.setup(client, bufnr)
 			return
 		end
 
-		---@diagnostic disable-next-line: undefined-field, missing-parameter
+		---@diagnostic disable-next-line: undefined-field, missing-parameter, need-check-nil
 		if config.virtual_text() == false then
 			vim.diagnostic.config({
 				---@diagnostic disable-next-line: return-type-mismatch

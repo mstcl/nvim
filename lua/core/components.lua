@@ -74,8 +74,10 @@ function M.get_scrollbar()
 
 	local cur = vim.api.nvim_win_get_cursor(0)[1]
 	local total = vim.api.nvim_buf_line_count(0)
+	---@diagnostic disable-next-line: need-check-nil
 	local idx = math.floor((cur - 1) / total * #sbar_chars) + 1
 
+	---@diagnostic disable-next-line: param-type-not-match, need-check-nil
 	return set_hl(sbar_chars[idx]:rep(2), "StatuslineScrollbar")
 end
 
@@ -109,12 +111,14 @@ function M.get_lsp_progress()
 		return ""
 	end
 
+	---@diagnostic disable-next-line: unnecessary-if
 	if not require("core.variables").lsp_enabled then
 		return ""
 	end
 	return require("lsp-progress").progress()
 end
 
+---@diagnostic disable-next-line: unnecessary-if
 if require("core.variables").lsp_enabled then
 	augroup("lspProgress", {
 		{ "User" },
@@ -141,6 +145,7 @@ local diagnostic_color = {
 	[4] = "StatuslineBlue",
 }
 
+---@diagnostic disable-next-line: unnecessary-if
 if require("core.variables").lsp_enabled then
 	augroup("diagnosticUpdate", {
 		{ "DiagnosticChanged" },
@@ -163,6 +168,7 @@ end
 -- Padding and brackets added
 ---@return string
 function M.get_lsp_diagnostic()
+	---@diagnostic disable-next-line: unnecessary-if
 	if not require("core.variables").lsp_enabled then
 		return ""
 	end
@@ -432,7 +438,7 @@ function M.get_filetype()
 		return ""
 	elseif ft == "" then
 		return "[No Name]"
-	elseif vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+	elseif vim.tbl_contains(ignore_filetypes, ft) then
 		return set_hl(string.format("%s", ft:upper()), "StatuslineModeInv")
 	else
 		return set_hl((ft:gsub("^%l", string.upper)), "StatuslineNC")
@@ -449,7 +455,7 @@ function M.get_filetype_2()
 		return ""
 	elseif ft == "" then
 		return "[No Name]"
-	elseif vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+	elseif vim.tbl_contains(ignore_filetypes, ft) then
 		return set_hl(string.format("%s", ft:upper()), "StatuslineModeInv")
 	else
 		return ""
@@ -565,7 +571,9 @@ function M.get_indentation()
 	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
 		return ""
 	end
+	---@diagnostic disable-next-line: undefined-field
 	local expandtab_string = vim.opt.expandtab:get() and "shift" or "tab"
+	---@diagnostic disable-next-line: undefined-field
 	local shiftwidth_string = vim.opt.shiftwidth:get()
 	return string.format(
 		"%s%s%s",

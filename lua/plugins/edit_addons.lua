@@ -323,7 +323,7 @@ return {
 							global_snippets = { "all" },
 							extended_filetypes = {},
 							ignored_filetypes = {},
-							get_filetype = function(context)
+							get_filetype = function(_)
 								return vim.bo.filetype
 							end,
 						},

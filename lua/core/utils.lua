@@ -25,6 +25,7 @@ function M.augroup(group, ...)
 	local id = groupid(group, { clear = true })
 	for _, a in ipairs({ ... }) do
 		a[2].group = id
+		---@diagnostic disable-next-line: missing-parameter
 		autocmd(unpack(a))
 	end
 end
@@ -49,6 +50,7 @@ local function pad_str(in_str, width, align)
 	if num_spaces < 1 then
 		num_spaces = 1
 	end
+	---@diagnostic disable-next-line: param-type-not-match
 	local spaces = string.rep(" ", num_spaces)
 
 	if align == "left" then

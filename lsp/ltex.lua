@@ -1,5 +1,6 @@
 --@type vim.lsp.Config
 local spell_words = {}
+---@diagnostic disable: need-check-nil
 for word in io.open(vim.fn.stdpath("config") .. "/spell/en.utf-8.add", "r"):lines() do
 	table.insert(spell_words, word)
 end

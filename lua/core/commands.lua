@@ -1,5 +1,4 @@
 local create_command = vim.api.nvim_create_user_command
-local notify = require("core.utils").send_info_notification
 
 -- Clean register
 create_command("WipeReg", "for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor", { bang = false })

@@ -86,12 +86,14 @@ map("n", "<C-T>c", function()
 end, { desc = "close tab" })
 
 -- save original gx to use as fallback
+---@diagnostic disable-next-line: param-type-not-match
 local old_gx = vim.fn.maparg("gx", "n", nil, true)
 map("n", "gx", function()
 	local word = vim.fn.expand("<cWORD>"):match("[\"']([%a_%.%-]+/[%a_%.%-]+)[\"']")
 	if word then
 		vim.ui.open("https://github.com/" .. word)
 	else
+		---@diagnostic disable-next-line: undefined-field
 		old_gx.callback()
 	end
 end, { desc = "follow word with xdg-open" })

@@ -70,6 +70,7 @@ set.pumheight = 15
 set.pumwidth = 15
 
 -- Hacks
+---@diagnostic disable: undefined-field
 set.iskeyword:append("-")
 set.nrformats:append("unsigned")
 set.nrformats:remove("bin", "hex")
@@ -117,7 +118,7 @@ set.colorcolumn = "80"
 set.linebreak = true
 
 -- Completion
-set.completeopt = { "menu", "menuone", "noselect", "noinsert" }
+set.completeopt = "menu,menuone,noselect,noinsert"
 set.wildmenu = true
 set.wildmode = "longest:full,full"
 set.wildoptions = "pum"
