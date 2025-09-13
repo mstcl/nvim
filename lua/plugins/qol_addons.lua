@@ -969,8 +969,14 @@ return {
 		config = function()
 			require("nvim-tree").setup({
 				hijack_directories = { enable = false, auto_open = false },
-				git = { enable = false },
-				filters = { dotfiles = true },
+				sync_root_with_cwd = true,
+				reload_on_bufenter = true,
+				respect_buf_cwd = true,
+				git = { enable = true },
+				filters = {
+					dotfiles = true,
+					git_ignored = false,
+				},
 				view = { width = 35 },
 				renderer = {
 					root_folder_label = ":~:s?$??",
@@ -980,24 +986,28 @@ return {
 							file = true,
 							folder = true,
 							folder_arrow = true,
-							git = false,
+							git = true,
 							modified = true,
 							hidden = false,
 							diagnostics = false,
 							bookmarks = false,
 						},
+						git_placement = "after",
+						glyphs = {
+							git = {
+								unstaged = "N",
+								staged = "S",
+								unmerged = "U",
+								renamed = "R",
+								untracked = "U",
+								deleted = "D",
+								ignored = "I",
+							},
+						},
 					},
 					indent_markers = { enable = true },
 				},
 			})
-
-			require("nvim-tree.view").View.winopts.winhighlight = "Normal:CursorLine"
-			require("nvim-tree.view").View.winopts.foldcolumn = "0"
-			require("nvim-tree.view").View.winopts.cursorline = false
-			require("nvim-tree.view").View.winopts.statuscolumn = ""
-			require("nvim-tree.view").View.winopts.colorcolumn = ""
-			require("nvim-tree.view").View.winopts.signcolumn = "no"
-
 			augroup("closeTreeOnExit", {
 				{ "QuitPre" },
 				{
@@ -1023,6 +1033,12 @@ return {
 					end,
 				},
 			})
+			require("nvim-tree.view").View.winopts.foldcolumn = "0"
+			require("nvim-tree.view").View.winopts.cursorline = false
+			require("nvim-tree.view").View.winopts.statuscolumn = ""
+			require("nvim-tree.view").View.winopts.colorcolumn = ""
+			require("nvim-tree.view").View.winopts.signcolumn = "no"
+			require("nvim-tree.view").View.winopts.winhighlight = "Normal:CursorLine"
 		end,
 	},
 }

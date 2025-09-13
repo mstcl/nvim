@@ -32,7 +32,7 @@ augroup("altWinHighlight", {
 	"FileType",
 	{
 		desc = "set background for alt windows",
-		pattern = { "aerial", "NvimTree" },
+		pattern = { "aerial" },
 		callback = function()
 			vim.wo.winhighlight = "Normal:CursorLine"
 		end,
