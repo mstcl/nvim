@@ -113,12 +113,17 @@ highlight! link CmpWindowScrollThumb Delimiter
 highlight! link Conceal Delimiter
 highlight! link Noise Delimiter
 highlight! link NvimTreeIndentMarker Delimiter
+highlight! link RenderMarkdownChecked Delimiter
+highlight! link RenderMarkdownTodo Delimiter
+highlight! link RenderMarkdownUnchecked Delimiter
 highlight! link @markup.heading.1.marker Delimiter
 highlight! link @markup.heading.2.marker Delimiter
 highlight! link @markup.heading.3.marker Delimiter
 highlight! link @markup.heading.4.marker Delimiter
 highlight! link @markup.heading.5.marker Delimiter
 highlight! link @markup.heading.6.marker Delimiter
+highlight! link @markup.list.checked.markdown Delimiter
+highlight! link @markup.list.unchecked.markdown Delimiter
 highlight! link @punctuation Delimiter
 highlight! link @punctuation.delimiter.yaml Delimiter
 highlight DiagnosticSignError guifg=#79241f guibg=NONE guisp=NONE blend=NONE gui=bold
@@ -177,6 +182,12 @@ highlight FoldColumn guifg=#9e8d7f guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight Folded guifg=#9e8d7f guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
 highlight Function guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight! link CmpItemAbbrMatch Function
+highlight! link RenderMarkdownH1 Function
+highlight! link RenderMarkdownH2 Function
+highlight! link RenderMarkdownH3 Function
+highlight! link RenderMarkdownH4 Function
+highlight! link RenderMarkdownH5 Function
+highlight! link RenderMarkdownH6 Function
 highlight! link @function Function
 highlight! link @function.method Function
 highlight! link @lsp.type.decorator Function
@@ -461,15 +472,16 @@ highlight @error guifg=#7c4034 guibg=NONE guisp=#7c4034 blend=NONE gui=undercurl
 highlight @function.builtin guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight @keyword.exception guifg=#8e3d63 guibg=NONE guisp=NONE blend=NONE gui=italic
 highlight @label guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight @markup.heading guifg=#7c4034 guibg=NONE guisp=#7c4034 blend=NONE gui=bold,underline
-highlight @markup.heading.1 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold,underline
-highlight @markup.heading.2 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold,underline
-highlight @markup.heading.3 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold,underline
-highlight @markup.heading.4 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold,underline
-highlight @markup.heading.5 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold,underline
-highlight @markup.heading.6 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold,underline
+highlight @markup.heading guifg=#7c4034 guibg=NONE guisp=#7c4034 blend=NONE gui=bold
+highlight @markup.heading.1 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight @markup.heading.2 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight @markup.heading.3 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight @markup.heading.4 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight @markup.heading.5 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight @markup.heading.6 guifg=#352e2e guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight @markup.italic guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=italic
 highlight @markup.link.label guifg=#545468 guibg=NONE guisp=NONE blend=NONE gui=NONE
+highlight @markup.link.markdown_inline guifg=#573e1a guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight @markup.link.url guifg=#464c3a guibg=NONE guisp=NONE blend=NONE gui=underline
 highlight @markup.quote guifg=#574b42 guibg=NONE guisp=NONE blend=NONE gui=italic
 highlight @markup.raw guifg=#493f37 guibg=#edeae4 guisp=NONE blend=NONE gui=NONE

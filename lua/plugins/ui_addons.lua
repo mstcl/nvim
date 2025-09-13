@@ -74,6 +74,7 @@ return {
 						"gitsigns-*",
 						"lazy",
 						"Neogit*",
+						"markdown",
 						"Diffview*",
 						"aerial",
 						"qf",

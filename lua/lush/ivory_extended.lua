@@ -13,6 +13,7 @@ local extended = lush.merge({
 	require("ivory_cmp"),
 	require("ivory_aerial"),
 	require("ivory_nvim_tree"),
+	require("ivory_render_markdown"),
 })
 
 ---@diagnostic disable-next-line: unnecessary-if

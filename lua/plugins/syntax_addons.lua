@@ -274,4 +274,84 @@ return {
 		"terrastruct/d2-vim",
 		ft = { "d2" },
 	},
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+		---@module 'render-markdown'
+		---@type render.md.UserConfig
+		ft = { "quarto", "markdown" },
+		opts = {
+			completions = { lsp = { enabled = true } },
+			anti_conceal = { enabled = true },
+			latex = { enabled = false },
+			heading = {
+				width = "block",
+				left_pad = 0,
+				right_pad = 1,
+				left_margin = 0,
+				position = "inline",
+				icons = { " 󰉫 ", " 󰉬 ", " 󰉭 ", " 󰉮 ", " 󰉯 ", " 󰉰 " },
+			},
+			sign = { enabled = false },
+			code = {
+				sign = false,
+				language_pad = 1,
+				left_pad = 1,
+				right_pad = 1,
+				width = "block",
+				inline_pad = 1,
+				min_width = 50,
+				border = "thin",
+			},
+			checkbox = {
+				unchecked = { icon = "󰄱 " },
+				checked = { icon = "󰄲 " },
+				custom = {
+					todo = { raw = "[-]", rendered = "󰡖 ", highlight = "RenderMarkdownTodo", scope_highlight = nil },
+				},
+			},
+			link = {
+				footnote = {
+					superscript = false,
+					prefix = "[",
+					suffix = "]",
+				},
+				image = "󰋩 ",
+				email = "󰇮 ",
+				hyperlink = "󰌷 ",
+				highlight = "RenderMarkdownLink",
+				wiki = {
+					icon = "󱗖 ",
+					highlight = "RenderMarkdownWikiLink",
+				},
+				custom = {
+					web = { pattern = "^http", icon = "󰖟 " },
+					discord = { pattern = "discord%.com", icon = "󰙯 " },
+					github = { pattern = "github%.com", icon = "󰊤 " },
+					gitlab = { pattern = "gitlab%.com", icon = "󰮠 " },
+					gitea = { pattern = "g%.beee%.ps", icon = " " },
+					google = { pattern = "google%.com", icon = "󰊭 " },
+					neovim = { pattern = "neovim%.io", icon = " " },
+					reddit = { pattern = "reddit%.com", icon = "󰑍 " },
+					stackoverflow = { pattern = "stackoverflow%.com", icon = "󰓌 " },
+					wikipedia = { pattern = "wikipedia%.org", icon = "󰖬 " },
+					youtube = { pattern = "youtube%.com", icon = "󰗃 " },
+				},
+			},
+			win_options = {
+				conceallevel = {
+					default = vim.o.conceallevel,
+					rendered = 3,
+				},
+				concealcursor = {
+					default = vim.o.concealcursor,
+					rendered = "",
+				},
+			},
+			bullet = {
+				icons = { "•", "◦", "•", "◦" },
+			},
+			yaml = { enabled = false },
+		},
+	},
 }

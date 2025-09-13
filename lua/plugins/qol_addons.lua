@@ -939,6 +939,7 @@ return {
 	{ -- (section-wordcount.nvim) Display wordcount under section header
 		"dimfeld/section-wordcount.nvim",
 		ft = { "markdown", "quarto" },
+		cond = false,
 		opts = {
 			highlight = "Comment",
 			virt_text_pos = "eol",
