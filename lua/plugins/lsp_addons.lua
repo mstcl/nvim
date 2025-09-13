@@ -1,19 +1,9 @@
 local on_attach = require("lsp.utils").on_attach
 local conf = require("core.variables")
 local condition = conf.lsp_enabled
-local LSP_SOURCES = conf.lsp_sources
-local FORMATTING_SOURCES = conf.formatting_sources
 local HOVER_SOURCES = conf.hover_sources
-local DIAGNOSTICS_SOURCES = conf.diagnostics_sources
-local CODE_ACTION_SOURCES = conf.code_action_sources
-
-local FORMATTING_MASON_SOURCES = conf.get_mason_sources(FORMATTING_SOURCES)
-local DIAGNOSTICS_MASON_SOURCES = conf.get_mason_sources(DIAGNOSTICS_SOURCES)
-local CODE_ACTION_MASON_SOURCES = conf.get_mason_sources(CODE_ACTION_SOURCES)
-local LSP_MASON_SOURCES = conf.get_mason_sources(LSP_SOURCES)
-
-local DIAGNOSTICS_COMPATIBLE_SOURCES = conf.get_compatible_sources(DIAGNOSTICS_SOURCES)
-local CODE_ACTION_COMPATIBLE_SOURCES = conf.get_compatible_sources(CODE_ACTION_SOURCES)
+local DIAGNOSTICS_COMPATIBLE_SOURCES = conf.get_compatible_sources(conf.diagnostics_sources)
+local CODE_ACTION_COMPATIBLE_SOURCES = conf.get_compatible_sources(conf.code_action_sources)
 
 -- Plugins that add to nvim LSP functionalities
 return {
@@ -44,18 +34,13 @@ return {
 	},
 	{ -- (mason-tool-installer.nvim) Mason tool install
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
-		cmd = { "MasonToolsUpdate", "MasonToolsInstall" },
-		cond = condition,
+		-- cmd = { "MasonToolsUpdate", "MasonToolsInstall", "MasonToolsInstallSync", "MasonToolsUpdateSync" },
+		lazy = false,
+		-- cond = condition,
 		config = function()
 			require("mason-tool-installer").setup({
 				run_on_start = true,
-				ensure_installed = vim.tbl_deep_extend(
-					"force",
-					FORMATTING_MASON_SOURCES,
-					DIAGNOSTICS_MASON_SOURCES,
-					CODE_ACTION_MASON_SOURCES,
-					LSP_MASON_SOURCES
-				),
+				ensure_installed = conf.all_mason_sources,
 			})
 		end,
 	},

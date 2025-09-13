@@ -68,10 +68,10 @@ augroup("textOpts", {
 })
 
 augroup("activateOtter", {
-	{ "Filetype" },
+	{ "BufNewFile", "BufRead" },
 	{
 		desc = "Activate Otter",
-		pattern = { "markdown", "quarto" },
+		pattern = { "*.md", "*.qmd" },
 		callback = function()
 			require("otter").activate()
 		end,

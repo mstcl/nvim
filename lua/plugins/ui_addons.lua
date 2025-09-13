@@ -75,6 +75,7 @@ return {
 						"Diffview*",
 						"aerial",
 						"qf",
+						"mason",
 					},
 					desc = "Disable indentscope",
 					callback = function()

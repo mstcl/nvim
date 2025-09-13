@@ -2,9 +2,9 @@ local augroup = require("core.utils").augroup
 local lsp_signs = require("core.variables").lsp_signs
 local ignore_filetypes = {
 	"oil",
+	"mason",
 	"OverseerList",
 	"Lazy",
-	"Mason",
 	"gitsigns-blame",
 	"NeogitStatus",
 	"NeogitDiffView",
