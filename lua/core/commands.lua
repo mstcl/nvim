@@ -78,8 +78,8 @@ end, {})
 -- Check notification history
 create_command("MsgHistory", "lua require('mini.notify').show_history()", {})
 
-create_command("PasteMode", function()
-	require("core.pastemode").start()
+create_command("QuietMode", function()
+	require("core.quietmode").start()
 end, {})
 
 create_command("MinimalMode", function()

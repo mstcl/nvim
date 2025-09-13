@@ -39,9 +39,9 @@ map("n", "<leader>xc", function()
 	vim.cmd("ToggleColorColumn")
 end, { desc = "cursorcolumn toggle", noremap = false, silent = true })
 
-map("n", "<leader>xp", function()
+map("n", "<leader>Q", function()
 	vim.cmd("PasteMode")
-end, { desc = "paste mode", noremap = false, silent = true })
+end, { desc = "quiet mode", noremap = false, silent = true })
 
 -- Window splitting
 map("n", "<C-S>v", function()
