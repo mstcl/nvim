@@ -7,6 +7,9 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
 		lazy = vim.fn.argc(-1) == 0,
+		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+		build = ":TSUpdate",
 		keys = {
 			{
 				"<leader>xt",
@@ -15,50 +18,8 @@ return {
 				end,
 				desc = "Toggle treesitter highlighting",
 			},
-			{
-				"an",
-				desc = "Increment TS node",
-				mode = { "o", "x" },
-			},
-			{
-				"aN",
-				desc = "Increment TS scope",
-				mode = { "o", "x" },
-			},
-			{
-				"in",
-				desc = "Decrement TS node",
-				mode = { "o", "x" },
-			},
 		},
-		cmd = {
-			"TSInstall",
-			"TSInstallSync",
-			"TSInstallInfo",
-			"TSUninstall",
-			"TSUpdate",
-			"TSUpdateSync",
-			"TSBufEnable",
-			"TSBufToggle",
-			"TSEnable",
-			"TSToggle",
-			"TSModuleInfo",
-			"TSEditQuery",
-			"TSEditQueryUserAfter",
-		},
-		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
-		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
-		build = ":TSUpdate",
 		init = function(plugin)
-			require("lazy.core.loader").add_to_rtp(plugin)
-			require("nvim-treesitter.query_predicates")
-			augroup("Treesitter", {
-				{ "VimEnter" },
-				{
-					pattern = "*.zsh",
-					command = "silent! TSBufDisable highlight",
-				},
-			})
 			require("lazy.core.loader").add_to_rtp(plugin)
 			require("nvim-treesitter.query_predicates")
 		end,
@@ -125,6 +86,18 @@ return {
 					},
 				},
 				textobjects = {
+					select = {
+						enabled = true,
+						lookahead = true,
+						keymaps = {
+							["af"] = { query = "@function.outer", desc = "outer function" },
+							["if"] = { query = "@function.inner", desc = "inner function" },
+							["ac"] = { query = "@conditional.outer", desc = "outer conditional" },
+							["ic"] = { query = "@conditional.inner", desc = "inner conditional" },
+							["al"] = { query = "@conditional.outer", desc = "outer loop" },
+							["il"] = { query = "@conditional.inner", desc = "inner loop" },
+						},
+					},
 					move = {
 						enable = true,
 						set_jumps = true,
@@ -166,6 +139,7 @@ return {
 			}
 		end,
 		config = function(_, opts)
+			-- Add configured syntax to ensure installed
 			if type(opts.ensure_installed) == "table" then
 				---@type table<string, boolean>
 				local added = {}
@@ -177,12 +151,44 @@ return {
 					return true
 				end, opts.ensure_installed)
 			end
+
 			if opts then
 				require("nvim-treesitter.configs").setup(opts)
 			end
-			vim.schedule(function()
-				require("lazy").load({ plugins = { "nvim-treesitter-textobjects" } })
-			end)
+		end,
+	},
+	{
+		-- (nvim-treesitter-textobjects) Textobjects
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		event = "VeryLazy",
+		config = function()
+			-- Globally map Tree-sitter text object binds
+			local function textobj_map(key, query)
+				local outer = "@" .. query .. ".outer"
+				local inner = "@" .. query .. ".inner"
+				function get_opts(type)
+					return {
+						desc = type .. " " .. query,
+						silent = true,
+					}
+				end
+				vim.keymap.set("x", "i" .. key, function()
+					vim.cmd.TSTextobjectSelect(inner)
+				end, get_opts("inner"))
+				vim.keymap.set("x", "a" .. key, function()
+					vim.cmd.TSTextobjectSelect(outer)
+				end, get_opts("outer"))
+				vim.keymap.set("o", "i" .. key, function()
+					vim.cmd.TSTextobjectSelect(inner)
+				end, get_opts("inner"))
+				vim.keymap.set("o", "a" .. key, function()
+					vim.cmd.TSTextobjectSelect(outer)
+				end, get_opts("outer"))
+			end
+
+			textobj_map("f", "function")
+			textobj_map("c", "conditional")
+			textobj_map("l", "loop")
 		end,
 	},
 	{ -- (tex-coneal) Concealing in latex files
