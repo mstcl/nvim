@@ -3,6 +3,7 @@ local lsp_signs = require("core.variables").lsp_signs
 local ignore_filetypes = {
 	"oil",
 	"mason",
+	"NvimTree",
 	"OverseerList",
 	"Lazy",
 	"gitsigns-blame",

@@ -12,6 +12,7 @@ local extended = lush.merge({
 	require("ivory_gitsigns"),
 	require("ivory_cmp"),
 	require("ivory_aerial"),
+	require("ivory_nvim_tree"),
 })
 
 if conf.lsp_enabled then

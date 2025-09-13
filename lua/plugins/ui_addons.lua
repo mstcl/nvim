@@ -78,6 +78,7 @@ return {
 						"aerial",
 						"qf",
 						"mason",
+						"NvimTree",
 					},
 					desc = "Disable indentscope",
 					callback = function()

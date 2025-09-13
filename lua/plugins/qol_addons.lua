@@ -949,4 +949,80 @@ return {
 			vim.g.undotree_TreeVertShape = "┃"
 		end,
 	},
+	{ -- (nvim-tree) Tree file
+		"nvim-tree/nvim-tree.lua",
+		version = "*",
+		lazy = true,
+		cmd = {
+			"NvimTreeToggle",
+		},
+		keys = {
+			{
+				"<leader>T",
+				function()
+					vim.cmd("NvimTreeToggle")
+				end,
+				desc = "tree toggle",
+			},
+		},
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			require("nvim-tree").setup({
+				hijack_directories = { enable = false, auto_open = false },
+				git = { enable = false },
+				filters = { dotfiles = true },
+				view = { width = 35 },
+				renderer = {
+					root_folder_label = ":~:s?$??",
+					icons = {
+						symlink_arrow = " » ",
+						show = {
+							file = true,
+							folder = true,
+							folder_arrow = true,
+							git = false,
+							modified = true,
+							hidden = false,
+							diagnostics = false,
+							bookmarks = false,
+						},
+					},
+					indent_markers = { enable = true },
+				},
+			})
+
+			require("nvim-tree.view").View.winopts.winhighlight = "Normal:CursorLine"
+			require("nvim-tree.view").View.winopts.foldcolumn = "0"
+			require("nvim-tree.view").View.winopts.cursorline = false
+			require("nvim-tree.view").View.winopts.statuscolumn = ""
+			require("nvim-tree.view").View.winopts.colorcolumn = ""
+			require("nvim-tree.view").View.winopts.signcolumn = "no"
+
+			augroup("closeTreeOnExit", {
+				{ "QuitPre" },
+				{
+					callback = function()
+						local tree_wins = {}
+						local floating_wins = {}
+						local wins = vim.api.nvim_list_wins()
+						for _, w in ipairs(wins) do
+							local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
+							if bufname:match("NvimTree_") ~= nil then
+								table.insert(tree_wins, w)
+							end
+							if vim.api.nvim_win_get_config(w).relative ~= "" then
+								table.insert(floating_wins, w)
+							end
+						end
+						if 1 == #wins - #floating_wins - #tree_wins then
+							-- Should quit, so we close all invalid windows.
+							for _, w in ipairs(tree_wins) do
+								vim.api.nvim_win_close(w, true)
+							end
+						end
+					end,
+				},
+			})
+		end,
+	},
 }
