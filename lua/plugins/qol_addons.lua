@@ -722,7 +722,7 @@ return {
 					function()
 						require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
 					end,
-					desc = "cxpand quickfix context",
+					desc = "expand quickfix context",
 				},
 				{
 					"<",
