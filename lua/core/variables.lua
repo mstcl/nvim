@@ -149,9 +149,10 @@ end
 M.lsp_sources = {
 	ansiblels = "ansible-language-server",
 	bashls = "bash-language-server",
-	jedi_language_server = "jedi-language-server",
 	cssls = "css-lsp",
 	ruff = "ruff",
+	pyrefly = "pyrefly",
+	ty = "ty",
 	lua_ls = "lua-language-server",
 	gopls = "gopls",
 	yamlls = "yaml-language-server",
@@ -163,9 +164,7 @@ M.lsp_sources = {
 M.formatting_sources = {
 	prettierd = "prettierd",
 	shfmt = "shfmt",
-	mdformat = "mdformat",
 	stylua = "stylua",
-	cbfmt = "cbfmt",
 	goimports = "goimports",
 	gofumpt = "gofumpt",
 	golines = "golines",
@@ -183,10 +182,11 @@ M.diagnostics_sources = {
 	hadolint = "hadolint",
 	commitlint = "commitlint",
 	ansiblelint = "ansible-lint",
-	mypy = "mypy",
+	selene = "selene",
 	golangci_lint = "golangci-lint",
 	tfsec = "tfsec",
 	terraform_validate = "",
+	codespell = "codespell",
 }
 
 M.code_action_sources = {
@@ -235,5 +235,24 @@ M.oil_columns = {
 	icon = { "icon" },
 	permissions = { "permissions", highlight = "Number" },
 }
+
+M.all_mason_sources = {}
+
+local join_mason_sources = function()
+	for _, value in ipairs(M.get_mason_sources(M.diagnostics_sources)) do
+		table.insert(M.all_mason_sources, value)
+	end
+	for _, value in ipairs(M.get_mason_sources(M.formatting_sources)) do
+		table.insert(M.all_mason_sources, value)
+	end
+	for _, value in ipairs(M.get_mason_sources(M.code_action_sources)) do
+		table.insert(M.all_mason_sources, value)
+	end
+	for _, value in ipairs(M.get_mason_sources(M.lsp_sources)) do
+		table.insert(M.all_mason_sources, value)
+	end
+end
+
+join_mason_sources()
 
 return M
