@@ -8,12 +8,6 @@ return {
 		event = "InsertCharPre",
 		opts = {},
 	},
-	{ -- (comfy-line-numbers) Better relative number
-		"mluders/comfy-line-numbers.nvim",
-		event = "BufReadPre",
-		cond = false,
-		opts = {},
-	},
 	{ -- (mini.surround) Add motions to surround objects with brackets etc.
 		"echasnovski/mini.surround",
 		version = false,
@@ -100,76 +94,6 @@ return {
 		config = function(_, opts)
 			if opts then
 				require("move").setup(opts)
-			end
-		end,
-	},
-	{ -- (flash.nvim) Jump around the buffer *
-		"folke/flash.nvim",
-		cond = condition.flash,
-		keys = {
-			{
-				"S",
-				mode = { "n", "x", "o" },
-				function()
-					require("flash").treesitter()
-				end,
-				desc = "Flash Treesitter",
-			},
-			{
-				"s",
-				mode = { "n", "x", "o" },
-				function()
-					require("flash").jump()
-				end,
-				desc = "Flash",
-			},
-			{
-				"r",
-				mode = "o",
-				function()
-					require("flash").remote()
-				end,
-				desc = "Remote Flash",
-			},
-			{
-				"R",
-				mode = { "n", "o", "x" },
-				function()
-					require("flash").treesitter_search()
-				end,
-				desc = "Treesitter Search",
-			},
-			{
-				"<C-S>",
-				mode = { "c" },
-				function()
-					require("flash").toggle()
-					vim.notify("Toggled searching with Flash", vim.log.levels.INFO)
-				end,
-				desc = "Toggled Flash Search",
-			},
-		},
-		opts = function()
-			return {
-				prompt = {
-					prefix = { { " FLASH ", "FlashPromptIcon" } },
-				},
-				modes = {
-					char = {
-						multi_line = false,
-					},
-				},
-				label = {
-					rainbow = {
-						enabled = true,
-						shade = 9,
-					},
-				},
-			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("flash").setup(opts)
 			end
 		end,
 	},
@@ -418,14 +342,6 @@ return {
 			},
 		},
 		opts_extend = { "sources.completion.enabled_providers" },
-	},
-	{ -- (nvim-early-retirement) Discard inactive buffers *
-		"chrisgrieser/nvim-early-retirement",
-		cond = condition.retirement,
-		event = "BufReadPre",
-		opts = {
-			notificationOnAutoClose = true,
-		},
 	},
 	{ -- (conform.nvim) Formatter
 		"stevearc/conform.nvim",

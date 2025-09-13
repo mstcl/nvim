@@ -185,15 +185,13 @@ return {
 			end)
 		end,
 	},
-	{ -- (tex-coneal) Concealing in latex files *
+	{ -- (tex-coneal) Concealing in latex files
 		"KeitaNakamura/tex-conceal.vim",
-		cond = conf.syntax_features.tex,
 		ft = { "tex" },
 	},
-	{ -- (quarto-nvim) Quarto syntax *
+	{ -- (quarto-nvim) Quarto syntax
 		"quarto-dev/quarto-nvim",
 		dev = false,
-		cond = conf.syntax_features.quarto,
 		ft = { "quarto" },
 		dependencies = { "jmbuhr/otter.nvim" },
 		opts = {
@@ -211,104 +209,16 @@ return {
 			},
 		},
 	},
-	{ -- (typst.nvim) Typst syntax *
+	{ -- (typst.nvim) Typst syntax
 		"kaarmu/typst.vim",
-		cond = conf.syntax_features.typst,
-		event = "Filetype",
+		event = "Filetype typst",
 		config = function()
 			vim.g.typst_pdf_viewer = "sioyek"
 		end,
 	},
-	{ -- (molten-nvim) Python notebooks *
-		"benlubas/molten-nvim",
-		ft = "quarto",
-		version = "^1.0.0",
-		build = ":UpdateRemotePlugins",
-		cond = conf.syntax_features.quarto or conf.syntax_features.notebook,
-		keys = {
-			{
-				"me",
-				":<C-u>MoltenEvaluateVisual<cr>gv",
-				mode = "v",
-				desc = "Evaluate cell (visual)",
-				buffer = true,
-			},
-			{ "md", "<cmd>MoltenDelete<cr>", desc = "Delete cell", buffer = true },
-			{ "mh", "<cmd>MoltenHideOutput<cr>", desc = "Hide cell output", buffer = true },
-			{ "mo", ":noautocmd MoltenEnterOutput<cr>", desc = "Open cell output", buffer = true },
-			{ "]e", "<cmd>MoltenNext<cr>", desc = "Next cell", buffer = true },
-			{ "[e", "<cmd>MoltenPrev<cr>", desc = "Next cell", buffer = true },
-		},
-		init = function()
-			vim.g.molten_image_provider = "none"
-			vim.g.molten_wrap_output = true
-			vim.g.molten_auto_open_output = false
-			vim.g.molten_virt_lines_off_by_1 = true
-			vim.g.molten_output_virt_lines = true
-			vim.g.molten_virt_text_output = true
-			vim.g.molten_virt_text_max_lines = 10
-			vim.g.molten_output_crop_border = 10
-			vim.g.molten_output_win_style = "minimal"
-			vim.g.molten_output_win_cover_gutter = false
-			vim.g.molten_output_win_max_height = 20
-			vim.g.molten_output_win_border = "none"
-			local imb = function(e)
-				vim.schedule(function()
-					local kernels = vim.fn.MoltenAvailableKernels()
-					local try_kernel_name = function()
-						local metadata = vim.json.decode(io.open(e.file, "r"):read("a"))["metadata"]
-						return metadata.kernelspec.name
-					end
-					local ok, kernel_name = pcall(try_kernel_name)
-					if not ok or not vim.tbl_contains(kernels, kernel_name) then
-						kernel_name = nil
-						local venv = os.getenv("VIRTUAL_ENV")
-						if venv ~= nil then
-							kernel_name = string.match(venv, "/.+/(.+)")
-						end
-					end
-					if kernel_name ~= nil and vim.tbl_contains(kernels, kernel_name) then
-						vim.cmd(("MoltenInit %s"):format(kernel_name))
-					end
-					vim.cmd("MoltenImportOutput")
-				end)
-			end
-			vim.api.nvim_create_autocmd("BufAdd", {
-				pattern = { "*.ipynb" },
-				callback = imb,
-			})
-			vim.api.nvim_create_autocmd("BufEnter", {
-				pattern = { "*.ipynb" },
-				callback = function(e)
-					if vim.api.nvim_get_vvar("vim_did_enter") ~= 1 then
-						imb(e)
-					end
-				end,
-			})
-			vim.api.nvim_create_autocmd("BufWritePost", {
-				pattern = { "*.ipynb" },
-				callback = function()
-					if require("molten.status").initialized() == "Molten" then
-						vim.cmd("MoltenExportOutput!")
-					end
-				end,
-			})
-		end,
-	},
-	{ -- (jupytext.nvim) Convert ipython notebooks to something sane *
-		"GCBallesteros/jupytext.nvim",
-		event = "VeryLazy",
-		cond = conf.syntax_features.quarto or conf.syntax_features.notebook,
-		opts = {
-			style = "quarto",
-			output_extension = "qmd",
-			force_ft = "quarto",
-		},
-	},
-	{ -- (zk-nvim) Markdown note taking assistant *
+	{ -- (zk-nvim) Markdown note taking assistant
 		"zk-org/zk-nvim",
 		ft = "markdown",
-		cond = conf.syntax_features.markdown,
 		keys = {
 			{
 				"<leader>ne",

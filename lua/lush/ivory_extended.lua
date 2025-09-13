@@ -22,28 +22,6 @@ if conf.lsp_enabled then
 	})
 end
 
-if conf.ui_features.incline then
-	extended = lush.merge({
-		extended,
-		require("ivory_incline"),
-	})
-end
-
-if conf.ui_features.starter then
-	extended = lush.merge({
-		extended,
-		require("ivory_mini_starter"),
-	})
-end
-
-if conf.ui_features.tabline then
-	extended = lush.merge({
-		extended,
-		require("ivory_bufferline"),
-		require("ivory_mini_tabline"),
-	})
-end
-
 if conf.dap_enabled then
 	extended = lush.merge({
 		extended,

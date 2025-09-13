@@ -367,8 +367,7 @@ return {
 				{ "gr", group = "LSP symbol actions" },
 				{ "<leader>d", group = "Diffview commands" },
 				{ "<leader>db", group = "DAP commands", cond = conf.dap_enabled },
-				{ "<leader>n", group = "Notes commands (zk)", cond = conf.syntax_features.markdown },
-				{ "m", group = "Molten operations", cond = conf.syntax_features.quarto },
+				{ "<leader>n", group = "Notes commands (zk)" },
 				{ "go", group = "Otter symbols (code block)", cond = conf.lsp_enabled },
 			})
 			if opts then
@@ -815,9 +814,8 @@ return {
 	{ -- (section-wordcount.nvim) Display wordcount under section header
 		"dimfeld/section-wordcount.nvim",
 		ft = { "markdown", "quarto" },
-		cond = conf.syntax_features.markdown,
 		opts = {
-			highlight = "NonText",
+			highlight = "Comment",
 			virt_text_pos = "eol",
 		},
 		config = function(_, opts)

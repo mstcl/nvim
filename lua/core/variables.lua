@@ -13,24 +13,10 @@ M.lsp_features = {
 }
 M.edit_features = {
 	completion = true, -- completion by default
-	flash = false,
-	retirement = false,
 }
 
 M.ui_features = {
-	animate = false,
 	indent_lines = true, -- indentscope enabled by default
-	tabline = false,
-	incline = false,
-	starter = false,
-}
-
-M.syntax_features = {
-	typst = false,
-	quarto = false,
-	tex = false,
-	markdown = true,
-	notebook = false,
 }
 
 M.frecency_workspaces = {}
@@ -211,8 +197,6 @@ M.code_action_sources = {
 M.starter_ascii = "  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n"
 
 M.org_agenda_files = {}
-
-M.zk_wiki = "~/shared/wiki"
 
 M.border = "rounded"
 
