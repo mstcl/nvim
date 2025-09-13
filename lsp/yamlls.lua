@@ -3,6 +3,9 @@ return {
 	cmd = { "yaml-language-server" },
 	filetypes = { "yaml.ansible", "yaml", "yml" },
 	root_markers = { ".git" },
+	on_init = function(client)
+		client.server_capabilities.documentFormattingProvider = true
+	end,
 	settings = {
 		redhat = { telemetry = { enabled = false } },
 		yaml = {

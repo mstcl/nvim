@@ -15,6 +15,7 @@ vim.filetype.add({
 		sh = "sh",
 	},
 	filename = {
+		[".gitlab-ci.yml"] = "yaml.gitlab",
 		[".zshrc"] = "zsh",
 		[".zshenv"] = "zsh",
 		[".zprofile"] = "zsh",
