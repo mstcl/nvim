@@ -13,11 +13,26 @@ augroup("trim", {
 	},
 })
 
+augroup("hideComponents", {
+	"BufEnter",
+	{
+		desc = "hide components",
+		pattern = "*",
+		callback = function()
+			local filetypes = { "DiffviewFiles" }
+			local current_ft = vim.bo.filetype
+			if vim.tbl_contains(filetypes, current_ft) then
+				vim.cmd("MinimalMode")
+			end
+		end,
+	},
+})
+
 augroup("altWinHighlight", {
 	"FileType",
 	{
 		desc = "set background for alt windows",
-		pattern = { "aerial" },
+		pattern = { "aerial", "NvimTree" },
 		callback = function()
 			vim.wo.winhighlight = "Normal:CursorLine"
 		end,

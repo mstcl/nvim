@@ -20,17 +20,7 @@ function M.start()
 	vim.api.nvim_win_set_buf(new_win, current_buf)
 
 	vim.g.pastemode = true
-	vim.b.minianimate_disable = true
-	vim.b.miniindentscope_disable = true
-	vim.wo.list = false
-	vim.g.foldcolumn = false
-	vim.wo.foldcolumn = "0"
-	vim.wo.number = false
-	vim.wo.relativenumber = false
-	vim.wo.cursorline = false
-	vim.wo.statuscolumn = ""
-	vim.wo.colorcolumn = ""
-	vim.wo.signcolumn = "no"
+	vim.cmd("MinimalMode")
 
 	vim.keymap.set("n", "q", function()
 		vim.cmd("tabclose")
