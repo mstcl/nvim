@@ -442,12 +442,14 @@ return {
 				{ "<leader>d", group = "diffview commands" },
 				{ "<leader>db", group = "DAP commands", cond = conf.dap_enabled },
 				{ "<leader>n", group = "notes commands (zk)" },
+				{ "gc", group = "comment toggle" },
 
 				-- Rename of built-ins
 				{ "<C-R>", desc = "redo" },
 				{ "u", desc = "undo" },
 				{ "P", desc = "paste above" },
 				{ "p", desc = "paste below" },
+				{ "gcc", desc = "comment line toggle" },
 			})
 			if opts then
 				wk.setup(opts)
