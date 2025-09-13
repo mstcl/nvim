@@ -16,7 +16,7 @@ return {
 				function()
 					vim.cmd("TSBufToggle highlight")
 				end,
-				desc = "Toggle treesitter highlighting",
+				desc = "treesitter highlight toggle",
 			},
 		},
 		init = function(plugin)
@@ -102,37 +102,37 @@ return {
 						enable = true,
 						set_jumps = true,
 						goto_next_start = {
-							["]k"] = { query = "@block.outer", desc = "Next block start" },
-							["]f"] = { query = "@function.outer", desc = "Next function start" },
-							["]a"] = { query = "@parameter.inner", desc = "Next parameter start" },
+							["]k"] = { query = "@block.outer", desc = "next block start" },
+							["]f"] = { query = "@function.outer", desc = "next function start" },
+							["]a"] = { query = "@parameter.inner", desc = "next parameter start" },
 						},
 						goto_next_end = {
-							["]K"] = { query = "@block.outer", desc = "Next block end" },
-							["]F"] = { query = "@function.outer", desc = "Next function end" },
-							["]A"] = { query = "@parameter.inner", desc = "Next parameter end" },
+							["]K"] = { query = "@block.outer", desc = "next block end" },
+							["]F"] = { query = "@function.outer", desc = "next function end" },
+							["]A"] = { query = "@parameter.inner", desc = "next parameter end" },
 						},
 						goto_previous_start = {
-							["[k"] = { query = "@block.outer", desc = "Previous block start" },
-							["[f"] = { query = "@function.outer", desc = "Previous function start" },
-							["[a"] = { query = "@parameter.inner", desc = "Previous parameter start" },
+							["[k"] = { query = "@block.outer", desc = "previous block start" },
+							["[f"] = { query = "@function.outer", desc = "previous function start" },
+							["[a"] = { query = "@parameter.inner", desc = "previous parameter start" },
 						},
 						goto_previous_end = {
-							["[K"] = { query = "@block.outer", desc = "Previous block end" },
-							["[F"] = { query = "@function.outer", desc = "Previous function end" },
-							["[A"] = { query = "@parameter.inner", desc = "Previous parameter end" },
+							["[K"] = { query = "@block.outer", desc = "previous block end" },
+							["[F"] = { query = "@function.outer", desc = "previous function end" },
+							["[A"] = { query = "@parameter.inner", desc = "previous parameter end" },
 						},
 					},
 					swap = {
 						enable = true,
 						swap_next = {
-							[">K"] = { query = "@block.outer", desc = "Swap next block" },
-							[">F"] = { query = "@function.outer", desc = "Swap next function" },
-							[">A"] = { query = "@parameter.inner", desc = "Swap next parameter" },
+							[">K"] = { query = "@block.outer", desc = "swap next block" },
+							[">F"] = { query = "@function.outer", desc = "swap next function" },
+							[">A"] = { query = "@parameter.inner", desc = "swap next parameter" },
 						},
 						swap_previous = {
-							["<K"] = { query = "@block.outer", desc = "Swap previous block" },
-							["<F"] = { query = "@function.outer", desc = "Swap previous function" },
-							["<A"] = { query = "@parameter.inner", desc = "Swap previous parameter" },
+							["<K"] = { query = "@block.outer", desc = "swap previous block" },
+							["<F"] = { query = "@function.outer", desc = "swap previous function" },
+							["<A"] = { query = "@parameter.inner", desc = "swap previous parameter" },
 						},
 					},
 				},
@@ -174,16 +174,16 @@ return {
 				end
 				vim.keymap.set("x", "i" .. key, function()
 					vim.cmd.TSTextobjectSelect(inner)
-				end, get_opts("inner"))
+				end, get_opts("Inner"))
 				vim.keymap.set("x", "a" .. key, function()
 					vim.cmd.TSTextobjectSelect(outer)
-				end, get_opts("outer"))
+				end, get_opts("Outer"))
 				vim.keymap.set("o", "i" .. key, function()
 					vim.cmd.TSTextobjectSelect(inner)
-				end, get_opts("inner"))
+				end, get_opts("Inner"))
 				vim.keymap.set("o", "a" .. key, function()
 					vim.cmd.TSTextobjectSelect(outer)
-				end, get_opts("outer"))
+				end, get_opts("Outer"))
 			end
 
 			textobj_map("f", "function")
@@ -227,50 +227,37 @@ return {
 		ft = "markdown",
 		keys = {
 			{
-				"<leader>ne",
-				"<cmd>ZkNotes<cr>",
-				desc = "Note entries",
-			},
-			{
 				"<leader>nn",
 				function()
-					vim.ui.input({ prompt = "Enter path/title: " }, function(input)
-						if input == nil then
-							return
-						end
-						local rel = ""
-						local title = ""
-						for k, v in string.gmatch(input, "(.*)/(.*)") do
-							rel = k
-							title = v
-						end
-						require("zk.commands").get("ZkNew")({
-							dir = rel,
-							title = title,
-						})
-					end)
+					vim.cmd("ZkNotes")
 				end,
-				desc = "New note",
+				desc = "note entries",
 			},
 			{
 				"<leader>nl",
-				"<cmd>ZkLinks<cr>",
-				desc = "Note links",
+				function()
+					vim.cmd("ZkLinks")
+				end,
+				desc = "note links",
 			},
 			{
 				"<leader>nb",
-				"<cmd>ZkBacklinks<cr>",
-				desc = "Note backlinks",
+				function()
+					vim.cmd("ZkBacklinks")
+				end,
+				desc = "note backlinks",
 			},
 			{
 				"<leader>nt",
-				"<cmd>ZkTags<cr>",
-				desc = "Note tags",
+				function()
+					vim.cmd("ZkTags")
+				end,
+				desc = "note tags",
 			},
 			{
 				"<leader>n",
 				":'<,'>ZkNewFromTitleSelection<cr>",
-				desc = "New note from selection",
+				desc = "new note from selection",
 				mode = "v",
 			},
 		},

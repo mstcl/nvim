@@ -44,8 +44,8 @@ function M.on_attach(client, bufnr)
 	end
 
 	if client.name == "zk" then
-		vim.keymap.set("n", "<leader>ki", ":ZkIndex<CR>", {
-			desc = "Index notes",
+		vim.keymap.set("n", "<leader>ni", ":ZkIndex<CR>", {
+			desc = "index notes",
 			noremap = true,
 			silent = true,
 			buffer = bufnr,
@@ -140,6 +140,26 @@ function M.create_capabilities()
 	})
 
 	return capabilities
+end
+
+function M.root_pattern(...)
+	local patterns = M.tbl_flatten({ ... })
+	return function(startpath)
+		startpath = M.strip_archive_subpath(startpath)
+		for _, pattern in ipairs(patterns) do
+			local match = M.search_ancestors(startpath, function(path)
+				for _, p in ipairs(vim.fn.glob(table.concat({ escape_wildcards(path), pattern }, "/"), true, true)) do
+					if vim.uv.fs_stat(p) then
+						return path
+					end
+				end
+			end)
+
+			if match ~= nil then
+				return match
+			end
+		end
+	end
 end
 
 return M

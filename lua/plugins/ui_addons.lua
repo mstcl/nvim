@@ -20,8 +20,10 @@ return {
 		keys = {
 			{
 				"<leader>xh",
-				"<cmd>HighlightColors Toggle<cr>",
-				desc = "Toggle highlighting colours",
+				function()
+					vim.cmd("HighlightColors Toggle")
+				end,
+				desc = "highlight toggle",
 			},
 		},
 		opts = {
@@ -39,7 +41,7 @@ return {
 				function()
 					vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable
 				end,
-				desc = "Toggle indentscope",
+				desc = "indentscope toggle",
 			},
 		},
 		event = "BufReadPre",
@@ -91,25 +93,28 @@ return {
 		lazy = false,
 		keys = {
 			{
-				"<C-BS>",
+				"<leader>N",
 				function()
 					require("mini.notify").clear()
 				end,
-				desc = "Dismiss all notifications",
+				desc = "dismiss all notifications",
 			},
 		},
-		opts = {
-			content = {
-				format = function(notif)
-					return " " .. "[" .. notif.level .. "]" .. " " .. notif.msg .. " "
-				end,
-			},
-			lsp_progress = { enable = true },
-			window = { max_width_share = 1, winblend = 0, config = { border = conf.border } },
-		},
-		init = function()
+		opts = function()
+			return {
+				content = {
+					format = function(notif)
+						return " " .. "[" .. notif.level .. "]" .. " " .. notif.msg .. " "
+					end,
+				},
+				lsp_progress = { enable = true },
+				window = { max_width_share = 1, winblend = 0, config = { border = conf.border } },
+			}
+		end,
+		config = function(_, opts)
 			vim.api.nvim_set_hl(0, "MiniNotifyTitle", { link = "DiagnosticOk" })
-			local opts = {
+			require("mini.notify").setup(opts)
+			local vim_notify_opts = {
 				ERROR = { duration = 5000, hl_group = "DiagnosticOk" },
 				WARN = { duration = 5000, hl_group = "DiagnosticOk" },
 				INFO = { duration = 2000, hl_group = "DiagnosticOk" },
@@ -117,11 +122,7 @@ return {
 				TRACE = { duration = 0, hl_group = "DiagnosticOk" },
 				OFF = { duration = 0, hl_group = "DiagnosticSignOk" },
 			}
-
-			---@diagnostic disable-next-line: duplicate-set-field
-			vim.notify = function(...)
-				require("mini.notify").make_notify(opts)(...)
-			end
+			vim.notify = require("mini.notify").make_notify(vim_notify_opts)
 		end,
 	},
 	{ -- (visual-whitespace.nvim) Whitespace shows on visual selection

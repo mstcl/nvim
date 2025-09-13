@@ -7,7 +7,7 @@ local exec = vim.api.nvim_command
 augroup("trim", {
 	"BufWritePre",
 	{
-		desc = "Trim whitespace on write",
+		desc = "trim whitespace on write",
 		pattern = "*",
 		command = [[%s/\s\+$//e]],
 	},
@@ -16,7 +16,7 @@ augroup("trim", {
 augroup("altWinHighlight", {
 	"FileType",
 	{
-		desc = "Set background for alt windows",
+		desc = "set background for alt windows",
 		pattern = { "aerial" },
 		callback = function()
 			vim.wo.winhighlight = "Normal:CursorLine"
@@ -25,7 +25,7 @@ augroup("altWinHighlight", {
 }, {
 	"BufEnter",
 	{
-		desc = "Set background for alt windows",
+		desc = "set background for alt windows",
 		pattern = "*",
 		callback = function()
 			local filetypes = { "DiffviewFiles", "DiffviewFileHistory" }
@@ -41,7 +41,7 @@ augroup("editing", {
 	"BufEnter",
 	{
 		pattern = "*",
-		desc = "Set the format options globally",
+		desc = "set the format options globally",
 		callback = function()
 			local vals = { "c", "r", "o" }
 			for _, val in ipairs(vals) do
@@ -54,7 +54,7 @@ augroup("editing", {
 augroup("textOpts", {
 	{ "BufNewFile", "BufRead" },
 	{
-		desc = "Enable text editing options, spellcheck and spell correction on certain filetypes",
+		desc = "enable text editing options, spellcheck and spell correction on certain filetypes",
 		pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd", "*.typ" },
 		callback = function()
 			vim.opt_local.list = false
@@ -70,7 +70,7 @@ augroup("textOpts", {
 augroup("activateOtter", {
 	{ "BufNewFile", "BufRead" },
 	{
-		desc = "Activate Otter",
+		desc = "activate Otter",
 		pattern = { "*.md", "*.qmd" },
 		callback = function()
 			require("otter").activate()
@@ -81,7 +81,7 @@ augroup("activateOtter", {
 augroup("verticalHelp", {
 	{ "Filetype" },
 	{
-		desc = "Open help in vertical split",
+		desc = "open help in vertical split",
 		pattern = "help",
 		callback = function()
 			vim.bo.bufhidden = "unload"
@@ -94,7 +94,7 @@ augroup("verticalHelp", {
 augroup("rooter", {
 	{ "BufEnter" },
 	{
-		desc = "Set cwd to project root directory",
+		desc = "set cwd to project root directory",
 		callback = function(args)
 			local root = vim.fs.root(args.buf, {
 				".git",
@@ -113,7 +113,7 @@ augroup("rooter", {
 augroup("bigFile", {
 	{ "BufReadPre" },
 	{
-		desc = "Set settings for really big files",
+		desc = "set settings for really big files",
 		pattern = "*",
 		callback = function()
 			if big(vim.fn.expand("%")) then
@@ -132,7 +132,7 @@ augroup("bigFile", {
 augroup("terminal", {
 	{ "TermOpen", "BufWinEnter", "WinEnter" },
 	{
-		desc = "Set settings for really big files",
+		desc = "set settings for really big files",
 		pattern = "term://*",
 		callback = function()
 			exec("startinsert")

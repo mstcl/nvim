@@ -144,7 +144,7 @@ if require("core.variables").lsp_enabled then
 	augroup("diagnosticUpdate", {
 		{ "DiagnosticChanged" },
 		{
-			desc = "Update diagnostics cache for the status line.",
+			desc = "update diagnostics cache for the status line.",
 			callback = function(info)
 				local b = vim.b[info.buf]
 				local diagnostic_cnt_cache = { 0, 0, 0, 0 }

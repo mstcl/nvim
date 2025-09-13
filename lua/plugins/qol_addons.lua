@@ -28,49 +28,102 @@ return {
 		},
 		keys = {
 			{
-				"<leader>pl",
-				"<cmd>FzfLua resume<cr>",
-				desc = "Last picker",
+				"grR",
+				function()
+					vim.cmd("FzfLua lsp_references")
+				end,
+				desc = "references (picker)",
 			},
 			{
-				"<leader>pp",
-				"<cmd>FzfLua builtin<cr>",
-				desc = "All pickers",
+				"<leader>xdD",
+				function()
+					vim.cmd("FzfLua lsp_document_diagnostics")
+				end,
+				desc = "document diagnostics (picker)",
+			},
+			{
+				"<leader>xds",
+				function()
+					vim.cmd("FzfLua lsp_document_symbols")
+				end,
+				desc = "document symbols (picker)",
+			},
+			{
+				"<leader>wD",
+				function()
+					vim.cmd("FzfLua lsp_workspace_diagnostics")
+				end,
+				desc = "workspace diagnostics (picker)",
+			},
+			{
+				"<leader>ws",
+				function()
+					vim.cmd("FzfLua lsp_workspace_symbols")
+				end,
+				desc = "workspace symbols (picker)",
+			},
+			{
+				"<leader>p",
+				function()
+					vim.cmd("FzfLua resume")
+				end,
+				desc = "last picker",
+			},
+			{
+				"<leader>P",
+				function()
+					vim.cmd("FzfLua builtin")
+				end,
+				desc = "all pickers",
 			},
 			{
 				"<leader>t",
-				"<cmd>FzfLua tabs<cr>",
-				desc = "Tab list",
+				function()
+					vim.cmd("FzfLua tabs")
+				end,
+				desc = "tabs (picker)",
 			},
 			{
 				"<leader>h",
-				"<cmd>FzfLua oldfiles<cr>",
-				desc = "Browse history",
+				function()
+					vim.cmd("FzfLua oldfiles")
+				end,
+				desc = "history (picker)",
 			},
 			{
 				"<leader>b",
-				"<cmd>FzfLua buffers cwd_only=true<cr>",
-				desc = "Buffer list",
+				function()
+					vim.cmd("FzfLua buffers cwd_only=true")
+				end,
+				desc = "buffers (picker)",
 			},
 			{
 				"<leader>z",
-				"<cmd>FzfLua zoxide<cr>",
-				desc = "Zoxide",
+				function()
+					require("pickers.zoxide").zoxide()
+				end,
+				desc = "zoxide (picker)",
 			},
 			{
 				"<leader>gC",
-				"<cmd>FzfLua git_bcommits<cr>",
-				desc = "Git commits (buffer)",
+				function()
+					vim.cmd("FzfLua git_bcommits")
+				end,
+				desc = "git buffer commits (picker)",
 			},
 			{
-				"<leader>/",
-				"<cmd>FzfLua live_grep path_shorten=true multiline=2<cr>",
-				desc = "Grep workspace",
+				"<leader>s",
+				function()
+					vim.cmd("FzfLua live_grep path_shorten=true multiline=2 resume=true")
+				end,
+				desc = "search workspace (buffer)",
 			},
 			{
-				"<leader><bslash>",
-				"<cmd>FzfLua lgrep_curbuf<cr>",
-				desc = "Grep buffer",
+				"<leader>S",
+				function()
+					vim.cmd("FzfLua lgrep_curbuf")
+				end,
+				desc = "search buffer (buffer)",
 			},
 		},
 		opts = function()
@@ -163,6 +216,7 @@ return {
 				commands = { sort_lastused = true },
 				manpages = { previewer = "man_native" },
 				helptags = { previewer = "help_native" },
+				zoxide = { formatter = "path.dirname_first" },
 				lsp = {
 					symbol_fmt = function(s)
 						return s:lower() .. "\t"
@@ -200,8 +254,10 @@ return {
 		keys = {
 			{
 				"<leader>f",
-				"<cmd>FzfLua frecency cwd_only=true<cr>",
-				desc = "Find files",
+				function()
+					vim.cmd("FzfLua frecency cwd_only=true")
+				end,
+				desc = "files by frecency (picker)",
 			},
 		},
 		opts = {
@@ -318,11 +374,11 @@ return {
 		event = "VeryLazy",
 		keys = {
 			{
-				"<leader>w",
+				"<leader>k",
 				function()
 					require("which-key").show()
 				end,
-				desc = "Toggle which-key",
+				desc = "Keymaps",
 			},
 		},
 		opts = function()
@@ -347,28 +403,36 @@ return {
 		config = function(_, opts)
 			local wk = require("which-key")
 			wk.add({
-				{ "<leader>", group = "Leader commands" },
-				{ "<leader>g", group = "Git commands" },
-				{ "<leader>gh", group = "Git hunk actions" },
-				{ "<leader>p", group = "Picker commands" },
-				{ "<leader>x", group = "Extra commands" },
-				{ "<leader>xa", group = "Toggle animate/autopairs" },
-				{ "<leader>xb", group = "Toggle blame window/line" },
-				{ "<leader>xd", group = "Document symbols/diagnostics" },
-				{ "<leader>xw", group = "Workspace symbols/diagnostics" },
-				{ "<leader>v", group = "Toggle virtual-text/lines" },
-				{ "<C-S>", group = "Split windows" },
-				{ "<C-T>", group = "Tabpage new/close" },
-				{ "[", group = "Previous" },
-				{ "]", group = "Next" },
-				{ "z", group = "Folds, spelling & align" },
-				{ "g", group = "LSP, comment, case & navigation" },
-				{ "gs", group = "Surround" },
-				{ "gr", group = "LSP symbol actions" },
-				{ "<leader>d", group = "Diffview commands" },
+				{ "<leader>", group = "leader commands" },
+				{ "<leader>g", group = "git commands" },
+				{ "<leader>gh", group = "git hunk actions" },
+				{ "<leader>x", group = "extra commands" },
+				{ "<leader>xa", group = "animate/autopairs toggle" },
+				{ "<leader>xb", group = "blame window/line toggle" },
+				{ "<leader>xd", group = "document symbols/diagnostics" },
+				{ "<leader>w", group = "workspace symbols/diagnostics" },
+				{ "<leader>v", group = "virtual-text/lines toggle" },
+				{ "<C-S>", group = "split windows" },
+				{ "<C-W>", group = "windows" },
+				{ "<C-T>", group = "tabpage new/close" },
+				{ "[", group = "previous" },
+				{ "]", group = "next" },
+				{ "z", group = "folds, spelling & align" },
+				{ "g", group = "symbol, comment, case & navigation" },
+				{ "gs", group = "surround" },
+				{ '"', group = "registers" },
+				{ "`", group = "marks" },
+				{ "'", group = "marks" },
+				{ "gr", group = "symbol actions" },
+				{ "<leader>d", group = "diffview commands" },
 				{ "<leader>db", group = "DAP commands", cond = conf.dap_enabled },
-				{ "<leader>n", group = "Notes commands (zk)" },
-				{ "go", group = "Otter symbols (code block)", cond = conf.lsp_enabled },
+				{ "<leader>n", group = "notes commands (zk)" },
+
+				-- Rename of built-ins
+				{ "<C-R>", desc = "redo" },
+				{ "u", desc = "undo" },
+				{ "P", desc = "paste above" },
+				{ "p", desc = "paste below" },
 			})
 			if opts then
 				wk.setup(opts)
@@ -384,51 +448,63 @@ return {
 				function()
 					vim.cmd("Gitsigns toggle_signs")
 				end,
-				desc = "Toggle gitdiff signs",
+				desc = "gitdiff signs toggle",
 			},
 			{
 				"[g",
-				"<cmd>Gitsigns prev_hunk<cr>",
-				desc = "Previous hunk",
+				function()
+					vim.cmd("Gitsigns prev_hunk")
+				end,
+				desc = "previous git hunk",
 			},
 			{
 				"]g",
-				"<cmd>Gitsigns next_hunk<cr>",
-				desc = "Next hunk",
+				function()
+					vim.cmd("Gitsigns next_hunk")
+				end,
+				desc = "next git hunk",
 			},
 			{
 				"<leader>ghp",
-				"<cmd>Gitsigns preview_hunk_inline<cr>",
-				desc = "Git preview hunks inline",
+				function()
+					vim.cmd("Gitsigns preview_hunk_inline")
+				end,
+				desc = "preview hunk inline",
 			},
 			{
 				"<leader>ghs",
-				"<cmd>Gitsigns stage_hunk<cr>",
-				desc = "Git stage hunk",
+				function()
+					vim.cmd("Gitsigns stage_hunk")
+				end,
+				desc = "stage hunk",
 			},
 			{
 				"<leader>ghu",
-				"<cmd>Gitsigns undo_stage_hunk<cr>",
-				desc = "Git undo stage hunk",
+				function()
+					vim.cmd("Gitsigns undo_stage_hunk")
+				end,
+				desc = "undo stage hunk",
 			},
 			{
 				"<leader>ghr",
-				"<cmd>Gitsigns reset_hunk<cr>",
-				desc = "Reset hunk",
+				function()
+					vim.cmd("Gitsigns reset_hunk")
+				end,
+				desc = "reset hunk",
 			},
 			{
 				"<leader>xbl",
 				function()
 					vim.cmd("Gitsigns toggle_current_line_blame")
 				end,
-				desc = "Toggle blame virtual",
+				desc = "blame virtual toggle",
 			},
 			{
 				"<leader>xbw",
 				function()
 					vim.cmd("Gitsigns blame")
 				end,
-				desc = "Toggle blame window",
+				desc = "blame window toggle",
 			},
 		},
 		opts = function()
@@ -468,23 +544,31 @@ return {
 		keys = {
 			{
 				"<leader>gc",
-				"<cmd>Neogit commit kind=tab<cr>",
-				desc = "Neogit commits",
+				function()
+					vim.cmd("Neogit commit kind=tab")
+				end,
+				desc = "neogit commits",
 			},
 			{
 				"<leader>gl",
-				"<cmd>Neogit log kind=tab<cr>",
-				desc = "Neogit logs",
+				function()
+					vim.cmd("Neogit log kind=tab")
+				end,
+				desc = "neogit logs",
 			},
 			{
 				"<leader>gb",
-				"<cmd>Neogit branch<cr>",
-				desc = "Neogit branches",
+				function()
+					vim.cmd("Neogit branch")
+				end,
+				desc = "neogit branches",
 			},
 			{
 				"<leader>gg",
-				"<cmd>Neogit kind=tab<cr>",
-				desc = "Neogit",
+				function()
+					vim.cmd("Neogit kind=tab")
+				end,
+				desc = "neogit",
 			},
 		},
 		opts = function()
@@ -552,6 +636,15 @@ return {
 	{ -- (grug-far.nvim) Search and replace
 		"MagicDuck/grug-far.nvim",
 		cmd = { "GrugFar" },
+		keys = {
+			{
+				"<leader>G",
+				function()
+					vim.cmd("GrugFar")
+				end,
+				desc = "grugfar",
+			},
+		},
 		opts = {
 			disableBufferLineNumbers = true,
 			resultsSeparatorLineChar = "─",
@@ -570,28 +663,28 @@ return {
 				function()
 					require("quicker").toggle()
 				end,
-				desc = "Toggle quickfix",
+				desc = "quickfix toggle",
 			},
 			{
 				"<leader>l",
 				function()
 					require("quicker").toggle({ loclist = true })
 				end,
-				desc = "Toggle location list",
+				desc = "location list toggle",
 			},
 			{
 				">",
 				function()
 					require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
 				end,
-				desc = "Expand quickfix context",
+				desc = "expand quickfix context",
 			},
 			{
 				"<",
 				function()
 					require("quicker").collapse()
 				end,
-				desc = "Collapse quickfix context",
+				desc = "collapse quickfix context",
 			},
 		},
 		---@module "quicker"
@@ -628,16 +721,18 @@ return {
 		"stevearc/overseer.nvim",
 		keys = {
 			{
-				"<leader>xo",
+				"<leader>o",
 				function()
 					vim.cmd("OverseerToggle")
 				end,
-				desc = "Toggle Overseer",
+				desc = "overseer toggle",
 			},
 			{
 				"<leader>r",
-				"<cmd>OverseerRun<cr>",
-				desc = "Run tasks (Overseer)",
+				function()
+					vim.cmd("OverseerRun")
+				end,
+				desc = "run tasks (overseer)",
 			},
 		},
 		opts = function()
@@ -667,20 +762,24 @@ return {
 		keys = {
 			{
 				"}",
-				"<cmd>AerialNext<CR>",
-				desc = "Next symbol",
+				function()
+					vim.cmd("AerialNext")
+				end,
+				desc = "next symbol",
 			},
 			{
 				"{",
-				"<cmd>AerialPrev<CR>",
-				desc = "Previous symbol",
+				function()
+					vim.cmd("AerialPrev")
+				end,
+				desc = "previous symbol",
 			},
 			{
 				"<leader>a",
 				function()
 					vim.cmd("AerialToggle")
 				end,
-				desc = "Toggle aerial",
+				desc = "aerial toggle",
 			},
 		},
 		opts = {
@@ -725,18 +824,24 @@ return {
 		keys = {
 			{
 				"<leader>dh",
-				"<cmd>DiffviewFileHistory<cr>",
-				desc = "Open diffview history",
+				function()
+					vim.cmd("DiffviewFileHistory")
+				end,
+				desc = "open diffview history",
 			},
 			{
 				"<leader>dd",
-				"<cmd>DiffviewOpen<cr>",
-				desc = "Open diffview",
+				function()
+					vim.cmd("DiffviewOpen")
+				end,
+				desc = "open diffview",
 			},
 			{
 				"<leader>dc",
-				"<cmd>DiffviewClose<cr>",
-				desc = "Close diffview",
+				function()
+					vim.cmd("DiffviewClose")
+				end,
+				desc = "close diffview",
 			},
 		},
 		opts = {
@@ -766,32 +871,32 @@ return {
 			{
 				"co",
 				"<Plug>(git-conflict-ours)",
-				desc = "Choose ours (conflict)",
+				desc = "choose ours (conflict)",
 			},
 			{
 				"ct",
 				"<Plug>(git-conflict-theirs)",
-				desc = "Choose theirs (conflict)",
+				desc = "choose theirs (conflict)",
 			},
 			{
 				"cb",
 				"<Plug>(git-conflict-both)",
-				desc = "Choose both (conflict)",
+				desc = "choose both (conflict)",
 			},
 			{
 				"cn",
 				"<Plug>(git-conflict-none)",
-				desc = "Choose none (conflict)",
+				desc = "choose none (conflict)",
 			},
 			{
 				"]x",
 				"<Plug>(git-conflict-next-conflict)",
-				desc = "Next conflict",
+				desc = "next conflict",
 			},
 			{
 				"[x",
 				"<Plug>(git-conflict-prev-conflict)",
-				desc = "Previous conflict",
+				desc = "previous conflict",
 			},
 		},
 		opts = function()
@@ -833,7 +938,7 @@ return {
 				function()
 					vim.cmd("UndotreeToggle")
 				end,
-				desc = "Toggle undotree",
+				desc = "undotree toggle",
 			},
 		},
 		config = function()

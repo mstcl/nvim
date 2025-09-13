@@ -34,7 +34,7 @@ function M.start()
 
 	vim.keymap.set("n", "q", function()
 		vim.cmd("tabclose")
-	end, { buffer = true, desc = "Quit select mode and return to previous tab" })
+	end, { buffer = true, desc = "quit select mode and return to previous tab" })
 end
 
 return M

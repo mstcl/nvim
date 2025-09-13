@@ -18,30 +18,38 @@ return {
 		keys = {
 			{
 				"<leader>dbc",
-				"<cmd>DapContinue<cr>",
-				desc = "Debug: Continue",
+				function()
+					vim.cmd("DapContinue")
+				end,
+				desc = "continue",
 			},
 			{
 				"<leader>dbo",
-				"<cmd>DapStepOver<cr>",
-				desc = "Debug: Step over",
+				function()
+					vim.cmd("DapStepOver")
+				end,
+				desc = "step over",
 			},
 			{
 				"<leader>dbO",
-				"<cmd>DapStepOut<cr>",
-				desc = "Debug: Step out",
+				function()
+					vim.cmd("DapStepOut")
+				end,
+				desc = "step out",
 			},
 			{
 				"<leader>dbi",
-				"<cmd>DapStepIn<cr>",
-				desc = "Debug: Step into",
+				function()
+					vim.cmd("DapStepIn")
+				end,
+				desc = "step into",
 			},
 			{
 				"<leader>dbk",
 				function()
 					vim.cmd("DapToggleBreakpoint")
 				end,
-				desc = "Debug: breakpoint toggle",
+				desc = "breakpoint toggle",
 			},
 		},
 	},
@@ -72,11 +80,11 @@ return {
 		},
 		keys = {
 			{
-				"<leader>xd",
+				"<leader>D",
 				function()
 					vim.cmd("lua require('dapui').toggle()")
 				end,
-				desc = "Toggle DAP ui",
+				desc = "DAP UI toggle",
 			},
 		},
 		opts = {

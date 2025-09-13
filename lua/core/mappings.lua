@@ -2,84 +2,88 @@ local map = vim.keymap.set
 
 map("n", "<leader>xl", function()
 	vim.cmd("Lazy show")
-end, { desc = "Toggle Lazy panel" })
+end, { desc = "lazy panel toggle" })
 
-map({ "n", "v" }, "<space>", ":", { remap = false, desc = "Command", silent = true })
+map({ "n", "v" }, "<space>", ":", { remap = false, desc = "command", silent = true })
 
 -- UI toggles
 map("n", "<C-L>", function()
 	vim.cmd("Clear")
-end, { desc = "Clear screen & highlights", noremap = false, silent = true })
+end, { desc = "clear screen & highlights", noremap = false, silent = true })
 
 map("n", "<C-N>", function()
 	vim.cmd("ToggleNumber")
-end, { desc = "Cycle number mode", noremap = false, silent = true })
+end, { desc = "cycle number mode", noremap = false, silent = true })
 
-map("n", "<leader>s", function()
+map("n", "<leader>C", function()
 	vim.cmd("ToggleScrolloff")
-end, { desc = "Toggle scrolloff", noremap = false, silent = true })
+end, { desc = "centered cursor", noremap = false, silent = true })
 
 map("n", "<leader>xs", function()
 	vim.cmd("ToggleSpell")
-end, { desc = "Toggle spell checking", noremap = false, silent = true })
+end, { desc = "spell toggle", noremap = false, silent = true })
 
 map("n", "<leader>xn", function()
 	vim.cmd("ToggleList")
-end, { desc = "Toggle non-text characters", noremap = false, silent = true })
+end, { desc = "non-text characters toggle", noremap = false, silent = true })
 
 map("n", "<leader>c", function()
 	vim.cmd("ToggleCursorLine")
-end, { desc = "Toggle cursorline", noremap = false, silent = true })
+end, { desc = "cursorline toggle", noremap = false, silent = true })
 
 map("n", "<leader>xf", function()
 	vim.cmd("ToggleFoldColumn")
-end, { desc = "Toggle foldcolumn", noremap = false, silent = true })
+end, { desc = "foldcolumn toggle", noremap = false, silent = true })
 
 map("n", "<leader>xc", function()
 	vim.cmd("ToggleColorColumn")
-end, { desc = "Toggle cursorcolumn", noremap = false, silent = true })
+end, { desc = "cursorcolumn toggle", noremap = false, silent = true })
 
 map("n", "<leader>xp", function()
 	vim.cmd("PasteMode")
-end, { desc = "Enter paste mode", noremap = false, silent = true })
+end, { desc = "paste mode", noremap = false, silent = true })
 
 -- Window splitting
 map("n", "<C-S>v", function()
 	vim.cmd("vsplit")
-end, { desc = "Split vertical", noremap = false, silent = true })
+end, { desc = "split vertical", noremap = false, silent = true })
 
 map("n", "<C-S>h", function()
 	vim.cmd("split")
-end, { desc = "Split horizontal", noremap = false, silent = true })
+end, { desc = "split horizontal", noremap = false, silent = true })
 
 -- Searching
-map("n", "n", "nzz", { desc = "Search previous result" })
-map("n", "N", "Nzz", { desc = "Search next result" })
-map("n", "*", "*zz", { desc = "Search matching forward (word)" })
-map("n", "#", "#zz", { desc = "Search matching backward (word)" })
-map("n", "g*", "g*zz", { desc = "Search matching backward" })
-map("n", "g#", "g#zz", { desc = "Search matching backward" })
+map("n", "n", "nzz", { desc = "search previous result" })
+map("n", "N", "Nzz", { desc = "search next result" })
+map("n", "*", "*zz", { desc = "search matching forward (word)" })
+map("n", "#", "#zz", { desc = "search matching backward (word)" })
+map("n", "g*", "g*zz", { desc = "search matching backward" })
+map("n", "g#", "g#zz", { desc = "search matching backward" })
 
 -- Indenting
-map("x", "<", "<gv", { desc = "Unindent" })
-map("x", ">", ">gv", { desc = "Indent" })
+map("x", "<", "<gv", { desc = "unindent" })
+map("x", ">", ">gv", { desc = "indent" })
 
 -- Folding
-map("n", "<S-Tab>", "za", { desc = "Toggle current fold" })
+map("n", "<S-Tab>", "za", { desc = "fold toggle" })
 
 -- Better search
-map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
-map("x", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
-map("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
-map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search Result" })
-map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
-map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
+map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "next search result" })
+map("x", "n", "'Nn'[v:searchforward]", { expr = true, desc = "next Search result" })
+map("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "next Search result" })
+map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "prev search result" })
+map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "prev search result" })
+map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "prev search result" })
 
 -- Tab mappings
-map("n", "]t", "gt", { desc = "Next tabpage" })
-map("n", "[t", "gT", { desc = "Previous tabpage" })
-map("n", "<C-T>n", "<cmd>tabnew<cr>", { desc = "New tab" })
-map("n", "<C-T>c", "<cmd>tabclose<cr>", { desc = "Close tab" })
+map("n", "]t", "gt", { desc = "next tabpage" })
+map("n", "[t", "gT", { desc = "previous tabpage" })
+map("n", "<C-T>n", function()
+	vim.cmd("tabnew")
+end, { desc = "new tab" })
+map("n", "<C-T>c", function()
+	vim.cmd("tabclose")
+end, { desc = "close tab" })
 
 -- save original gx to use as fallback
 local old_gx = vim.fn.maparg("gx", "n", nil, true)
@@ -90,9 +94,9 @@ map("n", "gx", function()
 	else
 		old_gx.callback()
 	end
-end, { desc = "Follow word with xdg-open" })
+end, { desc = "follow word with xdg-open" })
 
 -- open terminal
 map("n", "<C-Bslash>", function()
 	require("core.terminal").Toggle()
-end, { desc = "Toggle terminal", noremap = false, silent = true })
+end, { desc = "quake terminal toggle", noremap = false, silent = true })

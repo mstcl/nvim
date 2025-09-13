@@ -5,4 +5,4 @@ setlocal.expandtab = true
 
 local map = vim.keymap.set
 
-map("n", "mr", require("quarto.runner").run_cell, { desc = "Run cell", buffer = true })
+map("n", "mr", require("quarto.runner").run_cell, { desc = "run cell", buffer = true })
