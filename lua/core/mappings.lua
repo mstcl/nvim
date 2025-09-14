@@ -40,7 +40,7 @@ map("n", "<leader>xc", function()
 end, { desc = "cursorcolumn toggle", noremap = false, silent = true })
 
 map("n", "<leader>Q", function()
-	vim.cmd("PasteMode")
+	vim.cmd("QuietMode")
 end, { desc = "quiet mode", noremap = false, silent = true })
 
 -- Window splitting
