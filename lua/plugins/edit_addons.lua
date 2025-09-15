@@ -372,7 +372,7 @@ return {
 				sh = { "shfmt" },
 				bash = { "shfmt" },
 				zsh = { "shfmt" },
-				go = { "goimports", "gofumpt", "gofmt", "golines" },
+				go = { "goimports", "gofumpt", "gofmt", "golines", "gci" },
 				terraform = { "terraform_fmt" },
 				hcl = { "hcl" },
 				python = { "ruff_format", "ruff_organize_imports", "ruff_fix" },
