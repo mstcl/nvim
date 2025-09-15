@@ -613,7 +613,7 @@ return {
 				},
 				commit_view = { kind = "replace" },
 				commit_editor = { kind = "vsplit", staged_diff_split_kind = "vsplit" },
-				integrations = { fzf_lua = true },
+				integrations = { fzf_lua = true, diffview = true },
 				signs = {
 					hunk = { " ", " " },
 					item = { "▸", "▾" },

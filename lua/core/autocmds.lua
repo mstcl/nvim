@@ -26,6 +26,15 @@ augroup("hideComponents", {
 			end
 		end,
 	},
+}, {
+	"FileType",
+	{
+		desc = "hide components",
+		pattern = "Neogit*",
+		callback = function()
+			vim.wo.colorcolumn = ""
+		end,
+	},
 })
 
 augroup("altWinHighlight", {
