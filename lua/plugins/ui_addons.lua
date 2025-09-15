@@ -109,7 +109,7 @@ return {
 						return " " .. "[" .. notif.level .. "]" .. " " .. notif.msg .. " "
 					end,
 				},
-				lsp_progress = { enable = true },
+				lsp_progress = { enable = false },
 				window = { max_width_share = 1, winblend = 0, config = { border = conf.border } },
 			}
 		end,
