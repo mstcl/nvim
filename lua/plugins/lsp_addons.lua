@@ -110,7 +110,7 @@ return {
 		end,
 		config = function(_, opts)
 			if opts then
-				require("null-ls").setup(opts)
+				require("null-ls").setup({ opts })
 			end
 		end,
 	},
