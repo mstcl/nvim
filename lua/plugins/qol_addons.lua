@@ -1002,6 +1002,7 @@ return {
 				"<leader>T",
 				function()
 					vim.cmd("NvimTreeToggle")
+					vim.cmd("wincmd p")
 				end,
 				desc = "tree toggle",
 			},
@@ -1017,6 +1018,10 @@ return {
 				filters = {
 					dotfiles = true,
 					git_ignored = false,
+				},
+				update_focused_file = {
+					enable = true,
+					update_root = true,
 				},
 				view = { width = 35 },
 				renderer = {
@@ -1075,11 +1080,11 @@ return {
 				},
 			})
 			require("nvim-tree.view").View.winopts.foldcolumn = "0"
-			require("nvim-tree.view").View.winopts.cursorline = false
+			require("nvim-tree.view").View.winopts.cursorline = true
 			require("nvim-tree.view").View.winopts.statuscolumn = ""
 			require("nvim-tree.view").View.winopts.colorcolumn = ""
 			require("nvim-tree.view").View.winopts.signcolumn = "no"
-			require("nvim-tree.view").View.winopts.winhighlight = "Normal:CursorLine"
+			require("nvim-tree.view").View.winopts.winhighlight = "Normal:CursorLine,Cursorline:DiffText"
 		end,
 	},
 }
