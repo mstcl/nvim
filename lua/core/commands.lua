@@ -94,3 +94,11 @@ create_command("MinimalMode", function()
 	vim.wo.colorcolumn = ""
 	vim.wo.signcolumn = "no"
 end, {})
+
+-- Get latest commit hash
+create_command("GetCommitHash", function()
+	local hash = vim.fn.system("git rev-parse HEAD")
+	vim.fn.setreg('"', hash)
+	vim.fn.setreg("+", hash)
+	vim.notify("Copied commit hash to clipboard", vim.log.levels.INFO)
+end, {})

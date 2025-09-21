@@ -612,7 +612,7 @@ return {
 						tree = "https://codeberg.org/${owner}/${repository}/src/branch/${branch_name}",
 					},
 				},
-				disable_insert_on_commit = false,
+				disable_insert_on_commit = "auto",
 				disable_context_highlighting = true,
 				disable_line_numbers = true,
 				disable_relative_line_numbers = true,

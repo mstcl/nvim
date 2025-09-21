@@ -102,3 +102,8 @@ end, { desc = "follow word with xdg-open" })
 map("n", "<C-Bslash>", function()
 	require("core.terminal").Toggle()
 end, { desc = "quake terminal toggle", noremap = false, silent = true })
+
+-- copy commit hash
+map("n", "<leader>gy", function()
+	vim.cmd("GetCommitHash")
+end, { desc = "yank commit hash", noremap = false, silent = true })
