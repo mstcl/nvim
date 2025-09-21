@@ -1,5 +1,5 @@
 diff --git a/README.md b/README.md
-index ff5be181..86fd0242 100644
+index ebe7bb90..c9b0f5e9 100644
 --- a/README.md
 +++ b/README.md
 @@ -47,6 +47,7 @@ Here's an example spec for [Lazy](https://github.com/folke/lazy.nvim), but you'r
@@ -18,7 +18,7 @@ index ff5be181..86fd0242 100644
 +  log_pager = nil,
    -- Show message with spinning animation when a git command is running.
    process_spinner = false,
-   -- Used to generate URL's for branch popup action "pull request".
+   -- Used to generate URL's for branch popup action "pull request", "open commit" and "open tree"
 diff --git a/doc/neogit.txt b/doc/neogit.txt
 index 73f77647..d9c180a3 100644
 --- a/doc/neogit.txt
@@ -86,10 +86,10 @@ index 2fd54566..40959902 100644
  
  M.List = Component.new(function(props)
 diff --git a/lua/neogit/config.lua b/lua/neogit/config.lua
-index 6f65ac03..1c31d6d3 100644
+index 8b3c7fff..261b0e98 100644
 --- a/lua/neogit/config.lua
 +++ b/lua/neogit/config.lua
-@@ -340,6 +340,7 @@ end
+@@ -345,6 +345,7 @@ end
  ---@field graph_style? NeogitGraphStyle Style for graph
  ---@field commit_date_format? string Commit date format
  ---@field log_date_format? string Log date format
@@ -97,7 +97,7 @@ index 6f65ac03..1c31d6d3 100644
  ---@field disable_hint? boolean Remove the top hint in the Status buffer
  ---@field disable_context_highlighting? boolean Disable context highlights based on cursor position
  ---@field disable_signs? boolean Special signs to draw for sections etc. in Neogit
-@@ -396,6 +397,7 @@ function M.get_default_values()
+@@ -401,6 +402,7 @@ function M.get_default_values()
      graph_style = "ascii",
      commit_date_format = nil,
      log_date_format = nil,
@@ -240,10 +240,10 @@ index ae737977..15c8f237 100644
  ---@field align_right integer|nil
  ---@field padding_left integer
 diff --git a/lua/neogit/lib/ui/init.lua b/lua/neogit/lib/ui/init.lua
-index f2d6bfb1..ccfa852f 100644
+index 225cc5af..d5d0d0ed 100644
 --- a/lua/neogit/lib/ui/init.lua
 +++ b/lua/neogit/lib/ui/init.lua
-@@ -729,6 +729,7 @@ function Ui:update()
+@@ -712,6 +712,7 @@ function Ui:update()
      self.buf:set_highlights(renderer.buffer.highlight)
      self.buf:set_extmarks(renderer.buffer.extmark)
      self.buf:set_line_highlights(renderer.buffer.line_highlight)

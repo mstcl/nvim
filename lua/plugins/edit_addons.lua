@@ -417,11 +417,14 @@ return {
 	{ -- (beam.nvim) Remote operation
 		"Piotr1215/beam.nvim",
 		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+		commit = "5c59b89ed8287ecb69467eb52326b1d83bc8d377",
+		cond = false,
 		event = "VeryLazy",
 		opts = function()
 			return {
 				prefix = "gb",
 				beam_scope = { enabled = false },
+				show_discovery_notification = false,
 				resolved_conflicts = { "m" },
 			}
 		end,

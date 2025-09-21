@@ -591,8 +591,13 @@ return {
 		opts = function()
 			return {
 				git_services = {
-					["g.beee.ps"] = "https://g.beee.ps/${owner}/${repository}/compare/master...${branch_name}?expand=1",
+					["g.beee.ps"] = {
+						pull_request = "https://g.beee.ps/${owner}/${repository}/compare/master...${branch_name}?expand=1",
+						commit = "https://g.beee.ps/${owner}/${repository}/commit/${oid}",
+						tree = "https://g.beee.ps/${owner}/${repository}/src/branch/${branch_name}",
+					},
 				},
+				disable_insert_on_commit = false,
 				disable_context_highlighting = true,
 				disable_line_numbers = true,
 				disable_relative_line_numbers = true,
