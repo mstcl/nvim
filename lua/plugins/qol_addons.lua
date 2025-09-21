@@ -596,6 +596,21 @@ return {
 						commit = "https://g.beee.ps/${owner}/${repository}/commit/${oid}",
 						tree = "https://g.beee.ps/${owner}/${repository}/src/branch/${branch_name}",
 					},
+					["git@g.beee.ps"] = {
+						pull_request = "https://g.beee.ps/${owner}/${repository}/compare/master...${branch_name}?expand=1",
+						commit = "https://g.beee.ps/${owner}/${repository}/commit/${oid}",
+						tree = "https://g.beee.ps/${owner}/${repository}/src/branch/${branch_name}",
+					},
+					["codeberg.org"] = {
+						pull_request = "https://codeberg.org/${owner}/${repository}/compare/master...${branch_name}?expand=1",
+						commit = "https://codeberg.org/${owner}/${repository}/commit/${oid}",
+						tree = "https://codeberg.org/${owner}/${repository}/src/branch/${branch_name}",
+					},
+					["git@codeberg.org"] = {
+						pull_request = "https://codeberg.org/${owner}/${repository}/compare/master...${branch_name}?expand=1",
+						commit = "https://codeberg.org/${owner}/${repository}/commit/${oid}",
+						tree = "https://codeberg.org/${owner}/${repository}/src/branch/${branch_name}",
+					},
 				},
 				disable_insert_on_commit = false,
 				disable_context_highlighting = true,
