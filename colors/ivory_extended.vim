@@ -95,7 +95,7 @@ highlight! link @constant Constant
 highlight! link @lsp.type.enumMember Constant
 highlight CurSearch guifg=NONE guibg=#dfe1e6 guisp=NONE blend=NONE gui=NONE
 highlight CursorColumn guifg=NONE guibg=#493f37 guisp=NONE blend=NONE gui=NONE
-highlight CursorLine guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
+highlight CursorLine guifg=NONE guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight! link NeogitCursorLine CursorLine
 highlight! link QuickFixLine CursorLine
 highlight! link TreesitterContext CursorLine
@@ -241,6 +241,7 @@ highlight Keyword guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight Label guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=bold
 highlight LineNr guifg=#9e8d7f guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight! link GitSignsCurrentLineBlame LineNr
+highlight LspCodeLens guifg=#837163 guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInfoBorder guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInfoFiletype guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight LspInfoList guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
@@ -446,7 +447,7 @@ highlight! link @markup.underline Underlined
 highlight! link @string.special.uri Underlined
 highlight VertSplit guifg=#edeae4 guibg=#f1efeb guisp=NONE blend=NONE gui=NONE
 highlight! link WinSeparator VertSplit
-highlight Visual guifg=NONE guibg=#edeae4 guisp=NONE blend=NONE gui=NONE
+highlight Visual guifg=NONE guibg=#e5e1d9 guisp=NONE blend=NONE gui=NONE
 highlight! link VisualNOS Visual
 highlight Warning guifg=#573e1a guibg=#d6c890 guisp=NONE blend=NONE gui=NONE
 highlight! link DiagnosticWarn Warning

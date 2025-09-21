@@ -31,9 +31,9 @@ map("n", "<leader>c", function()
 	vim.cmd("ToggleCursorLine")
 end, { desc = "cursorline toggle", noremap = false, silent = true })
 
-map("n", "<leader>xf", function()
-	vim.cmd("ToggleFoldColumn")
-end, { desc = "foldcolumn toggle", noremap = false, silent = true })
+-- map("n", "<leader>xf", function()
+-- 	vim.cmd("ToggleFoldColumn")
+-- end, { desc = "foldcolumn toggle", noremap = false, silent = true })
 
 map("n", "<leader>xc", function()
 	vim.cmd("ToggleColorColumn")
@@ -107,3 +107,12 @@ end, { desc = "quake terminal toggle", noremap = false, silent = true })
 map("n", "<leader>gy", function()
 	vim.cmd("GetCommitHash")
 end, { desc = "yank commit hash", noremap = false, silent = true })
+
+-- pair mode commands
+map("n", "<leader>xp", function()
+	vim.cmd("PairModeEnter")
+end, { desc = "Pair mode enter", noremap = false, silent = true })
+
+map("n", "<leader>xP", function()
+	vim.cmd("PairModeLeave")
+end, { desc = "Pair mode leave", noremap = false, silent = true })

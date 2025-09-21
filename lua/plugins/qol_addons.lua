@@ -168,7 +168,7 @@ return {
 					tab_title = "Directory",
 					tab_marker = "Directory",
 					live_sym = "Boolean",
-					scrollbar = "NonText",
+					scrollbar = "CursorLine",
 				},
 				fzf_colors = {
 					["fg"] = { "fg", "TelescopeNormal" },
@@ -616,7 +616,7 @@ return {
 				disable_context_highlighting = true,
 				disable_line_numbers = true,
 				disable_relative_line_numbers = true,
-				disable_signs = false,
+				disable_signs = true,
 				disable_hint = true,
 				graph_style = "unicode",
 				fetch_after_checkout = true,
@@ -663,7 +663,6 @@ return {
 					callback = function()
 						vim.b.miniindentscope_disable = true
 						vim.wo.statuscolumn = "%!v:lua.get_statuscol()"
-						vim.g.foldcolumn = false
 						vim.wo.cursorline = false
 					end,
 				},
@@ -996,6 +995,7 @@ return {
 		lazy = true,
 		cmd = {
 			"NvimTreeToggle",
+			"NvimTreeOpen",
 		},
 		keys = {
 			{
@@ -1084,7 +1084,7 @@ return {
 			require("nvim-tree.view").View.winopts.statuscolumn = ""
 			require("nvim-tree.view").View.winopts.colorcolumn = ""
 			require("nvim-tree.view").View.winopts.signcolumn = "no"
-			require("nvim-tree.view").View.winopts.winhighlight = "Normal:CursorLine,Cursorline:DiffText"
+			require("nvim-tree.view").View.winopts.winhighlight = "Normal:ColorColumn,CursorLine:CursorLine"
 		end,
 	},
 }

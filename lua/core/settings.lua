@@ -89,7 +89,6 @@ set.foldminlines = 1
 set.foldnestmax = 4
 
 -- Statuscolumn
-vim.g.foldcolumn = true
 set.laststatus = 3
 set.number = true
 set.relativenumber = true

@@ -61,18 +61,14 @@ local function pad_str(in_str, width, align)
 end
 
 function M.get_fold(lnum)
-	local fold = vim.g.foldcolumn
-	if not fold then
-		return ""
-	end
 	local fcs = vim.opt.fillchars:get()
 	local foldopen = fcs.foldopen or "▾"
 	local foldclose = fcs.foldclose or "▸"
 	if vim.fn.foldlevel(lnum) <= vim.fn.foldlevel(lnum - 1) then
-		return "%#NonText#%= "
+		return "%#LineNr#%= "
 	end
 	local str = vim.fn.foldclosed(lnum) == -1 and foldopen or foldclose
-	return "%#NonText#%=" .. str .. " "
+	return "%#LineNr#%=" .. str .. " "
 end
 
 ---Return line number in configured format.

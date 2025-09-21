@@ -56,14 +56,14 @@ create_command("ToggleCursorLine", function()
 end, {})
 
 -- Toggle foldcolumn
-create_command("ToggleFoldColumn", function()
-	vim.g.foldcolumn = not vim.g.foldcolumn
-	if not vim.g.foldcolumn then
-		vim.o.numberwidth = 3
-	else
-		vim.o.numberwidth = 4
-	end
-end, {})
+-- create_command("ToggleFoldColumn", function()
+-- vim.g.foldcolumn = not vim.g.foldcolumn
+-- if not vim.g.foldcolumn then
+-- 	vim.o.numberwidth = 3
+-- else
+-- 	vim.o.numberwidth = 4
+-- end
+-- end, {})
 
 -- Toggle colorcolumn
 create_command("ToggleColorColumn", function()
@@ -85,11 +85,9 @@ create_command("MinimalMode", function()
 	vim.b.minianimate_disable = true
 	vim.b.miniindentscope_disable = true
 	vim.wo.list = false
-	vim.g.foldcolumn = false
 	vim.wo.foldcolumn = "0"
 	vim.wo.number = false
 	vim.wo.relativenumber = false
-	vim.wo.cursorline = false
 	vim.wo.statuscolumn = ""
 	vim.wo.colorcolumn = ""
 	vim.wo.signcolumn = "no"
@@ -101,4 +99,15 @@ create_command("GetCommitHash", function()
 	vim.fn.setreg('"', hash)
 	vim.fn.setreg("+", hash)
 	vim.notify("Copied commit hash to clipboard", vim.log.levels.INFO)
+end, {})
+
+create_command("PairModeEnter", function()
+	vim.wo.cursorlineopt = "both"
+	vim.cmd("NvimTreeOpen")
+	vim.cmd("wincmd p")
+end, {})
+
+create_command("PairModeLeave", function()
+	vim.wo.cursorlineopt = "number"
+	vim.cmd("NvimTreeClose")
 end, {})
