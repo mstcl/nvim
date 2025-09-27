@@ -616,7 +616,7 @@ return {
 				disable_context_highlighting = true,
 				disable_line_numbers = true,
 				disable_relative_line_numbers = true,
-				disable_signs = true,
+				disable_signs = false,
 				disable_hint = true,
 				graph_style = "unicode",
 				fetch_after_checkout = true,
@@ -662,8 +662,9 @@ return {
 					pattern = "Neogit*",
 					callback = function()
 						vim.b.miniindentscope_disable = true
-						vim.wo.statuscolumn = "%!v:lua.get_statuscol()"
+						vim.wo.statuscolumn = ""
 						vim.wo.cursorline = false
+						vim.wo.colorcolumn = ""
 					end,
 				},
 			})

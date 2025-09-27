@@ -30,6 +30,8 @@ return {
 			render = "virtual",
 			virtual_symbol = " ■",
 			enable_named_colors = false,
+			exclude_filetypes = { "Neogit*" },
+			exclude_buftypes = { "nofile" },
 		},
 	},
 	{ -- (mini.indentscope) Indent lines *
