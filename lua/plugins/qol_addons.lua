@@ -1042,7 +1042,7 @@ return {
 						git_placement = "after",
 						glyphs = {
 							git = {
-								unstaged = "N",
+								unstaged = "M",
 								staged = "S",
 								unmerged = "U",
 								renamed = "R",
@@ -1086,6 +1086,85 @@ return {
 			require("nvim-tree.view").View.winopts.colorcolumn = ""
 			require("nvim-tree.view").View.winopts.signcolumn = "no"
 			require("nvim-tree.view").View.winopts.winhighlight = "Normal:ColorColumn,CursorLine:CursorLine"
+		end,
+	},
+	{ -- (fyler.nvim) oil x tree
+		"A7Lavinraj/fyler.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		cmd = { "Fyler" },
+		opts = function()
+			return {
+				icon_provider = "nvim_web_devicons",
+				close_on_select = false,
+				confirm_simple = true,
+				indentscope = {
+					group = "Delimiter",
+				},
+				win = {
+					win_opts = {
+						concealcursor = "nvic",
+						conceallevel = 3,
+						cursorline = true,
+						number = false,
+						winhighlight = "Normal:ColorColumn,CursorLine:CursorLine",
+						relativenumber = false,
+						wrap = false,
+					},
+					kind = "split_left_most",
+					kind_presets = {
+						split_left_most = {
+							width = "35abs",
+						},
+					},
+				},
+				git_status = {
+					symbols = {
+						Untracked = "U",
+						Added = "S",
+						Modified = "M",
+						Deleted = "D",
+						Renamed = "R",
+						Copied = "C",
+						Conflict = "X",
+						Ignored = "I",
+					},
+				},
+				icon = {
+					directory_collapsed = "",
+					directory_empty = "",
+					directory_expanded = "",
+				},
+				mappings = {
+					["q"] = "CloseView",
+					["<CR>"] = "Select",
+					["<C-t>"] = "SelectTab",
+					["<C-s>v"] = "SelectVSplit",
+					["<C-s>h"] = "SelectSplit",
+					["-"] = "GotoParent",
+					["="] = "GotoCwd",
+					["."] = "GotoNode",
+					["#"] = "CollapseAll",
+					["<BS>"] = "CollapseNode",
+				},
+			}
+		end,
+		config = function(_, opts)
+			require("fyler").setup(opts)
+			augroup("FylerWinOpts", {
+				{ "FileType" },
+				{
+					desc = "Set Fyler win options",
+					pattern = "Fyler",
+					callback = function()
+						vim.wo.cursorlineopt = "both"
+						vim.wo.colorcolumn = ""
+						vim.b.miniindentscope_disable = true
+						vim.wo.statuscolumn = ""
+						vim.wo.foldcolumn = "0"
+						vim.wo.signcolumn = "no"
+					end,
+				},
+			})
 		end,
 	},
 }

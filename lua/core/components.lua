@@ -2,6 +2,7 @@ local augroup = require("core.utils").augroup
 local lsp_signs = require("core.variables").lsp_signs
 local ignore_filetypes = {
 	"oil",
+	"Fyler",
 	"mason",
 	"NvimTree",
 	"OverseerList",
