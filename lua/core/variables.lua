@@ -146,6 +146,7 @@ M.lsp_kind_icons_padded = {}
 for key, value in pairs(M.lsp_kind_icons) do
 	M.lsp_kind_icons_padded[key] = " " .. value
 end
+
 M.lsp_sources = {
 	ansiblels = "ansible-language-server",
 	bashls = "bash-language-server",
@@ -160,6 +161,8 @@ M.lsp_sources = {
 	zk = "zk",
 	dockerls = "dockerfile-language-server",
 	terraformls = "terraform-ls",
+	tflint = "tflint",
+	tofuls = "tofu-ls",
 }
 
 M.formatting_sources = {
@@ -190,6 +193,7 @@ M.diagnostics_sources = {
 	tfsec = "tfsec",
 	terraform_validate = "",
 	codespell = "codespell",
+	trivy = "trivy",
 }
 
 M.code_action_sources = {
