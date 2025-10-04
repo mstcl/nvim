@@ -1,9 +1,8 @@
+local augroup = require("core.utils").augroup
 local on_attach = require("lsp.utils").on_attach
 local conf = require("core.variables")
 local condition = conf.lsp_enabled
-local HOVER_SOURCES = conf.hover_sources
 local DIAGNOSTICS_COMPATIBLE_SOURCES = conf.get_compatible_sources(conf.diagnostics_sources)
-local CODE_ACTION_COMPATIBLE_SOURCES = conf.get_compatible_sources(conf.code_action_sources)
 
 -- Plugins that add to nvim LSP functionalities
 return {
@@ -44,74 +43,29 @@ return {
 			})
 		end,
 	},
-	{ -- (none-ls.nvim) Linter/diagnostic
-		"nvimtools/none-ls.nvim",
-		cond = condition,
-		event = "BufRead",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = function()
-			local null_ls = require("null-ls")
-			local null_sources = {}
-
-			for _, source in ipairs(HOVER_SOURCES) do
-				table.insert(null_sources, null_ls.builtins.hover[source])
-			end
-
-			for _, source in ipairs(DIAGNOSTICS_COMPATIBLE_SOURCES) do
-				if source == "commitlint" then
-					table.insert(
-						null_sources,
-						null_ls.builtins.diagnostics[source].with({
-							filetypes = { "NeogitCommitMessage", "gitcommit" },
-							env = {
-								NODE_PATH = vim.fn.expand(
-									"$HOME/.local/share/nvim/mason/packages/commitlint/node_modules"
-								),
-							},
-							extra_args = { "--extends", "@commitlint/config-conventional" },
-						})
-					)
-				elseif source == "proselint" then
-					table.insert(
-						null_sources,
-						null_ls.builtins.diagnostics[source].with({
-							filetypes = { "markdown", "quarto", "org", "tex" },
-						})
-					)
-				elseif source == "golangci_lint" then
-					table.insert(
-						null_sources,
-						null_ls.builtins.diagnostics[source].with({
-							args = { "run", "--fix=false", "--out-format=json", "--concurency=4" },
-							extra_args = { "--enable", "goconst,gocritic,gosec,wsl,sloglint,unconvert,unparam" },
-						})
-					)
-				else
-					table.insert(null_sources, null_ls.builtins.diagnostics[source])
-				end
-			end
-
-			for _, source in ipairs(CODE_ACTION_COMPATIBLE_SOURCES) do
-				if source == "proselint" then
-					table.insert(
-						null_sources,
-						null_ls.builtins.code_actions[source].with({
-							filetypes = { "markdown", "quarto", "org", "tex" },
-						})
-					)
-				else
-					table.insert(null_sources, null_ls.builtins.code_actions[source])
-				end
-			end
-			return {
-				sources = null_sources,
-				on_attach = on_attach,
+	{ -- (nvim-lint)
+		"mfussenegger/nvim-lint",
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			require("lint").linters_by_ft = {
+				lua = { "selene" },
+				dockerfile = { "hadolint", "trivy" },
+				gitcommit = { "commitlint" },
+				terraform = { "trivy", "terraform_validate" },
+				ansible = { "ansible_lint" },
+				go = { "golangcilint" },
 			}
-		end,
-		config = function(_, opts)
-			if opts then
-				require("null-ls").setup({ opts })
-			end
+
+			augroup("lint", {
+				{ "BufEnter", "BufWritePost", "InsertLeave" },
+				{
+					desc = "run linter",
+					callback = function()
+						require("lint").try_lint()
+						require("lint").try_lint("codespell")
+					end,
+				},
+			})
 		end,
 	},
 	{ -- (otter.nvim) LSP completion in code blocks

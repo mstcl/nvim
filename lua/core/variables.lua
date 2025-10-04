@@ -179,26 +179,15 @@ M.formatting_sources = {
 	opa = "opa",
 }
 
-M.hover_sources = {
-	"dictionary",
-	"printenv",
-}
-
 M.diagnostics_sources = {
 	hadolint = "hadolint",
 	commitlint = "commitlint",
 	ansiblelint = "ansible-lint",
 	selene = "selene",
 	golangci_lint = "golangci-lint",
-	tfsec = "tfsec",
 	terraform_validate = "",
 	codespell = "codespell",
 	trivy = "trivy",
-}
-
-M.code_action_sources = {
-	impl = "impl",
-	gomodifytags = "gomodifytags",
 }
 
 M.starter_ascii = "  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n"
@@ -250,9 +239,6 @@ local join_mason_sources = function()
 		table.insert(M.all_mason_sources, value)
 	end
 	for _, value in ipairs(M.get_mason_sources(M.formatting_sources)) do
-		table.insert(M.all_mason_sources, value)
-	end
-	for _, value in ipairs(M.get_mason_sources(M.code_action_sources)) do
 		table.insert(M.all_mason_sources, value)
 	end
 	for _, value in ipairs(M.get_mason_sources(M.lsp_sources)) do
