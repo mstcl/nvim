@@ -181,7 +181,6 @@ M.formatting_sources = {
 
 M.diagnostics_sources = {
 	hadolint = "hadolint",
-	commitlint = "commitlint",
 	ansiblelint = "ansible-lint",
 	selene = "selene",
 	golangci_lint = "golangci-lint",

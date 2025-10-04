@@ -50,7 +50,6 @@ return {
 			require("lint").linters_by_ft = {
 				lua = { "selene" },
 				dockerfile = { "hadolint", "trivy" },
-				gitcommit = { "commitlint" },
 				terraform = { "trivy", "terraform_validate" },
 				ansible = { "ansible_lint" },
 				go = { "golangcilint" },
