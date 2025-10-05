@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined_variable
 vim.g.mapleader = ","
 vim.g.maplocalleader = ",."
 

@@ -28,30 +28,6 @@ augroup("hideComponents", {
 	},
 })
 
-augroup("altWinHighlight", {
-	"FileType",
-	{
-		desc = "set background for alt windows",
-		pattern = { "aerial" },
-		callback = function()
-			vim.wo.winhighlight = "Normal:CursorLine"
-		end,
-	},
-}, {
-	"BufEnter",
-	{
-		desc = "set background for alt windows",
-		pattern = "*",
-		callback = function()
-			local filetypes = { "DiffviewFiles", "DiffviewFileHistory" }
-			local current_ft = vim.bo.filetype
-			if vim.tbl_contains(filetypes, current_ft) then
-				vim.wo.winhighlight = "Normal:CursorLine"
-			end
-		end,
-	},
-})
-
 augroup("editing", {
 	"BufEnter",
 	{

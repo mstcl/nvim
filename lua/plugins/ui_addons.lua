@@ -82,6 +82,7 @@ return {
 						"qf",
 						"mason",
 						"NvimTree",
+						"Overseer*",
 					},
 					desc = "Disable indentscope",
 					callback = function()

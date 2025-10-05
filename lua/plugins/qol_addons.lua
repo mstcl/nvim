@@ -187,8 +187,8 @@ return {
 						["?"] = "toggle-preview",
 						["<F1>"] = "toggle-preview-ccw",
 						["<F2>"] = "toggle-preview-cw",
-						["<C-P>"] = "preview-page-down",
-						["<C-N>"] = "preview-page-up",
+						["<C-N>"] = "preview-page-down",
+						["<C-P>"] = "preview-page-up",
 						["<S-left>"] = "preview-page-reset",
 					},
 					fzf = {
@@ -682,14 +682,56 @@ return {
 				desc = "grugfar",
 			},
 		},
-		opts = {
-			disableBufferLineNumbers = true,
-			resultsSeparatorLineChar = "─",
-			spinnerStates = conf.spinner,
-			icons = {
-				enabled = false,
-			},
-		},
+		opts = function()
+			return {
+				disableBufferLineNumbers = true,
+				resultsSeparatorLineChar = "─",
+				spinnerStates = conf.spinner,
+				showInputsTopPadding = false,
+				showInputsBottomPadding = false,
+				helpLine = {
+					enabled = false,
+				},
+				icons = {
+					enabled = true,
+					searchInput = "",
+					replaceInput = "",
+					filesFilterInput = "",
+					flagsInput = "",
+					pathsInput = "",
+					resultsStatusReady = "",
+					resultsStatusError = "",
+					resultsStatusSuccess = "",
+					resultsActionMessage = "",
+					resultsEngineLeft = "[",
+					resultsEngineRight = "]",
+					resultsChangeIndicator = "",
+					resultsAddedIndicator = "",
+					resultsRemovedIndicator = "",
+					resultsDiffSeparatorIndicator = "┊",
+					historyTitle = "",
+					helpTitle = "",
+					lineNumbersEllipsis = " ",
+				},
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("grug-far").setup(opts)
+			end
+			augroup("grugfar", {
+				{ "Filetype" },
+				{
+					pattern = "grug-far",
+					callback = function()
+						vim.b.miniindentscope_disable = true
+						vim.wo.statuscolumn = ""
+						vim.wo.cursorline = false
+						vim.wo.colorcolumn = ""
+					end,
+				},
+			})
+		end,
 	},
 	{ -- (quicker.nvim) Quickfix list QOL
 		"stevearc/quicker.nvim",
@@ -822,41 +864,62 @@ return {
 				desc = "aerial toggle",
 			},
 		},
-		opts = {
-			icons = conf.lsp_kind_icons_padded,
-			guides = {
-				nested_top = " │ ",
-				mid_item = " ├─",
-				last_item = " └─",
-				whitespace = "   ",
-			},
-			ignore = {
-				unlisted_buffers = false,
-				diff_windows = true,
-				buftypes = "special",
-				wintypes = "special",
-			},
-			close_automatic_events = {
-				"unfocus",
-				"switch_buffer",
-				"unsupported",
-			},
-			-- open_automatic = function(bufnr)
-			-- 	local aerial = require("aerial")
-			-- return vim.api.nvim_win_get_width(0) > 80
-			-- 	and aerial.num_symbols(bufnr) > 6
-			-- 	and not aerial.was_closed()
-			-- 	and vim.api.nvim_buf_line_count(bufnr) > 80
-			-- 	and not vim.g.pastemode
-			-- end,
-			show_guides = true,
-			layout = {
-				placement = "edge",
-				close_on_select = false,
-				max_width = 28,
-				min_width = 28,
-			},
-		},
+		opts = function()
+			return {
+				icons = conf.lsp_kind_icons_padded,
+				guides = {
+					nested_top = " │ ",
+					mid_item = " ├─",
+					last_item = " └─",
+					whitespace = "   ",
+				},
+				ignore = {
+					unlisted_buffers = false,
+					diff_windows = true,
+					buftypes = "special",
+					wintypes = "special",
+				},
+				close_automatic_events = {
+					"unfocus",
+					"switch_buffer",
+					"unsupported",
+				},
+				-- open_automatic = function(bufnr)
+				-- 	local aerial = require("aerial")
+				-- return vim.api.nvim_win_get_width(0) > 80
+				-- 	and aerial.num_symbols(bufnr) > 6
+				-- 	and not aerial.was_closed()
+				-- 	and vim.api.nvim_buf_line_count(bufnr) > 80
+				-- 	and not vim.g.pastemode
+				-- end,
+				show_guides = true,
+				layout = {
+					placement = "edge",
+					close_on_select = false,
+					max_width = 28,
+					min_width = 28,
+				},
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("aerial").setup(opts)
+			end
+
+			augroup("aerial", {
+				{ "Filetype" },
+				{
+					pattern = "aerial",
+					callback = function()
+						vim.b.miniindentscope_disable = true
+						vim.wo.statuscolumn = ""
+						vim.wo.cursorline = false
+						vim.wo.colorcolumn = ""
+						vim.wo.winhighlight = "Normal:ColorColumn"
+					end,
+				},
+			})
+		end,
 	},
 	{ -- (diffview.nvim) Powerful diff and merge tool
 		"sindrets/diffview.nvim",
@@ -884,24 +947,45 @@ return {
 				desc = "close diffview",
 			},
 		},
-		opts = {
-			signs = {
-				fold_closed = "▸",
-				fold_open = "▾",
-				done = "✓",
-			},
-			file_panel = {
-				listing_style = "list",
-				win_config = {
-					position = "left",
-					width = 40,
-					win_opts = {},
+		opts = function()
+			return {
+				signs = {
+					fold_closed = "▸",
+					fold_open = "▾",
+					done = "✓",
 				},
-			},
-			use_icons = true,
-			show_help_hints = false,
-			enhanced_diff_hl = true,
-		},
+				file_panel = {
+					listing_style = "list",
+					win_config = {
+						position = "left",
+						width = 40,
+						win_opts = {},
+					},
+				},
+				use_icons = true,
+				show_help_hints = false,
+				enhanced_diff_hl = true,
+			}
+		end,
+		config = function(_, opts)
+			if opts then
+				require("diffview").setup(opts)
+			end
+			augroup("diffview", {
+				"BufEnter",
+				{
+					desc = "set background for alt windows",
+					pattern = "*",
+					callback = function()
+						local filetypes = { "DiffviewFiles", "DiffviewFileHistory" }
+						local current_ft = vim.bo.filetype
+						if vim.tbl_contains(filetypes, current_ft) then
+							vim.wo.winhighlight = "Normal:ColorColumn"
+						end
+					end,
+				},
+			})
+		end,
 	},
 	{ -- (git-conflict.nvim) Git conflicts helper
 		"akinsho/git-conflict.nvim",
@@ -1150,7 +1234,7 @@ return {
 		end,
 		config = function(_, opts)
 			require("fyler").setup(opts)
-			augroup("FylerWinOpts", {
+			augroup("fyler", {
 				{ "FileType" },
 				{
 					desc = "Set Fyler win options",

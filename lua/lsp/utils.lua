@@ -106,7 +106,7 @@ function M.configure_builtin_diagnostic()
 				"FocusLost",
 			},
 			border = border,
-			source = "if_many",
+			source = "always",
 			focus = false,
 		},
 		severity_sort = true,

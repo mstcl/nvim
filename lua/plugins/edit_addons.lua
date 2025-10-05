@@ -180,11 +180,9 @@ return {
 				["<C-K>"] = { "show", "show_documentation", "hide_documentation" },
 				["<C-space>"] = {},
 				["<C-e>"] = {},
-				["<C-P>"] = {},
-				["<C-N>"] = {},
 				["<C-CR>"] = { "hide" },
-				["<C-U>"] = { "scroll_documentation_up", "fallback" },
-				["<C-D>"] = { "scroll_documentation_down", "fallback" },
+				["<C-P>"] = { "scroll_documentation_up", "fallback" },
+				["<C-N>"] = { "scroll_documentation_down", "fallback" },
 			},
 			completion = {
 				accept = {
