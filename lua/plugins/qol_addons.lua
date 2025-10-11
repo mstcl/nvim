@@ -91,11 +91,18 @@ return {
 				desc = "history (picker)",
 			},
 			{
+				"<leader>B",
+				function()
+					vim.cmd("FzfLua buffers")
+				end,
+				desc = "buffers (picker)",
+			},
+			{
 				"<leader>b",
 				function()
 					vim.cmd("FzfLua buffers cwd_only=true")
 				end,
-				desc = "buffers (picker)",
+				desc = "buffers cwd (picker)",
 			},
 			{
 				"<leader>z",
@@ -424,7 +431,7 @@ return {
 				{ "<leader>g", group = "git commands" },
 				{ "<leader>gh", group = "git hunk actions" },
 				{ "<leader>x", group = "extra commands" },
-				{ "<leader>B", group = "blame window/line toggle" },
+				{ "<leader>gb", group = "blame window/line toggle" },
 				{ "<leader>xd", group = "document symbols/diagnostics" },
 				{ "<leader>w", group = "workspace symbols/diagnostics" },
 				{ "<C-S>", group = "split windows" },
@@ -510,14 +517,14 @@ return {
 				desc = "reset hunk",
 			},
 			{
-				"<leader>Bl",
+				"<leader>gbl",
 				function()
 					vim.cmd("Gitsigns toggle_current_line_blame")
 				end,
 				desc = "blame virtual toggle",
 			},
 			{
-				"<leader>Bw",
+				"<leader>gbw",
 				function()
 					vim.cmd("Gitsigns blame")
 				end,
