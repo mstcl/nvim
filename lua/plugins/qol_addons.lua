@@ -1088,6 +1088,7 @@ return {
 		cmd = {
 			"NvimTreeToggle",
 			"NvimTreeOpen",
+			"NvimTreeClose",
 		},
 		keys = {
 			{
