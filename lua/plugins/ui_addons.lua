@@ -134,12 +134,6 @@ return {
 		"mcauley-penney/visual-whitespace.nvim",
 		event = { "ModeChanged" },
 		config = function(_, opts)
-			local fg = vim.api.nvim_get_hl(0, { name = "Tabline" }).bg
-			local bg = vim.api.nvim_get_hl(0, { name = "Visual" }).bg
-			vim.api.nvim_set_hl(0, "VisualNonText", {
-				bg = string.format("#%06x", bg),
-				fg = string.format("#%06x", fg),
-			})
 			if opts then
 				require("visual-whitespace").setup(opts)
 			end
@@ -159,6 +153,44 @@ return {
 				undo = { enabled = true },
 				redo = { enabled = true },
 			},
+		},
+	},
+	{
+		"b0o/incline.nvim",
+		dependencies = {
+			"nvim-tree/nvim-web-devicons",
+			"elanmed/fzf-lua-frecency.nvim",
+		},
+		event = "BufReadPost",
+		opts = {
+			hide = {
+				cursorline = true,
+			},
+			render = function(props)
+				local bufname = vim.api.nvim_buf_get_name(props.buf)
+				local filename = vim.fn.fnamemodify(bufname, ":t")
+				local extension = vim.fn.fnamemodify(filename, ":e")
+				local icon, _ = require("nvim-web-devicons").get_icon(filename, extension, { default = true })
+				local modified = ""
+
+				if icon ~= "" then
+					icon = icon .. " "
+				end
+
+				if filename == "" then
+					filename = "[No Name]"
+				end
+
+				if vim.api.nvim_get_option_value("modified", { buf = props.buf }) then
+					modified = " [+]"
+				end
+
+				return {
+					icon,
+					filename,
+					modified,
+				}
+			end,
 		},
 	},
 }

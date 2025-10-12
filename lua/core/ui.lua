@@ -51,10 +51,10 @@ _G.get_statusline = function()
 		components.hl_alt,
 		components.search,
 		--
-		components.hl_orange,
+		components.hl_yellow,
 		components.fformat,
 		--
-		components.hl_orange,
+		components.hl_yellow,
 		components.fenc,
 		-- Right most
 		components.align,

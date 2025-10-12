@@ -81,7 +81,7 @@ function M.get_scrollbar()
 	local idx = math.floor((cur - 1) / total * #sbar_chars) + 1
 
 	---@diagnostic disable-next-line: param-type-not-match, need-check-nil
-	return set_hl(sbar_chars[idx]:rep(2), "StatuslineScrollbar")
+	return set_hl(sbar_chars[idx]:rep(2), "StatusLineScrollbar")
 end
 
 ---Get modified status
@@ -91,7 +91,7 @@ function M.get_modified()
 		return ""
 	end
 
-	local hl = vim.bo.mod and "StatuslineModifiedInv" or "Statusline"
+	local hl = vim.bo.mod and "StatusLineModifiedInv" or "StatusLine"
 	return set_hl(" ● ", hl)
 end
 
@@ -103,7 +103,7 @@ function M.get_mode()
 	end
 	local mode = vim.fn.mode()
 	local mode_str = (mode == "n" and (vim.bo.ro or not vim.bo.ma)) and "RO" or modes[mode]
-	local hl = vim.bo.mod and "StatuslineModifiedInv" or "StatuslineModeInv"
+	local hl = vim.bo.mod and "StatusLineModifiedInv" or "StatusLineModeInv"
 	return set_hl(string.format("%s", mode_str), hl)
 end
 
@@ -142,10 +142,10 @@ local diagnostic_sign = {
 }
 
 local diagnostic_color = {
-	[1] = "StatuslineOrange",
-	[2] = "StatuslineYellow",
-	[3] = "StatuslineRed",
-	[4] = "StatuslineBlue",
+	[1] = "ErrorMsg",
+	[2] = "WarningMsg",
+	[3] = "InfoMsg",
+	[4] = "HintMsg",
 }
 
 ---@diagnostic disable-next-line: unnecessary-if
@@ -182,7 +182,7 @@ function M.get_lsp_diagnostic()
 
 	local cog_icon = set_hl("󰒓 ", "StatusLineAlt")
 	local clients = vim.lsp.get_clients()
-	local placeholder = set_hl("ok", "StatuslineNC")
+	local placeholder = set_hl("ok", "StatusLineNC")
 
 	if #clients == 0 then
 		return ""
@@ -315,7 +315,7 @@ function M.get_git_branch()
 
 	---@diagnostic disable-next-line: undefined-field
 	local branch = vim.b.git_branch or "nil"
-	return set_hl("@", "StatuslineAlt") .. set_hl(branch, "StatusLineNC")
+	return set_hl("@", "StatusLineAlt") .. set_hl(branch, "StatusLineNC")
 end
 
 ---Get current git branch with space
@@ -327,7 +327,7 @@ function M.get_git_branch_2()
 
 	---@diagnostic disable-next-line: undefined-field
 	local branch = vim.b.gitsigns_head or "nil"
-	return set_hl("󰘬 ", "StatuslineAlt") .. set_hl(branch, "StatusLineNC")
+	return set_hl("󰘬 ", "StatusLineAlt") .. set_hl(branch, "StatusLineNC")
 end
 
 ---Get git diffs for current buffer
@@ -340,7 +340,7 @@ function M.get_diffs()
 
 	---@diagnostic disable-next-line: undefined-field
 	local diffs = vim.b.gitsigns_status_dict
-	local git_icon = set_hl(" ", "StatuslineAlt")
+	local git_icon = set_hl(" ", "StatusLineAlt")
 
 	if diffs ~= nil then
 		local added = diffs.added or 0
@@ -349,7 +349,7 @@ function M.get_diffs()
 		if added == 0 and removed == 0 and changed == 0 then
 			return M.get_open_bracket()
 				.. git_icon
-				.. set_hl("clean", "StatuslineNC")
+				.. set_hl("clean", "StatusLineNC")
 				.. M.get_close_bracket()
 				.. M.get_padding()
 		end
@@ -358,9 +358,9 @@ function M.get_diffs()
 			.. git_icon
 			.. string.format(
 				"%s%s%s",
-				set_hl("+" .. tostring(added), "StatuslineGreen"),
-				set_hl("~" .. tostring(changed), "StatuslineMagenta"),
-				set_hl("-" .. tostring(removed), "StatuslineRed")
+				set_hl("+" .. tostring(added), "GitSignsAdd"),
+				set_hl("~" .. tostring(changed), "GitSignsChange"),
+				set_hl("-" .. tostring(removed), "GitSignsDelete")
 			)
 			.. M.get_close_bracket()
 			.. M.get_padding()
@@ -372,7 +372,7 @@ end
 ---Get file root
 ---@return string
 function M.get_root()
-	return set_hl(M.get_cwd_name(), "StatuslineNC")
+	return set_hl(M.get_cwd_name(), "StatusLineNC")
 end
 
 ---Get file path with root
@@ -383,19 +383,19 @@ function M.get_filepath()
 		return ""
 	end
 
-	local root = set_hl(M.get_cwd_name(), "StatuslineNC")
+	local root = set_hl(M.get_cwd_name(), "StatusLineNC")
 	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
-	local prefix = set_hl("@ ", "StatuslineAlt")
+	local prefix = set_hl("@ ", "StatusLineAlt")
 
 	if ft == "oil" then
-		return set_hl(string.format(" %s ", string.sub(fpath, 7)), "StatuslineMode")
+		return set_hl(string.format(" %s ", string.sub(fpath, 7)), "StatusLineMode")
 	end
 
 	if fpath == "" or fpath == "." or vim.bo.buftype == "terminal" then
 		return prefix .. root
 	end
 
-	local secondary = set_hl(string.format("/%%<%s", fpath), "StatuslineNC")
+	local secondary = set_hl(string.format("/%%<%s", fpath), "StatusLineNC")
 
 	return prefix .. root .. secondary
 end
@@ -414,7 +414,7 @@ function M.get_filename()
 	if fname == "" or vim.bo.buftype == "terminal" then
 		return "nil"
 	end
-	return set_hl(fname, "StatuslineNC")
+	return set_hl(fname, "StatusLineNC")
 end
 
 ---Get file icon
@@ -436,15 +436,15 @@ end
 function M.get_filetype()
 	local ft = vim.bo.filetype
 	if vim.bo.buftype == "terminal" then
-		return set_hl("TERMINAL", "StatuslineModeInv")
+		return set_hl("TERMINAL", "StatusLineModeInv")
 	elseif ft == "oil" then
 		return ""
 	elseif ft == "" then
 		return "[No Name]"
 	elseif vim.tbl_contains(ignore_filetypes, ft) then
-		return set_hl(string.format("%s", ft:upper()), "StatuslineModeInv")
+		return set_hl(string.format("%s", ft:upper()), "StatusLineModeInv")
 	else
-		return set_hl((ft:gsub("^%l", string.upper)), "StatuslineNC")
+		return set_hl((ft:gsub("^%l", string.upper)), "StatusLineNC")
 	end
 end
 
@@ -453,13 +453,13 @@ end
 function M.get_filetype_2()
 	local ft = vim.bo.filetype
 	if vim.bo.buftype == "terminal" then
-		return set_hl("TERMINAL", "StatuslineModeInv")
+		return set_hl("TERMINAL", "StatusLineModeInv")
 	elseif ft == "oil" then
 		return ""
 	elseif ft == "" then
 		return "[No Name]"
 	elseif vim.tbl_contains(ignore_filetypes, ft) then
-		return set_hl(string.format("%s", ft:upper()), "StatuslineModeInv")
+		return set_hl(string.format("%s", ft:upper()), "StatusLineModeInv")
 	else
 		return ""
 	end
@@ -580,9 +580,9 @@ function M.get_indentation()
 	local shiftwidth_string = vim.opt.shiftwidth:get()
 	return string.format(
 		"%s%s%s",
-		set_hl(expandtab_string, "StatuslineNC"),
+		set_hl(expandtab_string, "StatusLineNC"),
 		set_hl(":", "StatusLineAlt"),
-		set_hl(shiftwidth_string, "StatuslineNC")
+		set_hl(shiftwidth_string, "StatusLineNC")
 	)
 end
 
@@ -590,7 +590,7 @@ function M.get_delimiter()
 	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
 		return ""
 	end
-	return set_hl("·", "StatuslineAlt")
+	return set_hl("·", "StatusLineAlt")
 end
 
 -- Components
@@ -603,7 +603,7 @@ M.components = {
 	hl_modified = [[%#statuslinemodified#]],
 	hl_alt = [[%#statuslinealt#]],
 	hl_mode = [[%#statuslinemode#]],
-	hl_orange = [[%#statuslineorange#]],
+	hl_yellow = [[%#statuslineyellow#]],
 	hl_restore = [[%*]],
 	-- LSP
 	diagnostics = [[%{%v:lua.require'core.components'.get_lsp_diagnostic()%}]],

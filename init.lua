@@ -10,7 +10,9 @@ require("core.settings")
 
 -- UI setup
 require("core.ui")
+-- selene: allow(undefined_variable)
 set_statusline()
+-- selene: allow(undefined_variable)
 set_statuscol()
 
 -- Autocommands, mappings, and commands
