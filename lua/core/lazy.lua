@@ -30,7 +30,7 @@ require("lazy").setup({
 	},
 	install = {
 		missing = true,
-		colorscheme = { "ivory" },
+		colorscheme = { "tavern" },
 	},
 	ui = {
 		size = { width = 0.8, height = 0.8 },

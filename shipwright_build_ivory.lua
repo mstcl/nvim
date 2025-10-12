@@ -1,5 +1,7 @@
 ---@diagnostic disable: undefined-global
 local lushwright = require("shipwright.transform.lush")
+
+-- selene: allow(undefined_variable)
 run(
 	require("lush.ivory_extended"),
 	lushwright.to_vimscript,

@@ -480,13 +480,6 @@ highlight! link DiagnosticFloatingWarn WarningMsg
 highlight! link DiagnosticVirtualLinesWarn WarningMsg
 highlight! link DiagnosticVirtualTextWarn WarningMsg
 highlight! link ModeMsg WarningMsg
-highlight WhichKey guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight WhichKeyBorder guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight WhichKeyDesc guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight WhichKeyFloat guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight WhichKeyGroup guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight WhichKeySeparator guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
-highlight WhichKeyValue guifg=NONE guibg=NONE guisp=NONE blend=NONE gui=NONE
 highlight WinBar guifg=NONE guibg=#EDEBE5 guisp=NONE blend=NONE gui=NONE
 highlight! link WinBarNC WinBar
 highlight Yellow guifg=#523427 guibg=NONE guisp=NONE blend=NONE gui=NONE

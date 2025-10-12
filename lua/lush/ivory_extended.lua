@@ -5,7 +5,6 @@ local extended = lush.merge({
 	require("ivory"),
 	require("ivory_statusline"),
 	require("ivory_telescope"),
-	require("ivory_whichkey"),
 	require("ivory_neogit"),
 	require("ivory_mini_indentscope"),
 	require("ivory_diffview"),

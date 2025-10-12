@@ -2,6 +2,7 @@ local M = {}
 
 M.dev_plugins = {
 	"ivory",
+	"tavern",
 }
 
 M.dap_enabled = false
