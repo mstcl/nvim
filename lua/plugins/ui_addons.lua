@@ -9,8 +9,8 @@ return {
 		cmd = "Shipwright",
 		dependencies = {
 			"rktjmp/lush.nvim",
-			-- "mstcl/tavern",
-			-- "mstcl/ivory",
+			"mstcl/tavern.nvim",
+			"mstcl/ivory.nvim",
 		},
 	},
 	{ -- (nvim-highlight-colors) Highlight color blocks
