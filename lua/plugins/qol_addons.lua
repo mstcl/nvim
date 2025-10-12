@@ -979,7 +979,7 @@ return {
 				require("diffview").setup(opts)
 			end
 			augroup("diffview", {
-				"BufEnter",
+				{ "BufEnter", "ColorScheme" },
 				{
 					desc = "set background for alt windows",
 					pattern = "*",
@@ -1168,6 +1168,20 @@ return {
 							for _, w in ipairs(tree_wins) do
 								vim.api.nvim_win_close(w, true)
 							end
+						end
+					end,
+				},
+			})
+			augroup("nvimtree", {
+				{ "BufEnter", "ColorScheme" },
+				{
+					desc = "set background for alt windows",
+					pattern = "*",
+					callback = function()
+						local filetypes = { "NvimTree" }
+						local current_ft = vim.bo.filetype
+						if vim.tbl_contains(filetypes, current_ft) then
+							vim.wo.winhighlight = "Normal:ColorColumn,CursorLine:CursorLine"
 						end
 					end,
 				},
