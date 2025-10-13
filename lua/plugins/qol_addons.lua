@@ -1,7 +1,3 @@
-local augroup = require("core.utils").augroup
-local conf = require("core.variables")
-local LSP_SIGNS = conf.lsp_signs
-
 -- Plugins which add additional ways to use nvim
 return {
 	{ -- (remember.nvim) jump to last place in a buffer
@@ -107,7 +103,7 @@ return {
 			{
 				"<leader>z",
 				function()
-					require("pickers.zoxide").zoxide()
+					_G.pickers.zoxide()
 				end,
 				desc = "zoxide (picker)",
 			},
@@ -149,7 +145,7 @@ return {
 						vertical = "up:45%",
 						horizontal = "right:55%",
 					},
-					border = conf.border,
+					border = _G.config.border,
 				},
 				hls = {
 					normal = "TelescopeNormal",
@@ -354,25 +350,25 @@ return {
 							detail = not detail
 							if detail then
 								require("oil").set_columns({
-									conf.oil_columns.types,
-									conf.oil_columns.permissions,
-									conf.oil_columns.icon,
+									_G.config.oil_columns.types,
+									_G.config.oil_columns.permissions,
+									_G.config.oil_columns.icon,
 								})
 							else
-								require("oil").set_columns({ conf.oil_columns.icon })
+								require("oil").set_columns({ _G.config.oil_columns.icon })
 							end
 						end,
 					},
 				},
-				columns = { conf.oil_columns.icon },
+				columns = { _G.config.oil_columns.icon },
 				float = {
 					padding = 2,
-					border = conf.border,
+					border = _G.config.border,
 					max_width = math.floor(vim.api.nvim_win_get_width(0) * 0.7),
 					max_height = math.floor(vim.api.nvim_win_get_height(0) * 0.6),
 				},
-				preview = { border = conf.border },
-				progress = { border = conf.border },
+				preview = { border = _G.config.border },
+				progress = { border = _G.config.border },
 				win_options = {
 					number = false,
 					relativenumber = true,
@@ -381,8 +377,8 @@ return {
 					statuscolumn = "",
 					colorcolumn = "",
 				},
-				keymaps_help = { border = conf.border },
-				ssh = { border = conf.border },
+				keymaps_help = { border = _G.config.border },
+				ssh = { border = _G.config.border },
 				cleanup_delay_ms = false,
 				delete_to_trash = true,
 				skip_confirm_for_simple_edits = true,
@@ -408,7 +404,7 @@ return {
 		opts = function()
 			return {
 				win = {
-					border = conf.border,
+					border = _G.config.border,
 					no_overlap = false,
 					height = { min = 5, max = 25 },
 				},
@@ -447,7 +443,7 @@ return {
 				{ "'", group = "marks" },
 				{ "gr", group = "symbol actions" },
 				{ "<leader>d", group = "diffview commands" },
-				{ "<leader>db", group = "DAP commands", cond = conf.dap_enabled },
+				{ "<leader>db", group = "DAP commands", cond = _G.config.features.dap.enabled },
 				{ "<leader>n", group = "notes commands (zk)" },
 				{ "gc", group = "comment toggle" },
 
@@ -693,7 +689,7 @@ return {
 			return {
 				disableBufferLineNumbers = true,
 				resultsSeparatorLineChar = "─",
-				spinnerStates = conf.spinner,
+				spinnerStates = _G.config.signs.spinner,
 				showInputsTopPadding = false,
 				showInputsBottomPadding = false,
 				helpLine = {
@@ -763,11 +759,11 @@ return {
 		---@type quicker.SetupOptions
 		opts = {
 			type_icons = {
-				E = LSP_SIGNS.Error,
-				W = LSP_SIGNS.Warn,
-				I = LSP_SIGNS.Info,
-				N = LSP_SIGNS.Info,
-				H = LSP_SIGNS.Hint,
+				E = _G.config.signs.lsp.Error,
+				W = _G.config.signs.lsp.Warn,
+				I = _G.config.signs.lsp.Info,
+				N = _G.config.signs.lsp.Info,
+				H = _G.config.signs.lsp.Hint,
 			},
 			borders = {
 				vert = " ┋ ",
@@ -826,7 +822,7 @@ return {
 		},
 		opts = function()
 			local default_win_opts = {
-				border = conf.border,
+				border = _G.config.border,
 				win_opts = {
 					winblend = 0,
 				},
@@ -873,7 +869,7 @@ return {
 		},
 		opts = function()
 			return {
-				icons = conf.lsp_kind_icons_padded,
+				icons = _G.config.signs.kinds_padded,
 				guides = {
 					nested_top = " │ ",
 					mid_item = " ├─",
@@ -957,9 +953,9 @@ return {
 		opts = function()
 			return {
 				signs = {
-					fold_closed = "▸",
-					fold_open = "▾",
-					done = "✓",
+					fold_closed = _G.config.signs.fold_closed,
+					fold_open = _G.config.signs.fold_open,
+					done = _G.config.signs.done,
 				},
 				file_panel = {
 					listing_style = "list",

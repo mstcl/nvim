@@ -1,20 +1,16 @@
-local exec = vim.api.nvim_command
-
-local M = {}
-
 local function split_new_terminal()
 	if vim.api.nvim_win_get_width(0) >= 350 then
-		exec("vsplit | winc L | vertical resize 150 | term")
+		vim.cmd("vsplit | winc L | vertical resize 150 | term")
 	else
-		exec("split | winc J | resize 10 | term")
+		vim.cmd("split | winc J | resize 10 | term")
 	end
 end
 
 local function split_existing_terminal()
 	if vim.api.nvim_win_get_width(0) >= 350 then
-		exec("vert sb " .. vim.t.t_buf .. "| winc L | vertical resize 150")
+		vim.cmd("vert sb " .. vim.t.t_buf .. "| winc L | vertical resize 150")
 	else
-		exec("sb" .. vim.t.t_buf .. "| winc J | resize 10")
+		vim.cmd("sb" .. vim.t.t_buf .. "| winc J | resize 10")
 	end
 end
 
@@ -31,16 +27,14 @@ end
 
 local function hide_terminal()
 	if vim.fn.win_gotoid(vim.t.t_win_id) == 1 then
-		exec("hide")
+		vim.cmd("hide")
 	end
 end
 
-function M.Toggle()
+_G.toggle_terminal = function()
 	if vim.fn.win_gotoid(vim.t.t_win_id) == 1 then
 		hide_terminal()
 	else
 		open_terminal()
 	end
 end
-
-return M

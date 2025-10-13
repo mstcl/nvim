@@ -1,7 +1,3 @@
-local augroup = require("core.utils").augroup
-local conf = require("core.variables")
-local condition = conf.ui_features
-
 -- Plugins that modify UI
 return {
 	{ -- (shipwright.nvim & lush.nvim) Colorscheme building
@@ -62,7 +58,7 @@ return {
 			if opts then
 				opts.draw.animation = require("mini.indentscope").gen_animation.none()
 				require("mini.indentscope").setup(opts)
-				vim.g.miniindentscope_disable = not condition.indent_lines
+				vim.g.miniindentscope_disable = not _G.config.features.ui.indent_lines
 			end
 		end,
 		init = function()
@@ -113,7 +109,7 @@ return {
 					end,
 				},
 				lsp_progress = { enable = false },
-				window = { max_width_share = 1, winblend = 0, config = { border = conf.border } },
+				window = { max_width_share = 1, winblend = 0, config = { border = _G.config.border } },
 			}
 		end,
 		config = function(_, opts)

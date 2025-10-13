@@ -1,9 +1,11 @@
 ---@diagnostic disable: undefined-global
 local lushwright = require("shipwright.transform.lush")
+local wtpath = "~/dotfiles/nvim2"
+vim.opt.rtp:prepend(wtpath)
 
 -- selene: allow(undefined_variable)
 run(
-	require("lush.ivory_extended"),
+	require("themes.ivory_extended"),
 	lushwright.to_vimscript,
 	{ prepend, "set background=light" },
 	{ prepend, 'let g:colors_name="ivory_extended"' },

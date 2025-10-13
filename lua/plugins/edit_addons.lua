@@ -1,6 +1,3 @@
-local conf = require("core.variables")
-local condition = conf.edit_features
-
 -- Plugins that add extra functionality with keybindings or while editing
 return {
 	{ -- (better-escape.nvim) Allows mapping custom escape keys without ruining typing experience.
@@ -160,7 +157,7 @@ return {
 	},
 	{ -- (blink.cmp) Auto completion *
 		"saghen/blink.cmp",
-		cond = condition.completion,
+		cond = _G.config.features.edit.completion,
 		event = "InsertEnter",
 		dependencies = {
 			{ "rafamadriz/friendly-snippets" },
@@ -244,7 +241,7 @@ return {
 			appearance = {
 				use_nvim_cmp_as_default = true,
 				nerd_font_variant = "mono",
-				kind_icons = conf.lsp_kind_icons,
+				kind_icons = _G.config.signs.kinds,
 			},
 			sources = {
 				default = {

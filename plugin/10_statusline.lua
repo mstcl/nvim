@@ -1,27 +1,3 @@
-local augroup = require("core.utils").augroup
-local lsp_signs = require("core.variables").lsp_signs
-local ignore_filetypes = {
-	"oil",
-	"Fyler",
-	"mason",
-	"NvimTree",
-	"OverseerList",
-	"OverseerForm",
-	"Lazy",
-	"gitsigns-blame",
-	"grug-far",
-	"NeogitStatus",
-	"NeogitDiffView",
-	"NeogitLogView",
-	"aerial",
-	"",
-	"fzf",
-	"DiffviewFileHistory",
-	"DiffviewFiles",
-}
-
-local M = {}
-
 ---Highlight str with group hl in string representation
 local function set_hl(str, hl, restore)
 	restore = restore == nil or restore
@@ -57,6 +33,20 @@ local modes = {
 	["t"] = "TERM",
 }
 
+local diagnostic_sign = {
+	[1] = _G.config.signs.lsp.Error,
+	[2] = _G.config.signs.lsp.Warn,
+	[3] = _G.config.signs.lsp.Info,
+	[4] = _G.config.signs.lsp.Hint,
+}
+
+local diagnostic_color = {
+	[1] = "ErrorMsg",
+	[2] = "WarningMsg",
+	[3] = "InfoMsg",
+	[4] = "HintMsg",
+}
+
 local function group_number(num, sep)
 	if num < 999 then
 		return tostring(num)
@@ -66,10 +56,13 @@ local function group_number(num, sep)
 	end
 end
 
+_G.statusline = {}
+_G.statusline.components = {}
+
 ---Get scrollbar
 ---@return string
-function M.get_scrollbar()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.scrollbar = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -86,8 +79,8 @@ end
 
 ---Get modified status
 ---@return string
-function M.get_modified()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.modified = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -97,8 +90,8 @@ end
 
 ---Get current mode
 ---@return string
-function M.get_mode()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.mode = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 	local mode = vim.fn.mode()
@@ -107,76 +100,16 @@ function M.get_mode()
 	return set_hl(string.format("%s", mode_str), hl)
 end
 
----Get LSP progress
----@return string
-function M.get_lsp_progress()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
-		return ""
-	end
-
-	---@diagnostic disable-next-line: unnecessary-if
-	if not require("core.variables").lsp_enabled then
-		return ""
-	end
-	return require("lsp-progress").progress()
-end
-
----@diagnostic disable-next-line: unnecessary-if
-if require("core.variables").lsp_enabled then
-	augroup("lspProgress", {
-		{ "User" },
-		{
-			pattern = "LspProgressStatusUpdated",
-			callback = vim.schedule_wrap(function()
-				vim.cmd("redrawstatus")
-			end),
-		},
-	})
-end
-
-local diagnostic_sign = {
-	[1] = lsp_signs.Error,
-	[2] = lsp_signs.Warn,
-	[3] = lsp_signs.Info,
-	[4] = lsp_signs.Hint,
-}
-
-local diagnostic_color = {
-	[1] = "ErrorMsg",
-	[2] = "WarningMsg",
-	[3] = "InfoMsg",
-	[4] = "HintMsg",
-}
-
----@diagnostic disable-next-line: unnecessary-if
-if require("core.variables").lsp_enabled then
-	augroup("diagnosticUpdate", {
-		{ "DiagnosticChanged" },
-		{
-			desc = "update diagnostics cache for the status line.",
-			callback = function(info)
-				local b = vim.b[info.buf]
-				local diagnostic_cnt_cache = { 0, 0, 0, 0 }
-				for _, diagnostic in ipairs(info.data.diagnostics) do
-					diagnostic_cnt_cache[diagnostic.severity] = diagnostic_cnt_cache[diagnostic.severity] + 1
-				end
-				b.diagnostic_str_cache = nil
-				b.diagnostic_cnt_cache = diagnostic_cnt_cache
-			end,
-		},
-	})
-end
-
 ---Get diagnostics for current buffer
 -- Padding and brackets added
 ---@return string
-function M.get_lsp_diagnostic()
+_G.statusline.components.lsp_diagnostic = function()
 	---@diagnostic disable-next-line: unnecessary-if
-	if not require("core.variables").lsp_enabled then
+	if _G.config.features.lsp.enabled then
 		return ""
 	end
 
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -190,13 +123,17 @@ function M.get_lsp_diagnostic()
 
 	if vim.b.diagnostic_str_cache then
 		if vim.b.diagnostic_str_cache ~= "" then
-			return M.get_open_bracket()
+			return _G.statusline.components.open_bracket()
 				.. cog_icon
 				.. vim.b.diagnostic_str_cache
-				.. M.get_close_bracket()
-				.. M.get_padding()
+				.. _G.statusline.components.close_bracket()
+				.. _G.statusline.components.padding()
 		else
-			return M.get_open_bracket() .. cog_icon .. placeholder .. M.get_close_bracket() .. M.get_padding()
+			return _G.statusline.components.open_bracket()
+				.. cog_icon
+				.. placeholder
+				.. _G.statusline.components.close_bracket()
+				.. _G.statusline.components.padding()
 		end
 	end
 
@@ -218,98 +155,36 @@ function M.get_lsp_diagnostic()
 	vim.b.diagnostic_str_cache = str
 
 	if str ~= "" then
-		return M.get_open_bracket() .. cog_icon .. str .. M.get_close_bracket() .. M.get_padding()
+		return _G.statusline.components.open_bracket()
+			.. cog_icon
+			.. str
+			.. _G.statusline.components.close_bracket()
+			.. _G.statusline.components.padding()
 	else
-		return M.get_open_bracket() .. cog_icon .. placeholder .. M.get_close_bracket() .. M.get_padding()
+		return _G.statusline.components.open_bracket()
+			.. cog_icon
+			.. placeholder
+			.. _G.statusline.components.close_bracket()
+			.. _G.statusline.components.padding()
 	end
 end
 
 ---Get cwd
 ---@return string
-function M.get_cwd()
+_G.statusline.components.cwd = function()
 	return vim.fn.pathshorten(vim.fn.getcwd(), 1)
 end
 
 ---Get the directory name of the cwd
 ---@return string
-function M.get_cwd_name()
+_G.statusline.components.cwd_name = function()
 	return vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
 end
 
-local function is_valid_git_repo(buf_id)
-	-- Check if it's a valid buffer
-	local path = vim.api.nvim_buf_get_name(buf_id)
-	if path == "" or vim.fn.filereadable(path) ~= 1 then
-		return false
-	end
-
-	-- Check if the current directory is a Git repository
-	if vim.fn.isdirectory(".git") == 0 then
-		return false
-	end
-
-	return true
-end
-
-local branch_cache = {}
-
--- Function to clear the Git branch cache
-local function clear_git_branch_cache()
-	-- Clear by doing an empty table :)
-	branch_cache = {}
-end
-
--- Autocommand to clear the Git branch cache when the directory changes
-vim.api.nvim_create_autocmd("DirChanged", {
-	callback = clear_git_branch_cache,
-})
-
-local function update_git_branch(data)
-	if not is_valid_git_repo(data.buf) then
-		return
-	end
-
-	-- Check if branch is already cached
-	local cached_branch = branch_cache[data.buf]
-	if cached_branch then
-		vim.b.git_branch = cached_branch
-		return
-	end
-
-	---@diagnostic disable-next-line: undefined-field
-	local stdout = vim.uv.new_pipe(false)
-	---@diagnostic disable-next-line: undefined-field
-	local _, _ = vim.uv.spawn(
-		"git",
-		{
-			args = { "-C", vim.fn.expand("%:p:h"), "branch", "--show-current" },
-			stdio = { nil, stdout, nil },
-		},
-		vim.schedule_wrap(function(code, _)
-			if code == 0 then
-				stdout:read_start(function(_, content)
-					if content then
-						vim.b.git_branch = content:gsub("\n", "") -- Remove newline character
-						branch_cache[data.buf] = vim.b.git_branch -- Cache the branch name
-						stdout:close()
-					end
-				end)
-			else
-				stdout:close()
-			end
-		end)
-	)
-end
-
--- Call this function when the buffer is opened in a window
-vim.api.nvim_create_autocmd("BufWinEnter", {
-	callback = update_git_branch,
-})
-
 ---Get current git branch
 ---@return string
-function M.get_git_branch()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.git_branch = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -320,8 +195,8 @@ end
 
 ---Get current git branch with space
 ---@return string
-function M.get_git_branch_2()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.git_branch_2 = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -333,8 +208,8 @@ end
 ---Get git diffs for current buffer
 -- Padding and brackets added
 ---@return string
-function M.get_diffs()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.diffs = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -347,14 +222,14 @@ function M.get_diffs()
 		local changed = diffs.changed or 0
 		local removed = diffs.removed or 0
 		if added == 0 and removed == 0 and changed == 0 then
-			return M.get_open_bracket()
+			return _G.statusline.components.open_bracket()
 				.. git_icon
 				.. set_hl("clean", "StatusLineNC")
-				.. M.get_close_bracket()
-				.. M.get_padding()
+				.. _G.statusline.components.close_bracket()
+				.. _G.statusline.components.padding()
 		end
 
-		return M.get_open_bracket()
+		return _G.statusline.components.open_bracket()
 			.. git_icon
 			.. string.format(
 				"%s%s%s",
@@ -362,8 +237,8 @@ function M.get_diffs()
 				set_hl("~" .. tostring(changed), "GitSignsChange"),
 				set_hl("-" .. tostring(removed), "GitSignsDelete")
 			)
-			.. M.get_close_bracket()
-			.. M.get_padding()
+			.. _G.statusline.components.close_bracket()
+			.. _G.statusline.components.padding()
 	end
 
 	return ""
@@ -371,19 +246,19 @@ end
 
 ---Get file root
 ---@return string
-function M.get_root()
-	return set_hl(M.get_cwd_name(), "StatusLineNC")
+_G.statusline.components.root = function()
+	return set_hl(_G.statusline.components.cwd_name(), "StatusLineNC")
 end
 
 ---Get file path with root
 ---@return string
-function M.get_filepath()
+_G.statusline.components.filepath = function()
 	local ft = vim.bo.filetype
-	if vim.tbl_contains(ignore_filetypes, ft) and ft ~= "oil" then
+	if vim.tbl_contains(_G.config.simple_fts, ft) and ft ~= "oil" then
 		return ""
 	end
 
-	local root = set_hl(M.get_cwd_name(), "StatusLineNC")
+	local root = set_hl(_G.statusline.components.cwd_name(), "StatusLineNC")
 	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
 	local prefix = set_hl("@ ", "StatusLineAlt")
 
@@ -402,8 +277,8 @@ end
 
 ---Get filename
 ---@return string
-function M.get_filename()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.filename = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -419,8 +294,8 @@ end
 
 ---Get file icon
 ---@return string
-function M.get_icon()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.icon = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -433,7 +308,7 @@ end
 
 ---Get filetype for all files
 ---@return string
-function M.get_filetype()
+_G.statusline.components.filetype = function()
 	local ft = vim.bo.filetype
 	if vim.bo.buftype == "terminal" then
 		return set_hl("TERMINAL", "StatusLineModeInv")
@@ -441,7 +316,7 @@ function M.get_filetype()
 		return ""
 	elseif ft == "" then
 		return "[No Name]"
-	elseif vim.tbl_contains(ignore_filetypes, ft) then
+	elseif vim.tbl_contains(_G.config.simple_fts, ft) then
 		return set_hl(string.format("%s", ft:upper()), "StatusLineModeInv")
 	else
 		return set_hl((ft:gsub("^%l", string.upper)), "StatusLineNC")
@@ -450,7 +325,7 @@ end
 
 ---Get filetype for only ignored filetypes
 ---@return string
-function M.get_filetype_2()
+_G.statusline.components.filetype_2 = function()
 	local ft = vim.bo.filetype
 	if vim.bo.buftype == "terminal" then
 		return set_hl("TERMINAL", "StatusLineModeInv")
@@ -458,15 +333,15 @@ function M.get_filetype_2()
 		return ""
 	elseif ft == "" then
 		return "[No Name]"
-	elseif vim.tbl_contains(ignore_filetypes, ft) then
+	elseif vim.tbl_contains(_G.config.simple_fts, ft) then
 		return set_hl(string.format("%s", ft:upper()), "StatusLineModeInv")
 	else
 		return ""
 	end
 end
 
-function M.get_search_counts()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.search_counts = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -483,8 +358,8 @@ function M.get_search_counts()
 	return ""
 end
 
-function M.get_macro_recording()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.macro_recording = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -496,8 +371,8 @@ function M.get_macro_recording()
 	end
 end
 
-function M.get_fformat()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.fformat = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -508,8 +383,8 @@ function M.get_fformat()
 	return "[" .. ff .. "]"
 end
 
-function M.get_ffenc()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.ffenc = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -522,7 +397,7 @@ end
 
 ---Get line count
 local function get_vlinecount()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -534,8 +409,8 @@ end
 
 --- Get wordcount for current buffer or visual selection
 --- @return string word count
-function M.get_fileinfo()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.fileinfo = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 
@@ -549,29 +424,29 @@ function M.get_fileinfo()
 	end
 end
 
-function M.get_open_bracket()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.open_bracket = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 	return set_hl("(", "StatusLineAlt")
 end
 
-function M.get_close_bracket()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.close_bracket = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 	return set_hl(")", "StatusLineAlt")
 end
 
-function M.get_padding()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.padding = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 	return " "
 end
 
-function M.get_indentation()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.indentation = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 	---@diagnostic disable-next-line: undefined-field
@@ -586,17 +461,17 @@ function M.get_indentation()
 	)
 end
 
-function M.get_delimiter()
-	if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+_G.statusline.components.delimiter = function()
+	if vim.tbl_contains(_G.config.simple_fts, vim.bo.filetype) then
 		return ""
 	end
 	return set_hl("·", "StatusLineAlt")
 end
 
--- Components
-M.components = {
+-- All blocks
+local blocks = {
 	-- LSP symbol
-	symbol = [[%{%v:lua.require'core.components'.get_symbol()%}]],
+	symbol = [[%{%v:lua.statusline.components.symbol()%}]],
 	-- Highlights
 	hl_main = [[%#statuslinenc#]],
 	hl_strong = [[%#statusline#]],
@@ -606,38 +481,92 @@ M.components = {
 	hl_yellow = [[%#statuslineyellow#]],
 	hl_restore = [[%*]],
 	-- LSP
-	diagnostics = [[%{%v:lua.require'core.components'.get_lsp_diagnostic()%}]],
-	progress = [[%{%v:lua.require'core.components'.get_lsp_progress()%}]],
+	diagnostics = [[%{%v:lua.statusline.components.lsp_diagnostic()%}]],
+	progress = [[%{%v:lua.statusline.components.lsp_progress()%}]],
 	-- Git
-	branch = [[%{%v:lua.require'core.components'.get_git_branch()%}]],
-	branch2 = [[%{%v:lua.require'core.components'.get_git_branch_2()%}]],
-	diffs = [[%{%v:lua.require'core.components'.get_diffs()%}]],
+	branch = [[%{%v:lua.statusline.components.git_branch()%}]],
+	branch2 = [[%{%v:lua.statusline.components.git_branch_2()%}]],
+	diffs = [[%{%v:lua.statusline.components.diffs()%}]],
 	-- Misc
 	align = [[%=]],
 	truncate = [[%<]],
-	open_bracket = [[%{%v:lua.require'core.components'.get_open_bracket()%}]],
-	close_bracket = [[%{%v:lua.require'core.components'.get_close_bracket()%}]],
-	padding = [[%{%v:lua.require'core.components'.get_padding()%}]],
-	delimiter = [[%{%v:lua.require'core.components'.get_delimiter()%}]],
+	open_bracket = [[%{%v:lua.statusline.components.open_bracket()%}]],
+	close_bracket = [[%{%v:lua.statusline.components.close_bracket()%}]],
+	padding = [[%{%v:lua.statusline.components.padding()%}]],
+	delimiter = [[%{%v:lua.statusline.components.delimiter()%}]],
 	-- General
-	root = [[%{%v:lua.require'core.components'.get_root()%}]],
-	filepath = [[%{%v:lua.require'core.components'.get_filepath()%}]],
-	filename = [[%{%v:lua.require'core.components'.get_filename()%}]],
-	icon = [[%{%v:lua.require'core.components'.get_icon()%}]],
+	root = [[%{%v:lua.statusline.components.root()%}]],
+	filepath = [[%{%v:lua.statusline.components.filepath()%}]],
+	filename = [[%{%v:lua.statusline.components.filename()%}]],
+	icon = [[%{%v:lua.statusline.components.icon()%}]],
 	pos = [[%{%&ru?" %#statuslinenc#%l%#statuslinealt#:%#statuslinenc#%2c %2p%#statuslinealt#%%":""%}]],
 	cmd = [[%S]],
-	modified = [[%{%v:lua.require'core.components'.get_modified()%}]],
-	scrollbar = [[%{%v:lua.require'core.components'.get_scrollbar()%}]],
-	mode = [[%{%v:lua.require'core.components'.get_mode()%}]],
-	cwd = [[%{%v:lua.require'core.components'.get_cwd()%}]],
-	info = [[%{%v:lua.require'core.components'.get_fileinfo()%}]],
-	indentation = [[%{%v:lua.require'core.components'.get_indentation()%}]],
-	ft = [[%{%v:lua.require'core.components'.get_filetype()%}]],
-	ft2 = [[%{%v:lua.require'core.components'.get_filetype_2()%}]],
-	fformat = [[%{%v:lua.require'core.components'.get_fformat()%}]],
-	fenc = [[%{%v:lua.require'core.components'.get_ffenc()%}]],
-	search = [[%{%v:lua.require'core.components'.get_search_counts()%}]],
-	macro = [[%{%v:lua.require'core.components'.get_macro_recording()%}]],
+	modified = [[%{%v:lua.statusline.components.modified()%}]],
+	scrollbar = [[%{%v:lua.statusline.components.scrollbar()%}]],
+	mode = [[%{%v:lua.statusline.components.mode()%}]],
+	cwd = [[%{%v:lua.statusline.components.cwd()%}]],
+	info = [[%{%v:lua.statusline.components.fileinfo()%}]],
+	indentation = [[%{%v:lua.statusline.components.indentation()%}]],
+	ft = [[%{%v:lua.statusline.components.filetype()%}]],
+	ft2 = [[%{%v:lua.statusline.components.filetype_2()%}]],
+	fformat = [[%{%v:lua.statusline.components.fformat()%}]],
+	fenc = [[%{%v:lua.statusline.components.ffenc()%}]],
+	search = [[%{%v:lua.statusline.components.search_counts()%}]],
+	macro = [[%{%v:lua.statusline.components.macro_recording()%}]],
 }
 
-return M
+---@diagnostic disable-next-line: duplicate-set-field
+_G.statusline.get = function()
+	return table.concat({
+		" ",
+		blocks.mode,
+		blocks.padding,
+		blocks.delimiter,
+		blocks.padding,
+		blocks.filepath,
+		blocks.padding,
+		blocks.branch2,
+		blocks.padding,
+		blocks.delimiter,
+		blocks.padding,
+		blocks.icon,
+		blocks.padding,
+		blocks.filename,
+		blocks.padding,
+		blocks.ft2,
+		blocks.diffs,
+		blocks.diagnostics,
+		blocks.truncate,
+		-- Messy middle bit
+		blocks.align,
+		blocks.hl_alt,
+		blocks.macro,
+		--
+		blocks.hl_alt,
+		blocks.search,
+		--
+		blocks.hl_yellow,
+		blocks.fformat,
+		--
+		blocks.hl_yellow,
+		blocks.fenc,
+		-- Right most
+		blocks.align,
+		--
+		blocks.hl_alt,
+		blocks.info,
+		blocks.padding,
+		--
+		blocks.padding,
+		blocks.indentation,
+		blocks.padding,
+		--
+		blocks.hl_restore,
+	}, "")
+end
+
+_G.statusline.set = function()
+	vim.o.statusline = "%!v:lua.statusline.get()"
+end
+
+_G.statusline.set()

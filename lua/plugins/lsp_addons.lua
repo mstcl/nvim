@@ -1,9 +1,3 @@
-local augroup = require("core.utils").augroup
-local on_attach = require("lsp.utils").on_attach
-local conf = require("core.variables")
-local condition = conf.lsp_enabled
-local DIAGNOSTICS_COMPATIBLE_SOURCES = conf.get_compatible_sources(conf.diagnostics_sources)
-
 -- Plugins that add to nvim LSP functionalities
 return {
 	{ -- (mason.nvim) Code tools forge
@@ -17,7 +11,7 @@ return {
 			"MasonUninstallAll",
 			"MasonLog",
 		},
-		cond = condition,
+		cond = _G.config.features.lsp.enabled,
 		opts = {
 			log_level = vim.log.levels.ERROR,
 			ui = {
@@ -35,11 +29,11 @@ return {
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		-- cmd = { "MasonToolsUpdate", "MasonToolsInstall", "MasonToolsInstallSync", "MasonToolsUpdateSync" },
 		lazy = false,
-		-- cond = condition,
+		-- cond = _G.config.features.lsp.enabled,
 		config = function()
 			require("mason-tool-installer").setup({
 				run_on_start = true,
-				ensure_installed = conf.all_mason_sources,
+				ensure_installed = _G.config.sources.mason,
 			})
 		end,
 	},
@@ -69,14 +63,14 @@ return {
 	},
 	{ -- (otter.nvim) LSP completion in code blocks
 		"jmbuhr/otter.nvim",
-		cond = condition,
+		cond = _G.config.features.lsp.enabled,
 		dependencies = { "neovim/nvim-lspconfig" },
 		ft = { "quarto", "markdown" },
 		opts = function()
 			return {
 				lsp = {
 					hover = {
-						border = conf.border,
+						border = _G.config.border,
 					},
 				},
 				buffers = {

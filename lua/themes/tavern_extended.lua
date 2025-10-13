@@ -1,8 +1,6 @@
-local conf = require("core.variables")
-
 local lush = require("lush")
 local extended = lush.merge({
-	require("tavern"),
+	require("shipwright_build_tavern"),
 	require("tavern_statusline"),
 	require("tavern_telescope"),
 	require("tavern_neogit"),
@@ -18,7 +16,7 @@ local extended = lush.merge({
 })
 
 ---@diagnostic disable-next-line: unnecessary-if
-if conf.lsp_enabled then
+if _G.config.features.lsp.enabled then
 	extended = lush.merge({
 		extended,
 		require("tavern_mason"),
@@ -27,7 +25,7 @@ if conf.lsp_enabled then
 end
 
 ---@diagnostic disable-next-line: unnecessary-if
-if conf.dap_enabled then
+if _G.config.features.dap.enabled then
 	extended = lush.merge({
 		extended,
 		require("tavern_dap"),

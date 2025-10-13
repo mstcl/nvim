@@ -1,8 +1,8 @@
 local fzf_lua = require("fzf-lua")
 
-local M = {}
+_G.pickers = {}
 
-M.zoxide = function()
+_G.pickers.zoxide = function()
 	fzf_lua.fzf_exec("zoxide query -l", {
 		winopts = {
 			title = " Zoxide ",
@@ -32,5 +32,3 @@ M.zoxide = function()
 		},
 	})
 end
-
-return M

@@ -4,7 +4,7 @@ return {
 	filetypes = { "yaml.gitlab" },
 	root_dir = function(bufnr, on_dir)
 		local fname = vim.api.nvim_buf_get_name(bufnr)
-		on_dir(require("lsp.utils").root_pattern(".git", ".gitlab*")(fname))
+		on_dir(_G.lsp.root_pattern(".git", ".gitlab*")(fname))
 	end,
 	settings = {},
 }

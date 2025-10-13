@@ -1,5 +1,3 @@
-local conf = require("core.variables")
-
 local lush = require("lush")
 local extended = lush.merge({
 	require("ivory"),
@@ -18,7 +16,7 @@ local extended = lush.merge({
 })
 
 ---@diagnostic disable-next-line: unnecessary-if
-if conf.lsp_enabled then
+if _G.config.features.lsp.enabled then
 	extended = lush.merge({
 		extended,
 		require("ivory_mason"),
@@ -27,7 +25,7 @@ if conf.lsp_enabled then
 end
 
 ---@diagnostic disable-next-line: unnecessary-if
-if conf.dap_enabled then
+if _G.config.features.dap.enabled then
 	extended = lush.merge({
 		extended,
 		require("ivory_dap"),

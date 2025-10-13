@@ -1,5 +1,3 @@
-local conf = require("core.variables")
-
 -- Plugins to extend syntax, either natively or with treesitter
 return {
 	{ -- (nvim-treesitter) Treesitter engine
@@ -31,7 +29,7 @@ return {
 			add("git_config")
 			add("rasi")
 			return {
-				ensure_installed = conf.treesitter_sources,
+				ensure_installed = _G.config.sources.treesitter,
 				sync_install = false,
 				highlight = {
 					enable = true,
@@ -39,7 +37,7 @@ return {
 					additional_vim_regex_highlighting = { "org" },
 					disable = { "latex" },
 					is_supported = function()
-						if require("core.utils").big(vim.fn.expand("%")) then
+						if _G.big(vim.fn.expand("%")) then
 							return false
 						else
 							return true
