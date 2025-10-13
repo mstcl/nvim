@@ -1,7 +1,7 @@
 require("lazy").setup({
 	spec = {
-		{ import = "plugins" },
-		{ import = "plugins.override" },
+		{ import = "specs" },
+		{ import = "specs.override" },
 	},
 	default = { lazy = true },
 	dev = {

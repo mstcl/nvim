@@ -1,6 +1,5 @@
 -- Setup lazy
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-local wtpath = "~/dotfiles/nvim2"
 
 ---@diagnostic disable-next-line: undefined-field, deprecated
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -18,11 +17,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 
 vim.opt.rtp:prepend(lazypath)
-vim.opt.rtp:prepend(wtpath)
 
----Shortcut syntax to create autocmd with augroup
----@param group string
----@vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
+---Shortcut syntax to create autocmd with augroup @param group string @vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
 ---@return nil
 _G.augroup = function(group, ...)
 	local id = vim.api.nvim_create_augroup(group, { clear = true })
@@ -43,3 +39,17 @@ _G.big = function(filepath)
 	end
 	return false
 end
+
+require("plugin.00_variables")
+require("plugin.10_statusline")
+require("plugin.11_statuscol")
+require("plugin.20_options")
+require("plugin.25_terminal")
+require("plugin.30_lazy")
+require("plugin.40_commands")
+require("plugin.41_quietmode")
+require("plugin.50_autocmds")
+require("plugin.60_mappings")
+require("plugin.70_lsp")
+require("plugin.80_pickers")
+require("plugin.99_override")
