@@ -1,6 +1,6 @@
 local lush = require("lush")
 local extended = lush.merge({
-	require("shipwright_build_tavern"),
+	require("tavern"),
 	require("tavern_statusline"),
 	require("tavern_telescope"),
 	require("tavern_neogit"),

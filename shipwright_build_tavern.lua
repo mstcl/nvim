@@ -1,4 +1,5 @@
 ---@diagnostic disable: undefined-global
+vim.opt.rtp:prepend("~/projects/tavern")
 local lushwright = require("shipwright.transform.lush")
 
 -- selene: allow(undefined_variable)
