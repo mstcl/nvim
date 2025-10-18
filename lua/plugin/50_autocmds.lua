@@ -220,8 +220,18 @@ _G.augroup("terminal", {
 				vim.cmd("MinimalMode")
 
 				-- Keymaps to leave
-				vim.keymap.set("t", "<esc><esc>", [[<C-\><C-n>]], { silent = true, buffer = 0 })
-				vim.keymap.set("t", "<C-Bslash>", [[<C-\><C-n>:ToggleTerminal<CR>]], { silent = true, buffer = 0 })
+				vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { silent = true, buffer = 0 })
+				vim.keymap.set(
+					"t",
+					"<C-Bslash><C-Bslash>",
+					[[<C-\><C-n>:ToggleTerminal<CR>]],
+					{ silent = true, buffer = 0 }
+				)
+
+				-- Also map <C-\> to <Esc> to avoid interuptting Claude code
+				vim.keymap.set("t", "<C-Bslash>", function()
+					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
+				end)
 			end
 		end,
 	},
@@ -229,10 +239,20 @@ _G.augroup("terminal", {
 	{ "BufLeave" },
 	{
 		pattern = "term://*",
+		desc = "Stop insert when leaving terminal",
 		callback = function()
 			if vim.bo.buftype == "terminal" and vim.bo.filetype == "" then
 				vim.cmd("stopinsert")
 			end
+		end,
+	},
+}, {
+	{ "TermLeave" },
+	{
+		desc = "Reload buffers when leaving terminal",
+		pattern = "*",
+		callback = function()
+			vim.cmd.checktime()
 		end,
 	},
 })
