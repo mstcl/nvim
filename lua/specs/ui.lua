@@ -189,28 +189,4 @@ return {
 			end,
 		},
 	},
-	{ -- (auto-dark-mode.nvim)
-		"f-person/auto-dark-mode.nvim",
-		lazy = false,
-		init = function()
-			local current_hour = tonumber(os.date("%H"))
-
-			if current_hour >= 9 and current_hour < 17 then
-				vim.opt.background = "light"
-				vim.cmd.colorscheme("ivory_extended")
-			else
-				vim.opt.background = "dark"
-				vim.cmd.colorscheme("tavern_extended")
-			end
-		end,
-		opts = {
-			set_dark_mode = function()
-				vim.cmd.colorscheme("tavern_extended")
-			end,
-			set_light_mode = function()
-				vim.cmd.colorscheme("ivory_extended")
-			end,
-			fallback = "dark",
-		},
-	},
 }
