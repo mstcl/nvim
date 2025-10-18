@@ -1,42 +1,34 @@
-From 3da109525893190d8cb5741d6d59bdc57e0aa8c6 Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Fri, 6 Dec 2024 04:28:25 +1100
-Subject: [PATCH 01/11] feat: support viewing the diff via other pagers, e.g.
- *Delta*
-
-Add the `log_pager` option, which can be set to `delta`.
----
- README.md                     |  2 ++
- doc/neogit.txt                |  5 +++++
- lua/neogit/buffers/common.lua | 33 +++++++++++++++++++++++++++++----
- lua/neogit/config.lua         |  2 ++
- lua/neogit/lib/buffer.lua     | 15 ++++++++++++++-
- lua/neogit/lib/git/diff.lua   |  2 ++
- 6 files changed, 54 insertions(+), 5 deletions(-)
-
 diff --git a/README.md b/README.md
-index ebe7bb90c..14b45123b 100644
+index 5ab8cae3..fe8edc93 100644
 --- a/README.md
 +++ b/README.md
-@@ -97,6 +97,8 @@ neogit.setup {
+@@ -47,6 +47,7 @@ Here's an example spec for [Lazy](https://github.com/folke/lazy.nvim), but you'r
+   dependencies = {
+     "nvim-lua/plenary.nvim",         -- required
+     "sindrets/diffview.nvim",        -- optional - Diff integration
++    "m00qek/baleia.nvim",            -- optional - Required for a custom log pager
+ 
+     -- Only one of these is needed.
+     "nvim-telescope/telescope.nvim", -- optional
+@@ -97,6 +98,8 @@ neogit.setup {
    -- Show relative date by default. When set, use `strftime` to display dates
    commit_date_format = nil,
    log_date_format = nil,
-+  -- When set, used to format the diff.
++  -- When set, used to format the diff. Requires *baleia* to colorize text with ANSI escape sequences. An example for `Delta` is `{ 'delta', '--width', '117' }`. For `Delta`, hyperlinks must be disabled in its git config section, for text to be colorized properly. It's recommended to set `disable_context_highlighting = true`, otherwise when the cursor is in the hunk, we lose background highlighting
 +  log_pager = nil,
    -- Show message with spinning animation when a git command is running.
    process_spinner = false,
    -- Used to generate URL's for branch popup action "pull request", "open commit" and "open tree"
 diff --git a/doc/neogit.txt b/doc/neogit.txt
-index 5616a1d92..b7893670b 100644
+index 5616a1d9..c4e7d94d 100644
 --- a/doc/neogit.txt
 +++ b/doc/neogit.txt
 @@ -113,6 +113,11 @@ to Neovim users.
      -- Show relative date by default. When set, use `strftime` to display dates
      commit_date_format = nil,
      log_date_format = nil,
-+    -- When set, used to format the diff. Requires *baleia* to colorize text with ANSI escape sequences. An example for
-+    -- *Delta* is `{ 'delta', '--width', '117' }`. For *Delta*, hyperlinks must be disabled in its *Git* config section,
++    -- When set, used to format the diff. Requires `baleia` to colorize text with ANSI escape sequences. An example for
++    -- `Delta` is `{ 'delta', '--width', '117' }`. For `Delta`, hyperlinks must be disabled in its git config section,
 +    -- for text to be colorized properly. It's recommended to set `disable_context_highlighting = true`, otherwise when
 +    -- the cursor is in the hunk, we lose background highlighting
 +    log_pager = nil,
@@ -44,67 +36,57 @@ index 5616a1d92..b7893670b 100644
      git_services = {
          ["github.com"] = {
 diff --git a/lua/neogit/buffers/common.lua b/lua/neogit/buffers/common.lua
-index 625ffbc40..5828db715 100644
+index 625ffbc4..37efcda1 100644
 --- a/lua/neogit/buffers/common.lua
 +++ b/lua/neogit/buffers/common.lua
-@@ -1,3 +1,5 @@
-+local Job = require("plenary.job")
-+
- local Ui = require("neogit.lib.ui")
- local Component = require("neogit.lib.ui.component")
- local util = require("neogit.lib.util")
-@@ -25,22 +27,45 @@ M.Diff = Component.new(function(diff)
+@@ -25,21 +25,16 @@ M.Diff = Component.new(function(diff)
    }, { foldable = true, folded = false, context = true })
  end)
  
 --- Use vim iter api?
  M.DiffHunks = Component.new(function(diff)
-   local hunk_props = vim
-     .iter(diff.hunks)
-     :map(function(hunk)
+-  local hunk_props = vim
+-    .iter(diff.hunks)
+-    :map(function(hunk)
 -      hunk.content = vim.iter(diff.lines):slice(hunk.diff_from + 1, hunk.diff_to):totable()
-+      local header = diff.lines[hunk.diff_from]
-+      local content = vim.list_slice(diff.lines, hunk.diff_from + 1, hunk.diff_to)
-+      local job = nil
-+      if config.values.log_pager ~= nil then
-+        job = Job:new {
-+          command = config.values.log_pager[1],
-+          args = vim.list_slice(config.values.log_pager, 2),
-+        }
-+        job:start()
-+        for _, part in ipairs { diff.header, { header }, content } do
-+          for _, line in ipairs(part) do
-+            job:send(line .. "\n")
-+          end
-+        end
-+        job.stdin:close()
-+      end
- 
-       return {
+-
+-      return {
 -        header = diff.lines[hunk.diff_from],
 -        content = hunk.content,
-+        header = header,
-+        content = content,
-+        job = job,
-         hunk = hunk,
-         folded = hunk._folded,
-       }
-     end)
-     :totable()
- 
-+  if config.values.log_pager ~= nil then
-+    vim.iter(hunk_props):each(function(hunk)
-+      hunk.job:wait()
-+      hunk.content = hunk.job:result()
-+      hunk.job = nil
-+    end)
+-        hunk = hunk,
+-        folded = hunk._folded,
+-      }
+-    end)
+-    :totable()
++  local hunk_props = {}
++  for i, hunk in ipairs(diff.hunks) do
++    table.insert(hunk_props, {
++      header = diff.lines[hunk.diff_from],
++      content = diff.pager_contents[i],
++      hunk = hunk,
++      folded = hunk._folded,
++    })
 +  end
-+
+ 
    return col.tag("DiffContent") {
      col.tag("DiffInfo")(map(diff.info, text)),
-     col.tag("HunkList")(map(hunk_props, M.Hunk)),
+@@ -88,7 +83,13 @@ M.Hunk = Component.new(function(props)
+   return col.tag("Hunk")({
+     text.line_hl("NeogitHunkHeader")(props.header),
+     col.tag("HunkContent")(map(props.content, HunkLine)),
+-  }, { foldable = true, folded = props.folded or false, context = true, hunk = props.hunk })
++  }, {
++    ansi_hl = config.values.log_pager ~= nil,
++    foldable = true,
++    folded = props.folded or false,
++    context = true,
++    hunk = props.hunk,
++  })
+ end)
+ 
+ M.List = Component.new(function(props)
 diff --git a/lua/neogit/config.lua b/lua/neogit/config.lua
-index 8b3c7fff0..261b0e986 100644
+index 8b3c7fff..261b0e98 100644
 --- a/lua/neogit/config.lua
 +++ b/lua/neogit/config.lua
 @@ -345,6 +345,7 @@ end
@@ -124,286 +106,38 @@ index 8b3c7fff0..261b0e986 100644
      filewatcher = {
        enabled = true,
 diff --git a/lua/neogit/lib/buffer.lua b/lua/neogit/lib/buffer.lua
-index 562e7e5af..2d90b2735 100644
+index 2c567d25..06bca3d8 100644
 --- a/lua/neogit/lib/buffer.lua
 +++ b/lua/neogit/lib/buffer.lua
-@@ -147,8 +147,21 @@ function Buffer:set_extmarks(extmarks)
+@@ -152,6 +152,26 @@ function Buffer:set_line_highlights(highlights)
+   end
  end
  
- function Buffer:set_line_highlights(highlights)
-+  local line_ansi_colorized = {}
++function Buffer:set_ansi_highlights(highlights)
++  for _, hl in ipairs(highlights) do
++    local first_line, last_line = unpack(hl)
++    local text = self:get_lines(first_line, last_line, false)
 +
-   for _, hl in ipairs(highlights) do
--    self:add_line_highlight(unpack(hl))
-+    local line_nr, hl_group = unpack(hl)
-+    if hl_group == "NeogitDiffContext" then
-+      if not line_ansi_colorized[line_nr] then
-+        local text = self:get_line(line_nr + 1)
-+        vim.g.baleia.buf_set_lines(self.handle, line_nr, line_nr + 1, false, text)
-+        line_ansi_colorized[line_nr] = true
++    for i, line in ipairs(text) do
++      if line:match("\27%[0K\27%[0m$") then
++        -- Handle "Erase in Line". We don't support coloring the rest of the line.
++        line = line:gsub("\27%[0K\27%[0m$", "")
++        if i < #text then
++          text[i + 1] = "\27[0m" .. text[i + 1]
++        end
 +      end
++      text[i] = line
 +    end
 +
-+    if not line_ansi_colorized[line_nr] then
-+      self:add_line_highlight(unpack(hl))
-+    end
-   end
- end
- 
-diff --git a/lua/neogit/lib/git/diff.lua b/lua/neogit/lib/git/diff.lua
-index 64d3be1fa..1e5d4a9a6 100644
---- a/lua/neogit/lib/git/diff.lua
-+++ b/lua/neogit/lib/git/diff.lua
-@@ -12,6 +12,7 @@ local sha256 = vim.fn.sha256
- ---@field staged_stats fun(): DiffStagedStats
- ---
- ---@class Diff
-+---@field header string[]
- ---@field kind string
- ---@field lines string[]
- ---@field file string
-@@ -232,6 +233,7 @@ local function parse_diff(raw_diff, raw_stats)
-   end)
- 
-   return { ---@type Diff
-+    header = header,
-     kind = kind,
-     lines = lines,
-     file = file,
-
-From 613ddc294da76a28db8dcd872c83f008ad618b82 Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Sat, 7 Dec 2024 02:23:29 +1100
-Subject: [PATCH 02/11] refactor: ANSI colorize continuous chunks at once
-
-- This improves the speed.
-- If not done, for large diffs we can get the error `PANIC: unprotected error in call to Lua API (EMFILE: too many open files)`.
----
- lua/neogit/lib/buffer.lua | 33 +++++++++++++++++++++++++--------
- 1 file changed, 25 insertions(+), 8 deletions(-)
-
-diff --git a/lua/neogit/lib/buffer.lua b/lua/neogit/lib/buffer.lua
-index 2d90b2735..1fa1360aa 100644
---- a/lua/neogit/lib/buffer.lua
-+++ b/lua/neogit/lib/buffer.lua
-@@ -147,21 +147,38 @@ function Buffer:set_extmarks(extmarks)
- end
- 
- function Buffer:set_line_highlights(highlights)
--  local line_ansi_colorized = {}
-+  local line_ansi_colorized_map = {}
- 
-   for _, hl in ipairs(highlights) do
-     local line_nr, hl_group = unpack(hl)
-     if hl_group == "NeogitDiffContext" then
--      if not line_ansi_colorized[line_nr] then
--        local text = self:get_line(line_nr + 1)
--        vim.g.baleia.buf_set_lines(self.handle, line_nr, line_nr + 1, false, text)
--        line_ansi_colorized[line_nr] = true
--      end
-+      line_ansi_colorized_map[line_nr] = true
-+    else
-+      self:add_line_highlight(unpack(hl))
-     end
++    vim.g.baleia.buf_set_lines(self.handle, first_line, last_line, false, text)
 +  end
- 
--    if not line_ansi_colorized[line_nr] then
--      self:add_line_highlight(unpack(hl))
-+  local line_ansi_colorized = {}
-+  for k in pairs(line_ansi_colorized_map) do
-+    table.insert(line_ansi_colorized, k)
-+  end
-+  table.sort(line_ansi_colorized)
++end
 +
-+  local start_line_nr, prev_line_nr
-+  for _, line_nr in ipairs(line_ansi_colorized) do
-+    if start_line_nr == nil then
-+      start_line_nr = line_nr
-     end
-+    if prev_line_nr ~= nil and line_nr ~= prev_line_nr + 1 then
-+      local text = self:get_lines(start_line_nr, prev_line_nr + 1, false)
-+      vim.g.baleia.buf_set_lines(self.handle, start_line_nr, prev_line_nr + 1, false, text)
-+      start_line_nr = line_nr
-+    end
-+    prev_line_nr = line_nr
-+  end
-+  if start_line_nr ~= nil then
-+    local text = self:get_lines(start_line_nr, prev_line_nr + 1, false)
-+    vim.g.baleia.buf_set_lines(self.handle, start_line_nr, prev_line_nr + 1, false, text)
-   end
- end
+ function Buffer:set_folds(folds)
+   self:set_window_option("foldmethod", "manual")
  
-
-From 12944a408b6cd6dec5ecac801da38093b5b1b3e0 Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Mon, 9 Dec 2024 02:15:27 +1100
-Subject: [PATCH 03/11] docs: add *Delta* example for `log_pager`
-
----
- README.md | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/README.md b/README.md
-index 14b45123b..834ee530d 100644
---- a/README.md
-+++ b/README.md
-@@ -47,6 +47,7 @@ Here's an example spec for [Lazy](https://github.com/folke/lazy.nvim), but you'r
-   dependencies = {
-     "nvim-lua/plenary.nvim",         -- required
-     "sindrets/diffview.nvim",        -- optional - Diff integration
-+    "m00qek/baleia.nvim",            -- optional - Required for a custom log pager
- 
-     -- Only one of these is needed.
-     "nvim-telescope/telescope.nvim", -- optional
-@@ -97,7 +98,7 @@ neogit.setup {
-   -- Show relative date by default. When set, use `strftime` to display dates
-   commit_date_format = nil,
-   log_date_format = nil,
--  -- When set, used to format the diff.
-+  -- When set, used to format the diff. Requires *baleia* to colorize text with ANSI escape sequences. An example for *Delta* is `{ 'delta', '--width', '117' }`. It's recommended to set `disable_context_highlighting = true`, otherwise when the cursor is in the hunk, we lose background highlighting
-   log_pager = nil,
-   -- Show message with spinning animation when a git command is running.
-   process_spinner = false,
-
-From 9f295cfb6adc6f84fd58c189acafb607c0bbe594 Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Mon, 9 Dec 2024 18:28:23 +1100
-Subject: [PATCH 04/11] docs: for *Delta*, hyperlinks must be disabled in its
- *Git* config section
-
----
- README.md | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/README.md b/README.md
-index 834ee530d..6dc8bb64e 100644
---- a/README.md
-+++ b/README.md
-@@ -98,7 +98,7 @@ neogit.setup {
-   -- Show relative date by default. When set, use `strftime` to display dates
-   commit_date_format = nil,
-   log_date_format = nil,
--  -- When set, used to format the diff. Requires *baleia* to colorize text with ANSI escape sequences. An example for *Delta* is `{ 'delta', '--width', '117' }`. It's recommended to set `disable_context_highlighting = true`, otherwise when the cursor is in the hunk, we lose background highlighting
-+  -- When set, used to format the diff. Requires *baleia* to colorize text with ANSI escape sequences. An example for *Delta* is `{ 'delta', '--width', '117' }`. For *Delta*, hyperlinks must be disabled in its *Git* config section, for text to be colorized properly. It's recommended to set `disable_context_highlighting = true`, otherwise when the cursor is in the hunk, we lose background highlighting
-   log_pager = nil,
-   -- Show message with spinning animation when a git command is running.
-   process_spinner = false,
-
-From 1e31dcd43898b23c4faf2b815d55f1bdf83795c8 Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Tue, 10 Dec 2024 04:04:13 +1100
-Subject: [PATCH 05/11] refactor: use `vim.system()` instead of *plenary* to
- run `config.values.log_pager`
-
----
- lua/neogit/buffers/common.lua | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
-
-diff --git a/lua/neogit/buffers/common.lua b/lua/neogit/buffers/common.lua
-index 5828db715..0f226ece5 100644
---- a/lua/neogit/buffers/common.lua
-+++ b/lua/neogit/buffers/common.lua
-@@ -1,5 +1,3 @@
--local Job = require("plenary.job")
--
- local Ui = require("neogit.lib.ui")
- local Component = require("neogit.lib.ui.component")
- local util = require("neogit.lib.util")
-@@ -35,17 +33,13 @@ M.DiffHunks = Component.new(function(diff)
-       local content = vim.list_slice(diff.lines, hunk.diff_from + 1, hunk.diff_to)
-       local job = nil
-       if config.values.log_pager ~= nil then
--        job = Job:new {
--          command = config.values.log_pager[1],
--          args = vim.list_slice(config.values.log_pager, 2),
--        }
--        job:start()
-+        job = vim.system(config.values.log_pager, { stdin = true })
-         for _, part in ipairs { diff.header, { header }, content } do
-           for _, line in ipairs(part) do
--            job:send(line .. "\n")
-+            job:write(line .. "\n")
-           end
-         end
--        job.stdin:close()
-+        job:write()
-       end
- 
-       return {
-@@ -60,8 +54,7 @@ M.DiffHunks = Component.new(function(diff)
- 
-   if config.values.log_pager ~= nil then
-     vim.iter(hunk_props):each(function(hunk)
--      hunk.job:wait()
--      hunk.content = hunk.job:result()
-+      hunk.content = vim.split(hunk.job:wait().stdout, "\n")
-       hunk.job = nil
-     end)
-   end
-
-From 05342d4adb3f94db947c2506db56faa303525901 Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Tue, 10 Dec 2024 05:11:36 +1100
-Subject: [PATCH 06/11] refactor: run the pager in `neogit.lib.git.diff`
- `build_pager_contents()`
-
----
- lua/neogit/buffers/common.lua | 39 +++++++--------------------------
- lua/neogit/lib/git/diff.lua   | 41 +++++++++++++++++++++++++++++++++--
- 2 files changed, 47 insertions(+), 33 deletions(-)
-
-diff --git a/lua/neogit/buffers/common.lua b/lua/neogit/buffers/common.lua
-index 0f226ece5..484c5206e 100644
---- a/lua/neogit/buffers/common.lua
-+++ b/lua/neogit/buffers/common.lua
-@@ -26,37 +26,14 @@ M.Diff = Component.new(function(diff)
- end)
- 
- M.DiffHunks = Component.new(function(diff)
--  local hunk_props = vim
--    .iter(diff.hunks)
--    :map(function(hunk)
--      local header = diff.lines[hunk.diff_from]
--      local content = vim.list_slice(diff.lines, hunk.diff_from + 1, hunk.diff_to)
--      local job = nil
--      if config.values.log_pager ~= nil then
--        job = vim.system(config.values.log_pager, { stdin = true })
--        for _, part in ipairs { diff.header, { header }, content } do
--          for _, line in ipairs(part) do
--            job:write(line .. "\n")
--          end
--        end
--        job:write()
--      end
--
--      return {
--        header = header,
--        content = content,
--        job = job,
--        hunk = hunk,
--        folded = hunk._folded,
--      }
--    end)
--    :totable()
--
--  if config.values.log_pager ~= nil then
--    vim.iter(hunk_props):each(function(hunk)
--      hunk.content = vim.split(hunk.job:wait().stdout, "\n")
--      hunk.job = nil
--    end)
-+  local hunk_props = {}
-+  for i, hunk in ipairs(diff.hunks) do
-+    table.insert(hunk_props, {
-+      header = diff.lines[hunk.diff_from],
-+      content = diff.pager_contents[i],
-+      hunk = hunk,
-+      folded = hunk._folded,
-+    })
-   end
- 
-   return col.tag("DiffContent") {
 diff --git a/lua/neogit/lib/git/diff.lua b/lua/neogit/lib/git/diff.lua
-index 1e5d4a9a6..fa750dfe4 100644
+index 64d3be1f..ccf7609a 100644
 --- a/lua/neogit/lib/git/diff.lua
 +++ b/lua/neogit/lib/git/diff.lua
 @@ -1,6 +1,7 @@
@@ -414,14 +148,7 @@ index 1e5d4a9a6..fa750dfe4 100644
  local logger = require("neogit.logger")
  
  local insert = table.insert
-@@ -12,13 +13,13 @@ local sha256 = vim.fn.sha256
- ---@field staged_stats fun(): DiffStagedStats
- ---
- ---@class Diff
-----@field header string[]
- ---@field kind string
- ---@field lines string[]
- ---@field file string
+@@ -18,6 +19,7 @@ local sha256 = vim.fn.sha256
  ---@field info table
  ---@field stats table
  ---@field hunks Hunk
@@ -429,7 +156,20 @@ index 1e5d4a9a6..fa750dfe4 100644
  ---
  ---@class DiffStats
  ---@field additions number
-@@ -216,6 +217,41 @@ local function build_hunks(lines)
+@@ -166,10 +168,10 @@ local function build_hunks(lines)
+ 
+       if line:match("^@@@") then
+         -- Combined diff header
+-        index_from, index_len, disk_from, disk_len = line:match("@@@* %-(%d+),?(%d*) .* %+(%d+),?(%d*) @@@*")
++        index_from, index_len, disk_from, disk_len = line:match("^@@@* %-(%d+),?(%d*) .* %+(%d+),?(%d*) @@@*")
+       else
+         -- Normal diff header
+-        index_from, index_len, disk_from, disk_len = line:match("@@ %-(%d+),?(%d*) %+(%d+),?(%d*) @@")
++        index_from, index_len, disk_from, disk_len = line:match("^@@ %-(%d+),?(%d*) %+(%d+),?(%d*) @@")
+       end
+ 
+       if index_from then
+@@ -215,6 +217,41 @@ local function build_hunks(lines)
    return hunks
  end
  
@@ -471,7 +211,7 @@ index 1e5d4a9a6..fa750dfe4 100644
  ---@param raw_diff string[]
  ---@param raw_stats string[]
  ---@return Diff
-@@ -223,6 +259,7 @@ local function parse_diff(raw_diff, raw_stats)
+@@ -222,6 +259,7 @@ local function parse_diff(raw_diff, raw_stats)
    local header, start_idx = build_diff_header(raw_diff)
    local lines = build_lines(raw_diff, start_idx)
    local hunks = build_hunks(lines)
@@ -479,14 +219,7 @@ index 1e5d4a9a6..fa750dfe4 100644
    local kind, info = build_kind(header)
    local file = build_file(header, kind)
    local stats = parse_diff_stats(raw_stats or {})
-@@ -233,13 +270,13 @@ local function parse_diff(raw_diff, raw_stats)
-   end)
- 
-   return { ---@type Diff
--    header = header,
-     kind = kind,
-     lines = lines,
-     file = file,
+@@ -238,6 +276,7 @@ local function parse_diff(raw_diff, raw_stats)
      info = info,
      stats = stats,
      hunks = hunks,
@@ -494,95 +227,8 @@ index 1e5d4a9a6..fa750dfe4 100644
    }
  end
  
-
-From 51a5c328f68e0b5e589990e45bc5642fa5fdb7ed Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Thu, 12 Dec 2024 19:15:23 +1100
-Subject: [PATCH 07/11] refactor: move `Buffer:set_line_highlights()` ANSI
- highlights to `Buffer:set_ansi_highlights()`, to avoid finding hunk line
- numbers manually with the hard-coded `NeogitDiffContext`
-
-- Add `ansi_hl` to `ComponentOptions`, to indicate whether the component needs ANSI highlighting.
-- Add `ansi_highlight` to `RendererBuffer`, to pass hunk line numbers.
----
- lua/neogit/buffers/common.lua   |  8 +++++++-
- lua/neogit/lib/buffer.lua       | 36 +++++++--------------------------
- lua/neogit/lib/ui/component.lua |  1 +
- lua/neogit/lib/ui/init.lua      |  1 +
- lua/neogit/lib/ui/renderer.lua  |  9 +++++++++
- 5 files changed, 25 insertions(+), 30 deletions(-)
-
-diff --git a/lua/neogit/buffers/common.lua b/lua/neogit/buffers/common.lua
-index 484c5206e..37efcda11 100644
---- a/lua/neogit/buffers/common.lua
-+++ b/lua/neogit/buffers/common.lua
-@@ -83,7 +83,13 @@ M.Hunk = Component.new(function(props)
-   return col.tag("Hunk")({
-     text.line_hl("NeogitHunkHeader")(props.header),
-     col.tag("HunkContent")(map(props.content, HunkLine)),
--  }, { foldable = true, folded = props.folded or false, context = true, hunk = props.hunk })
-+  }, {
-+    ansi_hl = config.values.log_pager ~= nil,
-+    foldable = true,
-+    folded = props.folded or false,
-+    context = true,
-+    hunk = props.hunk,
-+  })
- end)
- 
- M.List = Component.new(function(props)
-diff --git a/lua/neogit/lib/buffer.lua b/lua/neogit/lib/buffer.lua
-index 1fa1360aa..82eb46d43 100644
---- a/lua/neogit/lib/buffer.lua
-+++ b/lua/neogit/lib/buffer.lua
-@@ -147,38 +147,16 @@ function Buffer:set_extmarks(extmarks)
- end
- 
- function Buffer:set_line_highlights(highlights)
--  local line_ansi_colorized_map = {}
--
-   for _, hl in ipairs(highlights) do
--    local line_nr, hl_group = unpack(hl)
--    if hl_group == "NeogitDiffContext" then
--      line_ansi_colorized_map[line_nr] = true
--    else
--      self:add_line_highlight(unpack(hl))
--    end
--  end
--
--  local line_ansi_colorized = {}
--  for k in pairs(line_ansi_colorized_map) do
--    table.insert(line_ansi_colorized, k)
-+    self:add_line_highlight(unpack(hl))
-   end
--  table.sort(line_ansi_colorized)
-+end
- 
--  local start_line_nr, prev_line_nr
--  for _, line_nr in ipairs(line_ansi_colorized) do
--    if start_line_nr == nil then
--      start_line_nr = line_nr
--    end
--    if prev_line_nr ~= nil and line_nr ~= prev_line_nr + 1 then
--      local text = self:get_lines(start_line_nr, prev_line_nr + 1, false)
--      vim.g.baleia.buf_set_lines(self.handle, start_line_nr, prev_line_nr + 1, false, text)
--      start_line_nr = line_nr
--    end
--    prev_line_nr = line_nr
--  end
--  if start_line_nr ~= nil then
--    local text = self:get_lines(start_line_nr, prev_line_nr + 1, false)
--    vim.g.baleia.buf_set_lines(self.handle, start_line_nr, prev_line_nr + 1, false, text)
-+function Buffer:set_ansi_highlights(highlights)
-+  for _, hl in ipairs(highlights) do
-+    local first_line, last_line = unpack(hl)
-+    local text = self:get_lines(first_line, last_line, false)
-+    vim.g.baleia.buf_set_lines(self.handle, first_line, last_line, false, text)
-   end
- end
- 
 diff --git a/lua/neogit/lib/ui/component.lua b/lua/neogit/lib/ui/component.lua
-index ae737977c..15c8f2375 100644
+index ae737977..15c8f237 100644
 --- a/lua/neogit/lib/ui/component.lua
 +++ b/lua/neogit/lib/ui/component.lua
 @@ -13,6 +13,7 @@ local default_component_options = {
@@ -594,7 +240,7 @@ index ae737977c..15c8f2375 100644
  ---@field align_right integer|nil
  ---@field padding_left integer
 diff --git a/lua/neogit/lib/ui/init.lua b/lua/neogit/lib/ui/init.lua
-index 225cc5af5..d5d0d0ed4 100644
+index 225cc5af..d5d0d0ed 100644
 --- a/lua/neogit/lib/ui/init.lua
 +++ b/lua/neogit/lib/ui/init.lua
 @@ -712,6 +712,7 @@ function Ui:update()
@@ -606,7 +252,7 @@ index 225cc5af5..d5d0d0ed4 100644
  
      self.statuscolumn = {}
 diff --git a/lua/neogit/lib/ui/renderer.lua b/lua/neogit/lib/ui/renderer.lua
-index 721278565..e5120bb6d 100644
+index 72127856..e5120bb6 100644
 --- a/lua/neogit/lib/ui/renderer.lua
 +++ b/lua/neogit/lib/ui/renderer.lua
 @@ -70,6 +70,7 @@ end
@@ -639,92 +285,8 @@ index 721278565..e5120bb6d 100644
    if child.options.virtual_text then
      table.insert(self.buffer.extmark, {
        self.namespace,
-
-From d79d897bbed583629115b2d2c45c19627df43014 Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Wed, 18 Dec 2024 19:37:05 +1100
-Subject: [PATCH 08/11] feat: handle "Erase in Line"
-
-We don't support coloring the rest of the line.
----
- lua/neogit/lib/buffer.lua | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/lua/neogit/lib/buffer.lua b/lua/neogit/lib/buffer.lua
-index 82eb46d43..340e614fe 100644
---- a/lua/neogit/lib/buffer.lua
-+++ b/lua/neogit/lib/buffer.lua
-@@ -156,6 +156,18 @@ function Buffer:set_ansi_highlights(highlights)
-   for _, hl in ipairs(highlights) do
-     local first_line, last_line = unpack(hl)
-     local text = self:get_lines(first_line, last_line, false)
-+
-+    for i, line in ipairs(text) do
-+      if line:match("\27%[0K\27%[0m$") then
-+        -- Handle "Erase in Line". We don't support coloring the rest of the line.
-+        line = line:gsub("\27%[0K\27%[0m$", "")
-+        if i < #text then
-+          text[i + 1] = "\27[0m" .. text[i + 1]
-+        end
-+      end
-+      text[i] = line
-+    end
-+
-     vim.g.baleia.buf_set_lines(self.handle, first_line, last_line, false, text)
-   end
- end
-
-From b188d85a67c741f902fb94006c9f53a28242b622 Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Fri, 20 Dec 2024 19:08:29 +1100
-Subject: [PATCH 09/11] docs: switch from `*` to ` `` `, as help documents
- treat that as a tag
-
----
- README.md      | 2 +-
- doc/neogit.txt | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/README.md b/README.md
-index 6dc8bb64e..c9b0f5e9c 100644
---- a/README.md
-+++ b/README.md
-@@ -98,7 +98,7 @@ neogit.setup {
-   -- Show relative date by default. When set, use `strftime` to display dates
-   commit_date_format = nil,
-   log_date_format = nil,
--  -- When set, used to format the diff. Requires *baleia* to colorize text with ANSI escape sequences. An example for *Delta* is `{ 'delta', '--width', '117' }`. For *Delta*, hyperlinks must be disabled in its *Git* config section, for text to be colorized properly. It's recommended to set `disable_context_highlighting = true`, otherwise when the cursor is in the hunk, we lose background highlighting
-+  -- When set, used to format the diff. Requires *baleia* to colorize text with ANSI escape sequences. An example for `Delta` is `{ 'delta', '--width', '117' }`. For `Delta`, hyperlinks must be disabled in its git config section, for text to be colorized properly. It's recommended to set `disable_context_highlighting = true`, otherwise when the cursor is in the hunk, we lose background highlighting
-   log_pager = nil,
-   -- Show message with spinning animation when a git command is running.
-   process_spinner = false,
-diff --git a/doc/neogit.txt b/doc/neogit.txt
-index b7893670b..c4e7d94dc 100644
---- a/doc/neogit.txt
-+++ b/doc/neogit.txt
-@@ -113,8 +113,8 @@ to Neovim users.
-     -- Show relative date by default. When set, use `strftime` to display dates
-     commit_date_format = nil,
-     log_date_format = nil,
--    -- When set, used to format the diff. Requires *baleia* to colorize text with ANSI escape sequences. An example for
--    -- *Delta* is `{ 'delta', '--width', '117' }`. For *Delta*, hyperlinks must be disabled in its *Git* config section,
-+    -- When set, used to format the diff. Requires `baleia` to colorize text with ANSI escape sequences. An example for
-+    -- `Delta` is `{ 'delta', '--width', '117' }`. For `Delta`, hyperlinks must be disabled in its git config section,
-     -- for text to be colorized properly. It's recommended to set `disable_context_highlighting = true`, otherwise when
-     -- the cursor is in the hunk, we lose background highlighting
-     log_pager = nil,
-
-From c8d72ced91814997df0da9436c6b07f4057b3735 Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Fri, 20 Dec 2024 19:28:02 +1100
-Subject: [PATCH 10/11] test: add `pager_contents` to `subject.parse()` specs
-
----
- tests/specs/neogit/lib/git/log_spec.lua | 74 +++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
-
 diff --git a/tests/specs/neogit/lib/git/log_spec.lua b/tests/specs/neogit/lib/git/log_spec.lua
-index f3618c353..fd0a8fbc9 100644
+index f3618c35..fd0a8fbc 100644
 --- a/tests/specs/neogit/lib/git/log_spec.lua
 +++ b/tests/specs/neogit/lib/git/log_spec.lua
 @@ -232,6 +232,67 @@ describe("lib.git.log.parse", function()
@@ -815,31 +377,3 @@ index f3618c353..fd0a8fbc9 100644
            stats = {
              additions = 0,
              deletions = 0,
-
-From 4c0e75ee92dbb7b7db8fc4c695417a72c6d2301a Mon Sep 17 00:00:00 2001
-From: Steven Xu <stevenxxiu@gmail.com>
-Date: Thu, 22 May 2025 19:54:26 +1000
-Subject: [PATCH 11/11] fix: match from the start of the line when building
- hunks, or `.diff` files will be shown incorrectly
-
----
- lua/neogit/lib/git/diff.lua | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/lua/neogit/lib/git/diff.lua b/lua/neogit/lib/git/diff.lua
-index fa750dfe4..ccf7609af 100644
---- a/lua/neogit/lib/git/diff.lua
-+++ b/lua/neogit/lib/git/diff.lua
-@@ -168,10 +168,10 @@ local function build_hunks(lines)
- 
-       if line:match("^@@@") then
-         -- Combined diff header
--        index_from, index_len, disk_from, disk_len = line:match("@@@* %-(%d+),?(%d*) .* %+(%d+),?(%d*) @@@*")
-+        index_from, index_len, disk_from, disk_len = line:match("^@@@* %-(%d+),?(%d*) .* %+(%d+),?(%d*) @@@*")
-       else
-         -- Normal diff header
--        index_from, index_len, disk_from, disk_len = line:match("@@ %-(%d+),?(%d*) %+(%d+),?(%d*) @@")
-+        index_from, index_len, disk_from, disk_len = line:match("^@@ %-(%d+),?(%d*) %+(%d+),?(%d*) @@")
-       end
- 
-       if index_from then

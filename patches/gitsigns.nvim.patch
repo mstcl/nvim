@@ -1,8 +1,8 @@
 diff --git a/lua/gitsigns/actions/blame.lua b/lua/gitsigns/actions/blame.lua
-index 48b5d35..23ec9e9 100644
+index 569dd27..39a6771 100644
 --- a/lua/gitsigns/actions/blame.lua
 +++ b/lua/gitsigns/actions/blame.lua
-@@ -332,6 +332,22 @@ local function pmap(mode, lhs, cb, opts)
+@@ -328,6 +328,22 @@ local function pmap(mode, lhs, cb, opts)
    end, opts)
  end
  
@@ -25,7 +25,7 @@ index 48b5d35..23ec9e9 100644
  --- @async
  function M.blame()
    local __FUNC__ = 'blame'
-@@ -339,6 +355,10 @@ function M.blame()
+@@ -335,6 +351,10 @@ function M.blame()
    local win = api.nvim_get_current_win()
    local bcache = cache[bufnr]
    if not bcache then
@@ -36,7 +36,7 @@ index 48b5d35..23ec9e9 100644
      log.dprint('Not attached')
      return
    end
-@@ -346,6 +366,11 @@ function M.blame()
+@@ -342,6 +362,11 @@ function M.blame()
    bcache:get_blame()
    local blame = assert(bcache.blame)
  
@@ -48,7 +48,7 @@ index 48b5d35..23ec9e9 100644
    -- Save position to align 'scrollbind'
    local top = vim.fn.line('w0') + vim.wo.scrolloff
    local current = vim.fn.line('.')
-@@ -353,9 +378,11 @@ function M.blame()
+@@ -349,9 +374,11 @@ function M.blame()
    vim.cmd.vsplit({ mods = { keepalt = true, split = 'aboveleft' } })
    local blm_win = api.nvim_get_current_win()
  
@@ -61,7 +61,7 @@ index 48b5d35..23ec9e9 100644
  
    local revision = bcache.git_obj.revision
  
-@@ -480,6 +507,7 @@ function M.blame()
+@@ -489,6 +516,7 @@ function M.blame()
        if api.nvim_win_is_valid(win) then
          cur_wlo.foldenable, cur_wlo.scrollbind, cur_wlo.wrap = unpack(cur_orig_wlo)
        end

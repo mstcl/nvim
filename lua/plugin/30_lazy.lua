@@ -7,11 +7,11 @@ require("lazy").setup({
 	dev = {
 		path = "~/projects",
 		patterns = _G.config.dev_plugins,
-		fallback = true,
+		fallback = false,
 	},
 	install = {
 		missing = true,
-		colorscheme = { "tavern" },
+		colorscheme = { "tavern_extended" },
 	},
 	ui = {
 		size = { width = 0.8, height = 0.8 },
