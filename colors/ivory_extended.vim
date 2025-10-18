@@ -134,14 +134,14 @@ highlight! link @markup.list.checked.markdown Delimiter
 highlight! link @markup.list.unchecked.markdown Delimiter
 highlight! link @punctuation Delimiter
 highlight! link @punctuation.delimiter.yaml Delimiter
-highlight DiagnosticSignError guifg=#79241F guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight DiagnosticSignError guifg=#79241F guibg=#E8D0C2 guisp=NONE blend=NONE gui=bold
 highlight! link LspDiagnosticsSignError DiagnosticSignError
-highlight DiagnosticSignHint guifg=#735057 guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight DiagnosticSignHint guifg=#735057 guibg=#DDD1DE guisp=NONE blend=NONE gui=bold
 highlight! link LspDiagnosticsSignHint DiagnosticSignHint
-highlight DiagnosticSignInfo guifg=#535367 guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight DiagnosticSignInfo guifg=#535367 guibg=#CAD6DE guisp=NONE blend=NONE gui=bold
 highlight! link LspDiagnosticsSignInformation DiagnosticSignInfo
 highlight DiagnosticSignOk guifg=#89766A guibg=NONE guisp=NONE blend=NONE gui=bold
-highlight DiagnosticSignWarn guifg=#563E1A guibg=NONE guisp=NONE blend=NONE gui=bold
+highlight DiagnosticSignWarn guifg=#523427 guibg=#E6D3A2 guisp=NONE blend=NONE gui=bold
 highlight! link LspDiagnosticsSignWarning DiagnosticSignWarn
 highlight DiagnosticUnderlineOk guifg=NONE guibg=NONE guisp=#454B39 blend=NONE gui=undercurl
 highlight DiagnosticUnnecessary guifg=NONE guibg=NONE guisp=#5B4D45 blend=NONE gui=underdotted
