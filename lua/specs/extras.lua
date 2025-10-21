@@ -804,6 +804,7 @@ return {
 	{ -- (overseer.nvim) Code runner
 		"stevearc/overseer.nvim",
 		dependencies = { "ibhagwan/fzf-lua" },
+		version = "v1.6.0",
 		keys = {
 			{
 				"<leader>O",
