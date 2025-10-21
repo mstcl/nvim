@@ -286,7 +286,7 @@ end
 
 local function search_ancestors(startpath, func)
 	if nvim_eleven then
-		validate("func", func, "function")
+		vim.validate("func", func, "function")
 	end
 	if func(startpath) then
 		return startpath
