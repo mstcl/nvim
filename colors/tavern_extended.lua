@@ -1,3 +1,6 @@
+vim.opt.background = "dark"
+vim.g.colors_name = "tavern_extended"
+
 local lush = require("lush")
 local extended = lush.merge({
 	require("tavern"),

@@ -1,8 +1,8 @@
 _G.config = {}
 
 _G.config.dev_plugins = {
-	"ivory",
-	"tavern",
+	"ivory.nvim",
+	"tavern.nvim",
 }
 
 _G.config.ascii = "  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n"

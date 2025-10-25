@@ -1,3 +1,6 @@
+vim.opt.background = "light"
+vim.g.colors_name = "ivory_extended"
+
 local lush = require("lush")
 local extended = lush.merge({
 	require("ivory"),

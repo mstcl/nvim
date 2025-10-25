@@ -200,7 +200,7 @@ end
 -- Configure on attach
 _G.lsp.on_attach = function(client, bufnr)
 	-- Prevent LSP from overwriting treesitter color settings
-	vim.highlight.priorities.semantic_tokens = 95
+	vim.highlight.priorities.semantic_tokens = 120
 
 	-- setup mappings
 	setup_mappings(client, bufnr)

@@ -5,8 +5,8 @@ return {
 		cmd = "Shipwright",
 		dependencies = {
 			"rktjmp/lush.nvim",
-			-- "mstcl/tavern.nvim",
-			-- "mstcl/ivory.nvim",
+			"mstcl/tavern.nvim",
+			"mstcl/ivory.nvim",
 		},
 	},
 	{ -- (nvim-highlight-colors) Highlight color blocks
@@ -62,7 +62,7 @@ return {
 			end
 		end,
 		init = function()
-			augroup("indentLinesDisable", {
+			_G.augroup("indentLinesDisable", {
 				{ "Filetype" },
 				{
 					pattern = {
