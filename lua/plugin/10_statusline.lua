@@ -105,7 +105,7 @@ end
 ---@return string
 _G.statusline.components.lsp_diagnostic = function()
 	---@diagnostic disable-next-line: unnecessary-if
-	if _G.config.features.lsp.enabled then
+	if not _G.config.features.lsp.enabled then
 		return ""
 	end
 
