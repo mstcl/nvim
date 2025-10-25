@@ -64,7 +64,6 @@ return {
 	{ -- (otter.nvim) LSP completion in code blocks
 		"jmbuhr/otter.nvim",
 		cond = _G.config.features.lsp.enabled,
-		dependencies = { "neovim/nvim-lspconfig" },
 		ft = { "quarto", "markdown" },
 		opts = function()
 			return {

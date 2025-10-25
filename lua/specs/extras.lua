@@ -5,11 +5,6 @@ return {
 		lazy = false,
 		config = true,
 	},
-	{ -- (lazy-patcher) lazy nvim plugin patcher
-		"one-d-wide/lazy-patcher.nvim",
-		ft = "lazy",
-		config = true,
-	},
 	{ -- (nvim-web-devicons) Icons
 		"nvim-tree/nvim-web-devicons",
 		opts = {
@@ -554,12 +549,12 @@ return {
 		cmd = "Neogit",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
-			{
-				"m00qek/baleia.nvim",
-				config = function()
-					vim.g.baleia = require("baleia").setup({})
-				end,
-			},
+			-- {
+			-- 	"m00qek/baleia.nvim",
+			-- 	config = function()
+			-- 		vim.g.baleia = require("baleia").setup({})
+			-- 	end,
+			-- },
 		},
 		keys = {
 			{
@@ -625,15 +620,15 @@ return {
 				fetch_after_checkout = true,
 				auto_show_console_on = "error",
 				console_timeout = 6000,
-				log_pager = {
-					"delta",
-					"--width",
-					"120",
-					"--file-style",
-					"omit",
-					"--hunk-header-style",
-					"omit",
-				},
+				-- log_pager = {
+				-- 	"delta",
+				-- 	"--width",
+				-- 	"120",
+				-- 	"--file-style",
+				-- 	"omit",
+				-- 	"--hunk-header-style",
+				-- 	"omit",
+				-- },
 				commit_view = { kind = "replace" },
 				commit_editor = { kind = "vsplit", staged_diff_split_kind = "vsplit" },
 				integrations = { fzf_lua = true, diffview = true },
@@ -659,7 +654,7 @@ return {
 			if opts then
 				require("neogit").setup(opts)
 			end
-			augroup("neogitDisable", {
+			_G.augroup("neogitDisable", {
 				{ "Filetype" },
 				{
 					pattern = "Neogit*",

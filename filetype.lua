@@ -40,6 +40,7 @@ vim.filetype.add({
 		[".*/host_vars/.*.yml"] = "yaml.ansible",
 		[".*/group_vars/.*.yml"] = "yaml.ansible",
 		[".*/playbooks/.*.yml"] = "yaml.ansible",
+		[".*/host/.*.yml"] = "yaml.ansible",
 		[".*/docker-compose.yml"] = "yaml",
 		[".*/fontconfig/%a*"] = "xml",
 		[".*/templates/.*.yml.j2"] = "jinja2.yaml",
