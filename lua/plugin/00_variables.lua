@@ -26,7 +26,7 @@ _G.config.features.ui = {
 _G.config.features.lsp = {
 	enabled = true,
 	virtual_text = false,
-	virtual_lines = true,
+	virtual_lines = false,
 	inlay_hints = false,
 }
 
@@ -197,6 +197,8 @@ _G.config.treesitter_sources = {
 	"query",
 	"sql",
 	"printf",
+	"git_config",
+	"rasi",
 }
 
 _G.config.sources.lsp = {
