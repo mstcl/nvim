@@ -21,13 +21,6 @@ return {
 			require("nvim-treesitter.query_predicates")
 		end,
 		opts = function()
-			local function add(lang)
-				if type(ensure_installed) == "table" then
-					table.insert(ensure_installed, lang)
-				end
-			end
-			add("git_config")
-			add("rasi")
 			return {
 				ensure_installed = _G.config.sources.treesitter,
 				sync_install = false,
@@ -35,7 +28,7 @@ return {
 					enable = true,
 					use_languagetree = true,
 					additional_vim_regex_highlighting = { "org" },
-					disable = { "latex" },
+					disable = { "latex", "dockerfile" },
 					is_supported = function()
 						if _G.big(vim.fn.expand("%")) then
 							return false
