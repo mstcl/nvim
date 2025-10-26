@@ -547,6 +547,7 @@ return {
 	{ -- (neogit) magit clone
 		"NeogitOrg/neogit",
 		cmd = "Neogit",
+		commit = "0f48491ae0046796841aaa97d439267982fe72db",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			-- {
