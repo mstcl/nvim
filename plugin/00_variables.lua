@@ -119,6 +119,8 @@ _G.config.sources.treesitter = {
 	"rasi",
 	"sxhkdrc",
 	"yaml",
+	"yaml.gitlab",
+	"yaml.ansible",
 	"toml",
 	"comment",
 	"org",
@@ -174,4 +176,5 @@ _G.config.sources.tools = {
 	"codespell",
 	"trivy",
 	"biome",
+	"yamlfmt",
 }

@@ -141,15 +141,16 @@ MiniDeps.later(function()
 		{
 			pattern = indentscope_disable_filetypes,
 			desc = "Disable indentscope",
-			callback = function()
-				vim.b.miniindentscope_disable = true
-			end,
+			callback = function() vim.b.miniindentscope_disable = true end,
 		},
 	})
 
-	vim.keymap.set("n", "<leader>I", function()
-		vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable
-	end, { desc = "Indentscope toggle", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>I",
+		function() vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable end,
+		{ desc = "Indentscope toggle", noremap = false, silent = true }
+	)
 
 	require("mini.indentscope").setup({
 		draw = {
@@ -180,9 +181,7 @@ _G.now_if_args(function()
 			nested = true,
 			callback = function(info)
 				local path = info.file
-				if path == "" then
-					return
-				end
+				if path == "" then return end
 				local stat = require("luv").fs_stat(path)
 				if stat and stat.type == "directory" then
 					vim.api.nvim_del_autocmd(info.id)
@@ -272,13 +271,19 @@ _G.now_if_args(function()
 		prompt_save_on_select_new_entry = true,
 	})
 
-	vim.keymap.set("n", "<leader>e", function()
-		require("oil").open()
-	end, { desc = "Explorer (Oil)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>e",
+		function() require("oil").open() end,
+		{ desc = "Explorer (Oil)", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>E", function()
-		require("oil").open_float()
-	end, { desc = "Explorer (Oil)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>E",
+		function() require("oil").open_float() end,
+		{ desc = "Explorer (Oil)", noremap = false, silent = true }
+	)
 end)
 
 -- (fzf-lua-frecency.nvim) Frecency plugin for fzf-lua
@@ -295,9 +300,12 @@ MiniDeps.later(function()
 		},
 	})
 
-	vim.keymap.set("n", "<leader>f", function()
-		vim.cmd("FzfLua frecency cwd_only=true")
-	end, { desc = "Files by frecency (picker)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>f",
+		function() vim.cmd("FzfLua frecency cwd_only=true") end,
+		{ desc = "Files by frecency (picker)", noremap = false, silent = true }
+	)
 end)
 
 -- (fzf-lua) Navigation and fuzzy pickers
@@ -327,7 +335,11 @@ MiniDeps.later(function()
 			file_icons = true,
 			formatter = "path.filename_first",
 		},
-		fzf_opts = { ["--margin"] = "0,0", ["--info"] = "inline-right", ["--no-bold"] = "" },
+		fzf_opts = {
+			["--margin"] = "0,0",
+			["--info"] = "inline-right",
+			["--no-bold"] = "",
+		},
 		winopts = {
 			backdrop = 100,
 			preview = {
@@ -411,9 +423,7 @@ MiniDeps.later(function()
 		helptags = { previewer = "help_native" },
 		zoxide = { formatter = "path.dirname_first" },
 		lsp = {
-			symbol_fmt = function(s)
-				return s:lower() .. "\t"
-			end,
+			symbol_fmt = function(s) return s:lower() .. "\t" end,
 			child_prefix = false,
 		},
 		tabs = {
@@ -437,9 +447,7 @@ MiniDeps.later(function()
 			},
 			actions = {
 				["ctrl-o"] = {
-					fn = function(selected)
-						require("oil").open(selected[1])
-					end,
+					fn = function(selected) require("oil").open(selected[1]) end,
 					desc = "open-oil",
 					header = "open oil in selected directory",
 				},
@@ -450,52 +458,82 @@ MiniDeps.later(function()
 					desc = "search-files",
 					header = "search files in selected directory",
 				},
-				["default"] = function(selected)
-					vim.cmd("cd " .. selected[1])
-				end,
+				["default"] = function(selected) vim.cmd("cd " .. selected[1]) end,
 			},
 		})
 	end
 
-	vim.keymap.set("n", "<leader>p", function()
-		vim.cmd("FzfLua resume")
-	end, { desc = "Last picker", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>p",
+		function() vim.cmd("FzfLua resume") end,
+		{ desc = "Last picker", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>P", function()
-		vim.cmd("FzfLua builtin")
-	end, { desc = "All pickers", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>P",
+		function() vim.cmd("FzfLua builtin") end,
+		{ desc = "All pickers", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>tt", function()
-		vim.cmd("FzfLua tabs")
-	end, { desc = "Tabs (picker)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>tt",
+		function() vim.cmd("FzfLua tabs") end,
+		{ desc = "Tabs (picker)", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>h", function()
-		vim.cmd("FzfLua oldfiles")
-	end, { desc = "History (picker)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>h",
+		function() vim.cmd("FzfLua oldfiles") end,
+		{ desc = "History (picker)", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>B", function()
-		vim.cmd("FzfLua buffers")
-	end, { desc = "Buffers (picker)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>B",
+		function() vim.cmd("FzfLua buffers") end,
+		{ desc = "Buffers (picker)", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>b", function()
-		vim.cmd("FzfLua buffers cwd_only=true")
-	end, { desc = "Buffers cwd (picker)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>b",
+		function() vim.cmd("FzfLua buffers cwd_only=true") end,
+		{ desc = "Buffers cwd (picker)", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>z", function()
-		zoxide_picker()
-	end, { desc = "Zoxide (picker)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>z",
+		function() zoxide_picker() end,
+		{ desc = "Zoxide (picker)", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>gC", function()
-		vim.cmd("FzfLua git_bcommits")
-	end, { desc = "Git buffer commits (picker)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>gC",
+		function() vim.cmd("FzfLua git_bcommits") end,
+		{ desc = "Git buffer commits (picker)", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>s", function()
-		vim.cmd("FzfLua live_grep path_shorten=true multiline=2 resume=true")
-	end, { desc = "Search workspace (buffer)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>s",
+		function()
+			vim.cmd("FzfLua live_grep path_shorten=true multiline=2 resume=true")
+		end,
+		{ desc = "Search workspace (buffer)", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>S", function()
-		vim.cmd("FzfLua lgrep_curbuf")
-	end, { desc = "search buffer (buffer)", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>S",
+		function() vim.cmd("FzfLua lgrep_curbuf") end,
+		{ desc = "search buffer (buffer)", noremap = false, silent = true }
+	)
 end)
 
 -- (gitsigns.nvim) blame and diff for git
@@ -517,41 +555,68 @@ MiniDeps.later(function()
 		},
 	})
 
-	vim.keymap.set("n", "<leader>gs", function()
-		vim.cmd("Gitsigns toggle_signs")
-	end, { desc = "Git signs toggle", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>gs",
+		function() vim.cmd("Gitsigns toggle_signs") end,
+		{ desc = "Git signs toggle", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "[g", function()
-		vim.cmd("Gitsigns prev_hunk")
-	end, { desc = "Previous git hunk", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"[g",
+		function() vim.cmd("Gitsigns prev_hunk") end,
+		{ desc = "Previous git hunk", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "]g", function()
-		vim.cmd("Gitsigns next_hunk")
-	end, { desc = "Next git hunk", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"]g",
+		function() vim.cmd("Gitsigns next_hunk") end,
+		{ desc = "Next git hunk", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>ghp", function()
-		vim.cmd("Gitsigns preview_hunk_inline")
-	end, { desc = "Preview hunk inline", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>ghp",
+		function() vim.cmd("Gitsigns preview_hunk_inline") end,
+		{ desc = "Preview hunk inline", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>ghs", function()
-		vim.cmd("Gitsigns stage_hunk")
-	end, { desc = "Stage hunk", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>ghs",
+		function() vim.cmd("Gitsigns stage_hunk") end,
+		{ desc = "Stage hunk", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>ghu", function()
-		vim.cmd("Gitsigns undo_stage_hunk")
-	end, { desc = "Undo stage hunk", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>ghu",
+		function() vim.cmd("Gitsigns undo_stage_hunk") end,
+		{ desc = "Undo stage hunk", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>ghr", function()
-		vim.cmd("Gitsigns reset_hunk")
-	end, { desc = "Reset hunk", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>ghr",
+		function() vim.cmd("Gitsigns reset_hunk") end,
+		{ desc = "Reset hunk", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>gbl", function()
-		vim.cmd("Gitsigns toggle_current_line_blame")
-	end, { desc = "Blame virtual toggle", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>gbl",
+		function() vim.cmd("Gitsigns toggle_current_line_blame") end,
+		{ desc = "Blame virtual toggle", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>gbw", function()
-		vim.cmd("Gitsigns blame")
-	end, { desc = "Blame window open", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>gbw",
+		function() vim.cmd("Gitsigns blame") end,
+		{ desc = "Blame window open", noremap = false, silent = true }
+	)
 end)
 
 -- (neogit) magit clone
@@ -639,21 +704,33 @@ MiniDeps.later(function()
 		},
 	})
 
-	vim.keymap.set("n", "<leader>gc", function()
-		vim.cmd("Neogit commit kind=tab")
-	end, { desc = "Neogit commits", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>gc",
+		function() vim.cmd("Neogit commit kind=tab") end,
+		{ desc = "Neogit commits", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>gl", function()
-		vim.cmd("Neogit log kind=tab")
-	end, { desc = "Neogit logs", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>gl",
+		function() vim.cmd("Neogit log kind=tab") end,
+		{ desc = "Neogit logs", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>gb", function()
-		vim.cmd("Neogit branch")
-	end, { desc = "Neogit branches", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>gb",
+		function() vim.cmd("Neogit branch") end,
+		{ desc = "Neogit branches", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>gg", function()
-		vim.cmd("Neogit kind=tab")
-	end, { desc = "Neogit", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>gg",
+		function() vim.cmd("Neogit kind=tab") end,
+		{ desc = "Neogit", noremap = false, silent = true }
+	)
 end)
 
 -- (blink.cmp) Auto completion *
@@ -713,9 +790,7 @@ MiniDeps.later(function()
 							text = function(ctx)
 								return " " .. ctx.kind_icon .. " " .. ctx.icon_gap
 							end,
-							highlight = function(ctx)
-								return ctx.kind_hl
-							end,
+							highlight = function(ctx) return ctx.kind_hl end,
 						},
 					},
 				},
@@ -826,9 +901,12 @@ end)
 MiniDeps.later(function()
 	MiniDeps.add("nvim-mini/mini.pairs")
 
-	vim.keymap.set("n", "<leader>A", function()
-		vim.g.minipairs_disable = not vim.g.minipairs_disable
-	end, { desc = "Autopairs toggle", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>A",
+		function() vim.g.minipairs_disable = not vim.g.minipairs_disable end,
+		{ desc = "Autopairs toggle", noremap = false, silent = true }
+	)
 
 	require("mini.pairs").setup({
 		modes = { insert = true, command = true, terminal = false },
@@ -875,30 +953,46 @@ MiniDeps.later(function()
 		},
 	})
 
-	vim.keymap.set("n", "<C-a>", function()
-		require("dial.map").manipulate("increment", "normal")
-	end)
-	vim.keymap.set("n", "<C-x>", function()
-		require("dial.map").manipulate("decrement", "normal")
-	end)
-	vim.keymap.set("n", "g<C-a>", function()
-		require("dial.map").manipulate("increment", "gnormal")
-	end)
-	vim.keymap.set("n", "g<C-x>", function()
-		require("dial.map").manipulate("decrement", "gnormal")
-	end)
-	vim.keymap.set("x", "<C-a>", function()
-		require("dial.map").manipulate("increment", "visual")
-	end)
-	vim.keymap.set("x", "<C-x>", function()
-		require("dial.map").manipulate("decrement", "visual")
-	end)
-	vim.keymap.set("x", "g<C-a>", function()
-		require("dial.map").manipulate("increment", "gvisual")
-	end)
-	vim.keymap.set("x", "g<C-x>", function()
-		require("dial.map").manipulate("decrement", "gvisual")
-	end)
+	vim.keymap.set(
+		"n",
+		"<C-a>",
+		function() require("dial.map").manipulate("increment", "normal") end
+	)
+	vim.keymap.set(
+		"n",
+		"<C-x>",
+		function() require("dial.map").manipulate("decrement", "normal") end
+	)
+	vim.keymap.set(
+		"n",
+		"g<C-a>",
+		function() require("dial.map").manipulate("increment", "gnormal") end
+	)
+	vim.keymap.set(
+		"n",
+		"g<C-x>",
+		function() require("dial.map").manipulate("decrement", "gnormal") end
+	)
+	vim.keymap.set(
+		"x",
+		"<C-a>",
+		function() require("dial.map").manipulate("increment", "visual") end
+	)
+	vim.keymap.set(
+		"x",
+		"<C-x>",
+		function() require("dial.map").manipulate("decrement", "visual") end
+	)
+	vim.keymap.set(
+		"x",
+		"g<C-a>",
+		function() require("dial.map").manipulate("increment", "gvisual") end
+	)
+	vim.keymap.set(
+		"x",
+		"g<C-x>",
+		function() require("dial.map").manipulate("decrement", "gvisual") end
+	)
 end)
 
 -- (nvim-treesitter) Treesitter engine
@@ -907,9 +1001,7 @@ _G.now_if_args(function()
 		source = "nvim-treesitter/nvim-treesitter",
 		checkout = "main",
 		hooks = {
-			post_checkout = function()
-				vim.cmd("TSUpdate")
-			end,
+			post_checkout = function() vim.cmd("TSUpdate") end,
 		},
 	})
 	MiniDeps.add({
@@ -965,30 +1057,72 @@ _G.now_if_args(function()
 				silent = true,
 			}
 		end
-		vim.keymap.set("x", "i" .. key, function()
-			require("nvim-treesitter-textobjects.select").select_textobject(inner, "textobjects")
-		end, get_opts("Inner"))
-		vim.keymap.set("x", "a" .. key, function()
-			require("nvim-treesitter-textobjects.select").select_textobject(outer, "textobjects")
-		end, get_opts("Outer"))
-		vim.keymap.set("o", "i" .. key, function()
-			require("nvim-treesitter-textobjects.select").select_textobject(inner, "textobjects")
-		end, get_opts("Inner"))
-		vim.keymap.set("o", "a" .. key, function()
-			require("nvim-treesitter-textobjects.select").select_textobject(outer, "textobjects")
-		end, get_opts("Outer"))
+		vim.keymap.set(
+			"x",
+			"i" .. key,
+			function()
+				require("nvim-treesitter-textobjects.select").select_textobject(
+					inner,
+					"textobjects"
+				)
+			end,
+			get_opts("Inner")
+		)
+		vim.keymap.set(
+			"x",
+			"a" .. key,
+			function()
+				require("nvim-treesitter-textobjects.select").select_textobject(
+					outer,
+					"textobjects"
+				)
+			end,
+			get_opts("Outer")
+		)
+		vim.keymap.set(
+			"o",
+			"i" .. key,
+			function()
+				require("nvim-treesitter-textobjects.select").select_textobject(
+					inner,
+					"textobjects"
+				)
+			end,
+			get_opts("Inner")
+		)
+		vim.keymap.set(
+			"o",
+			"a" .. key,
+			function()
+				require("nvim-treesitter-textobjects.select").select_textobject(
+					outer,
+					"textobjects"
+				)
+			end,
+			get_opts("Outer")
+		)
 	end
 
 	textobj_map("f", "function")
 	textobj_map("c", "conditional")
 	textobj_map("l", "loop")
 
-	vim.keymap.set("n", ">A", function()
-		require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner")
-	end)
-	vim.keymap.set("n", "<A", function()
-		require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner")
-	end)
+	vim.keymap.set(
+		"n",
+		">A",
+		function()
+			require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner")
+		end
+	)
+	vim.keymap.set(
+		"n",
+		"<A",
+		function()
+			require("nvim-treesitter-textobjects.swap").swap_previous(
+				"@parameter.inner"
+			)
+		end
+	)
 end)
 
 -- (nvim-treesitter-context) Treesitter context in-buffer
@@ -1026,9 +1160,7 @@ MiniDeps.later(function()
 	local get_mason_sources = function(source_map)
 		local sources = {}
 		for _, v in pairs(source_map) do
-			if v ~= "" then
-				table.insert(sources, v)
-			end
+			if v ~= "" then table.insert(sources, v) end
 		end
 
 		return sources
@@ -1075,9 +1207,7 @@ MiniDeps.later(function()
 		{
 			desc = "activate Otter",
 			pattern = { "*.md", "*.qmd" },
-			callback = function()
-				require("otter").activate()
-			end,
+			callback = function() require("otter").activate() end,
 		},
 	})
 end)
@@ -1092,22 +1222,18 @@ MiniDeps.later(function()
 		quiet = true,
 		default_format_opts = { lsp_format = "fallback" },
 		formatters_by_ft = {
-			typescript = { "prettierd" },
-			typescriptreact = { "prettierd" },
-			javascript = { "prettierd" },
-			javascriptreact = { "prettierd" },
-			html = { "prettierd" },
-			css = { "prettierd" },
-			scss = { "prettierd" },
+			typescript = { "biome" },
+			typescriptreact = { "biome" },
+			javascript = { "biome" },
+			javascriptreact = { "biome" },
+			html = { "biome" },
+			css = { "biome" },
+			scss = { "biome" },
 			lua = { "stylua", lsp_format = "prefer" },
 			markdown = { "prettierd", "injected", "mdslw" },
 			quarto = { "prettierd", "injected", "mdslw" },
-			yaml = { "prettierd" },
-			graphql = { "prettierd" },
-			vue = { "prettierd" },
-			angular = { "prettierd" },
-			less = { "prettierd" },
-			flow = { "prettierd" },
+			yaml = { "yamlfmt" },
+			graphql = { "biome" },
 			sh = { "shfmt" },
 			bash = { "shfmt" },
 			zsh = { "shfmt" },
@@ -1116,12 +1242,20 @@ MiniDeps.later(function()
 			hcl = { "hcl" },
 			python = { "ruff_format", "ruff_organize_imports", "ruff_fix" },
 			opa = { "opa_fmt" },
+			json = { "biome" },
+			jsonc = { "biome" },
 		},
 		format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
 		formatters = {
 			prettier = {
 				prepend_args = function()
-					return { "--no-semi", "--single-quote", "--no-bracket-spacing", "--print-width", "80" }
+					return {
+						"--no-semi",
+						"--single-quote",
+						"--no-bracket-spacing",
+						"--print-width",
+						"80",
+					}
 				end,
 			},
 			injected = {
@@ -1184,16 +1318,16 @@ MiniDeps.later(function()
 			local bufname = vim.api.nvim_buf_get_name(props.buf)
 			local filename = vim.fn.fnamemodify(bufname, ":t")
 			local extension = vim.fn.fnamemodify(filename, ":e")
-			local icon, _ = require("nvim-web-devicons").get_icon(filename, extension, { default = true })
+			local icon, _ = require("nvim-web-devicons").get_icon(
+				filename,
+				extension,
+				{ default = true }
+			)
 			local modified = ""
 
-			if icon ~= "" then
-				icon = icon .. " "
-			end
+			if icon ~= "" then icon = icon .. " " end
 
-			if filename == "" then
-				filename = "[No Name]"
-			end
+			if filename == "" then filename = "[No Name]" end
 
 			if vim.api.nvim_get_option_value("modified", { buf = props.buf }) then
 				modified = " [+]"
@@ -1220,9 +1354,12 @@ MiniDeps.later(function()
 		exclude_buftypes = { "nofile" },
 	})
 
-	vim.keymap.set("n", "<leader>H", function()
-		vim.cmd("HighlightColors Toggle")
-	end, { desc = "Highlight toggle", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>H",
+		function() vim.cmd("HighlightColors Toggle") end,
+		{ desc = "Highlight toggle", noremap = false, silent = true }
+	)
 end)
 
 -- (quarto-nvim) Quarto syntax
@@ -1258,9 +1395,7 @@ MiniDeps.later(function()
 end)
 
 -- (typst.nvim) Typst syntax
-MiniDeps.later(function()
-	MiniDeps.add("kaarmu/typst.vim")
-end)
+MiniDeps.later(function() MiniDeps.add("kaarmu/typst.vim") end)
 
 -- (zk-nvim) Markdown note taking assistant
 MiniDeps.later(function()
@@ -1275,21 +1410,33 @@ MiniDeps.later(function()
 		lsp = {},
 	})
 
-	vim.keymap.set("n", "<leader>ne", function()
-		vim.cmd("ZkNotes")
-	end, { desc = "Note entries", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>ne",
+		function() vim.cmd("ZkNotes") end,
+		{ desc = "Note entries", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>nl", function()
-		vim.cmd("ZkLinks")
-	end, { desc = "Note links", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>nl",
+		function() vim.cmd("ZkLinks") end,
+		{ desc = "Note links", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>nb", function()
-		vim.cmd("ZkBacklinks")
-	end, { desc = "Note backlinks", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>nb",
+		function() vim.cmd("ZkBacklinks") end,
+		{ desc = "Note backlinks", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>nt", function()
-		vim.cmd("ZkTags")
-	end, { desc = "Note tags", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>nt",
+		function() vim.cmd("ZkTags") end,
+		{ desc = "Note tags", noremap = false, silent = true }
+	)
 
 	vim.keymap.set(
 		"v",
@@ -1300,9 +1447,7 @@ MiniDeps.later(function()
 end)
 
 -- (d2-vim) D2 diagram
-MiniDeps.later(function()
-	MiniDeps.add("terrastruct/d2-vim")
-end)
+MiniDeps.later(function() MiniDeps.add("terrastruct/d2-vim") end)
 
 -- (render-markdown.nvim) Nice markdown rendering
 MiniDeps.later(function()
@@ -1343,7 +1488,12 @@ MiniDeps.later(function()
 			unchecked = { icon = "󰄱 " },
 			checked = { icon = "󰄲 " },
 			custom = {
-				todo = { raw = "[-]", rendered = "󰡖 ", highlight = "RenderMarkdownTodo", scope_highlight = nil },
+				todo = {
+					raw = "[-]",
+					rendered = "󰡖 ",
+					highlight = "RenderMarkdownTodo",
+					scope_highlight = nil,
+				},
 			},
 		},
 		link = {
@@ -1427,9 +1577,12 @@ MiniDeps.later(function()
 		},
 	})
 
-	vim.keymap.set("n", "<leader>G", function()
-		vim.cmd("GrugFar")
-	end, { desc = "GrugFar", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>G",
+		function() vim.cmd("GrugFar") end,
+		{ desc = "GrugFar", noremap = false, silent = true }
+	)
 
 	_G.augroup("grugfar", {
 		{ "Filetype" },
@@ -1481,27 +1634,35 @@ MiniDeps.later(function()
 			{
 				">",
 				function()
-					require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+					require("quicker").expand({
+						before = 2,
+						after = 2,
+						add_to_existing = true,
+					})
 				end,
 				desc = "expand quickfix context",
 			},
 			{
 				"<",
-				function()
-					require("quicker").collapse()
-				end,
+				function() require("quicker").collapse() end,
 				desc = "collapse quickfix context",
 			},
 		},
 	})
 
-	vim.keymap.set("n", "<leader>q", function()
-		require("quicker").toggle()
-	end, { desc = "Quickfix toggle", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>q",
+		function() require("quicker").toggle() end,
+		{ desc = "Quickfix toggle", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>l", function()
-		require("quicker").toggle({ loclist = true })
-	end, { desc = "Location list toggle", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>l",
+		function() require("quicker").toggle({ loclist = true }) end,
+		{ desc = "Location list toggle", noremap = false, silent = true }
+	)
 end)
 
 -- (overseer.nvim) Code runner
@@ -1526,13 +1687,19 @@ MiniDeps.later(function()
 		help_win = default_win_opts,
 	})
 
-	vim.keymap.set("n", "<leader>O", function()
-		vim.cmd("OverseerToggle")
-	end, { desc = "Overseer toggle", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>O",
+		function() vim.cmd("OverseerToggle") end,
+		{ desc = "Overseer toggle", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>o", function()
-		vim.cmd("OverseerRun")
-	end, { desc = "Overseer run", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>o",
+		function() vim.cmd("OverseerRun") end,
+		{ desc = "Overseer run", noremap = false, silent = true }
+	)
 end)
 
 -- (aerial.nvim) code outline
@@ -1567,17 +1734,26 @@ MiniDeps.later(function()
 		},
 	})
 
-	vim.keymap.set("n", "}", function()
-		vim.cmd("AerialNext")
-	end, { desc = "Next symbol", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"}",
+		function() vim.cmd("AerialNext") end,
+		{ desc = "Next symbol", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "{", function()
-		vim.cmd("AerialPrev")
-	end, { desc = "Previous symbol", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"{",
+		function() vim.cmd("AerialPrev") end,
+		{ desc = "Previous symbol", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>a", function()
-		vim.cmd("AerialToggle")
-	end, { desc = "Aerial toggle", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>a",
+		function() vim.cmd("AerialToggle") end,
+		{ desc = "Aerial toggle", noremap = false, silent = true }
+	)
 
 	_G.augroup("aerial", {
 		{ "Filetype" },
@@ -1617,17 +1793,26 @@ MiniDeps.later(function()
 		enhanced_diff_hl = true,
 	})
 
-	vim.keymap.set("n", "<leader>dh", function()
-		vim.cmd("DiffviewFileHistory")
-	end, { desc = "Open diffview history", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>dh",
+		function() vim.cmd("DiffviewFileHistory") end,
+		{ desc = "Open diffview history", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>dd", function()
-		vim.cmd("DiffviewOpen")
-	end, { desc = "Open diffview", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>dd",
+		function() vim.cmd("DiffviewOpen") end,
+		{ desc = "Open diffview", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>dc", function()
-		vim.cmd("DiffviewClose")
-	end, { desc = "Close diffview", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>dc",
+		function() vim.cmd("DiffviewClose") end,
+		{ desc = "Close diffview", noremap = false, silent = true }
+	)
 
 	_G.augroup("diffview", {
 		{ "BufEnter", "ColorScheme" },
@@ -1659,10 +1844,30 @@ MiniDeps.later(function()
 		},
 	})
 
-	vim.keymap.set("n", "co", "<Plug>(git-conflict-ours)", { desc = "Choose ours", noremap = false, silent = true })
-	vim.keymap.set("n", "ct", "<Plug>(git-conflict-theirs)", { desc = "Choose theirs", noremap = false, silent = true })
-	vim.keymap.set("n", "cb", "<Plug>(git-conflict-both)", { desc = "Choose both", noremap = false, silent = true })
-	vim.keymap.set("n", "cn", "<Plug>(git-conflict-none)", { desc = "Choose none", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"co",
+		"<Plug>(git-conflict-ours)",
+		{ desc = "Choose ours", noremap = false, silent = true }
+	)
+	vim.keymap.set(
+		"n",
+		"ct",
+		"<Plug>(git-conflict-theirs)",
+		{ desc = "Choose theirs", noremap = false, silent = true }
+	)
+	vim.keymap.set(
+		"n",
+		"cb",
+		"<Plug>(git-conflict-both)",
+		{ desc = "Choose both", noremap = false, silent = true }
+	)
+	vim.keymap.set(
+		"n",
+		"cn",
+		"<Plug>(git-conflict-none)",
+		{ desc = "Choose none", noremap = false, silent = true }
+	)
 
 	vim.keymap.set(
 		"n",
@@ -1678,13 +1883,19 @@ MiniDeps.later(function()
 		{ desc = "Previous conflict", noremap = false, silent = true }
 	)
 
-	vim.keymap.set("n", "<leader>dd", function()
-		vim.cmd("DiffviewOpen")
-	end, { desc = "Open diffview", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>dd",
+		function() vim.cmd("DiffviewOpen") end,
+		{ desc = "Open diffview", noremap = false, silent = true }
+	)
 
-	vim.keymap.set("n", "<leader>dc", function()
-		vim.cmd("DiffviewClose")
-	end, { desc = "Close diffview", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>dc",
+		function() vim.cmd("DiffviewClose") end,
+		{ desc = "Close diffview", noremap = false, silent = true }
+	)
 end)
 
 -- (nvim-spider) use the w, e, b motions like a spider.
@@ -1693,9 +1904,21 @@ MiniDeps.later(function()
 
 	require("spider").setup()
 
-	vim.keymap.set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<CR>")
-	vim.keymap.set({ "n", "o", "x" }, "e", "<cmd>lua require('spider').motion('e')<CR>")
-	vim.keymap.set({ "n", "o", "x" }, "b", "<cmd>lua require('spider').motion('b')<CR>")
+	vim.keymap.set(
+		{ "n", "o", "x" },
+		"w",
+		"<cmd>lua require('spider').motion('w')<CR>"
+	)
+	vim.keymap.set(
+		{ "n", "o", "x" },
+		"e",
+		"<cmd>lua require('spider').motion('e')<CR>"
+	)
+	vim.keymap.set(
+		{ "n", "o", "x" },
+		"b",
+		"<cmd>lua require('spider').motion('b')<CR>"
+	)
 end)
 
 -- (atone) Modern undotree
@@ -1703,9 +1926,12 @@ MiniDeps.later(function()
 	MiniDeps.add("XXiaoA/atone.nvim")
 	require("atone").setup()
 
-	vim.keymap.set("n", "<leader>u", function()
-		vim.cmd("Atone toggle")
-	end, { desc = "Undotree toggle", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>u",
+		function() vim.cmd("Atone toggle") end,
+		{ desc = "Undotree toggle", noremap = false, silent = true }
+	)
 end)
 
 -- (nvim-tree) Tree file
@@ -1769,7 +1995,8 @@ MiniDeps.later(function()
 				local floating_wins = {}
 				local wins = vim.api.nvim_list_wins()
 				for _, w in ipairs(wins) do
-					local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
+					local bufname =
+						vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
 					if bufname:match("NvimTree_") ~= nil then
 						table.insert(tree_wins, w)
 					end
@@ -1807,7 +2034,8 @@ MiniDeps.later(function()
 	require("nvim-tree.view").View.winopts.statuscolumn = ""
 	require("nvim-tree.view").View.winopts.colorcolumn = ""
 	require("nvim-tree.view").View.winopts.signcolumn = "no"
-	require("nvim-tree.view").View.winopts.winhighlight = "Normal:ColorColumn,CursorLine:CursorLine"
+	require("nvim-tree.view").View.winopts.winhighlight =
+		"Normal:ColorColumn,CursorLine:CursorLine"
 
 	vim.keymap.set("n", "<leader>T", function()
 		vim.cmd("NvimTreeToggle")
@@ -1893,7 +2121,10 @@ MiniDeps.later(function()
 		},
 	})
 
-	vim.keymap.set("n", "<leader>xf", function()
-		vim.cmd("Fyler")
-	end, { desc = "Fyler", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>xf",
+		function() vim.cmd("Fyler") end,
+		{ desc = "Fyler", noremap = false, silent = true }
+	)
 end)
