@@ -16,24 +16,8 @@ local extended = lush.merge({
 	require("tavern_render_markdown"),
 	require("tavern_visualwhitespace"),
 	require("tavern_incline"),
+	require("tavern_mason"),
+	require("tavern_null_ls"),
 })
-
----@diagnostic disable-next-line: unnecessary-if
-if _G.config.features.lsp.enabled then
-	extended = lush.merge({
-		extended,
-		require("tavern_mason"),
-		require("tavern_null_ls"),
-	})
-end
-
----@diagnostic disable-next-line: unnecessary-if
-if _G.config.features.dap.enabled then
-	extended = lush.merge({
-		extended,
-		require("tavern_dap"),
-		require("tavern_dap_ui"),
-	})
-end
 
 return lush(extended)

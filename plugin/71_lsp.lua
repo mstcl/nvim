@@ -70,39 +70,59 @@ end
 
 local function setup_mappings(client, bufnr)
 	-- Symbol actions
-	vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "definition", buffer = bufnr, noremap = true })
+	vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Definition", buffer = bufnr, noremap = true })
 	vim.keymap.set(
 		"n",
 		"grt",
 		vim.lsp.buf.type_definition,
-		{ desc = "type definition", buffer = bufnr, noremap = true }
+		{ desc = "Type definition", buffer = bufnr, noremap = true }
 	)
-	vim.keymap.set("n", "grr", vim.lsp.buf.references, { desc = "references", buffer = bufnr, noremap = true })
-	vim.keymap.set("n", "gri", vim.lsp.buf.implementation, { desc = "implementation", buffer = bufnr, noremap = true })
+	vim.keymap.set("n", "grr", vim.lsp.buf.references, { desc = "References", buffer = bufnr, noremap = true })
+	vim.keymap.set("n", "gri", vim.lsp.buf.implementation, { desc = "Implementation", buffer = bufnr, noremap = true })
+
+	vim.keymap.set("n", "grR", function()
+		vim.cmd("FzfLua lsp_references")
+	end, { desc = "References (picker)", noremap = false, silent = true })
+
+	vim.keymap.set("n", "<leader>xdD", function()
+		vim.cmd("FzfLua lsp_document_diagnostics")
+	end, { desc = "Document diagnostics (picker)", noremap = false, silent = true })
+
+	vim.keymap.set("n", "<leader>xds", function()
+		vim.cmd("FzfLua lsp_document_symbols")
+	end, { desc = "Document symbols (picker)", noremap = false, silent = true })
+
+	vim.keymap.set("n", "<leader>wD", function()
+		vim.cmd("FzfLua lsp_workspace_diagnostics")
+	end, { desc = "Workspace diagnostics (picker)", noremap = false, silent = true })
+
+	vim.keymap.set("n", "<leader>ws", function()
+		vim.cmd("FzfLua lsp_workspace_symbols")
+	end, { desc = "Workspace symbols (picker)", noremap = false, silent = true })
 
 	vim.keymap.set(
 		"n",
 		"<leader>xdS",
 		vim.lsp.buf.document_symbol,
-		{ desc = "document symbols (qf)", buffer = bufnr, noremap = true }
+		{ desc = "Document symbols (qf)", buffer = bufnr, noremap = true }
 	)
 	vim.keymap.set(
 		"n",
 		"<leader>xdd",
 		vim.diagnostic.setloclist,
-		{ desc = "document diagnostics (loc)", buffer = bufnr, noremap = true }
+		{ desc = "Document diagnostics (loc)", buffer = bufnr, noremap = true }
 	)
 	vim.keymap.set(
 		"n",
 		"<leader>wd",
 		vim.diagnostic.setqflist,
-		{ desc = "workspace diagnostics (qf)", buffer = bufnr, noremap = true }
+		{ desc = "Workspace diagnostics (qf)", buffer = bufnr, noremap = true }
 	)
 	vim.keymap.set(
 		"n",
 		"<leader>wS",
 		vim.lsp.buf.workspace_symbol,
-		{ desc = "workspace symbols (query)", buffer = bufnr, noremap = true }
+		{ desc = "Workspace symbols (query)", buffer = bufnr, noremap = true }
 	)
 
 	vim.keymap.set("n", "<leader>v", function()
@@ -127,7 +147,7 @@ local function setup_mappings(client, bufnr)
 				end,
 			})
 		end
-	end, { desc = "virtual lines toggle" })
+	end, { desc = "Virtual lines toggle" })
 	vim.keymap.set("n", "<leader>V", function()
 		local config = vim.diagnostic.config()
 		if config == nil then
@@ -150,31 +170,31 @@ local function setup_mappings(client, bufnr)
 				end,
 			})
 		end
-	end, { desc = "virtual text toggle", noremap = true })
+	end, { desc = "Virtual text toggle", noremap = true })
 
 	if client.server_capabilities.inlayHintProvider then
 		vim.keymap.set("n", "<leader>i", function()
 			---@diagnostic disable-next-line: missing-parameter
 			vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-		end, { desc = "inlay hints toggle", noremap = true })
+		end, { desc = "Inlay hints toggle", noremap = true })
 	end
 
 	if client.server_capabilities.codeActionProvider then
-		vim.keymap.set("n", "gra", vim.lsp.buf.code_action, { desc = "code actions", buffer = bufnr, noremap = true })
+		vim.keymap.set("n", "gra", vim.lsp.buf.code_action, { desc = "Code actions", buffer = bufnr, noremap = true })
 		vim.keymap.set(
 			"v",
 			"gra",
 			":'<,'>lua vim.lsp.buf.range_code_action()<CR>",
-			{ desc = "code actions", buffer = bufnr, noremap = true }
+			{ desc = "Code actions", buffer = bufnr, noremap = true }
 		)
 	end
 
 	if client.server_capabilities.codeLensProvider then
-		vim.keymap.set({ "n" }, "grl", vim.lsp.codelens.run, { desc = "code lens", buffer = bufnr, noremap = true })
+		vim.keymap.set({ "n" }, "grl", vim.lsp.codelens.run, { desc = "Code lens", buffer = bufnr, noremap = true })
 	end
 
 	if client.server_capabilities.declarationProvider then
-		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "declaration", buffer = bufnr, noremap = true })
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Declaration", buffer = bufnr, noremap = true })
 	end
 
 	if client.server_capabilities.documentFormattingProvider then
@@ -182,18 +202,18 @@ local function setup_mappings(client, bufnr)
 			{ "n", "v" },
 			"<leader>F",
 			require("conform").format,
-			{ desc = "format code", buffer = bufnr, noremap = true }
+			{ desc = "Format code", buffer = bufnr, noremap = true }
 		)
 	end
 
 	if client.server_capabilities.hoverProvider then
 		vim.keymap.set("n", "K", function()
 			vim.lsp.buf.hover({ border = _G.config.border, max_width = 35 })
-		end, { desc = "symbol documentation", buffer = bufnr, noremap = true })
+		end, { desc = "Symbol documentation", buffer = bufnr, noremap = true })
 	end
 
 	if client.server_capabilities.renameProvider then
-		vim.keymap.set("n", "grn", vim.lsp.buf.rename, { desc = "rename", buffer = bufnr, noremap = true })
+		vim.keymap.set("n", "grn", vim.lsp.buf.rename, { desc = "Rename", buffer = bufnr, noremap = true })
 	end
 end
 
@@ -201,6 +221,23 @@ end
 _G.lsp.on_attach = function(client, bufnr)
 	-- Prevent LSP from overwriting treesitter color settings
 	vim.highlight.priorities.semantic_tokens = 120
+
+	-- autocmd to update diagnostic for statusline
+	_G.augroup("diagnosticUpdate", {
+		{ "DiagnosticChanged" },
+		{
+			desc = "update diagnostics cache for the status line.",
+			callback = function(info)
+				local b = vim.b[info.buf]
+				local diagnostic_cnt_cache = { 0, 0, 0, 0 }
+				for _, diagnostic in ipairs(info.data.diagnostics) do
+					diagnostic_cnt_cache[diagnostic.severity] = diagnostic_cnt_cache[diagnostic.severity] + 1
+				end
+				b.diagnostic_str_cache = nil
+				b.diagnostic_cnt_cache = diagnostic_cnt_cache
+			end,
+		},
+	})
 
 	-- setup mappings
 	setup_mappings(client, bufnr)
@@ -238,7 +275,7 @@ _G.lsp.on_attach = function(client, bufnr)
 
 	if client.name == "zk" then
 		vim.keymap.set("n", "<leader>ni", ":ZkIndex<CR>", {
-			desc = "index notes",
+			desc = "Index notes",
 			noremap = true,
 			silent = true,
 			buffer = bufnr,
@@ -342,4 +379,13 @@ vim.lsp.config("*", {
 	flags = { debounce_text_changes = 150 },
 })
 
-vim.lsp.enable(_G.config.sources.get_compatible_sources(_G.config.sources.lsp))
+local get_lsp_sources = function(source_map)
+	local sources = {}
+	for k, _ in pairs(source_map) do
+		table.insert(sources, k)
+	end
+
+	return sources
+end
+
+vim.lsp.enable(get_lsp_sources(_G.config.sources.lsp))

@@ -1,0 +1,4 @@
+column_width = 85
+line_endings = "Unix"
+call_parentheses = "Always"
+collapse_simple_statement = "Always"

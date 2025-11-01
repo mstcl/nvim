@@ -1,22 +1,21 @@
--- Setup lazy
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
----@diagnostic disable-next-line: undefined-field, deprecated
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-	if vim.v.shell_error ~= 0 then
-		vim.api.nvim_echo({
-			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-			{ out, "WarningMsg" },
-			{ "\nPress any key to exit..." },
-		}, true, {})
-		vim.fn.getchar()
-		os.exit(1)
-	end
+-- Setup mini.deps
+local path_package = vim.fn.stdpath("data") .. "/site/"
+local deps_path = path_package .. "pack/deps/start/mini.deps"
+if not (vim.uv or vim.loop).fs_stat(deps_path) then
+	vim.cmd('echo "Installing `mini.deps`" | redraw')
+	local clone_cmd = {
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/nvim-mini/mini.deps",
+		deps_path,
+	}
+	vim.fn.system(clone_cmd)
+	vim.cmd("packadd mini.deps | helptags ALL")
+	vim.cmd('echo "Installed `mini.deps`" | redraw')
 end
 
-vim.opt.rtp:prepend(lazypath)
+require("mini.deps").setup({ path = { package = path_package } })
 
 ---Shortcut syntax to create autocmd with augroup @param group string @vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
 ---@return nil
@@ -40,16 +39,6 @@ _G.big = function(filepath)
 	return false
 end
 
-require("plugin.00_variables")
-require("plugin.10_statusline")
-require("plugin.11_statuscol")
-require("plugin.20_options")
-require("plugin.25_terminal")
-require("plugin.30_lazy")
-require("plugin.40_commands")
-require("plugin.41_quietmode")
-require("plugin.50_autocmds")
-require("plugin.60_mappings")
-require("plugin.70_lsp")
-require("plugin.80_pickers")
-require("plugin.99_override")
+-- Some plugins and 'mini.nvim' modules only need setup during startup if Neovim
+-- is started like `nvim -- path/to/file`, otherwise delaying setup is fine
+_G.now_if_args = vim.fn.argc(-1) > 0 and MiniDeps.now or MiniDeps.later

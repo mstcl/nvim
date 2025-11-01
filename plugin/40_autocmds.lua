@@ -1,5 +1,3 @@
-local opts = { noremap = true, silent = true }
-
 local function is_valid_git_repo(buf_id)
 	-- Check if it's a valid buffer
 	local path = vim.api.nvim_buf_get_name(buf_id)
@@ -58,25 +56,6 @@ local function update_git_branch(data)
 			end
 		end)
 	)
-end
-
----@diagnostic disable-next-line: unnecessary-if
-if _G.config.features.lsp.enabled then
-	_G.augroup("diagnosticUpdate", {
-		{ "DiagnosticChanged" },
-		{
-			desc = "update diagnostics cache for the status line.",
-			callback = function(info)
-				local b = vim.b[info.buf]
-				local diagnostic_cnt_cache = { 0, 0, 0, 0 }
-				for _, diagnostic in ipairs(info.data.diagnostics) do
-					diagnostic_cnt_cache[diagnostic.severity] = diagnostic_cnt_cache[diagnostic.severity] + 1
-				end
-				b.diagnostic_str_cache = nil
-				b.diagnostic_cnt_cache = diagnostic_cnt_cache
-			end,
-		},
-	})
 end
 
 _G.augroup("gitBranch", {
@@ -142,18 +121,7 @@ _G.augroup("textOpts", {
 			vim.opt_local.cursorline = false
 
 			-- Set keymap for spell autocorrect
-			vim.keymap.set("i", "<C-L>", "<c-g>u<Esc>[s1z=`]a<c-g>u", opts) -- autocorrect last spelling error
-		end,
-	},
-})
-
-_G.augroup("activateOtter", {
-	{ "BufNewFile", "BufRead" },
-	{
-		desc = "activate Otter",
-		pattern = { "*.md", "*.qmd" },
-		callback = function()
-			require("otter").activate()
+			vim.keymap.set("i", "<C-L>", "<c-g>u<Esc>[s1z=`]a<c-g>u", { noremap = true, silent = true }) -- autocorrect last spelling error
 		end,
 	},
 })
@@ -218,20 +186,6 @@ _G.augroup("terminal", {
 			if vim.bo.buftype == "terminal" and vim.bo.filetype == "" then
 				vim.cmd("startinsert")
 				vim.cmd("MinimalMode")
-
-				-- Keymaps to leave
-				vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { silent = true, buffer = 0 })
-				vim.keymap.set(
-					"t",
-					"<C-Bslash><C-Bslash>",
-					[[<C-\><C-n>:ToggleTerminal<CR>]],
-					{ silent = true, buffer = 0 }
-				)
-
-				-- Also map <C-\> to <Esc> to avoid interuptting Claude code
-				vim.keymap.set("t", "<C-Bslash>", function()
-					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
-				end)
 			end
 		end,
 	},

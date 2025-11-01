@@ -8,6 +8,7 @@ local extended = lush.merge({
 	require("ivory_telescope"),
 	require("ivory_neogit"),
 	require("ivory_mini_indentscope"),
+	require("ivory_mini_clue"),
 	require("ivory_diffview"),
 	require("ivory_gitsigns"),
 	require("ivory_cmp"),
@@ -16,24 +17,8 @@ local extended = lush.merge({
 	require("ivory_render_markdown"),
 	require("ivory_visualwhitespace"),
 	require("ivory_incline"),
+	require("ivory_mason"),
+	require("ivory_null_ls"),
 })
-
----@diagnostic disable-next-line: unnecessary-if
-if _G.config.features.lsp.enabled then
-	extended = lush.merge({
-		extended,
-		require("ivory_mason"),
-		require("ivory_null_ls"),
-	})
-end
-
----@diagnostic disable-next-line: unnecessary-if
-if _G.config.features.dap.enabled then
-	extended = lush.merge({
-		extended,
-		require("ivory_dap"),
-		require("ivory_dap_ui"),
-	})
-end
 
 return lush(extended)

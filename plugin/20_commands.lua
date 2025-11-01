@@ -79,10 +79,7 @@ end, {})
 -- Check notification history
 vim.api.nvim_create_user_command("MsgHistory", "lua require('mini.notify').show_history()", {})
 
-vim.api.nvim_create_user_command("QuietMode", function()
-	_G.quiet_mode()
-end, {})
-
+-- Minimal mode
 vim.api.nvim_create_user_command("MinimalMode", function()
 	vim.b.minianimate_disable = true
 	vim.b.miniindentscope_disable = true
@@ -93,6 +90,27 @@ vim.api.nvim_create_user_command("MinimalMode", function()
 	vim.wo.statuscolumn = ""
 	vim.wo.colorcolumn = ""
 	vim.wo.signcolumn = "no"
+end, {})
+
+-- Quiet mode
+vim.api.nvim_create_user_command("QuietMode", function()
+	-- Get the number of the current buffer.
+	local current_buf = vim.api.nvim_get_current_buf()
+
+	-- Open a new tab and create a new window within it.
+	vim.cmd("tabnew")
+	local new_win = vim.api.nvim_get_current_win()
+
+	-- Load the original buffer into the new window.
+	-- This ensures you are viewing the exact same file content.
+	vim.api.nvim_win_set_buf(new_win, current_buf)
+
+	vim.g.pastemode = true
+	vim.cmd("MinimalMode")
+
+	vim.keymap.set("n", "q", function()
+		vim.cmd("tabclose")
+	end, { buffer = true, desc = "quit select mode and return to previous tab" })
 end, {})
 
 -- Get latest commit hash
@@ -114,6 +132,43 @@ vim.api.nvim_create_user_command("PairModeLeave", function()
 	vim.cmd("NvimTreeClose")
 end, {})
 
+local function split_new_terminal()
+	if vim.api.nvim_win_get_width(0) >= 350 then
+		vim.cmd("vsplit | winc L | vertical resize 150 | term")
+	else
+		vim.cmd("split | winc J | resize 10 | term")
+	end
+end
+
+local function split_existing_terminal()
+	if vim.api.nvim_win_get_width(0) >= 350 then
+		vim.cmd("vert sb " .. vim.t.t_buf .. "| winc L | vertical resize 150")
+	else
+		vim.cmd("sb" .. vim.t.t_buf .. "| winc J | resize 10")
+	end
+end
+
+local function open_terminal()
+	if vim.fn.bufexists(vim.t.t_buf) ~= 1 then
+		split_new_terminal()
+		vim.t.t_win_id = vim.fn.win_getid()
+		vim.t.t_buf = vim.fn.bufnr("%")
+	elseif vim.fn.win_gotoid(vim.t.t_win_id) ~= 1 then
+		split_existing_terminal()
+		vim.t.t_win_id = vim.fn.win_getid()
+	end
+end
+
+local function hide_terminal()
+	if vim.fn.win_gotoid(vim.t.t_win_id) == 1 then
+		vim.cmd("hide")
+	end
+end
+
 vim.api.nvim_create_user_command("ToggleTerminal", function()
-	_G.toggle_terminal()
+	if vim.fn.win_gotoid(vim.t.t_win_id) == 1 then
+		hide_terminal()
+	else
+		open_terminal()
+	end
 end, {})

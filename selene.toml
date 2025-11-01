@@ -2,3 +2,4 @@ std="vim"
 
 [lints]
 mixed_table="allow"
+undefined_variable="allow"
