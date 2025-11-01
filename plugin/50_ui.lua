@@ -10,10 +10,6 @@ MiniDeps.now(function()
 	MiniDeps.add("rktjmp/lush.nvim")
 	MiniDeps.add("mstcl/tavern.nvim")
 	MiniDeps.add("mstcl/ivory.nvim")
-
-	vim.cmd.colorscheme("ivory_extended")
-	vim.env.BAT_THEME = "ivory"
-	vim.env.DELTA_FEATURES = "+ivory"
 end)
 
 -- (nvim-web-devicons) Icons
@@ -35,7 +31,11 @@ MiniDeps.now(function()
 			end,
 		},
 		lsp_progress = { enable = false },
-		window = { max_width_share = 1, winblend = 0, config = { border = _G.config.border } },
+		window = {
+			max_width_share = 1,
+			winblend = 0,
+			config = { border = _G.config.border },
+		},
 	})
 
 	local vim_notify_opts = {
@@ -49,7 +49,10 @@ MiniDeps.now(function()
 
 	vim.notify = require("mini.notify").make_notify(vim_notify_opts)
 
-	vim.keymap.set("n", "<leader>N", function()
-		require("mini.notify").clear()
-	end, { desc = "Dismiss all notifications", noremap = false, silent = true })
+	vim.keymap.set(
+		"n",
+		"<leader>N",
+		function() require("mini.notify").clear() end,
+		{ desc = "Dismiss all notifications", noremap = false, silent = true }
+	)
 end)

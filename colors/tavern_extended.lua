@@ -1,23 +1,29 @@
-vim.opt.background = "dark"
+vim.cmd("highlight clear")
+vim.cmd("set t_Co=256")
+vim.o.termguicolors = true
+vim.o.background = "dark"
 vim.g.colors_name = "tavern_extended"
+
+package.loaded["tavern"] = nil
 
 local lush = require("lush")
 local extended = lush.merge({
 	require("tavern"),
-	require("tavern_statusline"),
-	require("tavern_telescope"),
-	require("tavern_neogit"),
-	require("tavern_mini_indentscope"),
-	require("tavern_diffview"),
-	require("tavern_gitsigns"),
-	require("tavern_cmp"),
-	require("tavern_aerial"),
-	require("tavern_nvim_tree"),
-	require("tavern_render_markdown"),
-	require("tavern_visualwhitespace"),
-	require("tavern_incline"),
-	require("tavern_mason"),
-	require("tavern_null_ls"),
+	require("tavern.statusline"),
+	require("tavern.telescope"),
+	require("tavern.neogit"),
+	require("tavern.mini_indentscope"),
+	require("tavern.mini_clue"),
+	require("tavern.diffview"),
+	require("tavern.gitsigns"),
+	require("tavern.cmp"),
+	require("tavern.aerial"),
+	require("tavern.nvim_tree"),
+	require("tavern.render_markdown"),
+	require("tavern.visualwhitespace"),
+	require("tavern.incline"),
+	require("tavern.mason"),
+	require("tavern.null_ls"),
 })
 
 return lush(extended)
