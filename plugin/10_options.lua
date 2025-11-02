@@ -1,7 +1,29 @@
 vim.g.mapleader = ","
 vim.g.maplocalleader = ",."
 
--- Providers for nvim
+-- Disable plugins
+vim.g.loaded_gzip = 1
+vim.g.loaded_zip = 1
+vim.g.loaded_zipPlugin = 1
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrw_nogx = 1
+vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_netrwSettings = 1
+vim.g.loaded_netrwFileHandlers = 1
+vim.g.loaded_tar = 1
+vim.g.loaded_tarPlugin = 1
+vim.g.loaded_getscript = 1
+vim.g.loaded_getscriptPlugin = 1
+vim.g.loaded_vimballPlugin = 1
+---@diagnostic disable-next-line: assign-type-mismatch
+vim.g.loaded_2html_plugin = 1
+vim.g.loaded_spellfile_plugin = 1
+vim.g.loaded_tutor_mode_plugin = 1
+vim.g.loaded_matchit = 1
+vim.g.loaded_tutor = 1
+vim.g.loaded_tohtml = 1
+
+-- Disable providers
 vim.g.loaded_python_provider = false
 vim.g.loaded_ruby_provider = false
 vim.g.loaded_node_provider = false
@@ -10,7 +32,7 @@ vim.g.loaded_perl_provider = false
 -- Use filetype.lua
 vim.g.do_filetype_lua = true
 
--- Globals
+-- Vim syntax options
 vim.g["vimsyn_embed"] = "l"
 vim.g["tex_flavor"] = "latex"
 vim.g["tex_fold_enabled"] = "1"
@@ -148,7 +170,7 @@ vim.opt.spelllang = "en_gb"
 vim.opt.spell = false
 vim.opt.spelloptions = "camel"
 
--- Non-text characters
+-- Special characters
 vim.opt.list = false
 vim.opt.showbreak = "↪"
 vim.opt.fillchars = {
@@ -171,3 +193,47 @@ vim.opt.listchars = {
 	space = "·",
 	multispace = "···+",
 }
+
+local virt_lines_ns = vim.api.nvim_create_namespace("on_diagnostic_jump")
+--- @param diagnostic? vim.Diagnostic
+--- @param bufnr integer
+local function on_jump(diagnostic, bufnr)
+	if not diagnostic then return end
+	vim.diagnostic.show(
+		virt_lines_ns,
+		bufnr,
+		{ diagnostic },
+		{ virtual_lines = { current_line = true }, virtual_text = false }
+	)
+end
+
+---@diagnostic disable-next-line: param-type-not-match
+-- Configure builtin diagnostics
+vim.diagnostic.config({
+	---@type vim.diagnostic.Opts
+	virtual_lines = _G.config.diagnostics.virtual_lines,
+	virtual_text = false,
+	signs = true,
+	underline = false,
+	update_in_insert = false,
+	severity_sort = true,
+	jump = { on_jump = on_jump },
+
+	float = {
+		close_events = {
+			"BufLeave",
+			"CursorMoved",
+			"InsertEnter",
+			"FocusLost",
+		},
+		border = _G.config.border,
+		source = "always",
+		focus = false,
+	},
+})
+
+-- Place diagnostic signs as number highlight instead of signs in the gutter
+vim.cmd("sign define DiagnosticSignError text= numhl=DiagnosticSignError")
+vim.cmd("sign define DiagnosticSignWarn text=  numhl=DiagnosticSignWarn")
+vim.cmd("sign define DiagnosticSignInfo text=  numhl=DiagnosticSignInfo")
+vim.cmd("sign define DiagnosticSignHint text=  numhl=DiagnosticSignHint")

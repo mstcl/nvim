@@ -1,0 +1,7 @@
+{
+  "diagnostics": {
+    "disable": [
+      "need-check-nil"
+    ]
+  }
+}

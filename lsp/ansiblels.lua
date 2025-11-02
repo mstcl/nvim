@@ -1,8 +1,5 @@
 ---@type vim.lsp.Config
 return {
-	cmd = { vim.fn.expand("$HOME/.local/share/nvim/mason/bin/ansible-language-server"), "--stdio" },
-	filetypes = { "yaml.ansible" },
-	root_markers = { "ansible.cfg", ".ansible-lint" },
 	settings = {
 		ansible = {
 			ansible = {

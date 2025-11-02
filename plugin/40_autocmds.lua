@@ -1,14 +1,10 @@
 local function is_valid_git_repo(buf_id)
 	-- Check if it's a valid buffer
 	local path = vim.api.nvim_buf_get_name(buf_id)
-	if path == "" or vim.fn.filereadable(path) ~= 1 then
-		return false
-	end
+	if path == "" or vim.fn.filereadable(path) ~= 1 then return false end
 
 	-- Check if the current directory is a Git repository
-	if vim.fn.isdirectory(".git") == 0 then
-		return false
-	end
+	if vim.fn.isdirectory(".git") == 0 then return false end
 
 	return true
 end
@@ -22,9 +18,7 @@ local function clear_git_branch_cache()
 end
 
 local function update_git_branch(data)
-	if not is_valid_git_repo(data.buf) then
-		return
-	end
+	if not is_valid_git_repo(data.buf) then return end
 
 	-- Check if branch is already cached
 	local cached_branch = branch_cache[data.buf]
@@ -121,7 +115,12 @@ _G.augroup("textOpts", {
 			vim.opt_local.cursorline = false
 
 			-- Set keymap for spell autocorrect
-			vim.keymap.set("i", "<C-L>", "<c-g>u<Esc>[s1z=`]a<c-g>u", { noremap = true, silent = true }) -- autocorrect last spelling error
+			vim.keymap.set(
+				"i",
+				"<C-L>",
+				"<c-g>u<Esc>[s1z=`]a<c-g>u",
+				{ noremap = true, silent = true }
+			) -- autocorrect last spelling error
 		end,
 	},
 })
@@ -205,8 +204,217 @@ _G.augroup("terminal", {
 	{
 		desc = "Reload buffers when leaving terminal",
 		pattern = "*",
-		callback = function()
-			vim.cmd.checktime()
+		callback = function() vim.cmd.checktime() end,
+	},
+})
+
+_G.augroup("onLSPAttach", {
+	"LspAttach",
+	{
+		desc = "on attach for LSP",
+		callback = function(args)
+			local bufnr = args.buf
+			local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+
+			-- Prevent LSP from overwriting treesitter color settings
+			vim.highlight.priorities.semantic_tokens = 120
+
+			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
+				desc = "Definition",
+				noremap = true,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "grt", vim.lsp.buf.type_definition, {
+				desc = "Type definition",
+				noremap = true,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "grr", vim.lsp.buf.references, {
+				desc = "References",
+				noremap = true,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "gri", vim.lsp.buf.implementation, {
+				desc = "Implementation",
+				noremap = true,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "<leader>xdS", vim.lsp.buf.document_symbol, {
+				desc = "Document symbols (qf)",
+				noremap = true,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "<leader>xdd", vim.diagnostic.setloclist, {
+				desc = "Document diagnostics (loc)",
+				noremap = true,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, {
+				desc = "Workspace diagnostics (qf)",
+				noremap = true,
+				silent = true,
+				buffer = bufnr,
+			})
+			vim.keymap.set("n", "<leader>wS", vim.lsp.buf.workspace_symbol, {
+				desc = "Workspace symbols (query)",
+				silent = true,
+				noremap = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "<leader>v", function()
+				---@diagnostic disable-next-line: undefined-field
+				if vim.diagnostic.config().virtual_lines == false then
+					vim.diagnostic.config({
+						virtual_lines = _G.config.diagnostics.virtual_lines,
+					})
+				else
+					vim.diagnostic.config({
+						virtual_lines = false,
+					})
+				end
+			end, {
+				desc = "Virtual lines toggle",
+				noremap = true,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "<leader>V", function()
+				---@diagnostic disable-next-line: undefined-field
+				if vim.diagnostic.config().virtual_text == false then
+					vim.diagnostic.config({
+						virtual_text = _G.config.diagnostics.virtual_text,
+					})
+				else
+					vim.diagnostic.config({
+						virtual_text = false,
+					})
+				end
+			end, {
+				desc = "Virtual text toggle",
+				noremap = true,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			if client.server_capabilities.inlayHintProvider then
+				vim.keymap.set("n", "<leader>i", function()
+					---@diagnostic disable-next-line: missing-parameter
+					vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+				end, {
+					desc = "Inlay hints toggle",
+					noremap = true,
+					silent = true,
+					buffer = bufnr,
+				})
+			end
+
+			if client.server_capabilities.codeActionProvider then
+				vim.keymap.set("n", "gra", vim.lsp.buf.code_action, {
+					desc = "Code actions",
+					noremap = true,
+					silent = true,
+					buffer = bufnr,
+				})
+				vim.keymap.set(
+					"v",
+					"gra",
+					":'<,'>lua vim.lsp.buf.range_code_action()<CR>",
+					{
+						desc = "Code actions",
+						noremap = true,
+						silent = true,
+						buffer = bufnr,
+					}
+				)
+			end
+
+			if client.server_capabilities.codeLensProvider then
+				vim.keymap.set({ "n" }, "grl", vim.lsp.codelens.run, {
+					desc = "Code lens",
+					noremap = true,
+					silent = true,
+					buffer = bufnr,
+				})
+			end
+
+			if client.server_capabilities.declarationProvider then
+				vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {
+					desc = "Declaration",
+					noremap = true,
+					silent = true,
+					buffer = bufnr,
+				})
+			end
+
+			-- update diagnostic cache
+			_G.augroup("diagnosticUpdate", {
+				{ "DiagnosticChanged" },
+				{
+					desc = "update diagnostics cache for the status line.",
+					callback = function(info)
+						local b = vim.b[info.buf]
+						local diagnostic_cnt_cache = { 0, 0, 0, 0 }
+						for _, diagnostic in ipairs(info.data.diagnostics) do
+							diagnostic_cnt_cache[diagnostic.severity] = diagnostic_cnt_cache[diagnostic.severity]
+								+ 1
+						end
+						b.diagnostic_str_cache = nil
+						b.diagnostic_cnt_cache = diagnostic_cnt_cache
+					end,
+				},
+			})
+
+			-- inlay hints
+			if client.server_capabilities.inlayHintProvider then
+				vim.lsp.inlay_hint.enable(_G.config.features.lsp.inlay_hints)
+			end
+
+			-- code lens
+			if client.server_capabilities.codeLensProvider then
+				vim.lsp.codelens.refresh({ buffer = bufnr, client = client })
+				_G.augroup("codeLensRefresh", {
+					{ "BufEnter", "CursorHold", "InsertLeave" },
+					{
+						buffer = bufnr,
+						callback = function()
+							vim.lsp.codelens.refresh({
+								buffer = bufnr,
+								client = client,
+							})
+						end,
+					},
+				})
+			end
+
+			-- Workarounds for golsp
+			if client.name == "gopls" then
+				if not client.server_capabilities.semanticTokensProvider then
+					local semantic =
+						client.config.capabilities.textDocument.semanticTokens
+					client.server_capabilities.semanticTokensProvider = {
+						full = true,
+						legend = {
+							tokenTypes = semantic.tokenTypes,
+							tokenModifiers = semantic.tokenModifiers,
+						},
+						range = true,
+					}
+				end
+			end
 		end,
 	},
 })

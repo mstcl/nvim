@@ -1,6 +1,7 @@
 -- Setup mini.deps
 local path_package = vim.fn.stdpath("data") .. "/site/"
 local deps_path = path_package .. "pack/deps/start/mini.deps"
+---@diagnostic disable-next-line: deprecated, undefined-field
 if not (vim.uv or vim.loop).fs_stat(deps_path) then
 	vim.cmd('echo "Installing `mini.deps`" | redraw')
 	local clone_cmd = {
@@ -33,9 +34,7 @@ end
 ---@ param filepath string
 ---@return boolean
 _G.big = function(filepath)
-	if vim.fn.getfsize(filepath) > 400 * 1024 then
-		return true
-	end
+	if vim.fn.getfsize(filepath) > 400 * 1024 then return true end
 	return false
 end
 

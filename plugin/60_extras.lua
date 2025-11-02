@@ -1,4 +1,4 @@
-local plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
+local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
 
 -- (mini.clue) Mapping helper
 MiniDeps.later(function()
@@ -171,9 +171,6 @@ _G.now_if_args(function()
 		source = "stevearc/oil.nvim",
 		depends = { "nvim-tree/nvim-web-devicons" },
 	})
-
-	vim.g.loaded_netrw = 1
-	vim.g.loaded_netrwPlugin = 1
 
 	_G.augroup("oil start", {
 		"BufWinEnter",
@@ -534,6 +531,27 @@ MiniDeps.later(function()
 		function() vim.cmd("FzfLua lgrep_curbuf") end,
 		{ desc = "search buffer (buffer)", noremap = false, silent = true }
 	)
+end)
+
+-- (nvim-lspconfig) LSP server configurations
+_G.now_if_args(function()
+	MiniDeps.add("neovim/nvim-lspconfig")
+
+	vim.lsp.config("*", {
+		capabilities = _G.config.capabilities(),
+		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
+		flags = { debounce_text_changes = 150 },
+	})
+	local get_lsp_sources = function(source_map)
+		local sources = {}
+		for k, _ in pairs(source_map) do
+			table.insert(sources, k)
+		end
+
+		return sources
+	end
+
+	vim.lsp.enable(get_lsp_sources(_G.config.sources.lsp))
 end)
 
 -- (gitsigns.nvim) blame and diff for git
@@ -943,6 +961,7 @@ MiniDeps.later(function()
 	MiniDeps.add("monaqa/dial.nvim")
 
 	local augend = require("dial.augend")
+
 	require("dial.config").augends:register_group({
 		default = {
 			augend.integer.alias.decimal,
@@ -956,41 +975,56 @@ MiniDeps.later(function()
 	vim.keymap.set(
 		"n",
 		"<C-a>",
+		---@diagnostic disable-next-line: param-type-not-match
 		function() require("dial.map").manipulate("increment", "normal") end
 	)
+
 	vim.keymap.set(
 		"n",
 		"<C-x>",
+		---@diagnostic disable-next-line: param-type-not-match
 		function() require("dial.map").manipulate("decrement", "normal") end
 	)
+
 	vim.keymap.set(
 		"n",
 		"g<C-a>",
+		---@diagnostic disable-next-line: param-type-not-match
 		function() require("dial.map").manipulate("increment", "gnormal") end
 	)
+
 	vim.keymap.set(
 		"n",
 		"g<C-x>",
+		---@diagnostic disable-next-line: param-type-not-match
 		function() require("dial.map").manipulate("decrement", "gnormal") end
 	)
+
 	vim.keymap.set(
 		"x",
 		"<C-a>",
+		---@diagnostic disable-next-line: param-type-not-match
 		function() require("dial.map").manipulate("increment", "visual") end
 	)
+
 	vim.keymap.set(
 		"x",
 		"<C-x>",
+		---@diagnostic disable-next-line: param-type-not-match
 		function() require("dial.map").manipulate("decrement", "visual") end
 	)
+
 	vim.keymap.set(
 		"x",
 		"g<C-a>",
+		---@diagnostic disable-next-line: param-type-not-match
 		function() require("dial.map").manipulate("increment", "gvisual") end
 	)
+
 	vim.keymap.set(
 		"x",
 		"g<C-x>",
+		---@diagnostic disable-next-line: param-type-not-match
 		function() require("dial.map").manipulate("decrement", "gvisual") end
 	)
 end)
@@ -1213,7 +1247,7 @@ MiniDeps.later(function()
 end)
 
 -- (conform.nvim) Formatter
-MiniDeps.later(function()
+_G.now_if_args(function()
 	MiniDeps.add("stevearc/conform.nvim")
 
 	require("conform").setup({
@@ -1281,6 +1315,31 @@ MiniDeps.later(function()
 					lang_to_formatters = {},
 				},
 			},
+		},
+	})
+
+	_G.augroup("onLSPAttachConform", {
+		"LspAttach",
+		{
+			desc = "on attach for LSP for conform",
+			callback = function(args)
+				local bufnr = args.buf
+				local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+
+				if client.server_capabilities.documentFormattingProvider then
+					vim.keymap.set(
+						{ "n", "v" },
+						"<leader>F",
+						require("conform").format,
+						{
+							desc = "Format code",
+							noremap = true,
+							silent = true,
+							buffer = bufnr,
+						}
+					)
+				end
+			end,
 		},
 	})
 end)
@@ -1362,7 +1421,7 @@ MiniDeps.later(function()
 	)
 end)
 
--- (quarto-nvim) Quarto syntax
+-- (quarto-nvim) Quarto tools and utilities
 MiniDeps.later(function()
 	MiniDeps.add({
 		source = "quarto-dev/quarto-nvim",
@@ -1393,9 +1452,6 @@ MiniDeps.later(function()
 		},
 	})
 end)
-
--- (typst.nvim) Typst syntax
-MiniDeps.later(function() MiniDeps.add("kaarmu/typst.vim") end)
 
 -- (zk-nvim) Markdown note taking assistant
 MiniDeps.later(function()
@@ -1444,10 +1500,14 @@ MiniDeps.later(function()
 		":'<,'>ZkNewFromTitleSelection<cr>",
 		{ desc = "New note from selection", noremap = false, silent = true }
 	)
-end)
 
--- (d2-vim) D2 diagram
-MiniDeps.later(function() MiniDeps.add("terrastruct/d2-vim") end)
+	vim.keymap.set(
+		"n",
+		"<leader>ni",
+		function() vim.cmd("ZkIndex") end,
+		{ desc = "Index notes", noremap = true, silent = true }
+	)
+end)
 
 -- (render-markdown.nvim) Nice markdown rendering
 MiniDeps.later(function()
@@ -1700,6 +1760,76 @@ MiniDeps.later(function()
 		function() vim.cmd("OverseerRun") end,
 		{ desc = "Overseer run", noremap = false, silent = true }
 	)
+
+	_G.augroup("onLSPAttachFzfLua", {
+		"LspAttach",
+		{
+			desc = "on attach for LSP for fzf-lua",
+			callback = function(args)
+				local bufnr = args.buf
+
+				vim.keymap.set(
+					"n",
+					"grR",
+					function() vim.cmd("FzfLua lsp_references") end,
+					{
+						desc = "References (picker)",
+						noremap = false,
+						silent = true,
+						buffer = bufnr,
+					}
+				)
+
+				vim.keymap.set(
+					"n",
+					"<leader>xdD",
+					function() vim.cmd("FzfLua lsp_document_diagnostics") end,
+					{
+						desc = "Document diagnostics (picker)",
+						noremap = false,
+						silent = true,
+						buffer = bufnr,
+					}
+				)
+
+				vim.keymap.set(
+					"n",
+					"<leader>xds",
+					function() vim.cmd("FzfLua lsp_document_symbols") end,
+					{
+						desc = "Document symbols (picker)",
+						noremap = false,
+						silent = true,
+						buffer = bufnr,
+					}
+				)
+
+				vim.keymap.set(
+					"n",
+					"<leader>wD",
+					function() vim.cmd("FzfLua lsp_workspace_diagnostics") end,
+					{
+						desc = "Workspace diagnostics (picker)",
+						noremap = false,
+						silent = true,
+						buffer = bufnr,
+					}
+				)
+
+				vim.keymap.set(
+					"n",
+					"<leader>ws",
+					function() vim.cmd("FzfLua lsp_workspace_symbols") end,
+					{
+						desc = "Workspace symbols (picker)",
+						noremap = false,
+						silent = true,
+						buffer = bufnr,
+					}
+				)
+			end,
+		},
+	})
 end)
 
 -- (aerial.nvim) code outline
@@ -2041,90 +2171,4 @@ MiniDeps.later(function()
 		vim.cmd("NvimTreeToggle")
 		vim.cmd("wincmd p")
 	end, { desc = "Tree toggle", noremap = false, silent = true })
-end)
-
--- (fyler.nvim) oil x tree
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "A7Lavinraj/fyler.nvim",
-		depends = { "nvim-tree/nvim-web-devicons" },
-	})
-
-	require("fyler").setup({
-		icon_provider = "nvim_web_devicons",
-		close_on_select = false,
-		confirm_simple = true,
-		indentscope = {
-			group = "Delimiter",
-		},
-		win = {
-			win_opts = {
-				concealcursor = "nvic",
-				conceallevel = 3,
-				cursorline = true,
-				number = false,
-				winhighlight = "Normal:ColorColumn,CursorLine:CursorLine",
-				relativenumber = false,
-				wrap = false,
-			},
-			kind = "split_left_most",
-			kind_presets = {
-				split_left_most = {
-					width = "35abs",
-				},
-			},
-		},
-		git_status = {
-			symbols = {
-				Untracked = "U",
-				Added = "S",
-				Modified = "M",
-				Deleted = "D",
-				Renamed = "R",
-				Copied = "C",
-				Conflict = "X",
-				Ignored = "I",
-			},
-		},
-		icon = {
-			directory_collapsed = "",
-			directory_empty = "",
-			directory_expanded = "",
-		},
-		mappings = {
-			["q"] = "CloseView",
-			["<CR>"] = "Select",
-			["<C-t>"] = "SelectTab",
-			["<C-s>v"] = "SelectVSplit",
-			["<C-s>h"] = "SelectSplit",
-			["-"] = "GotoParent",
-			["="] = "GotoCwd",
-			["."] = "GotoNode",
-			["#"] = "CollapseAll",
-			["<BS>"] = "CollapseNode",
-		},
-	})
-
-	_G.augroup("fyler", {
-		{ "FileType" },
-		{
-			desc = "Set Fyler win options",
-			pattern = "Fyler",
-			callback = function()
-				vim.wo.cursorlineopt = "both"
-				vim.wo.colorcolumn = ""
-				vim.b.miniindentscope_disable = true
-				vim.wo.statuscolumn = ""
-				vim.wo.foldcolumn = "0"
-				vim.wo.signcolumn = "no"
-			end,
-		},
-	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>xf",
-		function() vim.cmd("Fyler") end,
-		{ desc = "Fyler", noremap = false, silent = true }
-	)
 end)

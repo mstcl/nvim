@@ -3,6 +3,7 @@ _G.config.sources = {}
 _G.config.filetypes = {}
 _G.config.features = {}
 _G.config.signs = {}
+_G.config.diagnostics = {}
 
 _G.config.ascii = "  ／l、\n（ﾟ、｡７\n  l  ~ヽ\n  じしf,)ノ\n\n"
 
@@ -108,7 +109,6 @@ _G.config.sources.treesitter = {
 	"diff",
 	"dockerfile",
 	"gitignore",
-	"gitconfig",
 	"gitcommit",
 	"gitrebase",
 	"regex",
@@ -146,15 +146,14 @@ _G.config.sources.lsp = {
 	ruff = "ruff",
 	pyrefly = "pyrefly",
 	ty = "ty",
-	emmyluals = "emmylua_ls",
+	emmylua_ls = "emmylua_ls",
 	gopls = "gopls",
-	gitlabcils = "gitlab-ci-ls",
+	gitlab_ci_ls = "gitlab-ci-ls",
 	yamlls = "yaml-language-server",
 	zk = "zk",
 	dockerls = "dockerfile-language-server",
-	terraformls = "terraform-ls",
 	tflint = "tflint",
-	tofuls = "tofu-ls",
+	tofu_ls = "tofu-ls",
 }
 
 -- all code tools to download from mason
@@ -178,3 +177,43 @@ _G.config.sources.tools = {
 	"biome",
 	"yamlfmt",
 }
+
+-- diagnostic configuration
+_G.config.diagnostics.virtual_text = {
+	current_line = true,
+	spacing = 4,
+	source = "if_many",
+	prefix = "●",
+	suffix = " ",
+}
+
+_G.config.diagnostics.virtual_lines = {
+	current_line = true,
+}
+
+-- LSP capabilities
+_G.config.capabilities = function()
+	local capabilities = vim.lsp.protocol.make_client_capabilities()
+	capabilities = vim.tbl_deep_extend("force", capabilities, {
+		textDocument = {
+			foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true,
+			},
+			completionItem = {
+				snippetSupport = true,
+			},
+		},
+		workspace = {
+			fileOperations = {
+				didRename = true,
+				willRename = true,
+			},
+			didChangeWatchedFiles = {
+				dynamicRegistration = true,
+			},
+		},
+	})
+
+	return capabilities
+end

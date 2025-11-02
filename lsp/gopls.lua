@@ -1,8 +1,5 @@
 ---@type vim.lsp.Config
 return {
-	cmd = { "gopls" },
-	filetypes = { "go", "gomod", "gowork", "gotmpl", "gosum" },
-	root_markers = { "go.mod", "go.work", ".git" },
 	settings = {
 		gopls = {
 			gofumpt = true,
@@ -34,7 +31,13 @@ return {
 				useany = true,
 			},
 			staticcheck = true,
-			directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+			directoryFilters = {
+				"-.git",
+				"-.vscode",
+				"-.idea",
+				"-.vscode-test",
+				"-node_modules",
+			},
 			semanticTokens = true,
 			vulncheck = "Imports",
 		},
