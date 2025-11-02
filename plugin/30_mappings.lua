@@ -162,14 +162,14 @@ end, { desc = "Follow word with xdg-open" })
 -- terminal
 vim.keymap.set(
 	"n",
-	"<C-`>",
+	"<C-Space>",
 	function() vim.cmd("ToggleTerminal") end,
 	{ desc = "Quake terminal toggle", noremap = false, silent = true }
 )
 vim.keymap.set("t", "<Esc><Esc>", [[<C-Bslash><C-n>]], { silent = true })
 vim.keymap.set(
 	"t",
-	"<C-`>",
+	"<C-Space>",
 	[[<C-Bslash><C-n>:ToggleTerminal<CR>]],
 	{ silent = true }
 )
