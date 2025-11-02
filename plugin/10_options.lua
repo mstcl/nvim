@@ -81,6 +81,8 @@ vim.opt.ttyfast = true
 vim.opt.conceallevel = 2
 vim.opt.winblend = 0
 vim.opt.termguicolors = true
+vim.opt.guicursor =
+	"n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:ver25-blinkon500-blinkoff500-TermCursor"
 vim.opt.synmaxcol = 400
 vim.opt.virtualedit = "block"
 vim.opt.selection = "old"
