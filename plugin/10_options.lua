@@ -196,30 +196,16 @@ vim.opt.listchars = {
 	multispace = "···+",
 }
 
-local virt_lines_ns = vim.api.nvim_create_namespace("on_diagnostic_jump")
---- @param diagnostic? vim.Diagnostic
---- @param bufnr integer
-local function on_jump(diagnostic, bufnr)
-	if not diagnostic then return end
-	vim.diagnostic.show(
-		virt_lines_ns,
-		bufnr,
-		{ diagnostic },
-		{ virtual_lines = { current_line = true }, virtual_text = false }
-	)
-end
-
 ---@diagnostic disable-next-line: param-type-not-match
 -- Configure builtin diagnostics
 vim.diagnostic.config({
 	---@type vim.diagnostic.Opts
-	virtual_lines = _G.config.diagnostics.virtual_lines,
+	virtual_lines = false,
 	virtual_text = false,
 	signs = true,
 	underline = false,
 	update_in_insert = false,
 	severity_sort = true,
-	jump = { on_jump = on_jump },
 
 	float = {
 		close_events = {

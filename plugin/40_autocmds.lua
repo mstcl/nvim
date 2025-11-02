@@ -183,41 +183,41 @@ _G.augroup("lsp", {
 				buffer = bufnr,
 			})
 
-			vim.keymap.set("n", "<leader>v", function()
-				---@diagnostic disable-next-line: undefined-field
-				if vim.diagnostic.config().virtual_lines == false then
-					vim.diagnostic.config({
-						virtual_lines = _G.config.diagnostics.virtual_lines,
-					})
-				else
-					vim.diagnostic.config({
-						virtual_lines = false,
-					})
-				end
-			end, {
-				desc = "Virtual lines toggle",
-				noremap = true,
-				silent = true,
-				buffer = bufnr,
-			})
-
-			vim.keymap.set("n", "<leader>V", function()
-				---@diagnostic disable-next-line: undefined-field
-				if vim.diagnostic.config().virtual_text == false then
-					vim.diagnostic.config({
-						virtual_text = _G.config.diagnostics.virtual_text,
-					})
-				else
-					vim.diagnostic.config({
-						virtual_text = false,
-					})
-				end
-			end, {
-				desc = "Virtual text toggle",
-				noremap = true,
-				silent = true,
-				buffer = bufnr,
-			})
+			-- vim.keymap.set("n", "<leader>v", function()
+			-- 	---@diagnostic disable-next-line: undefined-field
+			-- 	if vim.diagnostic.config().virtual_lines == false then
+			-- 		vim.diagnostic.config({
+			-- 			virtual_lines = _G.config.diagnostics.virtual_lines,
+			-- 		})
+			-- 	else
+			-- 		vim.diagnostic.config({
+			-- 			virtual_lines = false,
+			-- 		})
+			-- 	end
+			-- end, {
+			-- 	desc = "Virtual lines toggle",
+			-- 	noremap = true,
+			-- 	silent = true,
+			-- 	buffer = bufnr,
+			-- })
+			--
+			-- vim.keymap.set("n", "<leader>V", function()
+			-- 	---@diagnostic disable-next-line: undefined-field
+			-- 	if vim.diagnostic.config().virtual_text == false then
+			-- 		vim.diagnostic.config({
+			-- 			virtual_text = _G.config.diagnostics.virtual_text,
+			-- 		})
+			-- 	else
+			-- 		vim.diagnostic.config({
+			-- 			virtual_text = false,
+			-- 		})
+			-- 	end
+			-- end, {
+			-- 	desc = "Virtual text toggle",
+			-- 	noremap = true,
+			-- 	silent = true,
+			-- 	buffer = bufnr,
+			-- })
 
 			if client.server_capabilities.inlayHintProvider then
 				vim.keymap.set("n", "<leader>i", function()

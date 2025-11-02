@@ -648,6 +648,7 @@ MiniDeps.later(function()
 	})
 
 	require("neogit").setup({
+		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
 		git_services = {
 			["g.beee.ps"] = {
 				pull_request = "https://g.beee.ps/${owner}/${repository}/compare/master...${branch_name}?expand=1",
@@ -689,14 +690,17 @@ MiniDeps.later(function()
 		-- 	"--hunk-header-style",
 		-- 	"omit",
 		-- },
+		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
 		commit_view = { kind = "replace" },
 		commit_editor = { kind = "vsplit", staged_diff_split_kind = "vsplit" },
+		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
 		integrations = { fzf_lua = true, diffview = true },
 		signs = {
 			hunk = { " ", " " },
 			item = { "▸", "▾" },
 			section = { " ", " " },
 		},
+		---@diagnostic disable-next-line:  assign-type-mismatch
 		sections = {
 			recent = { folded = false },
 			untracked = { folded = true },
@@ -764,6 +768,7 @@ MiniDeps.later(function()
 		checkout = "v1.7.0",
 	})
 
+	---@diagnostic disable-next-line: undefined-field
 	require("blink.cmp").setup({
 		---@module 'blink.cmp'
 		---@type blink.cmp.Config
@@ -2189,4 +2194,34 @@ MiniDeps.later(function()
 		vim.cmd("NvimTreeToggle")
 		vim.cmd("wincmd p")
 	end, { desc = "Tree toggle", noremap = false, silent = true })
+end)
+
+-- (tiny-inline-diagnostic.nvim) Better virtual diagnostic
+MiniDeps.later(function()
+	MiniDeps.add("rachartier/tiny-inline-diagnostic.nvim")
+
+	require("tiny-inline-diagnostic").setup({
+		preset = "simple",
+		transparent_cursorline = true,
+		options = {
+			show_source = {
+				enabled = true,
+				if_many = true,
+			},
+			use_icons_from_diagnostic = true,
+			override_open_float = true,
+			break_line = { enabled = true },
+		},
+		hi = {
+			background = "None",
+			arrow = "Conceal",
+		},
+	})
+
+	vim.keymap.set(
+		"n",
+		"<leader>v",
+		function() vim.cmd("TinyInlineDiag toggle") end,
+		{ desc = "Virtual text toggle", noremap = false, silent = true }
+	)
 end)
