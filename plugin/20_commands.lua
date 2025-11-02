@@ -95,6 +95,7 @@ vim.api.nvim_create_user_command("MinimalMode", function()
 end, {})
 
 vim.api.nvim_create_user_command("BigFileMode", function()
+	---@diagnostic disable-next-line: unnecessary-if
 	-- disable matchparen
 	if vim.fn.exists(":DoMatchParen") ~= 2 then return end
 	vim.cmd("NoMatchParen")
