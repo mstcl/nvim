@@ -13,7 +13,7 @@ MiniDeps.later(function()
 		},
 
 		triggers = {
-			-- Leader triggers
+			-- leader triggers
 			{ mode = "n", keys = "<Leader>" },
 			{ mode = "x", keys = "<Leader>" },
 
@@ -27,13 +27,13 @@ MiniDeps.later(function()
 			{ mode = "x", keys = "'" },
 			{ mode = "x", keys = "`" },
 
-			-- Registers
+			-- registers
 			{ mode = "n", keys = '"' },
 			{ mode = "x", keys = '"' },
 			{ mode = "i", keys = "<C-r>" },
 			{ mode = "c", keys = "<C-r>" },
 
-			-- Window commands
+			-- window commands
 			{ mode = "n", keys = "<C-w>" },
 
 			-- `z` key
@@ -136,11 +136,11 @@ MiniDeps.later(function()
 
 	MiniDeps.add("nvim-mini/mini.indentscope")
 
-	_G.augroup("indentLinesDisable", {
+	_G.augroup("mini_indentscope", {
 		{ "Filetype" },
 		{
 			pattern = indentscope_disable_filetypes,
-			desc = "Disable indentscope",
+			desc = "disable indentscope",
 			callback = function() vim.b.miniindentscope_disable = true end,
 		},
 	})
@@ -172,10 +172,11 @@ _G.now_if_args(function()
 		depends = { "nvim-tree/nvim-web-devicons" },
 	})
 
-	_G.augroup("oil start", {
+	_G.augroup("oil", {
 		"BufWinEnter",
 		{
 			nested = true,
+			desc = "start oil when opened with dir arg",
 			callback = function(info)
 				local path = info.file
 				if path == "" then return end
@@ -709,10 +710,11 @@ MiniDeps.later(function()
 		},
 	})
 
-	_G.augroup("neogitDisable", {
+	_G.augroup("neogit", {
 		{ "Filetype" },
 		{
 			pattern = "Neogit*",
+			desc = "disable neogit",
 			callback = function()
 				vim.b.miniindentscope_disable = true
 				vim.wo.statuscolumn = ""
@@ -908,8 +910,8 @@ MiniDeps.later(function()
 	require("mini.keymap").map_combo({ "i", "c", "x", "s" }, "jk", "<BS><BS><Esc>")
 	require("mini.keymap").map_combo({ "i", "c", "x", "s" }, "kj", "<BS><BS><Esc>")
 
-	require("mini.keymap").map_combo("t", "jk", "<BS><BS><C-Bslash><C-n>")
-	require("mini.keymap").map_combo("t", "kj", "<BS><BS><C-Bslash><C-n>")
+	require("mini.keymap").map_combo("t", "jk", "<BS><BS><C-\\><C-n>")
+	require("mini.keymap").map_combo("t", "kj", "<BS><BS><C-\\><C-n>")
 
 	-- fix spelling
 	require("mini.keymap").map_combo("i", "kk", "<BS><BS><Esc>[s1z=gi<Right>")
@@ -1056,24 +1058,27 @@ _G.now_if_args(function()
 		require("nvim-treesitter").install({ "markdown_inline", "printf" })
 	end
 
-	-- Enable tree-sitter after opening a file for a target language
+	-- enable tree-sitter after opening a file for a target language
 	local filetypes = {}
 	for _, lang in ipairs(_G.config.sources.treesitter) do
 		for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang)) do
 			table.insert(filetypes, ft)
 		end
 	end
-	local ts_start = function(ev)
-		vim.treesitter.start(ev.buf)
-		vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+	local treesitter_start = function(ev)
+		-- start treesitter only for huge files
+		if not _G.big(vim.fn.expand("%")) then
+			vim.treesitter.start(ev.buf)
+			vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		end
 	end
 
-	_G.augroup("startTreesitter", {
+	_G.augroup("treesitter", {
 		"FileType",
 		{
-			desc = "Start tree-sitter",
+			desc = "start tree-sitter",
 			pattern = filetypes,
-			callback = ts_start,
+			callback = treesitter_start,
 		},
 	})
 
@@ -1081,7 +1086,7 @@ _G.now_if_args(function()
 		select = { lookahead = true },
 	})
 
-	-- Globally map Tree-sitter text object binds
+	-- globally map Tree-sitter text object binds
 	local function textobj_map(key, query)
 		local outer = "@" .. query .. ".outer"
 		local inner = "@" .. query .. ".inner"
@@ -1236,10 +1241,10 @@ MiniDeps.later(function()
 		buffers = { set_filetype = true },
 	})
 
-	_G.augroup("activateOtter", {
+	_G.augroup("otter", {
 		{ "BufNewFile", "BufRead" },
 		{
-			desc = "activate Otter",
+			desc = "activate otter",
 			pattern = { "*.md", "*.qmd" },
 			callback = function() require("otter").activate() end,
 		},
@@ -1318,7 +1323,7 @@ _G.now_if_args(function()
 		},
 	})
 
-	_G.augroup("onLSPAttachConform", {
+	_G.augroup("conform", {
 		"LspAttach",
 		{
 			desc = "on attach for LSP for conform",
@@ -1432,7 +1437,7 @@ MiniDeps.later(function()
 		{ "Filetype" },
 		{
 			pattern = { "quarto" },
-			desc = "Enable quarto plugin",
+			desc = "activate quarto",
 			callback = function()
 				require("quarto").setup({
 					lspFeatures = {
@@ -1761,7 +1766,7 @@ MiniDeps.later(function()
 		{ desc = "Overseer run", noremap = false, silent = true }
 	)
 
-	_G.augroup("onLSPAttachFzfLua", {
+	_G.augroup("fzf_lua", {
 		"LspAttach",
 		{
 			desc = "on attach for LSP for fzf-lua",
@@ -1957,6 +1962,19 @@ MiniDeps.later(function()
 				end
 			end,
 		},
+	}, {
+		"BufEnter",
+		{
+			desc = "minimal mode in diffview",
+			pattern = "*",
+			callback = function()
+				local filetypes = { "DiffviewFiles" }
+				local current_ft = vim.bo.filetype
+				if vim.tbl_contains(filetypes, current_ft) then
+					vim.cmd("MinimalMode")
+				end
+			end,
+		},
 	})
 end)
 
@@ -2117,7 +2135,7 @@ MiniDeps.later(function()
 		},
 	})
 
-	_G.augroup("closeTreeOnExit", {
+	_G.augroup("nvim_tree", {
 		{ "QuitPre" },
 		{
 			callback = function()

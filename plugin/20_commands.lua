@@ -1,16 +1,16 @@
--- Clean register
+-- clean register
 vim.api.nvim_create_user_command(
 	"WipeReg",
 	"for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor",
 	{ bang = false }
 )
 
--- Oil replaces old explorer
+-- oil replaces old explorer
 vim.api.nvim_create_user_command("E", "Oil", {})
 vim.api.nvim_create_user_command("Ex", "Oil", {})
 vim.api.nvim_create_user_command("Explore", "Oil", {})
 
--- Clear screen for real
+-- clear screen for real
 vim.api.nvim_create_user_command("Clear", function()
 	vim.cmd("nohlsearch")
 	vim.cmd("diffupdate")
@@ -18,46 +18,51 @@ vim.api.nvim_create_user_command("Clear", function()
 	vim.cmd("normal! <C-l>")
 end, {})
 
--- Toggle number
+-- toggle number
 vim.api.nvim_create_user_command("ToggleNumber", function()
-	if vim.o.number then
-		if vim.o.relativenumber then
-			vim.o.number = false
-			vim.o.relativenumber = false
+	if vim.wo.number then
+		if vim.wo.relativenumber then
+			vim.opt_local.number = false
+			vim.opt_local.relativenumber = false
 		else
-			vim.o.relativenumber = true
+			vim.opt_local.relativenumber = true
 		end
 	else
-		vim.o.number = true
+		vim.opt_local.number = true
 	end
 end, {})
 
--- Toggle scrolloff
-vim.api.nvim_create_user_command("ToggleScrolloff", function()
-	vim.opt.scrolloff = 999 - vim.o.scrolloff
-end, {})
+-- toggle scrolloff
+vim.api.nvim_create_user_command(
+	"ToggleScrolloff",
+	function() vim.opt_local.scrolloff = 999 - vim.wo.scrolloff end,
+	{}
+)
 
--- Toggle spelling
-vim.api.nvim_create_user_command("ToggleSpell", function()
-	---@diagnostic disable-next-line: undefined-field
-	vim.opt_local.spell = not (vim.opt_local.spell:get())
-end, {})
+-- toggle spelling
+vim.api.nvim_create_user_command(
+	"ToggleSpell",
+	function() vim.opt_local.spell = not vim.wo.spell end,
+	{}
+)
 
--- Toggle nontext chars
-vim.api.nvim_create_user_command("ToggleList", function()
-	vim.wo.list = not vim.wo.list
-end, {})
+-- toggle nontext chars
+vim.api.nvim_create_user_command(
+	"ToggleList",
+	function() vim.opt_local.list = not vim.wo.list end,
+	{}
+)
 
--- Toggle cursorline
+-- toggle cursorline
 vim.api.nvim_create_user_command("ToggleCursorLine", function()
 	if vim.wo.cursorlineopt == "number" then
-		vim.wo.cursorlineopt = "both"
+		vim.opt_local.cursorlineopt = "both"
 	else
-		vim.wo.cursorlineopt = "number"
+		vim.opt_local.cursorlineopt = "number"
 	end
 end, {})
 
--- Toggle foldcolumn
+-- toggle foldcolumn
 -- vim.api.nvim_create_user_command("ToggleFoldColumn", function()
 -- vim.g.foldcolumn = not vim.g.foldcolumn
 -- if not vim.g.foldcolumn then
@@ -67,29 +72,72 @@ end, {})
 -- end
 -- end, {})
 
--- Toggle colorcolumn
+-- toggle colorcolumn
 vim.api.nvim_create_user_command("ToggleColorColumn", function()
 	if vim.wo.colorcolumn ~= "" then
-		vim.wo.colorcolumn = ""
+		vim.opt_local.colorcolumn = ""
 	else
-		vim.wo.colorcolumn = "80"
+		vim.opt_local.colorcolumn = "80"
 	end
 end, {})
 
--- Check notification history
-vim.api.nvim_create_user_command("MsgHistory", "lua require('mini.notify').show_history()", {})
-
--- Minimal mode
+-- minimal mode
 vim.api.nvim_create_user_command("MinimalMode", function()
 	vim.b.minianimate_disable = true
 	vim.b.miniindentscope_disable = true
-	vim.wo.list = false
-	vim.wo.foldcolumn = "0"
-	vim.wo.number = false
-	vim.wo.relativenumber = false
-	vim.wo.statuscolumn = ""
-	vim.wo.colorcolumn = ""
-	vim.wo.signcolumn = "no"
+	vim.opt_local.list = false
+	vim.opt_local.foldcolumn = "0"
+	vim.opt_local.number = false
+	vim.opt_local.relativenumber = false
+	vim.opt_local.statuscolumn = ""
+	vim.opt_local.colorcolumn = ""
+	vim.opt_local.signcolumn = "no"
+end, {})
+
+vim.api.nvim_create_user_command("BigFileMode", function()
+	-- disable matchparen
+	if vim.fn.exists(":DoMatchParen") ~= 2 then return end
+	vim.cmd("NoMatchParen")
+
+	-- defer disable lsp
+	_G.augroup("bigfile_deferred", {
+		"LspAttach",
+		{
+			desc = "detach client for big files",
+			callback = function(args)
+				local bufnr = args.buf
+				vim.schedule(
+					function() vim.lsp.buf_detach_client(bufnr, args.data.client_id) end
+				)
+			end,
+		},
+	}, {
+		"BufReadPost",
+		{
+			desc = "deferred actions for big files",
+			callback = function()
+				vim.cmd("syntax clear")
+				vim.opt_local.syntax = "OFF"
+				vim.opt_local.filetype = ""
+			end,
+		},
+	})
+
+	-- disable fancy statusline
+	vim.opt_local.statusline = ""
+
+	-- disable swap
+	vim.opt_local.swapfile = false
+
+	-- turn off expr fold
+	vim.opt_local.foldmethod = "manual"
+
+	-- disable undotree
+	vim.opt_local.undolevels = -1
+	vim.opt_local.undoreload = 0
+
+	-- turn on minimal mode
+	vim.cmd("MinimalMode")
 end, {})
 
 -- Quiet mode
@@ -108,9 +156,12 @@ vim.api.nvim_create_user_command("QuietMode", function()
 	vim.g.pastemode = true
 	vim.cmd("MinimalMode")
 
-	vim.keymap.set("n", "q", function()
-		vim.cmd("tabclose")
-	end, { buffer = true, desc = "quit select mode and return to previous tab" })
+	vim.keymap.set(
+		"n",
+		"q",
+		function() vim.cmd("tabclose") end,
+		{ buffer = true, desc = "quit select mode and return to previous tab" }
+	)
 end, {})
 
 -- Get latest commit hash
@@ -122,13 +173,13 @@ vim.api.nvim_create_user_command("GetCommitHash", function()
 end, {})
 
 vim.api.nvim_create_user_command("PairModeEnter", function()
-	vim.wo.cursorlineopt = "both"
+	vim.opt.cursorlineopt = "both"
 	vim.cmd("NvimTreeOpen")
 	vim.cmd("wincmd p")
 end, {})
 
 vim.api.nvim_create_user_command("PairModeLeave", function()
-	vim.wo.cursorlineopt = "number"
+	vim.opt.cursorlineopt = "number"
 	vim.cmd("NvimTreeClose")
 end, {})
 
@@ -160,9 +211,7 @@ local function open_terminal()
 end
 
 local function hide_terminal()
-	if vim.fn.win_gotoid(vim.t.t_win_id) == 1 then
-		vim.cmd("hide")
-	end
+	if vim.fn.win_gotoid(vim.t.t_win_id) == 1 then vim.cmd("hide") end
 end
 
 vim.api.nvim_create_user_command("ToggleTerminal", function()

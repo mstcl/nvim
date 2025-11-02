@@ -29,6 +29,10 @@ _G.augroup = function(group, ...)
 	end
 end
 
+-- Some plugins and 'mini.nvim' modules only need setup during startup if Neovim
+-- is started like `nvim -- path/to/file`, otherwise delaying setup is fine
+_G.now_if_args = vim.fn.argc(-1) > 0 and MiniDeps.now or MiniDeps.later
+
 ---Detecting big file size (> 400 KB)
 ---Normally we want to pass `vim.fn.expand("%")`
 ---@ param filepath string
@@ -37,7 +41,3 @@ _G.big = function(filepath)
 	if vim.fn.getfsize(filepath) > 400 * 1024 then return true end
 	return false
 end
-
--- Some plugins and 'mini.nvim' modules only need setup during startup if Neovim
--- is started like `nvim -- path/to/file`, otherwise delaying setup is fine
-_G.now_if_args = vim.fn.argc(-1) > 0 and MiniDeps.now or MiniDeps.later

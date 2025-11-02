@@ -1,71 +1,3 @@
-local function is_valid_git_repo(buf_id)
-	-- Check if it's a valid buffer
-	local path = vim.api.nvim_buf_get_name(buf_id)
-	if path == "" or vim.fn.filereadable(path) ~= 1 then return false end
-
-	-- Check if the current directory is a Git repository
-	if vim.fn.isdirectory(".git") == 0 then return false end
-
-	return true
-end
-
-local branch_cache = {}
-
--- Function to clear the Git branch cache
-local function clear_git_branch_cache()
-	-- Clear by doing an empty table :)
-	branch_cache = {}
-end
-
-local function update_git_branch(data)
-	if not is_valid_git_repo(data.buf) then return end
-
-	-- Check if branch is already cached
-	local cached_branch = branch_cache[data.buf]
-	if cached_branch then
-		vim.b.git_branch = cached_branch
-		return
-	end
-
-	---@diagnostic disable-next-line: undefined-field
-	local stdout = vim.uv.new_pipe(false)
-	---@diagnostic disable-next-line: undefined-field
-	local _, _ = vim.uv.spawn(
-		"git",
-		{
-			args = { "-C", vim.fn.expand("%:p:h"), "branch", "--show-current" },
-			stdio = { nil, stdout, nil },
-		},
-		vim.schedule_wrap(function(code, _)
-			if code == 0 then
-				stdout:read_start(function(_, content)
-					if content then
-						vim.b.git_branch = content:gsub("\n", "") -- Remove newline character
-						branch_cache[data.buf] = vim.b.git_branch -- Cache the branch name
-						stdout:close()
-					end
-				end)
-			else
-				stdout:close()
-			end
-		end)
-	)
-end
-
-_G.augroup("gitBranch", {
-	"BufWinEnter",
-	{
-		desc = "Refresh git branch",
-		callback = update_git_branch,
-	},
-}, {
-	"DirChanged",
-	{
-		desc = "Clear git branch",
-		callback = clear_git_branch_cache,
-	},
-})
-
 _G.augroup("trim", {
 	"BufWritePre",
 	{
@@ -75,22 +7,7 @@ _G.augroup("trim", {
 	},
 })
 
-_G.augroup("hideComponents", {
-	"BufEnter",
-	{
-		desc = "hide components",
-		pattern = "*",
-		callback = function()
-			local filetypes = { "DiffviewFiles" }
-			local current_ft = vim.bo.filetype
-			if vim.tbl_contains(filetypes, current_ft) then
-				vim.cmd("MinimalMode")
-			end
-		end,
-	},
-})
-
-_G.augroup("editing", {
+_G.augroup("formatoptions", {
 	"BufEnter",
 	{
 		pattern = "*",
@@ -104,7 +21,7 @@ _G.augroup("editing", {
 	},
 })
 
-_G.augroup("textOpts", {
+_G.augroup("prose", {
 	{ "BufNewFile", "BufRead" },
 	{
 		desc = "enable text editing options, spellcheck and spell correction on certain filetypes",
@@ -125,7 +42,7 @@ _G.augroup("textOpts", {
 	},
 })
 
-_G.augroup("verticalHelp", {
+_G.augroup("help", {
 	{ "Filetype" },
 	{
 		desc = "open help in vertical split",
@@ -138,7 +55,7 @@ _G.augroup("verticalHelp", {
 	},
 })
 
-_G.augroup("rooter", {
+_G.augroup("root", {
 	{ "BufEnter" },
 	{
 		desc = "set cwd to project root directory",
@@ -157,21 +74,13 @@ _G.augroup("rooter", {
 	},
 })
 
-_G.augroup("bigFile", {
+_G.augroup("bigfile", {
 	{ "BufReadPre" },
 	{
 		desc = "set settings for really big files",
 		pattern = "*",
 		callback = function()
-			if _G.big(vim.fn.expand("%")) then
-				vim.opt.statusline = ""
-				vim.opt_local.swapfile = false
-				vim.opt_local.foldmethod = "manual"
-				vim.opt_local.undolevels = -1
-				vim.opt_local.undoreload = 0
-
-				vim.cmd("MinimalMode")
-			end
+			if _G.big(vim.fn.expand("%")) then vim.cmd("BigFileMode") end
 		end,
 	},
 })
@@ -192,7 +101,7 @@ _G.augroup("terminal", {
 	{ "BufLeave" },
 	{
 		pattern = "term://*",
-		desc = "Stop insert when leaving terminal",
+		desc = "stop insert when leaving terminal",
 		callback = function()
 			if vim.bo.buftype == "terminal" and vim.bo.filetype == "" then
 				vim.cmd("stopinsert")
@@ -202,13 +111,13 @@ _G.augroup("terminal", {
 }, {
 	{ "TermLeave" },
 	{
-		desc = "Reload buffers when leaving terminal",
+		desc = "reload buffers when leaving terminal",
 		pattern = "*",
 		callback = function() vim.cmd.checktime() end,
 	},
 })
 
-_G.augroup("onLSPAttach", {
+_G.augroup("lsp", {
 	"LspAttach",
 	{
 		desc = "on attach for LSP",

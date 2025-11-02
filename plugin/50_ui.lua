@@ -22,7 +22,6 @@ end)
 -- (mini.notify) Popup notifications
 MiniDeps.now(function()
 	MiniDeps.add("nvim-mini/mini.notify")
-	vim.api.nvim_set_hl(0, "MiniNotifyTitle", { link = "DiagnosticOk" })
 
 	require("mini.notify").setup({
 		content = {

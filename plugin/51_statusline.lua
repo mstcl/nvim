@@ -54,14 +54,14 @@ local modes = {
 	["t"] = "TERM",
 }
 
-local diagnostic_sign = {
+local lsp_diagnostic_signs = {
 	[1] = _G.config.signs.lsp.Error,
 	[2] = _G.config.signs.lsp.Warn,
 	[3] = _G.config.signs.lsp.Info,
 	[4] = _G.config.signs.lsp.Hint,
 }
 
-local diagnostic_color = {
+local lsp_diagnostic_colors = {
 	[1] = "ErrorMsg",
 	[2] = "WarningMsg",
 	[3] = "InfoMsg",
@@ -151,8 +151,8 @@ _G.statusline.components.lsp_diagnostic = function()
 	for severity_nr, _ in ipairs({ "Error", "Warn", "Info", "Hint" }) do
 		local cnt = buf_cnt[severity_nr] or 0
 		if cnt > 0 then
-			local icon_text = diagnostic_sign[severity_nr]
-			local icon_hl = diagnostic_color[severity_nr]
+			local icon_text = lsp_diagnostic_signs[severity_nr]
+			local icon_hl = lsp_diagnostic_colors[severity_nr]
 			str = str
 				.. (str == "" and "" or " ")
 				.. set_hl(icon_text, icon_hl)
@@ -193,16 +193,6 @@ end
 ---Get current git branch
 ---@return string
 _G.statusline.components.git_branch = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
-
-	---@diagnostic disable-next-line: undefined-field
-	local branch = vim.b.git_branch or "nil"
-	return set_hl("@", "StatusLineAlt") .. set_hl(branch, "StatusLineNC")
-end
-
----Get current git branch with space
----@return string
-_G.statusline.components.git_branch_2 = function()
 	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
 
 	---@diagnostic disable-next-line: undefined-field
@@ -447,11 +437,10 @@ local blocks = {
 	hl_yellow = [[%#statuslineyellow#]],
 	hl_restore = [[%*]],
 	-- LSP
-	diagnostics = [[%{%v:lua.statusline.components.lsp_diagnostic()%}]],
-	progress = [[%{%v:lua.statusline.components.lsp_progress()%}]],
+	lsp_diagnostics = [[%{%v:lua.statusline.components.lsp_diagnostic()%}]],
+	lsp_progress = [[%{%v:lua.statusline.components.lsp_progress()%}]],
 	-- Git
-	branch = [[%{%v:lua.statusline.components.git_branch()%}]],
-	branch2 = [[%{%v:lua.statusline.components.git_branch_2()%}]],
+	git_branch = [[%{%v:lua.statusline.components.git_branch()%}]],
 	diffs = [[%{%v:lua.statusline.components.diffs()%}]],
 	-- Misc
 	align = [[%=]],
@@ -491,7 +480,7 @@ _G.statusline.get = function()
 		blocks.padding,
 		blocks.filepath,
 		blocks.padding,
-		blocks.branch2,
+		blocks.git_branch,
 		blocks.padding,
 		blocks.delimiter,
 		blocks.padding,
@@ -501,7 +490,7 @@ _G.statusline.get = function()
 		blocks.padding,
 		blocks.ft2,
 		blocks.diffs,
-		blocks.diagnostics,
+		blocks.lsp_diagnostics,
 		blocks.truncate,
 		-- Messy middle bit
 		blocks.align,
