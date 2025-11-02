@@ -38,6 +38,6 @@ _G.now_if_args = vim.fn.argc(-1) > 0 and MiniDeps.now or MiniDeps.later
 ---@ param filepath string
 ---@return boolean
 _G.big = function(filepath)
-	if vim.fn.getfsize(filepath) > 400 * 1024 then return true end
+	if vim.fn.getfsize(filepath) > (400 * 1024) then return true end
 	return false
 end

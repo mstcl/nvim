@@ -123,9 +123,6 @@ vim.api.nvim_create_user_command("BigFileMode", function()
 		},
 	})
 
-	-- disable fancy statusline
-	vim.opt_local.statusline = ""
-
 	-- disable swap
 	vim.opt_local.swapfile = false
 
