@@ -123,6 +123,7 @@ MiniDeps.later(function()
 		"toggleterm",
 		"ministarter",
 		"gitsigns-*",
+		"help",
 		"lazy",
 		"Neogit*",
 		"markdown",
@@ -154,11 +155,8 @@ MiniDeps.later(function()
 
 	require("mini.indentscope").setup({
 		draw = {
-			delay = 20,
-		},
-		mappings = {
-			goto_top = "",
-			goto_bottom = "",
+			delay = 0,
+			animation = require("mini.indentscope").gen_animation.none(),
 		},
 		symbol = "┃",
 		options = { try_as_border = true },
