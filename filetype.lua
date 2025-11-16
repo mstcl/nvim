@@ -23,6 +23,7 @@ vim.filetype.add({
 		["go.sum"] = "gosum",
 		["go.mod"] = "gomod",
 		["go.work"] = "gowork",
+		["CODEOWNERS"] = "codeowners",
 	},
 	pattern = {
 		[".*/.*.nomad.tpl"] = "gotmpl",
