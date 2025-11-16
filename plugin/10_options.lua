@@ -55,6 +55,7 @@ vim.opt.undolevels = 500
 vim.opt.encoding = "utf-8"
 vim.opt.modeline = true
 vim.opt.modelines = 1
+vim.opt.shada = "'100,<50,s10,:1000,/100,@100,h" -- limit shada file
 
 -- Ticks
 vim.opt.updatetime = 180
@@ -84,8 +85,6 @@ vim.opt.termguicolors = true
 vim.opt.guicursor =
 	"n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:ver25-blinkon500-blinkoff500-TermCursor"
 vim.opt.synmaxcol = 400
-vim.opt.virtualedit = "block"
-vim.opt.selection = "old"
 vim.opt.winborder = _G.config.border
 
 -- Pum
@@ -99,9 +98,14 @@ vim.opt.iskeyword:append("-")
 vim.opt.nrformats:append("unsigned")
 vim.opt.nrformats:remove("bin", "hex")
 
--- Keys
+-- Editing
 vim.opt.mouse = "a"
 vim.opt.backspace = { "indent", "eol", "start" }
+vim.opt.virtualedit = "block"
+vim.opt.selection = "old"
+vim.opt.formatoptions = "rqnl1j" -- improve comment editing
+vim.opt.iskeyword = "@,48-57,_,192-255,-" -- treat dash as `word` textobject part
+vim.opt.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]] -- Pattern for a start of numbered list (used in `gw`). This reads as
 
 -- Folding
 vim.opt.foldmethod = "expr"
@@ -125,6 +129,7 @@ vim.opt.splitright = true
 vim.opt.jumpoptions = "stack,view"
 vim.opt.viewoptions = "folds,cursor,unix,curdir"
 vim.go.tabclose = "left"
+vim.opt.switchbuf = "usetab" -- use already opened buffers when switching
 
 -- Scrolling
 vim.opt.scrolljump = 1
@@ -165,6 +170,7 @@ vim.opt.autoindent = true
 vim.opt.shiftround = true
 vim.opt.smartindent = false
 vim.opt.breakindent = true
+vim.opt.breakindentopt = "list:-1"
 vim.opt.copyindent = true
 
 -- Spell
