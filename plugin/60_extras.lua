@@ -2166,7 +2166,7 @@ MiniDeps.later(function()
 	})
 
 	_G.augroup("nvimtree", {
-		{ "BufEnter", "ColorScheme" },
+		{ "BufWinEnter", "BufReadPre", "BufEnter", "ColorScheme" },
 		{
 			desc = "set background for alt windows",
 			pattern = "*",
