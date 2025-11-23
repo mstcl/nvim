@@ -116,7 +116,7 @@ MiniDeps.later(function()
 	})
 end)
 
--- (mini.indentscope) Indent lines *
+-- (mini.indentscope) Indent lines
 MiniDeps.later(function()
 	local indentscope_disable_filetypes = {
 		"fzf",
@@ -2128,7 +2128,6 @@ MiniDeps.later(function()
 					},
 				},
 			},
-			indent_markers = { enable = true },
 		},
 	})
 
