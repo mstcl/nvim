@@ -1365,12 +1365,6 @@ MiniDeps.later(function()
 	}
 end)
 
--- (visual-whitespace.nvim) Whitespace shows on visual selection
-MiniDeps.later(function()
-	MiniDeps.add("mcauley-penney/visual-whitespace.nvim")
-	require("visual-whitespace").setup()
-end)
-
 -- (incline.nvim) current file status
 MiniDeps.later(function()
 	MiniDeps.add({

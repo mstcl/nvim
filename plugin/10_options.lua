@@ -179,7 +179,7 @@ vim.opt.spell = false
 vim.opt.spelloptions = "camel"
 
 -- Special characters
-vim.opt.list = false
+vim.opt.list = true
 vim.opt.showbreak = "↪"
 vim.opt.fillchars = {
 	eob = " ",
