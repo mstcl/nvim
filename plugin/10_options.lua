@@ -111,7 +111,7 @@ vim.opt.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]] -- Pattern for a start 
 vim.opt.foldmethod = "expr"
 vim.opt.foldtext = ""
 vim.opt.foldlevel = 99
-vim.opt.foldlevelstart = 3
+vim.opt.foldlevelstart = 4
 vim.opt.foldminlines = 1
 vim.opt.foldnestmax = 4
 
