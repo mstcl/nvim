@@ -554,7 +554,7 @@ _G.now_if_args(function()
 	vim.lsp.enable(get_lsp_sources(_G.config.sources.lsp))
 end)
 
--- (gitsigns.nvim) blame and diff for git
+-- (gitsigns.nvim) Blame and diff for git
 MiniDeps.later(function()
 	MiniDeps.add("lewis6991/gitsigns.nvim")
 
@@ -637,7 +637,7 @@ MiniDeps.later(function()
 	)
 end)
 
--- (neogit) magit clone
+-- (neogit) Magit for neovim
 MiniDeps.later(function()
 	MiniDeps.add({
 		source = "NeogitOrg/neogit",
@@ -1353,7 +1353,7 @@ _G.now_if_args(function()
 	})
 end)
 
--- (gitsigns.nvim) blame and diff for git
+-- (gitsigns.nvim) Blame and diff for git
 MiniDeps.later(function()
 	MiniDeps.add("mfussenegger/nvim-lint")
 
@@ -1366,7 +1366,7 @@ MiniDeps.later(function()
 	}
 end)
 
--- (incline.nvim) current file status
+-- (incline.nvim) Current file status
 MiniDeps.later(function()
 	MiniDeps.add({
 		source = "b0o/incline.nvim",
@@ -1803,7 +1803,7 @@ MiniDeps.later(function()
 	})
 end)
 
--- (aerial.nvim) code outline
+-- (aerial.nvim) Code outline
 MiniDeps.later(function()
 	MiniDeps.add("stevearc/aerial.nvim")
 
