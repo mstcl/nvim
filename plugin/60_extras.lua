@@ -164,6 +164,95 @@ MiniDeps.later(function()
 	})
 end)
 
+-- (mini.keymap) Supercharged keymapping
+MiniDeps.later(function()
+	MiniDeps.add("nvim-mini/mini.keymap")
+
+	require("mini.keymap").setup()
+
+	local tab_steps = {
+		"increase_indent",
+		"blink_next",
+		"vimsnippet_next",
+		"jump_after_tsnode",
+		"jump_after_close",
+	}
+
+	local stab_steps = {
+		"decrease_indent",
+		"blink_prev",
+		"vimsnippet_prev",
+		"jump_before_tsnode",
+		"jump_before_open",
+	}
+
+	local cr_steps = {
+		"blink_accept",
+		"minipairs_cr",
+	}
+
+	local bs_steps = {
+		"minipairs_bs",
+	}
+
+	-- super tab/shift-tab/enter
+	require("mini.keymap").map_multistep("i", "<Tab>", tab_steps)
+	require("mini.keymap").map_multistep("i", "<S-Tab>", stab_steps)
+	require("mini.keymap").map_multistep("i", "<CR>", cr_steps)
+	require("mini.keymap").map_multistep("i", "<BS>", bs_steps)
+
+	-- escape
+	require("mini.keymap").map_combo({ "i", "c", "x", "s" }, "jk", "<BS><BS><Esc>")
+	require("mini.keymap").map_combo({ "i", "c", "x", "s" }, "kj", "<BS><BS><Esc>")
+
+	require("mini.keymap").map_combo("t", "jk", "<BS><BS><C-\\><C-n>")
+	require("mini.keymap").map_combo("t", "kj", "<BS><BS><C-\\><C-n>")
+
+	-- fix spelling
+	require("mini.keymap").map_combo("i", "kk", "<BS><BS><Esc>[s1z=gi<Right>")
+end)
+
+-- (mini.pairs) Auto pairs
+MiniDeps.later(function()
+	MiniDeps.add("nvim-mini/mini.pairs")
+
+	vim.keymap.set(
+		"n",
+		"<leader>A",
+		function() vim.g.minipairs_disable = not vim.g.minipairs_disable end,
+		{ desc = "Autopairs toggle", noremap = false, silent = true }
+	)
+
+	require("mini.pairs").setup({
+		modes = { insert = true, command = true, terminal = false },
+		mappings = {
+			["`"] = {
+				action = "closeopen",
+				pair = "``",
+				neigh_pattern = "[^\\`].",
+				register = { cr = false },
+			},
+		},
+	})
+end)
+
+-- (mini.surround) Add motions to surround objects with brackets etc.
+MiniDeps.later(function()
+	MiniDeps.add("nvim-mini/mini.surround")
+
+	require("mini.surround").setup({
+		mappings = {
+			add = "gsa",
+			delete = "gsd",
+			find = "gsf",
+			find_left = "gsF",
+			highlight = "gsh",
+			replace = "gsr",
+			update_n_lines = "gsn",
+		},
+	})
+end)
+
 -- (oil.nvim) Buffer-like file browser
 _G.now_if_args(function()
 	MiniDeps.add({
@@ -869,95 +958,6 @@ MiniDeps.later(function()
 		signature = {
 			enabled = true,
 			window = { direction_priority = { "s", "n" } },
-		},
-	})
-end)
-
--- (mini.keymap) Supercharged keymapping
-MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.keymap")
-
-	require("mini.keymap").setup()
-
-	local tab_steps = {
-		"increase_indent",
-		"blink_next",
-		"vimsnippet_next",
-		"jump_after_tsnode",
-		"jump_after_close",
-	}
-
-	local stab_steps = {
-		"decrease_indent",
-		"blink_prev",
-		"vimsnippet_prev",
-		"jump_before_tsnode",
-		"jump_before_open",
-	}
-
-	local cr_steps = {
-		"blink_accept",
-		"minipairs_cr",
-	}
-
-	local bs_steps = {
-		"minipairs_bs",
-	}
-
-	-- super tab/shift-tab/enter
-	require("mini.keymap").map_multistep("i", "<Tab>", tab_steps)
-	require("mini.keymap").map_multistep("i", "<S-Tab>", stab_steps)
-	require("mini.keymap").map_multistep("i", "<CR>", cr_steps)
-	require("mini.keymap").map_multistep("i", "<BS>", bs_steps)
-
-	-- escape
-	require("mini.keymap").map_combo({ "i", "c", "x", "s" }, "jk", "<BS><BS><Esc>")
-	require("mini.keymap").map_combo({ "i", "c", "x", "s" }, "kj", "<BS><BS><Esc>")
-
-	require("mini.keymap").map_combo("t", "jk", "<BS><BS><C-\\><C-n>")
-	require("mini.keymap").map_combo("t", "kj", "<BS><BS><C-\\><C-n>")
-
-	-- fix spelling
-	require("mini.keymap").map_combo("i", "kk", "<BS><BS><Esc>[s1z=gi<Right>")
-end)
-
--- (mini.pairs) Auto pairs
-MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.pairs")
-
-	vim.keymap.set(
-		"n",
-		"<leader>A",
-		function() vim.g.minipairs_disable = not vim.g.minipairs_disable end,
-		{ desc = "Autopairs toggle", noremap = false, silent = true }
-	)
-
-	require("mini.pairs").setup({
-		modes = { insert = true, command = true, terminal = false },
-		mappings = {
-			["`"] = {
-				action = "closeopen",
-				pair = "``",
-				neigh_pattern = "[^\\`].",
-				register = { cr = false },
-			},
-		},
-	})
-end)
-
--- (mini.surround) Add motions to surround objects with brackets etc.
-MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.surround")
-
-	require("mini.surround").setup({
-		mappings = {
-			add = "gsa",
-			delete = "gsd",
-			find = "gsf",
-			find_left = "gsF",
-			highlight = "gsh",
-			replace = "gsr",
-			update_n_lines = "gsn",
 		},
 	})
 end)
