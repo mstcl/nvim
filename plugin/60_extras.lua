@@ -2132,7 +2132,6 @@ MiniDeps.later(function()
 end)
 
 -- (vscode-diff.nvim) Side-by-side diffs
-
 MiniDeps.later(function()
 	MiniDeps.add({
 		source = "esmuellert/vscode-diff.nvim",
