@@ -128,6 +128,7 @@ MiniDeps.later(function()
 		"Neogit*",
 		"markdown",
 		"Diffview*",
+		"vscode-diff-*",
 		"aerial",
 		"qf",
 		"mason",
@@ -692,7 +693,7 @@ MiniDeps.later(function()
 		commit_view = { kind = "replace" },
 		commit_editor = { kind = "vsplit", staged_diff_split_kind = "vsplit" },
 		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
-		integrations = { fzf_lua = true, diffview = true },
+		integrations = { fzf_lua = true, diffview = false },
 		signs = {
 			hunk = { " ", " " },
 			item = { "▸", "▾" },
@@ -742,7 +743,7 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>gb",
+		"<leader>gr",
 		function() vim.cmd("Neogit branch") end,
 		{ desc = "Neogit branches", noremap = false, silent = true }
 	)
@@ -1902,79 +1903,6 @@ MiniDeps.later(function()
 	})
 end)
 
--- (diffview.nvim) Powerful diff and merge tool
-MiniDeps.later(function()
-	MiniDeps.add("sindrets/diffview.nvim")
-
-	require("diffview").setup({
-		signs = {
-			fold_closed = _G.config.signs.fold_closed,
-			fold_open = _G.config.signs.fold_open,
-			done = _G.config.signs.done,
-		},
-		file_panel = {
-			listing_style = "list",
-			win_config = {
-				position = "left",
-				width = 40,
-				win_opts = {},
-			},
-		},
-		use_icons = true,
-		show_help_hints = false,
-		enhanced_diff_hl = true,
-	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>dh",
-		function() vim.cmd("DiffviewFileHistory") end,
-		{ desc = "Open diffview history", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>dd",
-		function() vim.cmd("DiffviewOpen") end,
-		{ desc = "Open diffview", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>dc",
-		function() vim.cmd("DiffviewClose") end,
-		{ desc = "Close diffview", noremap = false, silent = true }
-	)
-
-	_G.augroup("diffview", {
-		{ "BufEnter", "ColorScheme" },
-		{
-			desc = "set background for alt windows",
-			pattern = "*",
-			callback = function()
-				local filetypes = { "DiffviewFiles", "DiffviewFileHistory" }
-				local current_ft = vim.bo.filetype
-				if vim.tbl_contains(filetypes, current_ft) then
-					vim.wo.winhighlight = "Normal:ColorColumn"
-				end
-			end,
-		},
-	}, {
-		"BufEnter",
-		{
-			desc = "minimal mode in diffview",
-			pattern = "*",
-			callback = function()
-				local filetypes = { "DiffviewFiles" }
-				local current_ft = vim.bo.filetype
-				if vim.tbl_contains(filetypes, current_ft) then
-					vim.cmd("MinimalMode")
-				end
-			end,
-		},
-	})
-end)
-
 -- (git-conflict.nvim) Git conflicts helper
 MiniDeps.later(function()
 	MiniDeps.add("akinsho/git-conflict.nvim")
@@ -2026,20 +1954,6 @@ MiniDeps.later(function()
 		"]x",
 		"<Plug>(git-conflict-prev-conflict)",
 		{ desc = "Previous conflict", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>dd",
-		function() vim.cmd("DiffviewOpen") end,
-		{ desc = "Open diffview", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>dc",
-		function() vim.cmd("DiffviewClose") end,
-		{ desc = "Close diffview", noremap = false, silent = true }
 	)
 end)
 
@@ -2215,4 +2129,56 @@ MiniDeps.later(function()
 		function() vim.cmd("TinyInlineDiag toggle") end,
 		{ desc = "Virtual text toggle", noremap = false, silent = true }
 	)
+end)
+
+-- (vscode-diff.nvim) Side-by-side diffs
+
+MiniDeps.later(function()
+	MiniDeps.add({
+		source = "esmuellert/vscode-diff.nvim",
+		depends = { "MunifTanjim/nui.nvim" },
+	})
+
+	require("vscode-diff").setup({
+		keymaps = {
+			view = {
+				toggle_explorer = "<leader>de",
+			},
+		},
+	})
+
+	vim.keymap.set(
+		"n",
+		"<leader>dd",
+		function() vim.cmd("CodeDiff") end,
+		{ desc = "Diff side-by-side", noremap = false, silent = true }
+	)
+
+	_G.augroup("vscode-diff", {
+		{ "BufEnter", "ColorScheme" },
+		{
+			desc = "set background for alt windows",
+			pattern = "*",
+			callback = function()
+				local filetypes = { "vscode-diff-explorer" }
+				local current_ft = vim.bo.filetype
+				if vim.tbl_contains(filetypes, current_ft) then
+					vim.wo.winhighlight = "Normal:ColorColumn"
+				end
+			end,
+		},
+	}, {
+		"BufEnter",
+		{
+			desc = "minimal mode in codediff",
+			pattern = "*",
+			callback = function()
+				local filetypes = { "vscode-diff-explorer" }
+				local current_ft = vim.bo.filetype
+				if vim.tbl_contains(filetypes, current_ft) then
+					vim.cmd("MinimalMode")
+				end
+			end,
+		},
+	})
 end)

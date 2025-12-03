@@ -29,6 +29,7 @@ local simple_filetypes = {
 	"NeogitLogView",
 	"DiffviewFileHistory",
 	"DiffviewFiles",
+	"vscode-diff-explorer",
 }
 
 local modes = {
