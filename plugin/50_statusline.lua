@@ -260,10 +260,14 @@ _G.statusline.components.icon = function()
 
 	local fname = vim.fn.expand("%:t")
 	local extension = vim.fn.fnamemodify(fname, ":e")
-	local icon, highlight =
-		require("nvim-web-devicons").get_icon(fname, extension, { default = true })
-
-	return set_hl(icon, highlight)
+	local ok, devicons = pcall(require, "nvim-web-devicons")
+	if not ok then
+		return ""
+	else
+		local icon, highlight =
+			devicons.get_icon(fname, extension, { default = true })
+		return set_hl(icon, highlight)
+	end
 end
 
 _G.statusline.components.search = function()

@@ -1,5 +1,8 @@
 local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
 
+-- (nvim-web-devicons) Icons
+MiniDeps.now(function() MiniDeps.add("nvim-tree/nvim-web-devicons") end)
+
 -- Colorschemes
 MiniDeps.now(function()
 	MiniDeps.add("rktjmp/lush.nvim")
