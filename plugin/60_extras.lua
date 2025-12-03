@@ -1424,38 +1424,6 @@ MiniDeps.later(function()
 	)
 end)
 
--- (quarto-nvim) Quarto tools and utilities
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "quarto-dev/quarto-nvim",
-		depends = { "jmbuhr/otter.nvim" },
-	})
-
-	_G.augroup("quarto", {
-		{ "Filetype" },
-		{
-			pattern = { "quarto" },
-			desc = "activate quarto",
-			callback = function()
-				require("quarto").setup({
-					lspFeatures = {
-						languages = { "python", "bash", "html", "lua" },
-					},
-					chunks = "all",
-					diagnostics = {
-						enabled = true,
-						trigger = { "BufWritePost" },
-					},
-					codeRunner = {
-						enabled = true,
-						default_method = "molten",
-					},
-				})
-			end,
-		},
-	})
-end)
-
 -- (zk-nvim) Markdown note taking assistant
 MiniDeps.later(function()
 	MiniDeps.add("zk-org/zk-nvim")
