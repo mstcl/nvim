@@ -981,7 +981,6 @@ MiniDeps.later(function()
 				"lsp",
 				"path",
 				"snippets",
-				"buffer",
 				"ripgrep",
 			},
 			providers = {
@@ -1001,11 +1000,6 @@ MiniDeps.later(function()
 					name = "S",
 					max_items = 3,
 					min_keyword_length = 0,
-				},
-				buffer = {
-					name = "B",
-					max_items = 3,
-					min_keyword_length = 3,
 				},
 			},
 		},
