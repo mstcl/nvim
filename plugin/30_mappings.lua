@@ -161,14 +161,6 @@ vim.keymap.set(
 	{ silent = true }
 )
 
--- copy commit hash
-vim.keymap.set(
-	"n",
-	"<leader>gy",
-	function() vim.cmd("GetCommitHash") end,
-	{ desc = "Yank commit hash", noremap = false, silent = true }
-)
-
 -- pair mode commands
 vim.keymap.set(
 	"n",
