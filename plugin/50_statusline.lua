@@ -166,7 +166,12 @@ _G.statusline.components.git_branch = function()
 
 	---@diagnostic disable-next-line: undefined-field
 	local branch = vim.b.gitsigns_head or "nil"
-	return set_hl("󰘬 ", "StatusLineAlt") .. set_hl(branch, "StatusLineNC")
+	if branch == "nil" or branch == "master" or branch == "main" then
+		branch = set_hl(branch, "StatusLineNC")
+	else
+		branch = set_hl(branch, "ErrorMsg")
+	end
+	return set_hl("󰘬 ", "StatusLineAlt") .. branch
 end
 
 ---Get git diffs for current buffer
@@ -215,7 +220,10 @@ _G.statusline.components.filepath = function()
 	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
 	local root = set_hl(vim.fn.fnamemodify(vim.fn.getcwd(), ":t"), hi)
 	local prefix = set_hl("@ ", "StatusLineAlt")
-	local secondary = set_hl(string.format("/%%<%s", fpath), hi)
+	local secondary = ""
+
+	if fpath ~= "." then secondary = string.format("/%s", fpath) end
+	secondary = set_hl(secondary, hi)
 
 	if ft == "oil" then
 		return " "
@@ -234,7 +242,7 @@ _G.statusline.components.filename = function()
 	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
 
 	local fname = vim.fn.expand("%:t")
-	return set_hl(fname, "StatusLineNC")
+	return set_hl(fname, "StatusLineBold")
 end
 
 ---Get filetype
