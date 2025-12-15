@@ -42,8 +42,8 @@ MiniDeps.now(function()
 	vim.keymap.set(
 		"n",
 		"<leader>N",
-		function() require("mini.notify").clear() end,
-		{ desc = "Dismiss all notifications", noremap = false, silent = true }
+		function() require("mini.notify").show_history() end,
+		{ desc = "Show notification history", noremap = false, silent = true }
 	)
 end)
 
@@ -1321,8 +1321,8 @@ _G.now_if_args(function()
 			css = { "biome" },
 			scss = { "biome" },
 			lua = { "stylua", lsp_format = "prefer" },
-			markdown = { "prettierd", "injected", "mdslw" },
-			quarto = { "prettierd", "injected", "mdslw" },
+			markdown = { "mdformat", "injected" },
+			quarto = { "mdformat", "injected" },
 			yaml = { "yamlfmt" },
 			graphql = { "biome" },
 			sh = { "shfmt" },
@@ -1338,17 +1338,6 @@ _G.now_if_args(function()
 		},
 		format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
 		formatters = {
-			prettier = {
-				prepend_args = function()
-					return {
-						"--no-semi",
-						"--single-quote",
-						"--no-bracket-spacing",
-						"--print-width",
-						"80",
-					}
-				end,
-			},
 			injected = {
 				options = {
 					ignore_errors = false,
