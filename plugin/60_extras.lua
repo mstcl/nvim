@@ -10,6 +10,24 @@ MiniDeps.now(function()
 	MiniDeps.add("mstcl/ivory.nvim")
 end)
 
+MiniDeps.later(function()
+	MiniDeps.add("nvim-mini/mini.files")
+
+	require("mini.files").setup({
+		options = {
+			permanent_delete = false,
+			use_as_default_explorer = true,
+		},
+	})
+
+	vim.keymap.set(
+		"n",
+		"<leader>e",
+		function() require("mini.files").open() end,
+		{ desc = "Navigate files", noremap = false, silent = true }
+	)
+end)
+
 -- (mini.notify) Popup notifications
 MiniDeps.now(function()
 	MiniDeps.add("nvim-mini/mini.notify")
@@ -413,15 +431,8 @@ _G.now_if_args(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>e",
-		function() require("oil").open() end,
-		{ desc = "Explorer (Oil)", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
 		"<leader>E",
-		function() require("oil").open_float() end,
+		function() require("oil").open() end,
 		{ desc = "Explorer (Oil)", noremap = false, silent = true }
 	)
 end)
@@ -2148,6 +2159,10 @@ MiniDeps.later(function()
 			view = {
 				toggle_explorer = "<leader>de",
 			},
+		},
+		explorer = {
+			view_mode = "tree",
+			width = 35,
 		},
 	})
 
