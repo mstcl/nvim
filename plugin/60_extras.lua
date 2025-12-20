@@ -24,7 +24,7 @@ MiniDeps.later(function()
 		"n",
 		"<leader>e",
 		function() require("mini.files").open() end,
-		{ desc = "Navigate files", noremap = false, silent = true }
+		{ desc = "Explorer (mini)", noremap = false, silent = true }
 	)
 end)
 
@@ -61,7 +61,7 @@ MiniDeps.now(function()
 		"n",
 		"<leader>N",
 		function() require("mini.notify").show_history() end,
-		{ desc = "Show notification history", noremap = false, silent = true }
+		{ desc = "Notification history", noremap = false, silent = true }
 	)
 end)
 
@@ -123,21 +123,19 @@ MiniDeps.later(function()
 			require("mini.clue").gen_clues.z(),
 			require("mini.clue").gen_clues.windows({ submode_resize = true }),
 
-			{ mode = "n", keys = "<leader>b", desc = "+Blame" },
-			{ mode = "n", keys = "<leader>g", desc = "+Git" },
-			{ mode = "n", keys = "<leader>gh", desc = "+Hunks" },
-			{ mode = "n", keys = "<leader>gb", desc = "+Blame" },
-			{ mode = "n", keys = "<leader>t", desc = "+Tab" },
-			{ mode = "n", keys = "<leader>x", desc = "+Extra" },
-			{ mode = "n", keys = "<leader>xd", desc = "+Document" },
-			{ mode = "n", keys = "<leader>w", desc = "+Workspace" },
-			{ mode = "n", keys = "<leader>d", desc = "+Diff" },
-			{ mode = "n", keys = "<leader>n", desc = "+Notes" },
-			{ mode = "n", keys = "gs", desc = "+Surround" },
-			{ mode = "x", keys = "gs", desc = "+Surround" },
-			{ mode = "n", keys = "gr", desc = "+Symbol" },
-			{ mode = "x", keys = "gr", desc = "+Symbol" },
-			{ mode = "x", keys = "c", desc = "+Conflicts" },
+			{ mode = "n", keys = "<leader>g", desc = "Git [+]" },
+			{ mode = "n", keys = "<leader>G", desc = "Hunks [+]" },
+			{ mode = "n", keys = "<leader>t", desc = "Tab [+]" },
+			{ mode = "n", keys = "<leader>p", desc = "Pair Mode [+]" },
+			{ mode = "n", keys = "<leader>w", desc = "Workspace [+]" },
+			{ mode = "n", keys = "<leader>d", desc = "Diff [+]" },
+			{ mode = "n", keys = "<leader>D", desc = "Document [+]" },
+			{ mode = "n", keys = "<leader>n", desc = "Notes [+]" },
+			{ mode = "n", keys = "gs", desc = "Surround [+]" },
+			{ mode = "x", keys = "gs", desc = "Surround [+]" },
+			{ mode = "n", keys = "gr", desc = "Symbol [+]" },
+			{ mode = "x", keys = "gr", desc = "Symbol [+]" },
+			{ mode = "x", keys = "c", desc = "Conflicts [+]" },
 		},
 	})
 end)
@@ -216,7 +214,7 @@ MiniDeps.later(function()
 		"n",
 		"<leader>I",
 		function() vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable end,
-		{ desc = "Indentscope toggle", noremap = false, silent = true }
+		{ desc = "Indentscope (toggle)", noremap = false, silent = true }
 	)
 
 	require("mini.indentscope").setup({
@@ -285,7 +283,7 @@ MiniDeps.later(function()
 		"n",
 		"<leader>A",
 		function() vim.g.minipairs_disable = not vim.g.minipairs_disable end,
-		{ desc = "Autopairs toggle", noremap = false, silent = true }
+		{ desc = "Autopairs (toggle)", noremap = false, silent = true }
 	)
 
 	require("mini.pairs").setup({
@@ -433,7 +431,7 @@ _G.now_if_args(function()
 		"n",
 		"<leader>E",
 		function() require("oil").open() end,
-		{ desc = "Explorer (Oil)", noremap = false, silent = true }
+		{ desc = "Explorer (oil)", noremap = false, silent = true }
 	)
 end)
 
@@ -616,16 +614,16 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>p",
+		"<leader>r",
 		function() vim.cmd("FzfLua resume") end,
-		{ desc = "Last picker", noremap = false, silent = true }
+		{ desc = "Resume picker", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
 		"<leader>P",
 		function() vim.cmd("FzfLua builtin") end,
-		{ desc = "All pickers", noremap = false, silent = true }
+		{ desc = "Pickers", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
@@ -731,7 +729,7 @@ MiniDeps.later(function()
 		"n",
 		"<leader>gs",
 		function() vim.cmd("Gitsigns toggle_signs") end,
-		{ desc = "Git signs toggle", noremap = false, silent = true }
+		{ desc = "Git signs (toggle)", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
@@ -750,42 +748,42 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>ghp",
+		"<leader>GG",
 		function() vim.cmd("Gitsigns preview_hunk_inline") end,
 		{ desc = "Preview hunk inline", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
-		"<leader>ghs",
+		"<leader>GS",
 		function() vim.cmd("Gitsigns stage_hunk") end,
 		{ desc = "Stage hunk", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
-		"<leader>ghu",
+		"<leader>GU",
 		function() vim.cmd("Gitsigns undo_stage_hunk") end,
 		{ desc = "Undo stage hunk", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
-		"<leader>ghr",
+		"<leader>GR",
 		function() vim.cmd("Gitsigns reset_hunk") end,
 		{ desc = "Reset hunk", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
-		"<leader>gbl",
+		"<leader>gm",
 		function() vim.cmd("Gitsigns toggle_current_line_blame") end,
-		{ desc = "Blame virtual toggle", noremap = false, silent = true }
+		{ desc = "Blame virtual (toggle)", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
-		"<leader>gbw",
+		"<leader>gM",
 		function() vim.cmd("Gitsigns blame") end,
 		{ desc = "Blame window open", noremap = false, silent = true }
 	)
@@ -883,13 +881,6 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>gc",
-		function() vim.cmd("Neogit commit kind=tab") end,
-		{ desc = "Neogit commits", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
 		"<leader>gl",
 		function() vim.cmd("Neogit log kind=tab") end,
 		{ desc = "Neogit logs", noremap = false, silent = true }
@@ -897,7 +888,7 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>gr",
+		"<leader>gb",
 		function() vim.cmd("Neogit branch") end,
 		{ desc = "Neogit branches", noremap = false, silent = true }
 	)
@@ -905,12 +896,19 @@ MiniDeps.later(function()
 	vim.keymap.set(
 		"n",
 		"<leader>gg",
+		function() vim.cmd("Neogit kind=vsplit") end,
+		{ desc = "Neogit (split)", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>gG",
 		function() vim.cmd("Neogit kind=tab") end,
-		{ desc = "Neogit", noremap = false, silent = true }
+		{ desc = "Neogit (tab)", noremap = false, silent = true }
 	)
 end)
 
--- (blink.cmp) Auto completion *
+-- (blink.cmp) Auto completion
 MiniDeps.later(function()
 	MiniDeps.add({
 		source = "saghen/blink.cmp",
@@ -1468,7 +1466,7 @@ MiniDeps.later(function()
 		"n",
 		"<leader>H",
 		function() vim.cmd("HighlightColors Toggle") end,
-		{ desc = "Highlight toggle", noremap = false, silent = true }
+		{ desc = "Highlight colors (toggle)", noremap = false, silent = true }
 	)
 end)
 
@@ -1658,9 +1656,9 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>G",
+		"<leader>R",
 		function() vim.cmd("GrugFar") end,
-		{ desc = "GrugFar", noremap = false, silent = true }
+		{ desc = "Replace (GrugFar)", noremap = false, silent = true }
 	)
 
 	_G.augroup("grugfar", {
@@ -1733,14 +1731,14 @@ MiniDeps.later(function()
 		"n",
 		"<leader>q",
 		function() require("quicker").toggle() end,
-		{ desc = "Quickfix toggle", noremap = false, silent = true }
+		{ desc = "Quickfix (toggle)", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
 		"<leader>l",
 		function() require("quicker").toggle({ loclist = true }) end,
-		{ desc = "Location list toggle", noremap = false, silent = true }
+		{ desc = "Location list (toggle)", noremap = false, silent = true }
 	)
 end)
 
@@ -1770,7 +1768,7 @@ MiniDeps.later(function()
 		"n",
 		"<leader>O",
 		function() vim.cmd("OverseerToggle") end,
-		{ desc = "Overseer toggle", noremap = false, silent = true }
+		{ desc = "Overseer (toggle)", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
@@ -1801,7 +1799,7 @@ MiniDeps.later(function()
 
 				vim.keymap.set(
 					"n",
-					"<leader>xdD",
+					"<leader>Dd",
 					function() vim.cmd("FzfLua lsp_document_diagnostics") end,
 					{
 						desc = "Document diagnostics (picker)",
@@ -1813,7 +1811,7 @@ MiniDeps.later(function()
 
 				vim.keymap.set(
 					"n",
-					"<leader>xds",
+					"<leader>DS",
 					function() vim.cmd("FzfLua lsp_document_symbols") end,
 					{
 						desc = "Document symbols (picker)",
@@ -1901,7 +1899,7 @@ MiniDeps.later(function()
 		"n",
 		"<leader>a",
 		function() vim.cmd("AerialToggle") end,
-		{ desc = "Aerial toggle", noremap = false, silent = true }
+		{ desc = "Aerial (toggle)", noremap = false, silent = true }
 	)
 
 	_G.augroup("aerial", {
@@ -2004,8 +2002,8 @@ MiniDeps.later(function()
 	vim.keymap.set(
 		"n",
 		"<leader>u",
-		function() vim.cmd("Atone toggle") end,
-		{ desc = "Undotree toggle", noremap = false, silent = true }
+		function() vim.cmd("Atone (toggle)") end,
+		{ desc = "Undotree (toggle)", noremap = false, silent = true }
 	)
 end)
 
@@ -2114,7 +2112,7 @@ MiniDeps.later(function()
 	vim.keymap.set("n", "<leader>T", function()
 		vim.cmd("NvimTreeToggle")
 		vim.cmd("wincmd p")
-	end, { desc = "Tree toggle", noremap = false, silent = true })
+	end, { desc = "Tree (toggle)", noremap = false, silent = true })
 end)
 
 -- (tiny-inline-diagnostic.nvim) Better virtual diagnostic
@@ -2142,8 +2140,8 @@ MiniDeps.later(function()
 	vim.keymap.set(
 		"n",
 		"<leader>v",
-		function() vim.cmd("TinyInlineDiag toggle") end,
-		{ desc = "Virtual text toggle", noremap = false, silent = true }
+		function() vim.cmd("TinyInlineDiag (toggle)") end,
+		{ desc = "Virtual text (toggle)", noremap = false, silent = true }
 	)
 end)
 
@@ -2170,7 +2168,14 @@ MiniDeps.later(function()
 		"n",
 		"<leader>dd",
 		function() vim.cmd("CodeDiff") end,
-		{ desc = "Diff side-by-side", noremap = false, silent = true }
+		{ desc = "Diff (toggle)", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>df",
+		function() vim.cmd("CodeDiff file HEAD") end,
+		{ desc = "Diff file with HEAD", noremap = false, silent = true }
 	)
 
 	_G.augroup("vscode-diff", {

@@ -156,14 +156,14 @@ _G.augroup("lsp", {
 				buffer = bufnr,
 			})
 
-			vim.keymap.set("n", "<leader>xdS", vim.lsp.buf.document_symbol, {
+			vim.keymap.set("n", "<leader>Ds", vim.lsp.buf.document_symbol, {
 				desc = "Document symbols (qf)",
 				noremap = true,
 				silent = true,
 				buffer = bufnr,
 			})
 
-			vim.keymap.set("n", "<leader>xdd", vim.diagnostic.setloclist, {
+			vim.keymap.set("n", "<leader>DD", vim.diagnostic.setloclist, {
 				desc = "Document diagnostics (loc)",
 				noremap = true,
 				silent = true,
@@ -195,7 +195,7 @@ _G.augroup("lsp", {
 			-- 		})
 			-- 	end
 			-- end, {
-			-- 	desc = "Virtual lines toggle",
+			-- 	desc = "Virtual lines (toggle)",
 			-- 	noremap = true,
 			-- 	silent = true,
 			-- 	buffer = bufnr,
@@ -213,7 +213,7 @@ _G.augroup("lsp", {
 			-- 		})
 			-- 	end
 			-- end, {
-			-- 	desc = "Virtual text toggle",
+			-- 	desc = "Virtual text (toggle)",
 			-- 	noremap = true,
 			-- 	silent = true,
 			-- 	buffer = bufnr,
@@ -224,7 +224,7 @@ _G.augroup("lsp", {
 					---@diagnostic disable-next-line: missing-parameter
 					vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 				end, {
-					desc = "Inlay hints toggle",
+					desc = "Inlay hints (toggle)",
 					noremap = true,
 					silent = true,
 					buffer = bufnr,

@@ -15,44 +15,44 @@ vim.keymap.set(
 
 vim.keymap.set(
 	"n",
-	"<leader>xn",
+	"<leader>y",
 	function() vim.cmd("ToggleNumber") end,
-	{ desc = "Cycle number mode", noremap = false, silent = true }
+	{ desc = "Number mode (cycle)", noremap = false, silent = true }
 )
 
 vim.keymap.set(
 	"n",
-	"<leader>C",
+	"<leader>x",
 	function() vim.cmd("ToggleScrolloff") end,
-	{ desc = "Centered cursor", noremap = false, silent = true }
+	{ desc = "Scrolloff (toggle)", noremap = false, silent = true }
 )
 
 vim.keymap.set(
 	"n",
-	"<leader>xs",
+	"<leader>x",
 	function() vim.cmd("ToggleSpell") end,
-	{ desc = "Spell toggle", noremap = false, silent = true }
+	{ desc = "Spell (toggle)", noremap = false, silent = true }
 )
 
 vim.keymap.set(
 	"n",
-	"<leader>xN",
+	"<leader>L",
 	function() vim.cmd("ToggleList") end,
-	{ desc = "Non-text characters toggle", noremap = false, silent = true }
+	{ desc = "List chars (toggle)", noremap = false, silent = true }
 )
 
 vim.keymap.set(
 	"n",
 	"<leader>c",
 	function() vim.cmd("ToggleCursorLine") end,
-	{ desc = "Cursorline toggle", noremap = false, silent = true }
+	{ desc = "Cursorline (toggle)", noremap = false, silent = true }
 )
 
 vim.keymap.set(
 	"n",
-	"<leader>xc",
+	"<leader>C",
 	function() vim.cmd("ToggleColorColumn") end,
-	{ desc = "Cursorcolumn toggle", noremap = false, silent = true }
+	{ desc = "Cursorcolumn (toggle)", noremap = false, silent = true }
 )
 
 vim.keymap.set(
@@ -90,7 +90,7 @@ vim.keymap.set("x", "<", "<gv", { desc = "Unindent" })
 vim.keymap.set("x", ">", ">gv", { desc = "Indent" })
 
 -- Folding
-vim.keymap.set("n", "<S-Tab>", "za", { desc = "Fold toggle" })
+vim.keymap.set("n", "<S-Tab>", "za", { desc = "Fold (toggle)" })
 
 -- Better search
 vim.keymap.set(
@@ -151,7 +151,7 @@ vim.keymap.set(
 	"n",
 	"<C-Space>",
 	function() vim.cmd("ToggleTerminal") end,
-	{ desc = "Quake terminal toggle", noremap = false, silent = true }
+	{ desc = "Quake terminal (toggle)", noremap = false, silent = true }
 )
 vim.keymap.set("t", "<Esc><Esc>", [[<C-Bslash><C-n>]], { silent = true })
 vim.keymap.set(
@@ -164,14 +164,14 @@ vim.keymap.set(
 -- pair mode commands
 vim.keymap.set(
 	"n",
-	"<leader>xp",
+	"<leader>pp",
 	function() vim.cmd("PairModeEnter") end,
 	{ desc = "Pair mode enter", noremap = false, silent = true }
 )
 
 vim.keymap.set(
 	"n",
-	"<leader>xP",
+	"<leader>pl",
 	function() vim.cmd("PairModeLeave") end,
 	{ desc = "Pair mode leave", noremap = false, silent = true }
 )
