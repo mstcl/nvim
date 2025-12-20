@@ -1096,7 +1096,6 @@ end)
 _G.now_if_args(function()
 	MiniDeps.add({
 		source = "nvim-treesitter/nvim-treesitter",
-		checkout = "main",
 		hooks = {
 			post_checkout = function() vim.cmd("TSUpdate") end,
 		},
@@ -1251,7 +1250,7 @@ MiniDeps.later(function()
 end)
 
 -- (mason-tool-installer.nvim) Mason tool install
-MiniDeps.later(function()
+_G.now_if_args(function()
 	MiniDeps.add({
 		source = "WhoIsSethDaniel/mason-tool-installer.nvim",
 		depends = { "mason-org/mason.nvim" },
