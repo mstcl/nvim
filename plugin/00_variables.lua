@@ -158,7 +158,6 @@ _G.config.sources.lsp = {
 
 -- all code tools to download from mason
 _G.config.sources.tools = {
-	"prettierd",
 	"shfmt",
 	"stylua",
 	"goimports",
