@@ -1096,6 +1096,7 @@ end)
 _G.now_if_args(function()
 	MiniDeps.add({
 		source = "nvim-treesitter/nvim-treesitter",
+		checkout = "main",
 		hooks = {
 			post_checkout = function() vim.cmd("TSUpdate") end,
 		},
@@ -1232,7 +1233,7 @@ MiniDeps.later(function()
 end)
 
 -- (mason.nvim) Code tools forge
-MiniDeps.later(function()
+_G.now_if_args(function()
 	MiniDeps.add("mason-org/mason.nvim")
 
 	require("mason").setup({
