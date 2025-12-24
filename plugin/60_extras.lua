@@ -197,6 +197,7 @@ MiniDeps.later(function()
 		"mason",
 		"NvimTree",
 		"Overseer*",
+		"git*",
 	}
 
 	MiniDeps.add("nvim-mini/mini.indentscope")
