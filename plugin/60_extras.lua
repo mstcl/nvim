@@ -2174,8 +2174,22 @@ MiniDeps.later(function()
 	vim.keymap.set(
 		"n",
 		"<leader>df",
-		function() vim.cmd("CodeDiff file HEAD") end,
-		{ desc = "Diff file with HEAD", noremap = false, silent = true }
+		function() vim.cmd("CodeDiff HEAD file") end,
+		{ desc = "Diff HEAD with file", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>dh",
+		function() vim.cmd("CodeDiff master HEAD") end,
+		{ desc = "Diff master with HEAD", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>dH",
+		function() vim.cmd("CodeDiff main HEAD") end,
+		{ desc = "Diff main with HEAD", noremap = false, silent = true }
 	)
 
 	_G.augroup("vscode-diff", {
