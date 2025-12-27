@@ -13,7 +13,13 @@ end)
 MiniDeps.later(function()
 	MiniDeps.add("nvim-mini/mini.files")
 
+	local icon_prefix = function(fs_entry)
+		if fs_entry.fs_type == "directory" then return "", "MiniFilesDirectory" end
+		return MiniFiles.default_prefix(fs_entry)
+	end
+
 	require("mini.files").setup({
+		content = { prefix = icon_prefix },
 		options = {
 			permanent_delete = false,
 			use_as_default_explorer = true,
@@ -355,24 +361,16 @@ _G.now_if_args(function()
 
 	local detail = false
 	local oil_columns = {
-		types = {
-			"type",
-			icons = {
-				directory = "+",
-				fifo = "p",
-				file = "·",
-				link = "l",
-				socket = "s",
-			},
-			highlight = "Special",
-		},
-		icon = { "icon" },
+		icon = { "icon", directory = "+ ", add_padding = false },
 		permissions = { "permissions", highlight = "Number" },
 	}
 
 	require("oil").setup({
 		default_file_explorer = true,
 		experimental_watch_for_changes = true,
+		view_options = {
+			show_hidden = true,
+		},
 		keymaps = {
 			["g?"] = "actions.show_help",
 			["<CR>"] = "actions.select",
@@ -393,7 +391,6 @@ _G.now_if_args(function()
 					detail = not detail
 					if detail then
 						require("oil").set_columns({
-							oil_columns.types,
 							oil_columns.permissions,
 							oil_columns.icon,
 						})
@@ -413,7 +410,7 @@ _G.now_if_args(function()
 		preview = { border = _G.config.border },
 		progress = { border = _G.config.border },
 		win_options = {
-			number = false,
+			number = true,
 			relativenumber = true,
 			signcolumn = "no",
 			foldcolumn = "0",
@@ -444,7 +441,6 @@ MiniDeps.later(function()
 	})
 	require("fzf-lua-frecency").setup({
 		display_score = false,
-		cwd_prompt = true,
 		winopts = {
 			preview = { hidden = "nohidden" },
 		},
@@ -484,6 +480,7 @@ MiniDeps.later(function()
 			git_icons = false,
 			file_icons = true,
 			formatter = "path.filename_first",
+			cwd_header = true,
 		},
 		fzf_opts = {
 			["--margin"] = "0,0",
@@ -578,10 +575,8 @@ MiniDeps.later(function()
 		},
 		tabs = {
 			tab_marker = "◀",
-			cwd_prompt = true,
 		},
 		buffers = {
-			cwd_prompt = true,
 			sort_lastused = true,
 		},
 	})
@@ -840,7 +835,7 @@ MiniDeps.later(function()
 		integrations = { fzf_lua = true, diffview = false },
 		signs = {
 			hunk = { " ", " " },
-			item = { "▸", "▾" },
+			item = { _G.config.signs.close, _G.config.signs.open },
 			section = { " ", " " },
 		},
 		---@diagnostic disable-next-line:  assign-type-mismatch
@@ -2011,7 +2006,13 @@ MiniDeps.later(function()
 		sync_root_with_cwd = true,
 		reload_on_bufenter = true,
 		respect_buf_cwd = true,
+		view = {
+			cursorline = false,
+			width = 30,
+			signcolumn = "no",
+		},
 		git = { enable = true },
+		modified = { enable = true },
 		filters = {
 			dotfiles = true,
 			git_ignored = false,
@@ -2020,14 +2021,26 @@ MiniDeps.later(function()
 			enable = true,
 			update_root = true,
 		},
-		view = { width = 35 },
 		renderer = {
-			root_folder_label = ":~:s?$??",
+			root_folder_label = false,
+			group_empty = true,
+			highlight_hidden = "name",
+			highlight_modified = "name",
+			indent_width = 2,
+			indent_markers = { enable = true },
+			special_files = {
+				"go.mod",
+				"Cargo.toml",
+				"Makefile",
+				"Justfile",
+				"README.md",
+				"readme.md",
+			},
 			icons = {
 				symlink_arrow = " » ",
 				show = {
 					file = true,
-					folder = true,
+					folder = false,
 					folder_arrow = true,
 					git = true,
 					modified = true,
@@ -2035,8 +2048,13 @@ MiniDeps.later(function()
 					diagnostics = false,
 					bookmarks = false,
 				},
-				git_placement = "after",
+				git_placement = "right_align",
 				glyphs = {
+					modified = "[+]",
+					folder = {
+						arrow_closed = _G.config.signs.close,
+						arrow_open = _G.config.signs.open,
+					},
 					git = {
 						unstaged = "M",
 						staged = "S",
@@ -2094,10 +2112,8 @@ MiniDeps.later(function()
 	})
 
 	require("nvim-tree.view").View.winopts.foldcolumn = "0"
-	require("nvim-tree.view").View.winopts.cursorline = true
 	require("nvim-tree.view").View.winopts.statuscolumn = ""
 	require("nvim-tree.view").View.winopts.colorcolumn = ""
-	require("nvim-tree.view").View.winopts.signcolumn = "no"
 	require("nvim-tree.view").View.winopts.winhighlight =
 		"Normal:ColorColumn,CursorLine:CursorLine"
 

@@ -98,7 +98,7 @@ end
 _G.statusline.components.lsp_diagnostic = function()
 	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
 
-	local cog_icon = set_hl("󰒓 ", "StatusLineAlt")
+	local cog_icon = set_hl(_G.config.signs.diagnostics, "StatusLineAlt")
 	local clients = vim.lsp.get_clients()
 	local placeholder = set_hl("ok", "StatusLineNC")
 
@@ -171,7 +171,7 @@ _G.statusline.components.git_branch = function()
 	else
 		branch = set_hl(branch, "ErrorMsg")
 	end
-	return set_hl("󰘬 ", "StatusLineAlt") .. branch
+	return set_hl(_G.config.signs.branch, "StatusLineAlt") .. branch
 end
 
 ---Get git diffs for current buffer
@@ -182,7 +182,7 @@ _G.statusline.components.git_diffs = function()
 
 	---@diagnostic disable-next-line: undefined-field
 	local diffs = vim.b.gitsigns_status_dict
-	local git_icon = set_hl(" ", "StatusLineAlt")
+	local git_icon = set_hl(_G.config.signs.diff, "StatusLineAlt")
 
 	if diffs ~= nil then
 		local added = diffs.added or 0
@@ -219,7 +219,7 @@ _G.statusline.components.filepath = function()
 	local hi = "StatusLineNC"
 	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
 	local root = set_hl(vim.fn.fnamemodify(vim.fn.getcwd(), ":t"), hi)
-	local prefix = set_hl("@ ", "StatusLineAlt")
+	local prefix = set_hl(_G.config.signs.file .. " ", "StatusLineAlt")
 	local secondary = ""
 
 	if fpath ~= "." then secondary = string.format("/%s", fpath) end
@@ -284,10 +284,13 @@ _G.statusline.components.search = function()
 	if vim.v.hlsearch == 1 then
 		local sinfo = vim.fn.searchcount({ maxcount = 0 })
 		local search_stat = sinfo.incomplete > 0 and "[?/?]"
-			or sinfo.total > 0 and ("[%s/%s]"):format(sinfo.current, sinfo.total)
-			or -1
+			or sinfo.total > 0 and set_hl(sinfo.current, "StatusLineAccent") .. set_hl(
+				" out of ",
+				"StatusLineAlt"
+			) .. set_hl(sinfo.total, "StatusLineAccent")
+			or ""
 
-		if search_stat ~= -1 then return set_hl(search_stat, "StatusLineAlt") end
+		if search_stat ~= "" then return search_stat end
 	end
 	return ""
 end
@@ -340,7 +343,7 @@ _G.statusline.components.fileinfo = function()
 	if mode == "v" or mode == "V" then
 		return get_vlinecount() .. " lines selected"
 	else
-		return set_hl("≡ " .. lines .. " lines", "StatusLineAlt")
+		return set_hl(lines .. " lines", "StatusLineAlt")
 	end
 end
 
@@ -375,7 +378,7 @@ end
 
 _G.statusline.components.delimiter = function()
 	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
-	return set_hl("·", "StatusLineAlt")
+	return set_hl(_G.config.signs.delimiter, "StatusLineAlt")
 end
 
 local blocks = {

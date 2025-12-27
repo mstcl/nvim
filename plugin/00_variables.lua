@@ -17,8 +17,14 @@ _G.config.features.lsp = {
 }
 
 _G.config.signs.done = "✓"
-_G.config.signs.fold_open = "▸"
-_G.config.signs.fold_closed = "▾"
+_G.config.signs.close = ""
+_G.config.signs.open = ""
+
+_G.config.signs.diagnostics = " "
+_G.config.signs.branch = " "
+_G.config.signs.diff = " "
+_G.config.signs.delimiter = "·"
+_G.config.signs.file = "@"
 
 _G.config.signs.lsp = {
 	Error = "*",
@@ -62,7 +68,7 @@ _G.config.signs.kinds = {
 	Module = "󰅩",
 	Namespace = "󰅩",
 	Null = "Ø",
-	Number = "󰎠",
+	Number = "",
 	Object = "󰅩",
 	Operator = "⁑",
 	Package = "󰆧",
