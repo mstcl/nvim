@@ -833,15 +833,6 @@ MiniDeps.later(function()
 		fetch_after_checkout = true,
 		auto_show_console_on = "error",
 		console_timeout = 6000,
-		-- log_pager = {
-		-- 	"delta",
-		-- 	"--width",
-		-- 	"120",
-		-- 	"--file-style",
-		-- 	"omit",
-		-- 	"--hunk-header-style",
-		-- 	"omit",
-		-- },
 		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
 		commit_view = { kind = "replace" },
 		commit_editor = { kind = "vsplit", staged_diff_split_kind = "vsplit" },
@@ -2220,4 +2211,23 @@ MiniDeps.later(function()
 			end,
 		},
 	})
+end)
+
+-- (context.nvim) Editor context for agents
+MiniDeps.later(function()
+	MiniDeps.add({
+		source = "ahkohd/context.nvim",
+		depends = { "ibhagwan/fzf-lua" },
+	})
+
+	require("context").setup({
+		picker = require("context").pickers.vim_ui,
+	})
+
+	vim.keymap.set(
+		"n",
+		"<leader>X",
+		function() require("context").pick() end,
+		{ desc = "Context (picker)", noremap = false, silent = true }
+	)
 end)
