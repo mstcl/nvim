@@ -2154,20 +2154,21 @@ MiniDeps.later(function()
 end)
 
 -- (vscode-diff.nvim) Side-by-side diffs
-MiniDeps.later(function()
+MiniDeps.now(function()
 	MiniDeps.add({
 		source = "esmuellert/vscode-diff.nvim",
+		checkout = "next",
 		depends = { "MunifTanjim/nui.nvim" },
 	})
 
-	require("vscode-diff").setup({
+	require("codediff").setup({
 		keymaps = {
 			view = {
 				toggle_explorer = "<leader>de",
 			},
 		},
 		explorer = {
-			view_mode = "tree",
+			view_mode = "list",
 			width = 35,
 		},
 	})
@@ -2177,13 +2178,6 @@ MiniDeps.later(function()
 		"<leader>dd",
 		function() vim.cmd("CodeDiff") end,
 		{ desc = "Diff (toggle)", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>df",
-		function() vim.cmd("CodeDiff HEAD file") end,
-		{ desc = "Diff HEAD with file", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
@@ -2206,7 +2200,7 @@ MiniDeps.later(function()
 			desc = "set background for alt windows",
 			pattern = "*",
 			callback = function()
-				local filetypes = { "vscode-diff-explorer" }
+				local filetypes = { "vscode-diff-explorer", "codediff-explorer" }
 				local current_ft = vim.bo.filetype
 				if vim.tbl_contains(filetypes, current_ft) then
 					vim.wo.winhighlight = "Normal:ColorColumn"
@@ -2219,7 +2213,7 @@ MiniDeps.later(function()
 			desc = "minimal mode in codediff",
 			pattern = "*",
 			callback = function()
-				local filetypes = { "vscode-diff-explorer" }
+				local filetypes = { "vscode-diff-explorer", "codediff-explorer" }
 				local current_ft = vim.bo.filetype
 				if vim.tbl_contains(filetypes, current_ft) then
 					vim.cmd("MinimalMode")
