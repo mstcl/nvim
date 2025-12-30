@@ -66,10 +66,7 @@ _G.augroup("root", {
 				"README.md",
 				"go.mod",
 			})
-			if root then
-				---@diagnostic disable-next-line: undefined-field
-				vim.fn.chdir(root)
-			end
+			if root and root ~= "." then pcall(vim.cmd.tcd, root) end
 		end,
 	},
 })

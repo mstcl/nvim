@@ -1399,44 +1399,6 @@ MiniDeps.later(function()
 	}
 end)
 
--- (incline.nvim) Current file status
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "b0o/incline.nvim",
-		depends = { "nvim-tree/nvim-web-devicons" },
-	})
-	require("incline").setup({
-		hide = {
-			cursorline = true,
-		},
-		render = function(props)
-			local bufname = vim.api.nvim_buf_get_name(props.buf)
-			local filename = vim.fn.fnamemodify(bufname, ":t")
-			local extension = vim.fn.fnamemodify(filename, ":e")
-			local icon, _ = require("nvim-web-devicons").get_icon(
-				filename,
-				extension,
-				{ default = true }
-			)
-			local modified = ""
-
-			if icon ~= "" then icon = icon .. " " end
-
-			if filename == "" then filename = "[No Name]" end
-
-			if vim.api.nvim_get_option_value("modified", { buf = props.buf }) then
-				modified = " [+]"
-			end
-
-			return {
-				icon,
-				filename,
-				modified,
-			}
-		end,
-	})
-end)
-
 -- (nvim-highlight-colors) Highlight color blocks
 MiniDeps.later(function()
 	MiniDeps.add("brenoprata10/nvim-highlight-colors")

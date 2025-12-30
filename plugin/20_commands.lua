@@ -39,6 +39,13 @@ vim.api.nvim_create_user_command(
 	{}
 )
 
+-- toggle tabline
+vim.api.nvim_create_user_command(
+	"ToggleTabLine",
+	function() vim.o.showtabline = vim.o.showtabline == 1 and 0 or 1 end,
+	{}
+)
+
 -- toggle spelling
 vim.api.nvim_create_user_command(
 	"ToggleSpell",

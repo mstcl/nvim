@@ -145,6 +145,12 @@ vim.keymap.set(
 	function() vim.cmd("tabclose") end,
 	{ desc = "Close tab" }
 )
+vim.keymap.set(
+	"n",
+	"<leader>tl",
+	function() vim.cmd("ToggleTabLine") end,
+	{ desc = "Toggle tab line" }
+)
 
 -- terminal
 vim.keymap.set(
