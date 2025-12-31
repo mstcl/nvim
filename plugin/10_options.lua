@@ -74,7 +74,7 @@ vim.opt.showcmd = false
 vim.opt.showcmdloc = "statusline"
 vim.opt.cmdheight = 0
 vim.opt.ruler = true
-vim.opt.showtabline = 0
+vim.opt.showtabline = 1
 
 -- Rendering
 vim.opt.lazyredraw = false
