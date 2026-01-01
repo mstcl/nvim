@@ -1169,6 +1169,7 @@ _G.now_if_args(function()
 				silent = true,
 			}
 		end
+
 		vim.keymap.set(
 			"x",
 			"i" .. key,
@@ -1664,13 +1665,13 @@ MiniDeps.later(function()
 			H = _G.config.signs.lsp.Hint,
 		},
 		borders = {
-			vert = " ┋ ",
-			strong_header = "━",
-			strong_cross = "━╋━",
-			strong_end = "━┫ ",
+			vert = " ┆ ",
+			strong_header = "─",
+			strong_cross = "─┼─",
+			strong_end = "─┤ ",
 			soft_header = "╌",
-			soft_cross = "╌╂╌",
-			soft_end = "╌┨ ",
+			soft_cross = "╌┼╌",
+			soft_end = "╌┤ ",
 		},
 		opts = {
 			colorcolumn = "",
