@@ -229,7 +229,7 @@ MiniDeps.later(function()
 			delay = 0,
 			animation = require("mini.indentscope").gen_animation.none(),
 		},
-		symbol = "┃",
+		symbol = "│",
 		options = { try_as_border = true },
 	})
 end)
@@ -708,11 +708,11 @@ MiniDeps.later(function()
 
 	require("gitsigns").setup({
 		signs = {
-			change = { text = "┋" },
+			change = { text = "┆" },
 			delete = { text = "~" },
 		},
 		signs_staged = {
-			change = { text = "┋" },
+			change = { text = "┆" },
 			delete = { text = "~" },
 		},
 		current_line_blame_formatter = "    <summary> • <author> • <author_time:%R> • <abbrev_sha>",
