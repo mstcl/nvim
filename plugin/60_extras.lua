@@ -8,6 +8,23 @@ MiniDeps.now(function()
 	MiniDeps.add("rktjmp/lush.nvim")
 	MiniDeps.add("mstcl/tavern.nvim")
 	MiniDeps.add("mstcl/ivory.nvim")
+
+	_G.augroup("toggletheme", {
+		"Signal",
+		{
+			pattern = "SIGUSR1",
+			callback = function()
+				package.loaded.theme = nil
+				if vim.g.colors_name == "tavern" then
+					vim.cmd.colorscheme("ivory")
+				else
+					vim.cmd.colorscheme("tavern")
+				end
+				vim.schedule(function() vim.cmd("redraw!") end)
+			end,
+			nested = true,
+		},
+	})
 end)
 
 MiniDeps.later(function()
@@ -708,12 +725,20 @@ MiniDeps.later(function()
 
 	require("gitsigns").setup({
 		signs = {
+			add = { text = "│" },
 			change = { text = "┆" },
 			delete = { text = "~" },
+			topdelete = { text = "‾" },
+			changedelete = { text = "~" },
+			untracked = { text = "┆" },
 		},
 		signs_staged = {
+			add = { text = "│" },
 			change = { text = "┆" },
 			delete = { text = "~" },
+			topdelete = { text = "‾" },
+			changedelete = { text = "~" },
+			untracked = { text = "┆" },
 		},
 		current_line_blame_formatter = "    <summary> • <author> • <author_time:%R> • <abbrev_sha>",
 		current_line_blame_opts = {
