@@ -2144,8 +2144,7 @@ end)
 -- (vscode-diff.nvim) Side-by-side diffs
 MiniDeps.now(function()
 	MiniDeps.add({
-		source = "esmuellert/vscode-diff.nvim",
-		checkout = "next",
+		source = "esmuellert/codediff.nvim",
 		depends = { "MunifTanjim/nui.nvim" },
 	})
 
