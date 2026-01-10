@@ -127,7 +127,6 @@ _G.config.sources.treesitter = {
 	"yaml",
 	"toml",
 	"comment",
-	"org",
 	"rust",
 	"xml",
 	"go",
