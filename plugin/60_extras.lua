@@ -744,6 +744,117 @@ MiniDeps.later(function()
 		current_line_blame_opts = {
 			delay = 100,
 		},
+		on_attach = function(bufnr)
+			local gitsigns = require("gitsigns")
+
+			vim.keymap.set("n", "[g", function()
+				if vim.wo.diff then
+					vim.cmd.normal({ "[c", bang = true })
+				else
+					gitsigns.nav_hunk("prev")
+				end
+			end, {
+				desc = "Previous git hunk",
+				noremap = false,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "]g", function()
+				if vim.wo.diff then
+					vim.cmd.normal({ "]c", bang = true })
+				else
+					gitsigns.nav_hunk("next")
+				end
+			end, {
+				desc = "Next git hunk",
+				noremap = false,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "<leader>Gg", gitsigns.preview_hunk_inline, {
+				desc = "Preview hunk inline",
+				noremap = false,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "<leader>GG", gitsigns.preview_hunk, {
+				desc = "Preview hunk",
+				noremap = false,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set(
+				"n",
+				"<leader>gm",
+				function() gitsigns.blame_line({ full = true }) end,
+				{
+					desc = "Blame line",
+					noremap = false,
+					silent = true,
+					buffer = bufnr,
+				}
+			)
+
+			vim.keymap.set("n", "<leader>GS", gitsigns.stage_hunk, {
+				desc = "Stage hunk",
+				noremap = false,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "<leader>GU", gitsigns.undo_stage_hunk, {
+				desc = "Undo stage hunk",
+				noremap = false,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "<leader>GR", gitsigns.reset_hunk, {
+				desc = "Reset hunk",
+				noremap = false,
+				silent = true,
+				buffer = bufnr,
+			})
+
+			vim.keymap.set(
+				"v",
+				"<leader>GS",
+				function()
+					gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+				end,
+				{
+					desc = "Stage hunk",
+					noremap = false,
+					silent = true,
+					buffer = bufnr,
+				}
+			)
+
+			vim.keymap.set(
+				"v",
+				"<leader>GR",
+				function()
+					gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+				end,
+				{
+					desc = "Reset hunk",
+					noremap = false,
+					silent = true,
+					buffer = bufnr,
+				}
+			)
+
+			vim.keymap.set({ "o", "x" }, "ih", gitsigns.select_hunk, {
+				desc = "Select hunk textobject",
+				noremap = false,
+				silent = true,
+				buffer = bufnr,
+			})
+		end,
 	})
 
 	vim.keymap.set(
@@ -755,58 +866,9 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"[g",
-		function() vim.cmd("Gitsigns prev_hunk") end,
-		{ desc = "Previous git hunk", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"]g",
-		function() vim.cmd("Gitsigns next_hunk") end,
-		{ desc = "Next git hunk", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>GG",
-		function() vim.cmd("Gitsigns preview_hunk_inline") end,
-		{ desc = "Preview hunk inline", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>GS",
-		function() vim.cmd("Gitsigns stage_hunk") end,
-		{ desc = "Stage hunk", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>GU",
-		function() vim.cmd("Gitsigns undo_stage_hunk") end,
-		{ desc = "Undo stage hunk", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>GR",
-		function() vim.cmd("Gitsigns reset_hunk") end,
-		{ desc = "Reset hunk", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>gm",
-		function() vim.cmd("Gitsigns toggle_current_line_blame") end,
-		{ desc = "Blame virtual (toggle)", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
 		"<leader>gM",
 		function() vim.cmd("Gitsigns blame") end,
-		{ desc = "Blame window open", noremap = false, silent = true }
+		{ desc = "Toggle blame sidebar", noremap = false, silent = true }
 	)
 end)
 
