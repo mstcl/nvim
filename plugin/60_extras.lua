@@ -1980,14 +1980,36 @@ end)
 -- (atone) Modern undotree
 MiniDeps.later(function()
 	MiniDeps.add("XXiaoA/atone.nvim")
-	require("atone").setup()
+	require("atone").setup({
+		layout = { width = 0.35 },
+		diff_cur_node = { split_percent = 0.45 },
+		ui = {
+			border = _G.config.border,
+			compact = true,
+		},
+	})
 
 	vim.keymap.set(
 		"n",
 		"<leader>u",
-		function() vim.cmd("Atone (toggle)") end,
+		function() vim.cmd("Atone toggle") end,
 		{ desc = "Undotree (toggle)", noremap = false, silent = true }
 	)
+
+	_G.augroup("atone", {
+		"BufEnter",
+		{
+			desc = "minimal mode in atone",
+			pattern = "*",
+			callback = function()
+				local filetypes = { "atone" }
+				local current_ft = vim.bo.filetype
+				if vim.tbl_contains(filetypes, current_ft) then
+					vim.cmd("MinimalMode")
+				end
+			end,
+		},
+	})
 end)
 
 -- (nvim-tree) Tree file
