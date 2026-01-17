@@ -2171,7 +2171,7 @@ MiniDeps.later(function()
 	)
 end)
 
--- (vscode-diff.nvim) Side-by-side diffs
+-- (codediff.nvim) Side-by-side diffs
 MiniDeps.now(function()
 	MiniDeps.add({
 		source = "esmuellert/codediff.nvim",
