@@ -1070,17 +1070,18 @@ MiniDeps.later(function()
 				ripgrep = {
 					name = "R",
 					module = "blink-ripgrep",
-					score_offset = 4,
+					score_offset = 1,
 					max_items = 3,
 					min_keyword_length = 3,
 				},
-				lsp = { name = "L", score_offset = 2 },
+				lsp = { name = "L", score_offset = 4 },
 				path = {
 					name = "P",
 					opts = { trailing_slash = false },
 				},
 				snippets = {
 					name = "S",
+					score_offset = 2,
 					max_items = 3,
 					min_keyword_length = 0,
 				},
