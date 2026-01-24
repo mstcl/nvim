@@ -1028,7 +1028,7 @@ MiniDeps.later(function()
 				border = "none",
 				draw = {
 					treesitter = { "lsp" }, -- WARN: performance issues
-					padding = { 0, 2 },
+					padding = { 0, 1 },
 					columns = {
 						{ "kind_icon" },
 						{ "label", "label_description", gap = 1 },
