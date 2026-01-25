@@ -148,7 +148,7 @@ MiniDeps.later(function()
 			{ mode = "n", keys = "<leader>g", desc = "Git [+]" },
 			{ mode = "n", keys = "<leader>G", desc = "Git hunks [+]" },
 			{ mode = "n", keys = "<leader>t", desc = "Tab [+]" },
-			{ mode = "n", keys = "<leader>p", desc = "Pair Mode [+]" },
+			{ mode = "n", keys = "<leader>p", desc = "Pair [+]" },
 			{ mode = "n", keys = "<leader>W", desc = "Workspace [+]" },
 			{ mode = "n", keys = "<leader>d", desc = "Diff [+]" },
 			{ mode = "n", keys = "<leader>D", desc = "Document [+]" },
@@ -878,6 +878,7 @@ MiniDeps.later(function()
 			desc = "disable neogit",
 			callback = function()
 				vim.b.miniindentscope_disable = true
+				vim.b.indent_guide = false
 				vim.wo.statuscolumn = ""
 				vim.wo.cursorline = false
 				vim.wo.colorcolumn = ""
@@ -1683,6 +1684,8 @@ MiniDeps.later(function()
 			pattern = "grug-far",
 			callback = function()
 				vim.b.miniindentscope_disable = true
+				vim.b.indent_guide = false
+				vim.b.indent_guide = false
 				vim.wo.statuscolumn = ""
 				vim.wo.cursorline = false
 				vim.wo.colorcolumn = ""
@@ -1817,6 +1820,7 @@ MiniDeps.later(function()
 			pattern = "aerial",
 			callback = function()
 				vim.b.miniindentscope_disable = true
+				vim.b.indent_guide = false
 				vim.wo.statuscolumn = ""
 				vim.wo.cursorline = false
 				vim.wo.colorcolumn = ""

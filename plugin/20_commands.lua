@@ -92,6 +92,7 @@ end, {})
 vim.api.nvim_create_user_command("MinimalMode", function()
 	vim.b.minianimate_disable = true
 	vim.b.miniindentscope_disable = true
+	vim.b.indent_guide = false
 	vim.opt_local.list = false
 	vim.opt_local.foldcolumn = "0"
 	vim.opt_local.number = false
