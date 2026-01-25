@@ -1,5 +1,4 @@
 local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
-
 -- (nvim-web-devicons) Icons
 MiniDeps.now(function() MiniDeps.add("nvim-tree/nvim-web-devicons") end)
 
@@ -182,73 +181,6 @@ MiniDeps.later(function()
 	MiniDeps.add("nvim-mini/mini.move")
 
 	require("mini.move").setup()
-end)
-
--- (mini.bracketed) Bracketed motions for prev and next
-MiniDeps.later(function()
-	MiniDeps.add("echasnovski/mini.bracketed")
-	require("mini.bracketed").setup({
-		buffer = { suffix = "" },
-		diagnostic = { suffix = "" },
-		conflict = { suffix = "" },
-		file = { suffix = "" },
-		indent = { suffix = "" },
-		undo = { suffix = "" },
-		window = { suffix = "" },
-		yank = { suffix = "" },
-		treesitter = { suffix = "" },
-		oldfile = { suffix = "" },
-		comment = { suffix = "" },
-	})
-end)
-
--- (mini.indentscope) Indent lines
-MiniDeps.later(function()
-	local indentscope_disable_filetypes = {
-		"fzf",
-		"toggleterm",
-		"ministarter",
-		"gitsigns-*",
-		"help",
-		"lazy",
-		"Neogit*",
-		"markdown",
-		"Diffview*",
-		"vscode-diff-*",
-		"aerial",
-		"qf",
-		"mason",
-		"NvimTree",
-		"Overseer*",
-		"git*",
-	}
-
-	MiniDeps.add("nvim-mini/mini.indentscope")
-
-	_G.augroup("mini_indentscope", {
-		{ "Filetype" },
-		{
-			pattern = indentscope_disable_filetypes,
-			desc = "disable indentscope",
-			callback = function() vim.b.miniindentscope_disable = true end,
-		},
-	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>I",
-		function() vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable end,
-		{ desc = "Indentscope (toggle)", noremap = false, silent = true }
-	)
-
-	require("mini.indentscope").setup({
-		draw = {
-			delay = 0,
-			animation = require("mini.indentscope").gen_animation.none(),
-		},
-		symbol = "│",
-		options = { try_as_border = true },
-	})
 end)
 
 -- (mini.keymap) Supercharged keymapping
@@ -980,6 +912,52 @@ MiniDeps.later(function()
 		function() vim.cmd("Neogit kind=tab") end,
 		{ desc = "Neogit (tab)", noremap = false, silent = true }
 	)
+end)
+
+-- (blink.indent) Indent lines
+MiniDeps.later(function()
+	MiniDeps.add("saghen/blink.indent")
+
+	require("blink.indent").setup({
+		--- @module 'blink.indent'
+		--- @type blink.indent.Config
+		blocked = {
+			-- default: 'terminal', 'quickfix', 'nofile', 'prompt'
+			buftypes = { include_defaults = true },
+			filetypes = {
+				"lspinfo",
+				"packer",
+				"checkhealth",
+				"man",
+				"",
+				"fzf",
+				"toggleterm",
+				"ministarter",
+				"gitsigns-*",
+				"help",
+				"lazy",
+				"Neogit*",
+				"markdown",
+				"Diffview*",
+				"vscode-diff-*",
+				"aerial",
+				"qf",
+				"mason",
+				"NvimTree",
+				"Overseer*",
+				"git*",
+			},
+		},
+		mappings = {
+			goto_top = "",
+			goto_bottom = "",
+		},
+		static = {
+			char = "│",
+			whitespace_char = " ",
+		},
+		scope = { enabled = false },
+	})
 end)
 
 -- (blink.cmp) Auto completion
@@ -1780,113 +1758,6 @@ MiniDeps.later(function()
 	)
 end)
 
--- (overseer.nvim) Code runner
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "stevearc/overseer.nvim",
-		depends = { "ibhagwan/fzf-lua" },
-		checkout = "v1.6.0",
-	})
-
-	local default_win_opts = {
-		border = _G.config.border,
-		win_opts = {
-			winblend = 0,
-		},
-	}
-
-	require("overseer").setup({
-		form = default_win_opts,
-		confirm = default_win_opts,
-		task_win = default_win_opts,
-		help_win = default_win_opts,
-	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>O",
-		function() vim.cmd("OverseerToggle") end,
-		{ desc = "Overseer (toggle)", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>o",
-		function() vim.cmd("OverseerRun") end,
-		{ desc = "Overseer run", noremap = false, silent = true }
-	)
-
-	_G.augroup("fzf_lua", {
-		"LspAttach",
-		{
-			desc = "on attach for LSP for fzf-lua",
-			callback = function(args)
-				local bufnr = args.buf
-
-				vim.keymap.set(
-					"n",
-					"grR",
-					function() vim.cmd("FzfLua lsp_references") end,
-					{
-						desc = "References (picker)",
-						noremap = false,
-						silent = true,
-						buffer = bufnr,
-					}
-				)
-
-				vim.keymap.set(
-					"n",
-					"<leader>Dd",
-					function() vim.cmd("FzfLua lsp_document_diagnostics") end,
-					{
-						desc = "Document diagnostics (picker)",
-						noremap = false,
-						silent = true,
-						buffer = bufnr,
-					}
-				)
-
-				vim.keymap.set(
-					"n",
-					"<leader>DS",
-					function() vim.cmd("FzfLua lsp_document_symbols") end,
-					{
-						desc = "Document symbols (picker)",
-						noremap = false,
-						silent = true,
-						buffer = bufnr,
-					}
-				)
-
-				vim.keymap.set(
-					"n",
-					"<leader>wD",
-					function() vim.cmd("FzfLua lsp_workspace_diagnostics") end,
-					{
-						desc = "Workspace diagnostics (picker)",
-						noremap = false,
-						silent = true,
-						buffer = bufnr,
-					}
-				)
-
-				vim.keymap.set(
-					"n",
-					"<leader>ws",
-					function() vim.cmd("FzfLua lsp_workspace_symbols") end,
-					{
-						desc = "Workspace symbols (picker)",
-						noremap = false,
-						silent = true,
-						buffer = bufnr,
-					}
-				)
-			end,
-		},
-	})
-end)
-
 -- (aerial.nvim) Code outline
 MiniDeps.later(function()
 	MiniDeps.add("stevearc/aerial.nvim")
@@ -1976,41 +1847,6 @@ MiniDeps.later(function()
 		"b",
 		"<cmd>lua require('spider').motion('b')<CR>"
 	)
-end)
-
--- (atone) Modern undotree
-MiniDeps.later(function()
-	MiniDeps.add("XXiaoA/atone.nvim")
-	require("atone").setup({
-		layout = { width = 0.35 },
-		diff_cur_node = { split_percent = 0.45 },
-		ui = {
-			border = _G.config.border,
-			compact = true,
-		},
-	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>u",
-		function() vim.cmd("Atone toggle") end,
-		{ desc = "Undotree (toggle)", noremap = false, silent = true }
-	)
-
-	_G.augroup("atone", {
-		"BufEnter",
-		{
-			desc = "minimal mode in atone",
-			pattern = "*",
-			callback = function()
-				local filetypes = { "atone" }
-				local current_ft = vim.bo.filetype
-				if vim.tbl_contains(filetypes, current_ft) then
-					vim.cmd("MinimalMode")
-				end
-			end,
-		},
-	})
 end)
 
 -- (nvim-tree) Tree file
