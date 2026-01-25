@@ -167,13 +167,13 @@ _G.augroup("lsp", {
 				buffer = bufnr,
 			})
 
-			vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, {
+			vim.keymap.set("n", "<leader>WD", vim.diagnostic.setqflist, {
 				desc = "Workspace diagnostics (qf)",
 				noremap = true,
 				silent = true,
 				buffer = bufnr,
 			})
-			vim.keymap.set("n", "<leader>wS", vim.lsp.buf.workspace_symbol, {
+			vim.keymap.set("n", "<leader>WS", vim.lsp.buf.workspace_symbol, {
 				desc = "Workspace symbols (query)",
 				silent = true,
 				noremap = true,

@@ -146,10 +146,10 @@ MiniDeps.later(function()
 			require("mini.clue").gen_clues.windows({ submode_resize = true }),
 
 			{ mode = "n", keys = "<leader>g", desc = "Git [+]" },
-			{ mode = "n", keys = "<leader>G", desc = "Hunks [+]" },
+			{ mode = "n", keys = "<leader>G", desc = "Git hunks [+]" },
 			{ mode = "n", keys = "<leader>t", desc = "Tab [+]" },
 			{ mode = "n", keys = "<leader>p", desc = "Pair Mode [+]" },
-			{ mode = "n", keys = "<leader>w", desc = "Workspace [+]" },
+			{ mode = "n", keys = "<leader>W", desc = "Workspace [+]" },
 			{ mode = "n", keys = "<leader>d", desc = "Diff [+]" },
 			{ mode = "n", keys = "<leader>D", desc = "Document [+]" },
 			{ mode = "n", keys = "<leader>n", desc = "Notes [+]" },
