@@ -27,8 +27,6 @@ MiniDeps.now(function()
 end)
 
 MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.files")
-
 	local icon_prefix = function(fs_entry)
 		if fs_entry.fs_type == "directory" then return "", "MiniFilesDirectory" end
 		return MiniFiles.default_prefix(fs_entry)
@@ -52,8 +50,6 @@ end)
 
 -- (mini.notify) Popup notifications
 MiniDeps.now(function()
-	MiniDeps.add("nvim-mini/mini.notify")
-
 	require("mini.notify").setup({
 		content = {
 			format = function(notif)
@@ -89,8 +85,6 @@ end)
 
 -- (mini.clue) Mapping helper
 MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.clue")
-
 	require("mini.clue").setup({
 		window = {
 			delay = 200,
@@ -163,30 +157,16 @@ MiniDeps.later(function()
 end)
 
 -- (mini.align) Utility to align text by delimiters
-MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.align")
-
-	require("mini.align").setup()
-end)
+MiniDeps.later(function() require("mini.align").setup() end)
 
 -- (mini.jump) Super f/F/t/T
-MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.jump")
-
-	require("mini.jump").setup()
-end)
+MiniDeps.later(function() require("mini.jump").setup() end)
 
 -- (mini.move) Move lines in visual
-MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.move")
-
-	require("mini.move").setup()
-end)
+MiniDeps.later(function() require("mini.move").setup() end)
 
 -- (mini.keymap) Supercharged keymapping
 MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.keymap")
-
 	require("mini.keymap").setup()
 
 	local tab_steps = {
@@ -233,8 +213,6 @@ end)
 
 -- (mini.pairs) Auto pairs
 MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.pairs")
-
 	vim.keymap.set(
 		"n",
 		"<leader>A",
@@ -256,21 +234,21 @@ MiniDeps.later(function()
 end)
 
 -- (mini.surround) Add motions to surround objects with brackets etc.
-MiniDeps.later(function()
-	MiniDeps.add("nvim-mini/mini.surround")
-
-	require("mini.surround").setup({
-		mappings = {
-			add = "sa",
-			delete = "sd",
-			find = "sf",
-			find_left = "sF",
-			highlight = "sh",
-			replace = "sr",
-			update_n_lines = "sn",
-		},
-	})
-end)
+MiniDeps.later(
+	function()
+		require("mini.surround").setup({
+			mappings = {
+				add = "sa",
+				delete = "sd",
+				find = "sf",
+				find_left = "sF",
+				highlight = "sh",
+				replace = "sr",
+				update_n_lines = "sn",
+			},
+		})
+	end
+)
 
 -- (remember.nvim) Remember last place
 MiniDeps.now(function()
@@ -969,7 +947,7 @@ MiniDeps.later(function()
 			"rafamadriz/friendly-snippets",
 			"mikavilpas/blink-ripgrep.nvim",
 		},
-		checkout = "v1.7.0",
+		checkout = "v1.8.0",
 	})
 
 	---@diagnostic disable-next-line: undefined-field

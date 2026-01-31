@@ -1,22 +1,15 @@
--- Setup mini.deps
-local path_package = vim.fn.stdpath("data") .. "/site/"
-local deps_path = path_package .. "pack/deps/start/mini.deps"
----@diagnostic disable-next-line: deprecated, undefined-field
-if not (vim.uv or vim.loop).fs_stat(deps_path) then
-	vim.cmd('echo "Installing `mini.deps`" | redraw')
-	local clone_cmd = {
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/nvim-mini/mini.deps",
-		deps_path,
-	}
+-- Setup mini.nvim
+local mini_path = vim.fn.stdpath("data") .. "/site/pack/deps/start/mini.nvim"
+if not (vim.uv or vim.loop).fs_stat(mini_path) then
+	vim.cmd('echo "Installing `mini.nvim`" | redraw')
+	local origin = "https://github.com/nvim-mini/mini.nvim"
+	local clone_cmd = { "git", "clone", "--filter=blob:none", origin, mini_path }
 	vim.fn.system(clone_cmd)
-	vim.cmd("packadd mini.deps | helptags ALL")
-	vim.cmd('echo "Installed `mini.deps`" | redraw')
+	vim.cmd("packadd mini.nvim | helptags ALL")
+	vim.cmd('echo "Installed `mini.nvim`" | redraw')
 end
 
-require("mini.deps").setup({ path = { package = path_package } })
+require("mini.deps").setup()
 
 ---Shortcut syntax to create autocmd with augroup @param group string @vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
 ---@return nil
