@@ -153,7 +153,6 @@ _G.config.sources.lsp = {
 	gopls = "gopls",
 	gitlab_ci_ls = "gitlab-ci-ls",
 	yamlls = "yaml-language-server",
-	zk = "zk",
 	dockerls = "dockerfile-language-server",
 	tflint = "tflint",
 	tofu_ls = "tofu-ls",

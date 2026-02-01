@@ -153,33 +153,6 @@ _G.augroup("lsp", {
 				buffer = bufnr,
 			})
 
-			vim.keymap.set("n", "<leader>Ds", vim.lsp.buf.document_symbol, {
-				desc = "Document symbols (qf)",
-				noremap = true,
-				silent = true,
-				buffer = bufnr,
-			})
-
-			vim.keymap.set("n", "<leader>DD", vim.diagnostic.setloclist, {
-				desc = "Document diagnostics (loc)",
-				noremap = true,
-				silent = true,
-				buffer = bufnr,
-			})
-
-			vim.keymap.set("n", "<leader>WD", vim.diagnostic.setqflist, {
-				desc = "Workspace diagnostics (qf)",
-				noremap = true,
-				silent = true,
-				buffer = bufnr,
-			})
-			vim.keymap.set("n", "<leader>WS", vim.lsp.buf.workspace_symbol, {
-				desc = "Workspace symbols (query)",
-				silent = true,
-				noremap = true,
-				buffer = bufnr,
-			})
-
 			if client.server_capabilities.inlayHintProvider then
 				vim.keymap.set("n", "<leader>i", function()
 					---@diagnostic disable-next-line: missing-parameter

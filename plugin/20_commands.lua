@@ -227,3 +227,23 @@ vim.api.nvim_create_user_command("ToggleTerminal", function()
 		open_terminal()
 	end
 end, {})
+
+vim.api.nvim_create_user_command(
+	"WorkspaceSymbols",
+	vim.lsp.buf.workspace_symbol,
+	{}
+)
+
+vim.api.nvim_create_user_command(
+	"WorkspaceDiagnostics",
+	vim.diagnostic.setqflist,
+	{}
+)
+
+vim.api.nvim_create_user_command("DocumentSymbols", vim.lsp.buf.document_symbol, {})
+
+vim.api.nvim_create_user_command(
+	"DocumentDiagnostics",
+	vim.diagnostic.setloclist,
+	{}
+)

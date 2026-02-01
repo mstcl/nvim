@@ -15,30 +15,9 @@ vim.keymap.set(
 
 vim.keymap.set(
 	"n",
-	"<leader>y",
+	"<leader>m",
 	function() vim.cmd("ToggleNumber") end,
 	{ desc = "Number mode (cycle)", noremap = false, silent = true }
-)
-
-vim.keymap.set(
-	"n",
-	"<leader>x",
-	function() vim.cmd("ToggleScrolloff") end,
-	{ desc = "Scrolloff (toggle)", noremap = false, silent = true }
-)
-
-vim.keymap.set(
-	"n",
-	"<leader>x",
-	function() vim.cmd("ToggleSpell") end,
-	{ desc = "Spell (toggle)", noremap = false, silent = true }
-)
-
-vim.keymap.set(
-	"n",
-	"<leader>L",
-	function() vim.cmd("ToggleList") end,
-	{ desc = "List chars (toggle)", noremap = false, silent = true }
 )
 
 vim.keymap.set(
@@ -46,13 +25,6 @@ vim.keymap.set(
 	"<leader>c",
 	function() vim.cmd("ToggleCursorLine") end,
 	{ desc = "Cursorline (toggle)", noremap = false, silent = true }
-)
-
-vim.keymap.set(
-	"n",
-	"<leader>C",
-	function() vim.cmd("ToggleColorColumn") end,
-	{ desc = "Cursorcolumn (toggle)", noremap = false, silent = true }
 )
 
 vim.keymap.set(
@@ -145,12 +117,6 @@ vim.keymap.set(
 	function() vim.cmd("tabclose") end,
 	{ desc = "Close tab" }
 )
-vim.keymap.set(
-	"n",
-	"<leader>tl",
-	function() vim.cmd("ToggleTabLine") end,
-	{ desc = "Toggle tab line" }
-)
 
 -- terminal
 vim.keymap.set(
@@ -165,19 +131,4 @@ vim.keymap.set(
 	"<C-Space>",
 	[[<C-Bslash><C-n>:ToggleTerminal<CR>]],
 	{ silent = true }
-)
-
--- pair mode commands
-vim.keymap.set(
-	"n",
-	"<leader>pp",
-	function() vim.cmd("PairModeEnter") end,
-	{ desc = "Pair mode enter", noremap = false, silent = true }
-)
-
-vim.keymap.set(
-	"n",
-	"<leader>pl",
-	function() vim.cmd("PairModeLeave") end,
-	{ desc = "Pair mode leave", noremap = false, silent = true }
 )

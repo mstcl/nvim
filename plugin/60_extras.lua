@@ -140,18 +140,9 @@ MiniDeps.later(function()
 			require("mini.clue").gen_clues.windows({ submode_resize = true }),
 
 			{ mode = "n", keys = "<leader>g", desc = "Git [+]" },
-			{ mode = "n", keys = "<leader>G", desc = "Git hunks [+]" },
 			{ mode = "n", keys = "<leader>t", desc = "Tab [+]" },
-			{ mode = "n", keys = "<leader>p", desc = "Pair [+]" },
-			{ mode = "n", keys = "<leader>W", desc = "Workspace [+]" },
-			{ mode = "n", keys = "<leader>d", desc = "Diff [+]" },
-			{ mode = "n", keys = "<leader>D", desc = "Document [+]" },
-			{ mode = "n", keys = "<leader>n", desc = "Notes [+]" },
-			{ mode = "n", keys = "gs", desc = "Surround [+]" },
-			{ mode = "x", keys = "gs", desc = "Surround [+]" },
 			{ mode = "n", keys = "gr", desc = "Symbol [+]" },
 			{ mode = "x", keys = "gr", desc = "Symbol [+]" },
-			{ mode = "x", keys = "c", desc = "Conflicts [+]" },
 		},
 	})
 end)
@@ -539,12 +530,12 @@ MiniDeps.later(function()
 		"n",
 		"<leader>r",
 		function() vim.cmd("FzfLua resume") end,
-		{ desc = "Resume picker", noremap = false, silent = true }
+		{ desc = "Resume (picker)", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
-		"<leader>P",
+		"<leader>p",
 		function() vim.cmd("FzfLua builtin") end,
 		{ desc = "Pickers", noremap = false, silent = true }
 	)
@@ -586,25 +577,18 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>gC",
-		function() vim.cmd("FzfLua git_bcommits") end,
-		{ desc = "Git buffer commits (picker)", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
 		"<leader>s",
 		function()
 			vim.cmd("FzfLua live_grep path_shorten=true multiline=2 resume=true")
 		end,
-		{ desc = "Search workspace (buffer)", noremap = false, silent = true }
+		{ desc = "Search workspace (picker)", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
-		"<leader>S",
-		function() vim.cmd("FzfLua lgrep_curbuf") end,
-		{ desc = "search buffer (buffer)", noremap = false, silent = true }
+		"<leader>C",
+		function() vim.cmd("FzfLua commands") end,
+		{ desc = "Commands (picker)", noremap = false, silent = true }
 	)
 end)
 
@@ -683,15 +667,8 @@ MiniDeps.later(function()
 				buffer = bufnr,
 			})
 
-			vim.keymap.set("n", "<leader>Gg", gitsigns.preview_hunk_inline, {
-				desc = "Preview hunk inline",
-				noremap = false,
-				silent = true,
-				buffer = bufnr,
-			})
-
-			vim.keymap.set("n", "<leader>GG", gitsigns.preview_hunk, {
-				desc = "Preview hunk",
+			vim.keymap.set("n", "<leader>G", gitsigns.preview_hunk, {
+				desc = "Git diff peek",
 				noremap = false,
 				silent = true,
 				buffer = bufnr,
@@ -699,7 +676,7 @@ MiniDeps.later(function()
 
 			vim.keymap.set(
 				"n",
-				"<leader>gm",
+				"<leader>M",
 				function() gitsigns.blame_line({ full = true }) end,
 				{
 					desc = "Blame line",
@@ -709,22 +686,15 @@ MiniDeps.later(function()
 				}
 			)
 
-			vim.keymap.set("n", "<leader>GS", gitsigns.stage_hunk, {
+			vim.keymap.set("n", "<leader>S", gitsigns.stage_hunk, {
 				desc = "Stage hunk",
 				noremap = false,
 				silent = true,
 				buffer = bufnr,
 			})
 
-			vim.keymap.set("n", "<leader>GU", gitsigns.undo_stage_hunk, {
-				desc = "Undo stage hunk",
-				noremap = false,
-				silent = true,
-				buffer = bufnr,
-			})
-
-			vim.keymap.set("n", "<leader>GR", gitsigns.reset_hunk, {
-				desc = "Reset hunk",
+			vim.keymap.set("n", "<leader>U", gitsigns.undo_stage_hunk, {
+				desc = "Unstage hunk",
 				noremap = false,
 				silent = true,
 				buffer = bufnr,
@@ -732,7 +702,7 @@ MiniDeps.later(function()
 
 			vim.keymap.set(
 				"v",
-				"<leader>GS",
+				"<leader>S",
 				function()
 					gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end,
@@ -746,12 +716,12 @@ MiniDeps.later(function()
 
 			vim.keymap.set(
 				"v",
-				"<leader>GR",
+				"<leader>U",
 				function()
-					gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+					gitsigns.undo_stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end,
 				{
-					desc = "Reset hunk",
+					desc = "Unstage hunk",
 					noremap = false,
 					silent = true,
 					buffer = bufnr,
@@ -766,20 +736,6 @@ MiniDeps.later(function()
 			})
 		end,
 	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>gs",
-		function() vim.cmd("Gitsigns toggle_signs") end,
-		{ desc = "Git signs (toggle)", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>gM",
-		function() vim.cmd("Gitsigns blame") end,
-		{ desc = "Toggle blame sidebar", noremap = false, silent = true }
-	)
 end)
 
 -- (neogit) Magit for neovim
@@ -866,30 +822,9 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>gl",
-		function() vim.cmd("Neogit log kind=tab") end,
-		{ desc = "Neogit logs", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>gb",
-		function() vim.cmd("Neogit branch") end,
-		{ desc = "Neogit branches", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>gg",
+		"<leader>g",
 		function() vim.cmd("Neogit kind=vsplit") end,
-		{ desc = "Neogit (split)", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>gG",
-		function() vim.cmd("Neogit kind=tab") end,
-		{ desc = "Neogit (tab)", noremap = false, silent = true }
+		{ desc = "Neogit", noremap = false, silent = true }
 	)
 end)
 
@@ -1432,7 +1367,7 @@ _G.now_if_args(function()
 	})
 end)
 
--- (gitsigns.nvim) Blame and diff for git
+-- (nvim-lint) Linter engine
 MiniDeps.later(function()
 	MiniDeps.add("mfussenegger/nvim-lint")
 
@@ -1480,44 +1415,9 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>ne",
-		function() vim.cmd("ZkNotes") end,
-		{ desc = "Note entries", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>nl",
-		function() vim.cmd("ZkLinks") end,
-		{ desc = "Note links", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>nb",
-		function() vim.cmd("ZkBacklinks") end,
-		{ desc = "Note backlinks", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>nt",
-		function() vim.cmd("ZkTags") end,
-		{ desc = "Note tags", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"v",
 		"<leader>n",
-		":'<,'>ZkNewFromTitleSelection<cr>",
-		{ desc = "New note from selection", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>ni",
-		function() vim.cmd("ZkIndex") end,
-		{ desc = "Index notes", noremap = true, silent = true }
+		function() vim.cmd("ZkNotes") end,
+		{ desc = "Note entries (picker)", noremap = false, silent = true }
 	)
 end)
 
@@ -2011,23 +1911,9 @@ MiniDeps.now(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>dd",
+		"<leader>d",
 		function() vim.cmd("CodeDiff") end,
 		{ desc = "Diff (toggle)", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>dh",
-		function() vim.cmd("CodeDiff master HEAD") end,
-		{ desc = "Diff master with HEAD", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>dH",
-		function() vim.cmd("CodeDiff main HEAD") end,
-		{ desc = "Diff main with HEAD", noremap = false, silent = true }
 	)
 
 	_G.augroup("vscode-diff", {
