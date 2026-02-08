@@ -19,16 +19,11 @@ vim.api.nvim_create_user_command("Clear", function()
 end, {})
 
 -- toggle number
-vim.api.nvim_create_user_command("ToggleNumber", function()
-	if vim.wo.number then
-		if vim.wo.relativenumber then
-			vim.opt_local.number = false
-			vim.opt_local.relativenumber = false
-		else
-			vim.opt_local.relativenumber = true
-		end
+vim.api.nvim_create_user_command("ToggleRelativeNumber", function()
+	if vim.wo.relativenumber then
+		vim.opt_local.relativenumber = false
 	else
-		vim.opt_local.number = true
+		vim.opt_local.relativenumber = true
 	end
 end, {})
 

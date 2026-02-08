@@ -16,7 +16,7 @@ vim.keymap.set(
 vim.keymap.set(
 	"n",
 	"<leader>m",
-	function() vim.cmd("ToggleNumber") end,
+	function() vim.cmd("ToggleRelativeNumber") end,
 	{ desc = "Number mode (cycle)", noremap = false, silent = true }
 )
 
