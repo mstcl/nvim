@@ -53,11 +53,10 @@ MiniDeps.now(function()
 
 	vim.notify = require("mini.notify").make_notify(vim_notify_opts)
 
-	vim.keymap.set(
-		"n",
-		"<leader>N",
+	vim.api.nvim_create_user_command(
+		"Notifications",
 		function() require("mini.notify").show_history() end,
-		{ desc = "Notification history", noremap = false, silent = true }
+		{}
 	)
 end)
 
@@ -117,8 +116,7 @@ MiniDeps.later(function()
 			require("mini.clue").gen_clues.z(),
 			require("mini.clue").gen_clues.windows({ submode_resize = true }),
 
-			{ mode = "n", keys = "<leader>g", desc = "Git [+]" },
-			{ mode = "n", keys = "<leader>t", desc = "Tab [+]" },
+			{ mode = "n", keys = "<leader>t", desc = "Tab actions [+]" },
 			{ mode = "n", keys = "gr", desc = "Symbol [+]" },
 			{ mode = "x", keys = "gr", desc = "Symbol [+]" },
 		},
@@ -173,6 +171,7 @@ MiniDeps.later(function()
 	require("mini.keymap").map_combo({ "i", "c", "x", "s" }, "jk", "<BS><BS><Esc>")
 	require("mini.keymap").map_combo({ "i", "c", "x", "s" }, "kj", "<BS><BS><Esc>")
 
+	-- escape terminal
 	require("mini.keymap").map_combo("t", "jk", "<BS><BS><C-\\><C-n>")
 	require("mini.keymap").map_combo("t", "kj", "<BS><BS><C-\\><C-n>")
 
@@ -182,11 +181,10 @@ end)
 
 -- (mini.pairs) Auto pairs
 MiniDeps.later(function()
-	vim.keymap.set(
-		"n",
-		"<leader>A",
+	vim.api.nvim_create_user_command(
+		"ToggleAutopairs",
 		function() vim.g.minipairs_disable = not vim.g.minipairs_disable end,
-		{ desc = "Autopairs (toggle)", noremap = false, silent = true }
+		{}
 	)
 
 	require("mini.pairs").setup({
@@ -323,30 +321,9 @@ _G.now_if_args(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>E",
+		"<leader>e",
 		function() require("oil").open() end,
-		{ desc = "Explorer (oil)", noremap = false, silent = true }
-	)
-end)
-
--- (fzf-lua-frecency.nvim) Frecency plugin for fzf-lua
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "elanmed/fzf-lua-frecency.nvim",
-		depends = { "ibhagwan/fzf-lua" },
-	})
-	require("fzf-lua-frecency").setup({
-		display_score = false,
-		winopts = {
-			preview = { hidden = "nohidden" },
-		},
-	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>f",
-		function() vim.cmd("FzfLua frecency cwd_only=true") end,
-		{ desc = "Files by frecency (picker)", noremap = false, silent = true }
+		{ desc = "Explorer", noremap = false, silent = true }
 	)
 end)
 
@@ -471,9 +448,11 @@ MiniDeps.later(function()
 		},
 		tabs = {
 			tab_marker = "◀",
+			winopts = { preview = { hidden = false } },
 		},
 		buffers = {
 			sort_lastused = true,
+			winopts = { preview = { hidden = false } },
 		},
 	})
 
@@ -508,7 +487,7 @@ MiniDeps.later(function()
 		"n",
 		"<leader>r",
 		function() vim.cmd("FzfLua resume") end,
-		{ desc = "Resume (picker)", noremap = false, silent = true }
+		{ desc = "Resume picker", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
@@ -520,73 +499,66 @@ MiniDeps.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>tt",
+		"<leader>T",
 		function() vim.cmd("FzfLua tabs") end,
-		{ desc = "Tabs (picker)", noremap = false, silent = true }
+		{ desc = "Tabs", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
 		"<leader>h",
 		function() vim.cmd("FzfLua oldfiles") end,
-		{ desc = "History (picker)", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>B",
-		function() vim.cmd("FzfLua buffers") end,
-		{ desc = "Buffers (picker)", noremap = false, silent = true }
+		{ desc = "History", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
 		"<leader>b",
-		function() vim.cmd("FzfLua buffers cwd_only=true") end,
-		{ desc = "Buffers cwd (picker)", noremap = false, silent = true }
+		function() vim.cmd("FzfLua buffers") end,
+		{ desc = "Buffers", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
 		"<leader>z",
 		function() zoxide_picker() end,
-		{ desc = "Zoxide (picker)", noremap = false, silent = true }
+		{ desc = "Zoxide", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
 		"<leader>s",
 		function() vim.cmd("FzfLua live_grep multiline=2") end,
-		{ desc = "Search workspace (picker)", noremap = false, silent = true }
+		{ desc = "Search workspace", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
-		"<leader>C",
+		"<leader>c",
 		function() vim.cmd("FzfLua commands") end,
-		{ desc = "Commands (picker)", noremap = false, silent = true }
+		{ desc = "Commands", noremap = false, silent = true }
 	)
 end)
 
--- (nvim-lspconfig) LSP server configurations
-_G.now_if_args(function()
-	MiniDeps.add("neovim/nvim-lspconfig")
-
-	vim.lsp.config("*", {
-		capabilities = _G.config.capabilities(),
-		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
-		flags = { debounce_text_changes = 150 },
+-- (fzf-lua-frecency.nvim) Frecency plugin for fzf-lua
+MiniDeps.later(function()
+	MiniDeps.add({
+		source = "elanmed/fzf-lua-frecency.nvim",
+		depends = { "ibhagwan/fzf-lua" },
 	})
-	local get_lsp_sources = function(source_map)
-		local sources = {}
-		for k, _ in pairs(source_map) do
-			table.insert(sources, k)
-		end
+	require("fzf-lua-frecency").setup({
+		display_score = false,
+		winopts = {
+			preview = { hidden = "nohidden" },
+		},
+	})
 
-		return sources
-	end
-
-	vim.lsp.enable(get_lsp_sources(_G.config.sources.lsp))
+	vim.keymap.set(
+		"n",
+		"<leader>f",
+		function() vim.cmd("FzfLua frecency cwd_only=true") end,
+		{ desc = "Files", noremap = false, silent = true }
+	)
 end)
 
 -- (gitsigns.nvim) Blame and diff for git
@@ -644,7 +616,7 @@ MiniDeps.later(function()
 			})
 
 			vim.keymap.set("n", "<leader>G", gitsigns.preview_hunk, {
-				desc = "Git diff peek",
+				desc = "Git hunk preview",
 				noremap = false,
 				silent = true,
 				buffer = bufnr,
@@ -652,7 +624,7 @@ MiniDeps.later(function()
 
 			vim.keymap.set(
 				"n",
-				"<leader>M",
+				"<leader>B",
 				function() gitsigns.blame_line({ full = true }) end,
 				{
 					desc = "Blame line",
@@ -1176,6 +1148,27 @@ MiniDeps.later(function()
 	require("treesitter-context").setup()
 end)
 
+-- (nvim-lspconfig) LSP server configurations
+_G.now_if_args(function()
+	MiniDeps.add("neovim/nvim-lspconfig")
+
+	vim.lsp.config("*", {
+		capabilities = _G.config.capabilities(),
+		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
+		flags = { debounce_text_changes = 150 },
+	})
+	local get_lsp_sources = function(source_map)
+		local sources = {}
+		for k, _ in pairs(source_map) do
+			table.insert(sources, k)
+		end
+
+		return sources
+	end
+
+	vim.lsp.enable(get_lsp_sources(_G.config.sources.lsp))
+end)
+
 -- (mason.nvim) Code tools forge
 _G.now_if_args(function()
 	MiniDeps.add("mason-org/mason.nvim")
@@ -1343,19 +1336,6 @@ _G.now_if_args(function()
 	})
 end)
 
--- (nvim-lint) Linter engine
-MiniDeps.later(function()
-	MiniDeps.add("mfussenegger/nvim-lint")
-
-	require("lint").linters_by_ft = {
-		lua = { "selene" },
-		dockerfile = { "hadolint", "trivy" },
-		terraform = { "trivy", "terraform_validate" },
-		ansible = { "ansible_lint" },
-		go = { "golangcilint" },
-	}
-end)
-
 -- (nvim-highlight-colors) Highlight color blocks
 MiniDeps.later(function()
 	MiniDeps.add("brenoprata10/nvim-highlight-colors")
@@ -1368,12 +1348,7 @@ MiniDeps.later(function()
 		exclude_buftypes = { "nofile" },
 	})
 
-	vim.keymap.set(
-		"n",
-		"<leader>H",
-		function() vim.cmd("HighlightColors Toggle") end,
-		{ desc = "Highlight colors (toggle)", noremap = false, silent = true }
-	)
+	vim.api.nvim_create_user_command("ToggleColors", "HighlightColors Toggle", {})
 end)
 
 -- (grug-far.nvim) Search and replace
@@ -1416,7 +1391,7 @@ MiniDeps.later(function()
 		"n",
 		"<leader>R",
 		function() vim.cmd("GrugFar") end,
-		{ desc = "Replace (GrugFar)", noremap = false, silent = true }
+		{ desc = "Replace", noremap = false, silent = true }
 	)
 
 	_G.augroup("grugfar", {
@@ -1491,14 +1466,13 @@ MiniDeps.later(function()
 		"n",
 		"<leader>q",
 		function() require("quicker").toggle() end,
-		{ desc = "Quickfix (toggle)", noremap = false, silent = true }
+		{ desc = "Quickfix", noremap = false, silent = true }
 	)
-
 	vim.keymap.set(
 		"n",
 		"<leader>l",
 		function() require("quicker").toggle({ loclist = true }) end,
-		{ desc = "Location list (toggle)", noremap = false, silent = true }
+		{ desc = "Location list", noremap = false, silent = true }
 	)
 end)
 
@@ -1548,12 +1522,7 @@ MiniDeps.later(function()
 		{ desc = "Previous symbol", noremap = false, silent = true }
 	)
 
-	vim.keymap.set(
-		"n",
-		"<leader>a",
-		function() vim.cmd("AerialToggle") end,
-		{ desc = "Aerial (toggle)", noremap = false, silent = true }
-	)
+	vim.api.nvim_create_user_command("ToggleAerial", "AerialToggle", {})
 
 	_G.augroup("aerial", {
 		{ "Filetype" },
@@ -1717,10 +1686,7 @@ MiniDeps.later(function()
 	require("nvim-tree.view").View.winopts.winhighlight =
 		"Normal:ColorColumn,CursorLine:CursorLine"
 
-	vim.keymap.set("n", "<leader>T", function()
-		vim.cmd("NvimTreeToggle")
-		vim.cmd("wincmd p")
-	end, { desc = "Tree (toggle)", noremap = false, silent = true })
+	vim.api.nvim_create_user_command("ToggleTree", "NvimTreeToggle", {})
 end)
 
 -- (tiny-inline-diagnostic.nvim) Better virtual diagnostic
@@ -1745,11 +1711,10 @@ MiniDeps.later(function()
 		},
 	})
 
-	vim.keymap.set(
-		"n",
-		"<leader>v",
-		function() vim.cmd("TinyInlineDiag (toggle)") end,
-		{ desc = "Virtual text (toggle)", noremap = false, silent = true }
+	vim.api.nvim_create_user_command(
+		"ToggleVirtualDiagnostics",
+		"TinyInlineDiag toggle",
+		{}
 	)
 end)
 
@@ -1776,7 +1741,7 @@ MiniDeps.now(function()
 		"n",
 		"<leader>d",
 		function() vim.cmd("CodeDiff") end,
-		{ desc = "Diff (toggle)", noremap = false, silent = true }
+		{ desc = "Diffmode", noremap = false, silent = true }
 	)
 
 	_G.augroup("vscode-diff", {

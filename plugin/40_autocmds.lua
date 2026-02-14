@@ -146,7 +146,7 @@ _G.augroup("lsp", {
 					---@diagnostic disable-next-line: missing-parameter
 					vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 				end, {
-					desc = "Inlay hints (toggle)",
+					desc = "Inlay hints",
 					noremap = true,
 					silent = true,
 					buffer = bufnr,

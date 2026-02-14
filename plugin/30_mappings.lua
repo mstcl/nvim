@@ -15,23 +15,9 @@ vim.keymap.set(
 
 vim.keymap.set(
 	"n",
-	"<leader>m",
+	"<leader>n",
 	function() vim.cmd("ToggleRelativeNumber") end,
-	{ desc = "Number mode (cycle)", noremap = false, silent = true }
-)
-
-vim.keymap.set(
-	"n",
-	"<leader>c",
-	function() vim.cmd("ToggleCursorLine") end,
-	{ desc = "Cursorline (toggle)", noremap = false, silent = true }
-)
-
-vim.keymap.set(
-	"n",
-	"<leader>Q",
-	function() vim.cmd("QuietMode") end,
-	{ desc = "Quiet mode", noremap = false, silent = true }
+	{ desc = "Number relative", noremap = false, silent = true }
 )
 
 -- Window splitting
@@ -62,7 +48,7 @@ vim.keymap.set("x", "<", "<gv", { desc = "Unindent" })
 vim.keymap.set("x", ">", ">gv", { desc = "Indent" })
 
 -- Folding
-vim.keymap.set("n", "<S-Tab>", "za", { desc = "Fold (toggle)" })
+vim.keymap.set("n", "<S-Tab>", "za", { desc = "Fold" })
 
 -- Better search
 vim.keymap.set(
@@ -123,7 +109,7 @@ vim.keymap.set(
 	"n",
 	"<C-Space>",
 	function() vim.cmd("ToggleTerminal") end,
-	{ desc = "Quake terminal (toggle)", noremap = false, silent = true }
+	{ desc = "Quake terminal", noremap = false, silent = true }
 )
 vim.keymap.set(
 	"t",

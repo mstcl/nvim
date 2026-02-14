@@ -16,13 +16,6 @@ MiniDeps.later(function()
 		},
 		lsp = {},
 	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>n",
-		function() vim.cmd("ZkNotes") end,
-		{ desc = "Note entries (picker)", noremap = false, silent = true }
-	)
 end)
 
 -- (render-markdown.nvim) Nice markdown rendering
