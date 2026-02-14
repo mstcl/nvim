@@ -578,9 +578,7 @@ MiniDeps.later(function()
 	vim.keymap.set(
 		"n",
 		"<leader>s",
-		function()
-			vim.cmd("FzfLua live_grep path_shorten=true multiline=2 resume=true")
-		end,
+		function() vim.cmd("FzfLua live_grep multiline=2") end,
 		{ desc = "Search workspace (picker)", noremap = false, silent = true }
 	)
 
