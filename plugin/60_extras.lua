@@ -1773,21 +1773,73 @@ MiniDeps.now(function()
 	})
 end)
 
--- (context.nvim) Editor context for agents
+-- (opencode.nvim) Opencode integration
 MiniDeps.later(function()
 	MiniDeps.add({
-		source = "ahkohd/context.nvim",
-		depends = { "ibhagwan/fzf-lua" },
+		source = "nickjvandyke/opencode.nvim",
 	})
 
-	require("context").setup({
-		picker = require("context").pickers.vim_ui,
-	})
+	vim.g.opencode_opts = {
+		provider = {
+			enabled = "terminal",
+			terminal = {},
+		},
+	}
+
+	vim.keymap.set(
+		{ "n", "x" },
+		"<leader>A",
+		function() require("opencode").ask("", { submit = true }) end,
+		{ desc = "Ask OpenCode (append)" }
+	)
+	vim.keymap.set(
+		{ "n", "x" },
+		"<leader>a",
+		function() require("opencode").ask("@this: ", { submit = true }) end,
+		{ desc = "Ask OpenCode (@this)" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>o",
+		function() require("opencode").toggle() end,
+		{ desc = "OpenCode", noremap = false, silent = true }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>O",
+		function() require("opencode").select() end,
+		{ desc = "OpenCode actions", noremap = false, silent = true }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>I",
+		function() require("opencode").session.interrupt() end,
+		{ desc = "Interrupt OpenCode", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		{ "n", "x" },
+		"go",
+		function() return require("opencode").operator("@this ") end,
+		{ desc = "Add range to OpenCode", expr = true }
+	)
+	vim.keymap.set(
+		"n",
+		"goo",
+		function() return require("opencode").operator("@this ") .. "_" end,
+		{ desc = "Add line to OpenCode", expr = true }
+	)
 
 	vim.keymap.set(
 		"n",
-		"<leader>X",
-		function() require("context").pick() end,
-		{ desc = "Context (picker)", noremap = false, silent = true }
+		"<S-C-u>",
+		function() require("opencode").command("session.half.page.up") end,
+		{ desc = "Scroll OpenCode up" }
+	)
+	vim.keymap.set(
+		"n",
+		"<S-C-d>",
+		function() require("opencode").command("session.half.page.down") end,
+		{ desc = "Scroll OpenCode down" }
 	)
 end)
