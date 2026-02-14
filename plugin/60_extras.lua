@@ -26,28 +26,6 @@ MiniDeps.now(function()
 	})
 end)
 
-MiniDeps.later(function()
-	local icon_prefix = function(fs_entry)
-		if fs_entry.fs_type == "directory" then return "", "MiniFilesDirectory" end
-		return MiniFiles.default_prefix(fs_entry)
-	end
-
-	require("mini.files").setup({
-		content = { prefix = icon_prefix },
-		options = {
-			permanent_delete = false,
-			use_as_default_explorer = true,
-		},
-	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>e",
-		function() require("mini.files").open() end,
-		{ desc = "Explorer (mini)", noremap = false, silent = true }
-	)
-end)
-
 -- (mini.notify) Popup notifications
 MiniDeps.now(function()
 	require("mini.notify").setup({
