@@ -94,7 +94,7 @@ _G.statusline.components = {}
 _G.statusline.components.mode = function()
 	if is_simple_ft() then return "" end
 
-	local mode = vim.fn.mode()
+	local mode = vim.api.nvim_get_mode().mode
 	local mode_str = (mode == "n" and (vim.bo.ro or not vim.bo.ma)) and "RO"
 		or modes[mode]
 	local hl = vim.bo.mod and "StatusLineModifiedInv" or "StatusLineModeInv"
@@ -343,7 +343,7 @@ _G.statusline.components.fileinfo = function()
 	if is_special_bufs() then return "" end
 
 	local lines = group_number(vim.api.nvim_buf_line_count(0), ",")
-	local mode = vim.fn.mode()
+	local mode = vim.api.nvim_get_mode().mode
 
 	if mode == "v" or mode == "V" then
 		return get_vlinecount() .. " lines selected"

@@ -141,7 +141,7 @@ vim.opt.wrap = false
 vim.opt.whichwrap = vim.opt.whichwrap + "<>[]hl"
 vim.opt.wrapmargin = 0
 vim.opt.textwidth = 0
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = "88"
 vim.opt.linebreak = true
 
 -- Completion
