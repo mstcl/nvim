@@ -125,7 +125,6 @@ vim.keymap.set(
 	function() vim.cmd("ToggleTerminal") end,
 	{ desc = "Quake terminal (toggle)", noremap = false, silent = true }
 )
-vim.keymap.set("t", "<Esc><Esc>", [[<C-Bslash><C-n>]], { silent = true })
 vim.keymap.set(
 	"t",
 	"<C-Space>",

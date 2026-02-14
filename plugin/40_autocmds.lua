@@ -89,19 +89,7 @@ _G.augroup("terminal", {
 		pattern = "*",
 		callback = function()
 			if vim.bo.buftype == "terminal" and vim.bo.filetype == "" then
-				vim.cmd("startinsert")
 				vim.cmd("MinimalMode")
-			end
-		end,
-	},
-}, {
-	{ "BufLeave" },
-	{
-		pattern = "term://*",
-		desc = "stop insert when leaving terminal",
-		callback = function()
-			if vim.bo.buftype == "terminal" and vim.bo.filetype == "" then
-				vim.cmd("stopinsert")
 			end
 		end,
 	},

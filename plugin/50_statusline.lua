@@ -12,7 +12,6 @@ end
 
 -- simple filetype for statusline
 local simple_filetypes = {
-	"",
 	"fzf",
 	"oil",
 	"Fyler",
@@ -32,15 +31,24 @@ local simple_filetypes = {
 	"vscode-diff-explorer",
 }
 
+local function is_simple_ft()
+	return vim.tbl_contains(simple_filetypes, vim.bo.filetype)
+end
+
+local function is_special_bufs()
+	return is_simple_ft() or vim.bo.buftype == "terminal"
+end
+
+---@type table<string, string>
 local modes = {
 	["n"] = "NOR",
 	["no"] = "NOR",
 	["v"] = "VIS",
 	["V"] = "VIL",
-	[""] = "VIB",
+	["^V"] = "VIB",
 	["s"] = "SEL",
 	["S"] = "LINE",
-	[""] = "BLK",
+	["^S"] = "BLK",
 	["i"] = "INS",
 	["ic"] = "INS",
 	["R"] = "REPL",
@@ -84,7 +92,8 @@ _G.statusline.components = {}
 ---Get current mode
 ---@return string
 _G.statusline.components.mode = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_simple_ft() then return "" end
+
 	local mode = vim.fn.mode()
 	local mode_str = (mode == "n" and (vim.bo.ro or not vim.bo.ma)) and "RO"
 		or modes[mode]
@@ -96,7 +105,7 @@ end
 -- Padding and brackets added
 ---@return string
 _G.statusline.components.lsp_diagnostic = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	local cog_icon = set_hl(_G.config.signs.diagnostics, "StatusLineAlt")
 	local clients = vim.lsp.get_clients()
@@ -162,7 +171,7 @@ end
 ---Get current git branch
 ---@return string
 _G.statusline.components.git_branch = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	---@diagnostic disable-next-line: undefined-field
 	local branch = vim.b.gitsigns_head or "nil"
@@ -178,7 +187,7 @@ end
 -- Padding and brackets added
 ---@return string
 _G.statusline.components.git_diffs = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	---@diagnostic disable-next-line: undefined-field
 	local diffs = vim.b.gitsigns_status_dict
@@ -214,8 +223,9 @@ end
 ---Get file path with root
 ---@return string
 _G.statusline.components.filepath = function()
-	local ft = vim.bo.filetype
+	if is_special_bufs() then return "" end
 
+	local ft = vim.bo.filetype
 	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
 	local root = set_hl(vim.fn.fnamemodify(vim.fn.getcwd(), ":t"), "StatusLineBold")
 	local prefix = set_hl(_G.config.signs.file .. " ", "StatusLineAlt")
@@ -230,15 +240,13 @@ _G.statusline.components.filepath = function()
 			.. set_hl(string.format("%s ", string.sub(fpath, 7)), "StatusLineNC")
 	end
 
-	if vim.tbl_contains(simple_filetypes, ft) then return "" end
-
 	return prefix .. root .. secondary
 end
 
 ---Get filename
 ---@return string
 _G.statusline.components.filename = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	local fname = vim.fn.expand("%:t")
 	return set_hl(fname, "StatusLineBold")
@@ -253,9 +261,7 @@ _G.statusline.components.filetype = function()
 
 	-- priority important here
 	if vim.tbl_contains(simple_filetypes, ft) then s = ft end
-	if ft == "" then s = "None" end
-	if _G.big(vim.fn.expand("%")) then s = "Big File" end
-	if vim.bo.buftype == "terminal" then s = "Terminal" end
+	if _G.big(vim.fn.expand("%")) then s = "BIG " end
 
 	return set_hl(s:gsub("^%l", string.upper), "StatusLineModeInv")
 end
@@ -263,7 +269,7 @@ end
 ---Get file icon
 ---@return string
 _G.statusline.components.icon = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	local fname = vim.fn.expand("%:t")
 	local extension = vim.fn.fnamemodify(fname, ":e")
@@ -278,7 +284,7 @@ _G.statusline.components.icon = function()
 end
 
 _G.statusline.components.search = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	if vim.v.hlsearch == 1 then
 		local sinfo = vim.fn.searchcount({ maxcount = 0 })
@@ -295,7 +301,7 @@ _G.statusline.components.search = function()
 end
 
 _G.statusline.components.macro = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	local recording_register = vim.fn.reg_recording()
 	if recording_register == "" then
@@ -306,7 +312,7 @@ _G.statusline.components.macro = function()
 end
 
 _G.statusline.components.fformat = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	local ff = vim.bo.fileformat
 	if ff == "unix" or ff == "" then return "" end
@@ -314,7 +320,7 @@ _G.statusline.components.fformat = function()
 end
 
 _G.statusline.components.ffenc = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	local fe = vim.bo.fileencoding
 	if fe == "utf-8" or fe == "" then return "" end
@@ -323,7 +329,7 @@ end
 
 ---Get line count
 local function get_vlinecount()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	local raw_count = vim.fn.line(".") - vim.fn.line("v")
 	raw_count = raw_count < 0 and raw_count - 1 or raw_count + 1
@@ -334,7 +340,7 @@ end
 --- Get wordcount for current buffer or visual selection
 --- @return string word count
 _G.statusline.components.fileinfo = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
 
 	local lines = group_number(vim.api.nvim_buf_line_count(0), ",")
 	local mode = vim.fn.mode()
@@ -347,22 +353,26 @@ _G.statusline.components.fileinfo = function()
 end
 
 _G.statusline.components.open_bracket = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
+
 	return set_hl("(", "StatusLineAlt")
 end
 
 _G.statusline.components.close_bracket = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
+
 	return set_hl(")", "StatusLineAlt")
 end
 
 _G.statusline.components.padding = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
+
 	return " "
 end
 
 _G.statusline.components.indentation = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
+
 	---@diagnostic disable-next-line: undefined-field
 	local expandtab_string = vim.opt.expandtab:get() and "shift" or "tab"
 	---@diagnostic disable-next-line: undefined-field
@@ -376,7 +386,8 @@ _G.statusline.components.indentation = function()
 end
 
 _G.statusline.components.delimiter = function()
-	if vim.tbl_contains(simple_filetypes, vim.bo.filetype) then return "" end
+	if is_special_bufs() then return "" end
+
 	return set_hl(_G.config.signs.delimiter, "StatusLineAlt")
 end
 
