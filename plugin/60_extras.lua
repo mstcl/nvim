@@ -771,7 +771,7 @@ MiniDeps.later(function()
 	vim.keymap.set(
 		"n",
 		"<leader>g",
-		function() vim.cmd("Neogit kind=vsplit") end,
+		function() vim.cmd("Neogit kind=tab") end,
 		{ desc = "Neogit", noremap = false, silent = true }
 	)
 end)
@@ -1782,7 +1782,9 @@ MiniDeps.later(function()
 	vim.g.opencode_opts = {
 		provider = {
 			enabled = "terminal",
-			terminal = {},
+			terminal = {
+				width = math.floor(vim.o.columns * 0.5),
+			},
 		},
 	}
 
