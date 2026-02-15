@@ -1412,7 +1412,7 @@ MiniDeps.later(function()
 	)
 end)
 
--- (aerial.nvim) Code outline
+-- (aerial.nvim) Code outline and navigation
 MiniDeps.later(function()
 	MiniDeps.add("stevearc/aerial.nvim")
 
