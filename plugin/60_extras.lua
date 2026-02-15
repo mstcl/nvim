@@ -1225,7 +1225,7 @@ MiniDeps.later(function()
 		lua = { "selene" },
 		dockerfile = { "hadolint", "trivy" },
 		terraform = { "trivy", "terraform_validate" },
-		ansible = { "ansible_lint" },
+		["yaml.ansible"] = { "ansible_lint" },
 		go = { "golangcilint" },
 		yaml = { "yamllint" },
 	}
