@@ -69,6 +69,172 @@ end
 _G.statusline = {}
 _G.statusline.components = {}
 
+-- State and config for git_branch (inlined from git-statusline.nvim)
+local git_state = {
+	by_root = {},
+	inflight = {},
+	timers = {},
+	autocmds_setup = false,
+}
+
+local git_config = {
+	debounce_ms = 200,
+}
+
+local function git_setup_autocmds()
+	if git_state.autocmds_setup then return end
+	git_state.autocmds_setup = true
+
+	local group =
+		vim.api.nvim_create_augroup("GitStatuslineBranchV2", { clear = true })
+	vim.api.nvim_create_autocmd(
+		{ "BufEnter", "BufWritePost", "FocusGained", "DirChanged" },
+		{
+			group = group,
+			callback = function(args)
+				_G.statusline.components.git_branch_refresh(args.buf)
+			end,
+		}
+	)
+end
+
+local function git_root_for_buf(buf)
+	local name = vim.api.nvim_buf_get_name(buf)
+	if name == "" then return vim.fs.root(vim.fn.getcwd(0), { ".git" }) end
+	return vim.fs.root(name, { ".git" })
+end
+
+local function parse_git_status(output)
+	if not output or output == "" then return "" end
+
+	local lines = vim.split(output, "\n", { trimempty = true })
+	if #lines == 0 then return "" end
+
+	local head = lines[1]
+	if not vim.startswith(head, "## ") then return "" end
+
+	local branch_info = head:sub(4)
+	local branch = branch_info
+	local ahead = tonumber(branch_info:match("ahead (%d+)") or "")
+	local behind = tonumber(branch_info:match("behind (%d+)") or "")
+
+	local local_branch = branch_info:match("^([^%.]+)%.%.")
+		or branch_info:match("^([^%s]+)")
+	if local_branch and local_branch ~= "" then branch = local_branch end
+
+	if branch:match("^HEAD") then branch = "detached" end
+
+	local dirty = (#lines > 1)
+
+	local parts = { branch .. (dirty and "*" or "") }
+	if ahead and ahead > 0 then parts[#parts + 1] = "↑" .. ahead end
+	if behind and behind > 0 then parts[#parts + 1] = "↓" .. behind end
+
+	return table.concat(parts, " ")
+end
+
+local function refresh_git_status(root)
+	if git_state.inflight[root] then return end
+	git_state.inflight[root] = true
+
+	vim.system(
+		{ "git", "status", "--porcelain=v1", "-b" },
+		{ cwd = root },
+		function(result)
+			git_state.inflight[root] = nil
+			if result.code ~= 0 then
+				git_state.by_root[root] = ""
+				return
+			end
+			git_state.by_root[root] = parse_git_status(result.stdout or "")
+			vim.schedule(function() vim.cmd("redrawstatus") end)
+		end
+	)
+end
+
+local function schedule_git_refresh(root)
+	if git_state.timers[root] then return end
+	local timer = vim.uv.new_timer()
+	git_state.timers[root] = timer
+	timer:start(git_config.debounce_ms, 0, function()
+		timer:stop()
+		timer:close()
+		git_state.timers[root] = nil
+		refresh_git_status(root)
+	end)
+end
+
+local function ensure_git_status(root)
+	if git_state.by_root[root] == nil then
+		git_state.by_root[root] = ""
+		refresh_git_status(root)
+		return
+	end
+	schedule_git_refresh(root)
+end
+
+---Refresh git status for git_branch
+---@param buf number
+_G.statusline.components.git_branch_refresh = function(buf)
+	local root = git_root_for_buf(buf)
+	if not root then return end
+	schedule_git_refresh(root)
+end
+
+---Get git branch with ahead/behind counts (inlined from git-statusline.nvim)
+---NOTE: https://github.com/mattmorgis/git-statusline.nvim/blob/main/lua/git_statusline/init.lua
+---@return string
+_G.statusline.components.git_branch = function()
+	if is_special_bufs() then return "" end
+
+	git_setup_autocmds()
+	local buf = vim.api.nvim_get_current_buf()
+	local root = git_root_for_buf(buf)
+	if not root then return "" end
+
+	ensure_git_status(root)
+	local status = git_state.by_root[root] or ""
+	if status == "" then return "" end
+
+	-- Extract branch name (first word, removing trailing *)
+	local branch_name = status:match("^([^%s]+)") or ""
+	branch_name = branch_name:gsub("%*$", "")
+
+	-- Apply highlighting: main/master/nil are normal, feature branches are ErrorMsg
+	local branch_hl = "StatusLineNC"
+	if
+		branch_name ~= "nil"
+		and branch_name ~= "master"
+		and branch_name ~= "main"
+	then
+		branch_hl = "ErrorMsg"
+	end
+
+	-- Parse status into parts: branch, ahead/behind
+	-- Format: "branch*" or "branch* ↑2" or "branch* ↓3" or "branch* ↑2 ↓3"
+	local branch_part = status:match("^([^%s]+)") or ""
+	local ahead_behind = status:match("%s+(.+)$") or ""
+
+	-- Apply highlighting to branch part only
+	local highlighted_branch = set_hl(branch_part, branch_hl, false)
+
+	-- Wrap ahead/behind in brackets with StatusLineAlt if present
+	local result = highlighted_branch
+	if ahead_behind ~= "" then
+		local bracket_open = set_hl("[", "StatusLineAlt", false)
+		local bracket_close = set_hl("]", "StatusLineAlt", false)
+		local highlighted_ab = set_hl(ahead_behind, "StatusLineAlt", false)
+		result = highlighted_branch
+			.. " "
+			.. bracket_open
+			.. highlighted_ab
+			.. bracket_close
+	end
+
+	local git_icon = set_hl(_G.config.signs.branch, "StatusLineAlt")
+	return git_icon .. result
+end
+
 ---Get current mode
 ---@return string
 _G.statusline.components.mode = function()
@@ -101,21 +267,6 @@ end
 ---@return string
 _G.statusline.components.cwd = function()
 	return vim.fn.pathshorten(vim.fn.getcwd(), 1)
-end
-
----Get current git branch
----@return string
-_G.statusline.components.git_branch = function()
-	if is_special_bufs() then return "" end
-
-	---@diagnostic disable-next-line: undefined-field
-	local branch = vim.b.gitsigns_head or "nil"
-	if branch == "nil" or branch == "master" or branch == "main" then
-		branch = set_hl(branch, "StatusLineNC")
-	else
-		branch = set_hl(branch, "ErrorMsg")
-	end
-	return set_hl(_G.config.signs.branch, "StatusLineAlt") .. branch
 end
 
 ---Get git diffs for current buffer
