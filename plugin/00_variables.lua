@@ -141,42 +141,21 @@ _G.config.sources.treesitter = {
 	"rasi",
 }
 
--- all lsp servers to download from mason
+-- all lsp servers to enable
 _G.config.sources.lsp = {
-	ansiblels = "ansible-language-server",
-	bashls = "bash-language-server",
-	cssls = "css-lsp",
-	ruff = "ruff",
-	pyrefly = "pyrefly",
-	ty = "ty",
-	emmylua_ls = "emmylua_ls",
-	gopls = "gopls",
-	gitlab_ci_ls = "gitlab-ci-ls",
-	yamlls = "yaml-language-server",
-	dockerls = "dockerfile-language-server",
-	tflint = "tflint",
-	tofu_ls = "tofu-ls",
-}
-
--- all code tools to download from mason
-_G.config.sources.tools = {
-	"shfmt",
-	"stylua",
-	"goimports",
-	"gofumpt",
-	"golines",
-	"gci",
-	"mdslw",
-	"hclfmt",
-	"opa",
-	"hadolint",
-	"ansible-lint",
-	"selene",
-	"golangci-lint",
-	"codespell",
-	"trivy",
-	"biome",
-	"yamlfmt",
+	"ansiblels",
+	"bashls",
+	"cssls",
+	"ruff",
+	"pyrefly",
+	"ty",
+	"emmylua_ls",
+	"gopls",
+	"gitlab_ci_ls",
+	"yamlls",
+	"dockerls",
+	"tflint",
+	"tofu_ls",
 }
 
 -- diagnostic configuration
