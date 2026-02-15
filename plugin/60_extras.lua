@@ -126,9 +126,6 @@ end)
 -- (mini.align) Utility to align text by delimiters
 MiniDeps.later(function() require("mini.align").setup() end)
 
--- (mini.jump) Super f/F/t/T
-MiniDeps.later(function() require("mini.jump").setup() end)
-
 -- (mini.move) Move lines in visual
 MiniDeps.later(function() require("mini.move").setup() end)
 
