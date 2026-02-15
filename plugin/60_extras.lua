@@ -1017,7 +1017,7 @@ _G.now_if_args(function()
 		end
 	end
 	local treesitter_start = function(ev)
-		-- start treesitter only for huge files
+		-- start treesitter only for non huge files
 		if not _G.big(vim.fn.expand("%")) then
 			vim.treesitter.start(ev.buf)
 			vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
