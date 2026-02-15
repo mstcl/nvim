@@ -1726,14 +1726,57 @@ MiniDeps.now(function()
 	})
 
 	require("codediff").setup({
-		keymaps = {
-			view = {
-				toggle_explorer = "<leader>de",
-			},
-		},
 		explorer = {
+			icons = {
+				folder_closed = "",
+				folder_open = "",
+			},
 			view_mode = "list",
 			width = 35,
+			initial_focus = "modified",
+			focus_on_select = true,
+		},
+		history = {
+			position = "bottom",
+			height = 8,
+			initial_focus = "history",
+			view_mode = "list",
+		},
+		keymaps = {
+			explorer = {
+				select = "<CR>",
+				hover = "K",
+				refresh = "<localleader>r",
+				toggle_view_mode = "<localleader>t",
+				stage_all = "<localleader>s",
+				unstage_all = "<localleader>u",
+				restore = "<localleader>x",
+			},
+			view = {
+				toggle_explorer = "<localleader>e",
+				quit = "q",
+				next_hunk = "]g",
+				prev_hunk = "[g",
+				next_file = "]f",
+				prev_file = "[f",
+				diff_get = "do",
+				diff_put = "dp",
+				open_in_prev_tab = "gf",
+				toggle_stage = "-",
+				stage_hunk = "<localleader>s",
+				unstage_hunk = "<localleader>u",
+				discard_hunk = "<localleader>x",
+			},
+			conflict = {
+				accept_incoming = "<localleader>ct", -- Accept incoming (theirs/left) change
+				accept_current = "<localleader>co", -- Accept current (ours/right) change
+				accept_both = "<localleader>cb", -- Accept both changes (incoming first)
+				discard = "<localleader>cx", -- Discard both, keep base
+				next_conflict = "]x", -- Jump to next conflict
+				prev_conflict = "[x", -- Jump to previous conflict
+				diffget_incoming = "2do", -- Get hunk from incoming (left/theirs) buffer
+				diffget_current = "3do", -- Get hunk from current (right/ours) buffer
+			},
 		},
 	})
 
@@ -1744,13 +1787,27 @@ MiniDeps.now(function()
 		{ desc = "Diffmode", noremap = false, silent = true }
 	)
 
-	_G.augroup("vscode-diff", {
+	_G.augroup("codediff", {
+		{ "BufEnter", "ColorScheme" },
+		{
+			desc = "set highlights for history panel",
+			pattern = "*",
+			callback = function()
+				local filetypes = { "codediff-history" }
+				local current_ft = vim.bo.filetype
+				if vim.tbl_contains(filetypes, current_ft) then
+					vim.wo.winhighlight =
+						"DiagnosticError:DiffDelete,DiagnosticOk:DiffAdd,NonText:Operator"
+				end
+			end,
+		},
+	}, {
 		{ "BufEnter", "ColorScheme" },
 		{
 			desc = "set background for alt windows",
 			pattern = "*",
 			callback = function()
-				local filetypes = { "vscode-diff-explorer", "codediff-explorer" }
+				local filetypes = { "codediff-explorer" }
 				local current_ft = vim.bo.filetype
 				if vim.tbl_contains(filetypes, current_ft) then
 					vim.wo.winhighlight = "Normal:ColorColumn"
@@ -1763,7 +1820,10 @@ MiniDeps.now(function()
 			desc = "minimal mode in codediff",
 			pattern = "*",
 			callback = function()
-				local filetypes = { "vscode-diff-explorer", "codediff-explorer" }
+				local filetypes = {
+					"codediff-explorer",
+					"codediff-history",
+				}
 				local current_ft = vim.bo.filetype
 				if vim.tbl_contains(filetypes, current_ft) then
 					vim.cmd("MinimalMode")
