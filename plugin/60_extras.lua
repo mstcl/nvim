@@ -1227,6 +1227,7 @@ MiniDeps.later(function()
 		terraform = { "trivy", "terraform_validate" },
 		ansible = { "ansible_lint" },
 		go = { "golangcilint" },
+		yaml = { "yamllint" },
 	}
 end)
 
