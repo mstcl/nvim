@@ -1286,7 +1286,7 @@ _G.now_if_args(function()
 		formatters = {
 			injected = {
 				options = {
-					ignore_errors = false,
+					ignore_errors = true,
 					lang_to_ext = {
 						bash = "sh",
 						shell = "sh",
