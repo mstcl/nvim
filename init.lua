@@ -11,6 +11,19 @@ end
 
 require("mini.deps").setup()
 
+-- Commands for common minideps operations
+vim.api.nvim_create_user_command(
+	"MiniDepsUpdate",
+	function() require("mini.deps").update() end,
+	{}
+)
+
+vim.api.nvim_create_user_command(
+	"MiniDepsClean",
+	function() require("mini.deps").clean() end,
+	{}
+)
+
 ---Shortcut syntax to create autocmd with augroup @param group string @vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
 ---@return nil
 _G.augroup = function(group, ...)

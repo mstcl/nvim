@@ -54,7 +54,7 @@ MiniDeps.now(function()
 	vim.notify = require("mini.notify").make_notify(vim_notify_opts)
 
 	vim.api.nvim_create_user_command(
-		"Notifications",
+		"MiniNotifyHistory",
 		function() require("mini.notify").show_history() end,
 		{}
 	)
