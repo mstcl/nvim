@@ -1,12 +1,16 @@
 local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
 -- (nvim-web-devicons) Icons
-MiniDeps.now(function() MiniDeps.add("nvim-tree/nvim-web-devicons") end)
+_G.now(
+	function() vim.pack.add({ "https://github.com/nvim-tree/nvim-web-devicons" }) end
+)
 
 -- Colorschemes
-MiniDeps.now(function()
-	MiniDeps.add("rktjmp/lush.nvim")
-	MiniDeps.add("mstcl/tavern.nvim")
-	MiniDeps.add("mstcl/ivory.nvim")
+_G.now(function()
+	vim.pack.add({
+		"https://github.com/rktjmp/lush.nvim",
+		"https://github.com/mstcl/tavern.nvim",
+		"https://github.com/mstcl/ivory.nvim",
+	})
 
 	_G.augroup("toggletheme", {
 		"Signal",
@@ -27,7 +31,7 @@ MiniDeps.now(function()
 end)
 
 -- (mini.notify) Popup notifications
-MiniDeps.now(function()
+_G.now(function()
 	require("mini.notify").setup({
 		content = {
 			format = function(notif)
@@ -61,7 +65,7 @@ MiniDeps.now(function()
 end)
 
 -- (mini.clue) Mapping helper
-MiniDeps.later(function()
+_G.later(function()
 	require("mini.clue").setup({
 		window = {
 			delay = 200,
@@ -124,13 +128,13 @@ MiniDeps.later(function()
 end)
 
 -- (mini.align) Utility to align text by delimiters
-MiniDeps.later(function() require("mini.align").setup() end)
+_G.later(function() require("mini.align").setup() end)
 
 -- (mini.move) Move lines in visual
-MiniDeps.later(function() require("mini.move").setup() end)
+_G.later(function() require("mini.move").setup() end)
 
 -- (mini.keymap) Supercharged keymapping
-MiniDeps.later(function()
+_G.later(function()
 	require("mini.keymap").setup()
 
 	local tab_steps = {
@@ -177,7 +181,7 @@ MiniDeps.later(function()
 end)
 
 -- (mini.pairs) Auto pairs
-MiniDeps.later(function()
+_G.later(function()
 	vim.api.nvim_create_user_command(
 		"ToggleAutopairs",
 		function() vim.g.minipairs_disable = not vim.g.minipairs_disable end,
@@ -198,7 +202,7 @@ MiniDeps.later(function()
 end)
 
 -- (mini.surround) Add motions to surround objects with brackets etc.
-MiniDeps.later(
+_G.later(
 	function()
 		require("mini.surround").setup({
 			mappings = {
@@ -215,18 +219,15 @@ MiniDeps.later(
 )
 
 -- (remember.nvim) Remember last place
-MiniDeps.now(function()
-	MiniDeps.add("vladdoster/remember.nvim")
+_G.now(function()
+	vim.pack.add({ "https://github.com/vladdoster/remember.nvim" })
 
 	require("remember")
 end)
 
 -- (oil.nvim) Buffer-like file browser
 _G.now_if_args(function()
-	MiniDeps.add({
-		source = "stevearc/oil.nvim",
-		depends = { "nvim-tree/nvim-web-devicons" },
-	})
+	vim.pack.add({ "https://github.com/stevearc/oil.nvim" })
 
 	_G.augroup("oil", {
 		"BufWinEnter",
@@ -325,12 +326,10 @@ _G.now_if_args(function()
 end)
 
 -- (fzf-lua) Navigation and fuzzy pickers
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "ibhagwan/fzf-lua",
-		depends = {
-			"nvim-tree/nvim-web-devicons",
-		},
+_G.later(function()
+	vim.pack.add({
+		"https://github.com/ibhagwan/fzf-lua",
+		"https://github.com/elanmed/fzf-lua-frecency.nvim",
 	})
 
 	require("fzf-lua").register_ui_select(function(_, items)
@@ -535,14 +534,7 @@ MiniDeps.later(function()
 		function() vim.cmd("FzfLua commands") end,
 		{ desc = "Commands", noremap = false, silent = true }
 	)
-end)
 
--- (fzf-lua-frecency.nvim) Frecency plugin for fzf-lua
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "elanmed/fzf-lua-frecency.nvim",
-		depends = { "ibhagwan/fzf-lua" },
-	})
 	require("fzf-lua-frecency").setup({
 		display_score = false,
 		winopts = {
@@ -559,8 +551,8 @@ MiniDeps.later(function()
 end)
 
 -- (gitsigns.nvim) Blame and diff for git
-MiniDeps.later(function()
-	MiniDeps.add("lewis6991/gitsigns.nvim")
+_G.later(function()
+	vim.pack.add({ "https://github.com/lewis6991/gitsigns.nvim" })
 
 	require("gitsigns").setup({
 		signs = {
@@ -684,12 +676,10 @@ MiniDeps.later(function()
 end)
 
 -- (neogit) Magit for neovim
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "NeogitOrg/neogit",
-		depends = {
-			"nvim-lua/plenary.nvim",
-		},
+_G.later(function()
+	vim.pack.add({
+		"https://github.com/NeogitOrg/neogit",
+		"https://github.com/nvim-lua/plenary.nvim",
 	})
 
 	require("neogit").setup({
@@ -774,8 +764,8 @@ MiniDeps.later(function()
 end)
 
 -- (blink.indent) Indent lines
-MiniDeps.later(function()
-	MiniDeps.add("saghen/blink.indent")
+_G.later(function()
+	vim.pack.add({ "https://github.com/saghen/blink.indent" })
 
 	require("blink.indent").setup({
 		--- @module 'blink.indent'
@@ -815,14 +805,11 @@ MiniDeps.later(function()
 end)
 
 -- (blink.cmp) Auto completion
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "saghen/blink.cmp",
-		depends = {
-			"rafamadriz/friendly-snippets",
-			"mikavilpas/blink-ripgrep.nvim",
-		},
-		checkout = "v1.8.0",
+_G.later(function()
+	vim.pack.add({
+		{ src = "https://github.com/saghen/blink.cmp", version = "v1.8.0" },
+		"https://github.com/rafamadriz/friendly-snippets",
+		"https://github.com/mikavilpas/blink-ripgrep.nvim",
 	})
 
 	---@diagnostic disable-next-line: undefined-field
@@ -927,8 +914,8 @@ MiniDeps.later(function()
 end)
 
 -- (dial.nvim) Toggling booleans and more
-MiniDeps.later(function()
-	MiniDeps.add("monaqa/dial.nvim")
+_G.later(function()
+	vim.pack.add({ "https://github.com/monaqa/dial.nvim" })
 
 	local augend = require("dial.augend")
 
@@ -999,18 +986,14 @@ MiniDeps.later(function()
 	)
 end)
 
--- (nvim-treesitter) Treesitter engine
+-- (nvim-treesitter/nvim-treesitter-textobjects/nvim-treesitter-context) Treesitter engine and more
 _G.now_if_args(function()
-	MiniDeps.add({
-		source = "nvim-treesitter/nvim-treesitter",
-		checkout = "main",
-		hooks = {
-			post_checkout = function() vim.cmd("TSUpdate") end,
-		},
-	})
-	MiniDeps.add({
-		source = "nvim-treesitter/nvim-treesitter-textobjects",
-		checkout = "main",
+	local ts_update = function() vim.cmd("TSUpdate") end
+	_G.on_packchanged("nvim-treesitter", { "update" }, ts_update, ":TSUpdate")
+	vim.pack.add({
+		"https://github.com/nvim-treesitter/nvim-treesitter",
+		"https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+		"https://github.com/nvim-treesitter/nvim-treesitter-context",
 	})
 
 	require("nvim-treesitter").setup({
@@ -1131,18 +1114,13 @@ _G.now_if_args(function()
 			)
 		end
 	)
-end)
-
--- (nvim-treesitter-context) Treesitter context in-buffer
-MiniDeps.later(function()
-	MiniDeps.add("nvim-treesitter/nvim-treesitter-context")
 
 	require("treesitter-context").setup()
 end)
 
 -- (nvim-lspconfig) LSP server configurations
 _G.now_if_args(function()
-	MiniDeps.add("neovim/nvim-lspconfig")
+	vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
 
 	vim.lsp.config("*", {
 		capabilities = _G.config.capabilities(),
@@ -1153,8 +1131,8 @@ _G.now_if_args(function()
 end)
 
 -- (nvim-lint) Async linter engine
-MiniDeps.later(function()
-	MiniDeps.add("mfussenegger/nvim-lint")
+_G.later(function()
+	vim.pack.add({ "https://github.com/mfussenegger/nvim-lint" })
 
 	require("lint").linters_by_ft = {
 		lua = { "selene" },
@@ -1167,8 +1145,8 @@ MiniDeps.later(function()
 end)
 
 -- (otter.nvim) LSP completion in code blocks
-MiniDeps.later(function()
-	MiniDeps.add("jmbuhr/otter.nvim")
+_G.later(function()
+	vim.pack.add({ "https://github.com/jmbuhr/otter.nvim" })
 
 	require("otter").setup({
 		lsp = { hover = { border = _G.config.border } },
@@ -1187,7 +1165,7 @@ end)
 
 -- (conform.nvim) Formatter
 _G.now_if_args(function()
-	MiniDeps.add("stevearc/conform.nvim")
+	vim.pack.add({ "https://github.com/stevearc/conform.nvim" })
 
 	require("conform").setup({
 		---@module "conform"
@@ -1273,8 +1251,8 @@ _G.now_if_args(function()
 end)
 
 -- (nvim-highlight-colors) Highlight color blocks
-MiniDeps.later(function()
-	MiniDeps.add("brenoprata10/nvim-highlight-colors")
+_G.later(function()
+	vim.pack.add({ "https://github.com/brenoprata10/nvim-highlight-colors" })
 
 	require("nvim-highlight-colors").setup({
 		render = "virtual",
@@ -1288,8 +1266,8 @@ MiniDeps.later(function()
 end)
 
 -- (grug-far.nvim) Search and replace
-MiniDeps.later(function()
-	MiniDeps.add("MagicDuck/grug-far.nvim")
+_G.later(function()
+	vim.pack.add({ "https://github.com/MagicDuck/grug-far.nvim" })
 
 	require("grug-far").setup({
 		disableBufferLineNumbers = true,
@@ -1347,8 +1325,8 @@ MiniDeps.later(function()
 end)
 
 -- (quicker.nvim) Quickfix list QOL
-MiniDeps.later(function()
-	MiniDeps.add("stevearc/quicker.nvim")
+_G.later(function()
+	vim.pack.add({ "https://github.com/stevearc/quicker.nvim" })
 
 	require("quicker").setup({
 		---@module "quicker"
@@ -1413,8 +1391,8 @@ MiniDeps.later(function()
 end)
 
 -- (aerial.nvim) Code outline and navigation
-MiniDeps.later(function()
-	MiniDeps.add("stevearc/aerial.nvim")
+_G.later(function()
+	vim.pack.add({ "https://github.com/stevearc/aerial.nvim" })
 
 	require("aerial").setup({
 		icons = _G.config.signs.kinds_padded,
@@ -1477,8 +1455,8 @@ MiniDeps.later(function()
 end)
 
 -- (nvim-spider) use the w, e, b motions like a spider.
-MiniDeps.later(function()
-	MiniDeps.add("chrisgrieser/nvim-spider")
+_G.later(function()
+	vim.pack.add({ "https://github.com/chrisgrieser/nvim-spider" })
 
 	require("spider").setup()
 
@@ -1500,11 +1478,8 @@ MiniDeps.later(function()
 end)
 
 -- (nvim-tree) Tree file
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "nvim-tree/nvim-tree.lua",
-		depends = { "nvim-tree/nvim-web-devicons" },
-	})
+_G.later(function()
+	vim.pack.add({ "https://github.com/nvim-tree/nvim-tree.lua" })
 
 	require("nvim-tree").setup({
 		hijack_directories = { enable = false, auto_open = false },
@@ -1626,8 +1601,8 @@ MiniDeps.later(function()
 end)
 
 -- (tiny-inline-diagnostic.nvim) Better virtual diagnostic
-MiniDeps.later(function()
-	MiniDeps.add("rachartier/tiny-inline-diagnostic.nvim")
+_G.later(function()
+	vim.pack.add({ "https://github.com/rachartier/tiny-inline-diagnostic.nvim" })
 
 	require("tiny-inline-diagnostic").setup({
 		preset = "simple",
@@ -1655,10 +1630,10 @@ MiniDeps.later(function()
 end)
 
 -- (codediff.nvim) Side-by-side diffs
-MiniDeps.now(function()
-	MiniDeps.add({
-		source = "esmuellert/codediff.nvim",
-		depends = { "MunifTanjim/nui.nvim" },
+_G.now(function()
+	vim.pack.add({
+		"https://github.com/esmuellert/codediff.nvim",
+		"https://github.com/MunifTanjim/nui.nvim",
 	})
 
 	require("codediff").setup({
@@ -1770,10 +1745,8 @@ MiniDeps.now(function()
 end)
 
 -- (opencode.nvim) Opencode integration
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "nickjvandyke/opencode.nvim",
-	})
+_G.later(function()
+	vim.pack.add({ "https://github.com/nickjvandyke/opencode.nvim" })
 
 	vim.g.opencode_opts = {
 		provider = {

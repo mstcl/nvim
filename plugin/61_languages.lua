@@ -1,12 +1,14 @@
 -- (typst.nvim) Typst syntax
-MiniDeps.later(function() MiniDeps.add("kaarmu/typst.vim") end)
+_G.later(function() vim.pack.add({ "https://github.com/kaarmu/typst.vim" }) end)
 
 -- (codeowners) CODEOWNERS syntax
-MiniDeps.later(function() MiniDeps.add("rhysd/vim-syntax-codeowners") end)
+_G.later(
+	function() vim.pack.add({ "https://github.com/rhysd/vim-syntax-codeowners" }) end
+)
 
 -- (zk-nvim) Markdown note taking assistant
-MiniDeps.later(function()
-	MiniDeps.add("zk-org/zk-nvim")
+_G.later(function()
+	vim.pack.add({ "https://github.com/zk-org/zk-nvim" })
 
 	require("zk").setup({
 		picker = "fzf_lua",
@@ -19,14 +21,8 @@ MiniDeps.later(function()
 end)
 
 -- (render-markdown.nvim) Nice markdown rendering
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "MeanderingProgrammer/render-markdown.nvim",
-		depends = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-tree/nvim-web-devicons",
-		},
-	})
+_G.later(function()
+	vim.pack.add({ "https://github.com/MeanderingProgrammer/render-markdown.nvim" })
 
 	require("render-markdown").setup({
 		---@module 'render-markdown'
