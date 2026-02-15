@@ -208,10 +208,24 @@ vim.diagnostic.config({
 	---@type vim.diagnostic.Opts
 	virtual_lines = false,
 	virtual_text = false,
-	signs = true,
 	underline = false,
 	update_in_insert = false,
 	severity_sort = true,
+
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = "",
+			[vim.diagnostic.severity.WARN] = "",
+			[vim.diagnostic.severity.INFO] = "",
+			[vim.diagnostic.severity.HINT] = "",
+		},
+		numhl = {
+			[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+			[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+			[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+			[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+		},
+	},
 
 	float = {
 		close_events = {
@@ -225,9 +239,3 @@ vim.diagnostic.config({
 		focus = false,
 	},
 })
-
--- Place diagnostic signs as number highlight instead of signs in the gutter
-vim.cmd("sign define DiagnosticSignError text= numhl=DiagnosticSignError")
-vim.cmd("sign define DiagnosticSignWarn text=  numhl=DiagnosticSignWarn")
-vim.cmd("sign define DiagnosticSignInfo text=  numhl=DiagnosticSignInfo")
-vim.cmd("sign define DiagnosticSignHint text=  numhl=DiagnosticSignHint")
