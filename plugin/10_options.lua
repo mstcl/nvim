@@ -72,6 +72,7 @@ vim.opt.hidden = true
 vim.opt.showmode = false
 vim.opt.showcmd = false
 vim.opt.showcmdloc = "statusline"
+vim.opt.laststatus = 3
 vim.opt.cmdheight = 0
 vim.opt.ruler = true
 vim.opt.showtabline = 1
@@ -115,8 +116,7 @@ vim.opt.foldlevelstart = 4
 vim.opt.foldminlines = 1
 vim.opt.foldnestmax = 4
 
--- Statuscolumn
-vim.opt.laststatus = 3
+-- number/sign/status column
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = "yes"
