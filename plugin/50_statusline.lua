@@ -14,21 +14,15 @@ end
 local simple_filetypes = {
 	"fzf",
 	"oil",
-	"Fyler",
-	"mason",
-	"Lazy",
 	"aerial",
 	"grug-far",
 	"NvimTree",
-	"OverseerList",
-	"OverseerForm",
 	"gitsigns-blame",
 	"NeogitStatus",
 	"NeogitDiffView",
 	"NeogitLogView",
-	"DiffviewFileHistory",
-	"DiffviewFiles",
-	"vscode-diff-explorer",
+	"codediff-explorer",
+	"codediff-history",
 }
 
 local function is_simple_ft()
