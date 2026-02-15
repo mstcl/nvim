@@ -57,20 +57,6 @@ local modes = {
 	["t"] = "TERM",
 }
 
-local lsp_diagnostic_signs = {
-	[1] = _G.config.signs.lsp.Error,
-	[2] = _G.config.signs.lsp.Warn,
-	[3] = _G.config.signs.lsp.Info,
-	[4] = _G.config.signs.lsp.Hint,
-}
-
-local lsp_diagnostic_colors = {
-	[1] = "ErrorMsg",
-	[2] = "WarningMsg",
-	[3] = "InfoMsg",
-	[4] = "HintMsg",
-}
-
 local function group_number(num, sep)
 	if num < 999 then
 		return tostring(num)
@@ -101,59 +87,14 @@ end
 _G.statusline.components.lsp_diagnostic = function()
 	if is_special_bufs() then return "" end
 
-	local cog_icon = set_hl(_G.config.signs.diagnostics, "StatusLineAlt")
-	local clients = vim.lsp.get_clients()
-	local placeholder = set_hl("ok", "StatusLineNC")
-
-	if #clients == 0 then return "" end
-
-	if vim.b.diagnostic_str_cache then
-		if vim.b.diagnostic_str_cache ~= "" then
-			return _G.statusline.components.open_bracket()
-				.. cog_icon
-				.. vim.b.diagnostic_str_cache
-				.. _G.statusline.components.close_bracket()
-				.. _G.statusline.components.padding()
-		else
-			return _G.statusline.components.open_bracket()
-				.. cog_icon
-				.. placeholder
-				.. _G.statusline.components.close_bracket()
-				.. _G.statusline.components.padding()
-		end
-	end
-
-	local str = ""
-	local buf_cnt = vim.b.diagnostic_cnt_cache or {}
-
-	for severity_nr, _ in ipairs({ "Error", "Warn", "Info", "Hint" }) do
-		local cnt = buf_cnt[severity_nr] or 0
-		if cnt > 0 then
-			local icon_text = lsp_diagnostic_signs[severity_nr]
-			local icon_hl = lsp_diagnostic_colors[severity_nr]
-			str = str
-				.. (str == "" and "" or " ")
-				.. set_hl(icon_text, icon_hl)
-				.. set_hl(cnt, icon_hl)
-		end
-	end
-	if str:find("%S") then str = str end
-
-	vim.b.diagnostic_str_cache = str
-
-	if str ~= "" then
-		return _G.statusline.components.open_bracket()
-			.. cog_icon
-			.. str
-			.. _G.statusline.components.close_bracket()
-			.. _G.statusline.components.padding()
-	else
-		return _G.statusline.components.open_bracket()
-			.. cog_icon
-			.. placeholder
-			.. _G.statusline.components.close_bracket()
-			.. _G.statusline.components.padding()
-	end
+	local icon = set_hl(_G.config.signs.diagnostics, "StatusLineAlt")
+	local status = vim.diagnostic.status() == "" and set_hl("ok", "StatusLineNC")
+		or vim.diagnostic.status()
+	return _G.statusline.components.open_bracket()
+		.. icon
+		.. status
+		.. _G.statusline.components.close_bracket()
+		.. _G.statusline.components.padding()
 end
 
 ---Get cwd

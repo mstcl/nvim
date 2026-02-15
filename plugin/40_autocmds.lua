@@ -191,24 +191,6 @@ _G.augroup("lsp", {
 				})
 			end
 
-			-- update diagnostic cache
-			_G.augroup("diagnosticUpdate", {
-				{ "DiagnosticChanged" },
-				{
-					desc = "update diagnostics cache for the status line.",
-					callback = function(info)
-						local b = vim.b[info.buf]
-						local diagnostic_cnt_cache = { 0, 0, 0, 0 }
-						for _, diagnostic in ipairs(info.data.diagnostics) do
-							diagnostic_cnt_cache[diagnostic.severity] = diagnostic_cnt_cache[diagnostic.severity]
-								+ 1
-						end
-						b.diagnostic_str_cache = nil
-						b.diagnostic_cnt_cache = diagnostic_cnt_cache
-					end,
-				},
-			})
-
 			-- inlay hints
 			if client.server_capabilities.inlayHintProvider then
 				vim.lsp.inlay_hint.enable(_G.config.features.lsp.inlay_hints)

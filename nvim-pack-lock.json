@@ -50,7 +50,7 @@
       "src": "https://github.com/MagicDuck/grug-far.nvim"
     },
     "ivory.nvim": {
-      "rev": "511b52a1beaeb30f564fc322871b489cbf83c46b",
+      "rev": "afaf8ed3db8cbf6665a90fd53f616e04c1370674",
       "src": "https://github.com/mstcl/ivory.nvim"
     },
     "lush.nvim": {
@@ -134,7 +134,7 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "tavern.nvim": {
-      "rev": "bf59c6469250e8c17b27d99b2300d108ea680306",
+      "rev": "788d72cebc0573f6fc682765a46f2c276d0bafde",
       "src": "https://github.com/mstcl/tavern.nvim"
     },
     "tiny-inline-diagnostic.nvim": {

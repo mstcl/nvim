@@ -996,10 +996,6 @@ _G.now_if_args(function()
 		"https://github.com/nvim-treesitter/nvim-treesitter-context",
 	})
 
-	require("nvim-treesitter").setup({
-		install_dir = vim.fn.stdpath("data") .. "/site",
-	})
-
 	local isnt_installed = function(lang)
 		return #vim.api.nvim_get_runtime_file("parser/" .. lang .. ".*", false) == 0
 	end
@@ -1021,6 +1017,8 @@ _G.now_if_args(function()
 		if not _G.big(vim.fn.expand("%")) then
 			vim.treesitter.start(ev.buf)
 			vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+			vim.wo.foldmethod = "expr"
+			vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 		end
 	end
 

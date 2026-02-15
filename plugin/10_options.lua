@@ -227,6 +227,15 @@ vim.diagnostic.config({
 		},
 	},
 
+	status = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = _G.config.signs.lsp.Error,
+			[vim.diagnostic.severity.WARN] = _G.config.signs.lsp.Warn,
+			[vim.diagnostic.severity.INFO] = _G.config.signs.lsp.Info,
+			[vim.diagnostic.severity.HINT] = _G.config.signs.lsp.Hint,
+		},
+	},
+
 	float = {
 		close_events = {
 			"BufLeave",

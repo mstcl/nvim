@@ -96,6 +96,9 @@ end
 
 -- all treesitter grammar to compile
 _G.config.sources.treesitter = {
+	"lua",
+	"vimdoc",
+	"markdown",
 	"python",
 	"html",
 	"c",
@@ -109,8 +112,6 @@ _G.config.sources.treesitter = {
 	"cmake",
 	"ssh_config",
 	"latex",
-	"lua",
-	"markdown",
 	"bash",
 	"diff",
 	"dockerfile",
