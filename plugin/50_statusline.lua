@@ -18,7 +18,6 @@ local simple_filetypes = {
 	"grug-far",
 	"NvimTree",
 	"gitsigns-blame",
-	"NeogitStatus",
 	"NeogitDiffView",
 	"NeogitLogView",
 	"codediff-explorer",
