@@ -117,3 +117,11 @@ vim.keymap.set(
 	[[<C-Bslash><C-n>:ToggleTerminal<CR>]],
 	{ silent = true }
 )
+
+-- qol
+vim.keymap.set(
+	{ "n", "v" },
+	"<leader>Z",
+	require("mini.misc").zoom,
+	{ desc = "Zoom", remap = false, silent = true }
+)
