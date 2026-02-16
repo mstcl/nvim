@@ -220,10 +220,10 @@ vim.diagnostic.config({
 			[vim.diagnostic.severity.HINT] = "",
 		},
 		numhl = {
-			[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
-			[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
-			[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
-			[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+			[vim.diagnostic.severity.ERROR] = "DiagnosticError",
+			[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
+			[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
+			[vim.diagnostic.severity.HINT] = "DiagnosticHint",
 		},
 	},
 
