@@ -437,6 +437,8 @@ _G.later(function()
 			},
 			fzf = {
 				["ctrl-z"] = "jump",
+				["ctrl-q"] = "toggle",
+				["alt-q"] = "toggle-all",
 				["ctrl-u"] = "unix-line-discard",
 				["ctrl-f"] = "forward-word",
 				["ctrl-b"] = "backward-word",
@@ -457,11 +459,9 @@ _G.later(function()
 				["ctrl-s"] = require("fzf-lua").actions.file_split,
 				["ctrl-v"] = require("fzf-lua").actions.file_vsplit,
 				["ctrl-t"] = require("fzf-lua").actions.file_tabedit,
-				["alt-q"] = require("fzf-lua").actions.file_sel_to_qf,
-				["alt-Q"] = require("fzf-lua").actions.file_sel_to_ll,
-				-- ["alt-i"] = require("fzf-lua").actions.toggle_ignore,
-				-- ["alt-h"] = require("fzf-lua").actions.toggle_hidden,
-				-- ["alt-f"] = require("fzf-lua").actions.toggle_follow,
+				["alt-i"] = require("fzf-lua").actions.toggle_ignore,
+				["alt-h"] = require("fzf-lua").actions.toggle_hidden,
+				["alt-w"] = require("fzf-lua").actions.toggle_follow,
 			},
 		},
 		oldfiles = {
