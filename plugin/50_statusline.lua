@@ -372,7 +372,8 @@ _G.statusline.components.search = function()
 	if is_special_bufs() then return "" end
 
 	if vim.v.hlsearch == 1 then
-		local sinfo = vim.fn.searchcount({ maxcount = 0 })
+		local ok, sinfo = pcall(vim.fn.searchcount, { maxcount = 0 })
+		if not ok or not sinfo or sinfo.total == nil then return "" end
 		local search_stat = sinfo.incomplete > 0 and "[?/?]"
 			or sinfo.total > 0 and set_hl(sinfo.current, "StatusLineAccent") .. set_hl(
 				" out of ",
