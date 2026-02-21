@@ -713,6 +713,14 @@ _G.later(function()
 			})
 		end,
 	})
+
+	_G.augroup("gitsigns_refresh", {
+		"BufEnter",
+		{
+			callback = function() pcall(vim.cmd, "Gitsigns refresh") end,
+			desc = "Refresh gitsigns after external staging",
+		},
+	})
 end)
 
 -- (neogit) Magit for neovim
