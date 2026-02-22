@@ -1658,7 +1658,7 @@ _G.later(function()
 				enabled = true,
 				if_many = true,
 			},
-			use_icons_from_diagnostic = true,
+			use_icons_from_diagnostic = false,
 			override_open_float = true,
 			break_line = { enabled = true },
 		},
