@@ -108,9 +108,8 @@ vim.opt.formatoptions = "rqnl1j" -- improve comment editing
 vim.opt.iskeyword = "@,48-57,_,192-255,-" -- treat dash as `word` textobject part
 vim.opt.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]] -- Pattern for a start of numbered list (used in `gw`). This reads as
 
--- Folding
+-- Folding (foldtext is set in 53_foldtext.lua)
 vim.opt.foldmethod = "expr"
-vim.opt.foldtext = ""
 vim.opt.foldlevel = 99
 
 -- number/sign/status column
@@ -184,7 +183,8 @@ vim.opt.fillchars = {
 	foldclose = _G.config.signs.close,
 	foldopen = _G.config.signs.open,
 	foldsep = "│",
-	fold = "·",
+	foldinner = " ",
+	fold = " ",
 	diff = "╱",
 }
 vim.opt.listchars = {
