@@ -1525,7 +1525,12 @@ end)
 
 -- (nvim-tree) Tree file
 _G.later(function()
-	vim.pack.add({ "https://github.com/nvim-tree/nvim-tree.lua" })
+	vim.pack.add({
+		{
+			src = "https://github.com/nvim-tree/nvim-tree.lua",
+			version = "b548cfef00a79f0b3e3af24f91ae6bd14f22af95",
+		},
+	})
 
 	require("nvim-tree").setup({
 		hijack_directories = { enable = false, auto_open = false },
@@ -1759,7 +1764,7 @@ _G.now(function()
 			end,
 		},
 	}, {
-		{ "BufEnter", "ColorScheme" },
+		{ "BufWinEnter", "BufReadPre", "BufEnter", "ColorScheme" },
 		{
 			desc = "set background for alt windows",
 			pattern = "*",
@@ -1793,15 +1798,6 @@ end)
 -- (opencode.nvim) Opencode integration
 _G.later(function()
 	vim.pack.add({ "https://github.com/nickjvandyke/opencode.nvim" })
-
-	vim.g.opencode_opts = {
-		provider = {
-			enabled = "terminal",
-			terminal = {
-				width = math.floor(vim.o.columns * 0.5),
-			},
-		},
-	}
 
 	vim.keymap.set(
 		{ "n", "x" },
