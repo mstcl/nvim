@@ -198,13 +198,13 @@ _G.augroup("lsp", {
 
 			-- code lens
 			if client.server_capabilities.codeLensProvider then
-				vim.lsp.codelens.refresh({ buffer = bufnr, client = client })
+				vim.lsp.codelens.enable(true, { buffer = bufnr, client = client })
 				_G.augroup("codeLensRefresh", {
 					{ "BufEnter", "CursorHold", "InsertLeave" },
 					{
 						buffer = bufnr,
 						callback = function()
-							vim.lsp.codelens.refresh({
+							vim.lsp.codelens.enable(true, {
 								buffer = bufnr,
 								client = client,
 							})
