@@ -66,8 +66,9 @@
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "neogit": {
-      "rev": "5a7fca171e3ad07380745d573d791e95268b8f3f",
-      "src": "https://github.com/NeogitOrg/neogit"
+      "rev": "210b1cccc7497c27798d7c963e028c9f03369924",
+      "src": "https://github.com/NeogitOrg/neogit",
+      "version": "'210b1cccc7497c27798d7c963e028c9f03369924'"
     },
     "nui.nvim": {
       "rev": "de740991c12411b663994b2860f1a4fd0937c130",

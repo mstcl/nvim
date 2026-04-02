@@ -692,7 +692,10 @@ end)
 -- (neogit) Magit for neovim
 _G.later(function()
 	vim.pack.add({
-		"https://github.com/NeogitOrg/neogit",
+		{
+			src = "https://github.com/NeogitOrg/neogit",
+			version = "210b1cccc7497c27798d7c963e028c9f03369924",
+		},
 		"https://github.com/nvim-lua/plenary.nvim",
 	})
 
