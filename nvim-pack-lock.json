@@ -5,7 +5,7 @@
       "src": "https://github.com/stevearc/aerial.nvim"
     },
     "blink-ripgrep.nvim": {
-      "rev": "ffbc2e8012ddc35c8c1f0aee8610fc8c28dab3f6",
+      "rev": "a667a2568ea24176444d6b8bd4fc167884deba1e",
       "src": "https://github.com/mikavilpas/blink-ripgrep.nvim"
     },
     "blink.cmp": {
@@ -46,7 +46,7 @@
       "src": "https://github.com/Zeioth/garbage-day.nvim"
     },
     "gitsigns.nvim": {
-      "rev": "caa98e2e5e4c23a1652c23be839d2e1722cecc29",
+      "rev": "e1fb5425c8812214209b3f24eaa582c6c552cf98",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "grug-far.nvim": {
@@ -66,7 +66,7 @@
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "neogit": {
-      "rev": "4681c1fdac1b730592ae195576e87406f7255750",
+      "rev": "5a7fca171e3ad07380745d573d791e95268b8f3f",
       "src": "https://github.com/NeogitOrg/neogit"
     },
     "nui.nvim": {
@@ -82,7 +82,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "5492a24edd68f78d8a778edcb8905d0a28993abc",
+      "rev": "8e2084bf5e40c79c1f42210a6ef96a0a4793a763",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-spider": {
@@ -95,11 +95,11 @@
       "version": "'b548cfef00a79f0b3e3af24f91ae6bd14f22af95'"
     },
     "nvim-treesitter": {
-      "rev": "7caec274fd19c12b55902a5b795100d21531391f",
+      "rev": "539abf6da5ee8702e37b82cc953131dadd570da2",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
-      "rev": "adf4b6b0420b7be6c717ef0ac7993183d6c201b1",
+      "rev": "b0c45cefe2c8f7b55fc46f34e563bc428ef99636",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
     },
     "nvim-treesitter-textobjects": {
@@ -115,7 +115,7 @@
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "opencode.nvim": {
-      "rev": "df533d6da724109bf08446392db860fdceddbd0c",
+      "rev": "fa0a495fa2c229115404cb3c1970578f9c6d2f76",
       "src": "https://github.com/nickjvandyke/opencode.nvim"
     },
     "otter.nvim": {
