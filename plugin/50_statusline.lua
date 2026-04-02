@@ -22,6 +22,7 @@ local simple_filetypes = {
 	"NeogitLogView",
 	"codediff-explorer",
 	"codediff-history",
+	"nvim-undotree",
 }
 
 local function is_simple_ft()
