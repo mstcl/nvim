@@ -393,7 +393,7 @@ _G.statusline.components.macro = function()
 	if recording_register == "" then
 		return ""
 	else
-		return set_hl("[@" .. recording_register .. "]", "StatusLineAlt")
+		return set_hl(" ● REC [" .. recording_register .. "] ", "DiagnosticError")
 	end
 end
 
