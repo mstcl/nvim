@@ -885,6 +885,7 @@ _G.later(function()
 			},
 			documentation = {
 				auto_show = true,
+				auto_show_delay_ms = 100,
 				window = {
 					max_width = 120,
 					max_height = math.floor(vim.o.lines * 0.3),
@@ -908,8 +909,8 @@ _G.later(function()
 				ripgrep = {
 					name = "R",
 					module = "blink-ripgrep",
-					score_offset = 1,
-					max_items = 3,
+					score_offset = 2,
+					max_items = 4,
 					min_keyword_length = 3,
 				},
 				lsp = { name = "L", score_offset = 4 },
