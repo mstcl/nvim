@@ -41,6 +41,10 @@
       "rev": "5726403e132fe8699d670c7ef8d59dbed887b4e6",
       "src": "https://github.com/elanmed/fzf-lua-frecency.nvim"
     },
+    "garbage-day.nvim": {
+      "rev": "2fcc56556281de8ee871a5f3beb9db7ab747ef32",
+      "src": "https://github.com/Zeioth/garbage-day.nvim"
+    },
     "gitsigns.nvim": {
       "rev": "caa98e2e5e4c23a1652c23be839d2e1722cecc29",
       "src": "https://github.com/lewis6991/gitsigns.nvim"

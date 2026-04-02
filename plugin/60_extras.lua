@@ -30,40 +30,6 @@ _G.now(function()
 	})
 end)
 
--- (mini.notify) Popup notifications
-_G.now(function()
-	require("mini.notify").setup({
-		content = {
-			format = function(notif)
-				return " " .. "[" .. notif.level .. "]" .. " " .. notif.msg .. " "
-			end,
-		},
-		lsp_progress = { enable = false },
-		window = {
-			max_width_share = 1,
-			winblend = 0,
-			config = { border = _G.config.border },
-		},
-	})
-
-	local vim_notify_opts = {
-		ERROR = { duration = 5000, hl_group = "DiagnosticOk" },
-		WARN = { duration = 5000, hl_group = "DiagnosticOk" },
-		INFO = { duration = 2000, hl_group = "DiagnosticOk" },
-		DEBUG = { duration = 0, hl_group = "DiagnosticOk" },
-		TRACE = { duration = 0, hl_group = "DiagnosticOk" },
-		OFF = { duration = 0, hl_group = "DiagnosticSignOk" },
-	}
-
-	vim.notify = require("mini.notify").make_notify(vim_notify_opts)
-
-	vim.api.nvim_create_user_command(
-		"MiniNotifyHistory",
-		function() require("mini.notify").show_history() end,
-		{}
-	)
-end)
-
 -- (mini.clue) Mapping helper
 _G.later(function()
 	require("mini.clue").setup({
@@ -829,7 +795,7 @@ _G.later(function()
 				"fzf",
 				"toggleterm",
 				"ministarter",
-				"gitsigns-*",
+				"gitsigns-blame",
 				"help",
 				"NeogitDiffView",
 				"NeogitLogView",
