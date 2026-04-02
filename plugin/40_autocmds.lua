@@ -212,22 +212,6 @@ _G.augroup("lsp", {
 					},
 				})
 			end
-
-			-- Workarounds for golsp
-			if client.name == "gopls" then
-				if not client.server_capabilities.semanticTokensProvider then
-					local semantic =
-						client.config.capabilities.textDocument.semanticTokens
-					client.server_capabilities.semanticTokensProvider = {
-						full = true,
-						legend = {
-							tokenTypes = semantic.tokenTypes,
-							tokenModifiers = semantic.tokenModifiers,
-						},
-						range = true,
-					}
-				end
-			end
 		end,
 	},
 })

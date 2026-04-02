@@ -142,6 +142,13 @@ _G.config.sources.treesitter = {
 	"rasi",
 }
 
+-- filetypes to disable TS highlighting
+_G.config.sources.treesitter_disabled = {
+	-- "go",
+	-- "terraform",
+	-- "hcl",
+}
+
 -- all lsp servers to enable
 _G.config.sources.lsp = {
 	"ansiblels",

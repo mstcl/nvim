@@ -831,13 +831,15 @@ _G.later(function()
 				"ministarter",
 				"gitsigns-*",
 				"help",
-				"Neogit*",
+				"NeogitDiffView",
+				"NeogitLogView",
+				"gitcommit",
 				"markdown",
-				"codediff*",
+				"codediff-history",
+				"codediff-explorer",
 				"aerial",
 				"qf",
 				"NvimTree",
-				"git*",
 			},
 		},
 		mappings = {
@@ -1060,10 +1062,17 @@ _G.now_if_args(function()
 			table.insert(filetypes, ft)
 		end
 	end
+	local treesitter_hl_disabled_filetypes = {}
 	local treesitter_start = function(ev)
-		-- start treesitter only for non huge files
+		-- start treesitter only for non huge files and if not disabled for this filetype
+		local filetype = vim.bo[ev.buf].filetype
 		if not _G.big(vim.fn.expand("%")) then
-			vim.treesitter.start(ev.buf)
+			if
+				not vim.tbl_contains(_G.config.sources.treesitter_disabled, filetype)
+			then
+				vim.treesitter.start(ev.buf)
+			end
+
 			vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 			vim.wo.foldmethod = "expr"
 			vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
@@ -1175,6 +1184,11 @@ _G.now_if_args(function()
 	})
 	vim.lsp.enable(_G.config.sources.lsp)
 end)
+
+-- (garbage-day.nvim) Kill idle/inactive language servers
+_G.later(
+	function() vim.pack.add({ "https://github.com/Zeioth/garbage-day.nvim" }) end
+)
 
 -- (nvim-lint) Async linter engine
 _G.later(function()

@@ -225,20 +225,63 @@ end, {})
 
 vim.api.nvim_create_user_command(
 	"WorkspaceSymbols",
-	vim.lsp.buf.workspace_symbol,
+	function() vim.lsp.buf.workspace_symbol() end,
 	{}
 )
 
 vim.api.nvim_create_user_command(
 	"WorkspaceDiagnostics",
-	vim.diagnostic.setqflist,
+	function() vim.diagnostic.setqflist() end,
 	{}
 )
 
-vim.api.nvim_create_user_command("DocumentSymbols", vim.lsp.buf.document_symbol, {})
+vim.api.nvim_create_user_command(
+	"DocumentSymbols",
+	function() vim.lsp.buf.document_symbol() end,
+	{}
+)
+
+vim.api.nvim_create_user_command(
+	"DisableTreesitter",
+	function() vim.treesitter.stop() end,
+	{}
+)
+vim.api.nvim_create_user_command(
+	"EnableTreesitter",
+	function() vim.treesitter.start() end,
+	{}
+)
+
+vim.api.nvim_create_user_command(
+	"DisableSemanticToken",
+	function() vim.lsp.semantic_tokens.enable(false, { bufnr = 0 }) end,
+	{}
+)
+
+vim.api.nvim_create_user_command(
+	"EnableSemanticToken",
+	function() vim.lsp.semantic_tokens.enable(true, { bufnr = 0 }) end,
+	{}
+)
+
+vim.api.nvim_create_user_command("DisableSyntax", function()
+	vim.treesitter.stop()
+	vim.lsp.semantic_tokens.enable(false, { bufnr = 0 })
+end, {})
+
+vim.api.nvim_create_user_command("EnableSyntax", function()
+	vim.treesitter.start()
+	vim.lsp.semantic_tokens.enable(true, { bufnr = 0 })
+end, {})
 
 vim.api.nvim_create_user_command(
 	"DocumentDiagnostics",
-	vim.diagnostic.setloclist,
+	function() vim.diagnostic.setloclist() end,
+	{}
+)
+
+vim.api.nvim_create_user_command(
+	"LspInfo",
+	function() vim.cmd("checkhealth vim.lsp") end,
 	{}
 )
