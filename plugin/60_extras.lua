@@ -325,6 +325,8 @@ _G.later(function()
 			["--margin"] = "0,0",
 			["--info"] = "inline-right",
 			["--no-bold"] = "",
+			["--header-border"] = "bottom",
+			["--no-header-first"] = "",
 		},
 		winopts = {
 			backdrop = 100,
@@ -505,7 +507,7 @@ _G.later(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>T",
+		"<leader>t",
 		function() vim.cmd("FzfLua tabs") end,
 		{ desc = "Tabs", noremap = false, silent = true }
 	)
