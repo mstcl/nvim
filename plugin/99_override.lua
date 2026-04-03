@@ -1,3 +1,5 @@
+-- Overrides
+
 vim.opt.mouse = ""
 
 vim.cmd.colorscheme("tavern")

@@ -1,3 +1,5 @@
+-- External plugins
+
 local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
 -- (nvim-web-devicons) Icons
 _G.now(
@@ -148,11 +150,13 @@ end)
 
 -- (mini.pairs) Auto pairs
 _G.later(function()
-	vim.api.nvim_create_user_command(
-		"ToggleAutopairs",
-		function() vim.g.minipairs_disable = not vim.g.minipairs_disable end,
-		{}
-	)
+	_G.register_toggle("autopairs", { "pairs", "minipairs" }, function()
+		vim.g.minipairs_disable = not vim.g.minipairs_disable
+		vim.notify(
+			"Autopairs " .. (vim.g.minipairs_disable and "disabled" or "enabled"),
+			vim.log.levels.INFO
+		)
+	end)
 
 	require("mini.pairs").setup({
 		modes = { insert = true, command = true, terminal = false },
@@ -611,7 +615,7 @@ _G.later(function()
 			})
 
 			vim.keymap.set("n", "<leader>G", gitsigns.preview_hunk, {
-				desc = "Git hunk preview",
+				desc = "Git hunk diff",
 				noremap = false,
 				silent = true,
 				buffer = bufnr,
@@ -776,7 +780,21 @@ _G.later(function()
 		"n",
 		"<leader>g",
 		function() vim.cmd("Neogit kind=tab") end,
-		{ desc = "Neogit", noremap = false, silent = true }
+		{ desc = "Git", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>C",
+		function() vim.cmd("NeogitCommit") end,
+		{ desc = "Commit (latest)", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>L",
+		function() vim.cmd("NeogitLogCurrent") end,
+		{ desc = "Log (current ref)", noremap = false, silent = true }
 	)
 end)
 
@@ -826,7 +844,7 @@ end)
 -- (blink.cmp) Auto completion
 _G.later(function()
 	vim.pack.add({
-		{ src = "https://github.com/saghen/blink.cmp", version = "v1.8.0" },
+		{ src = "https://github.com/saghen/blink.cmp", version = "v1.10.1" },
 		"https://github.com/rafamadriz/friendly-snippets",
 		"https://github.com/mikavilpas/blink-ripgrep.nvim",
 	})
@@ -1019,7 +1037,7 @@ _G.now_if_args(function()
 	local isnt_installed = function(lang)
 		return #vim.api.nvim_get_runtime_file("parser/" .. lang .. ".*", false) == 0
 	end
-	local to_install = vim.tbl_filter(isnt_installed, _G.config.sources.treesitter)
+	local to_install = vim.tbl_filter(isnt_installed, _G.config.treesitter.grammars)
 	if #to_install > 0 then
 		require("nvim-treesitter").install(to_install)
 		require("nvim-treesitter").install({ "markdown_inline", "printf" })
@@ -1027,18 +1045,20 @@ _G.now_if_args(function()
 
 	-- enable tree-sitter after opening a file for a target language
 	local filetypes = {}
-	for _, lang in ipairs(_G.config.sources.treesitter) do
+	for _, lang in ipairs(_G.config.treesitter.grammars) do
 		for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang)) do
 			table.insert(filetypes, ft)
 		end
 	end
-	local treesitter_hl_disabled_filetypes = {}
 	local treesitter_start = function(ev)
 		-- start treesitter only for non huge files and if not disabled for this filetype
 		local filetype = vim.bo[ev.buf].filetype
 		if not _G.big(vim.fn.expand("%")) then
 			if
-				not vim.tbl_contains(_G.config.sources.treesitter_disabled, filetype)
+				not vim.tbl_contains(
+					_G.config.treesitter.disabled_filetypes,
+					filetype
+				)
 			then
 				vim.treesitter.start(ev.buf)
 			end
@@ -1148,11 +1168,11 @@ _G.now_if_args(function()
 	vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
 
 	vim.lsp.config("*", {
-		capabilities = _G.config.capabilities(),
+		capabilities = _G.config.lsp.capabilities(),
 		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
 		flags = { debounce_text_changes = 150 },
 	})
-	vim.lsp.enable(_G.config.sources.lsp)
+	vim.lsp.enable(_G.config.lsp.servers)
 end)
 
 -- (garbage-day.nvim) Kill idle/inactive language servers
@@ -1292,7 +1312,11 @@ _G.later(function()
 		exclude_buftypes = { "nofile" },
 	})
 
-	vim.api.nvim_create_user_command("ToggleColors", "HighlightColors Toggle", {})
+	_G.register_toggle(
+		"colors",
+		{ "highlight_colors", "color" },
+		function() vim.cmd("HighlightColors Toggle") end
+	)
 end)
 
 -- (grug-far.nvim) Search and replace
@@ -1466,7 +1490,11 @@ _G.later(function()
 		{ desc = "Previous symbol", noremap = false, silent = true }
 	)
 
-	vim.api.nvim_create_user_command("ToggleAerial", "AerialToggle", {})
+	_G.register_toggle(
+		"aerial",
+		{ "outline", "symbol" },
+		function() vim.cmd("AerialToggle") end
+	)
 
 	_G.augroup("aerial", {
 		{ "Filetype" },
@@ -1632,7 +1660,11 @@ _G.later(function()
 	require("nvim-tree.view").View.winopts.winhighlight =
 		"Normal:ColorColumn,CursorLine:CursorLine"
 
-	vim.api.nvim_create_user_command("ToggleTree", "NvimTreeToggle", {})
+	_G.register_toggle(
+		"tree",
+		{ "nvimtree", "filetree" },
+		function() vim.cmd("NvimTreeToggle") end
+	)
 end)
 
 -- (tiny-inline-diagnostic.nvim) Better virtual diagnostic
@@ -1657,10 +1689,10 @@ _G.later(function()
 		},
 	})
 
-	vim.api.nvim_create_user_command(
-		"ToggleVirtualDiagnostics",
-		"TinyInlineDiag toggle",
-		{}
+	_G.register_toggle(
+		"virtual_diagnostics",
+		{ "virt", "virtual", "diag", "diagnostics", "inline_diag" },
+		function() vim.cmd("TinyInlineDiag toggle") end
 	)
 end)
 
@@ -1772,7 +1804,7 @@ _G.now(function()
 				}
 				local current_ft = vim.bo.filetype
 				if vim.tbl_contains(filetypes, current_ft) then
-					vim.cmd("MinimalMode")
+					vim.cmd("Mode minimal")
 				end
 			end,
 		},
@@ -1782,6 +1814,33 @@ end)
 -- (opencode.nvim) Opencode integration
 _G.later(function()
 	vim.pack.add({ "https://github.com/nickjvandyke/opencode.nvim" })
+
+	local opencode_window_opts = {
+		relative = "editor",
+		border = "rounded",
+		style = "minimal",
+		col = math.floor(vim.go.columns / 2),
+		row = 0,
+		width = math.floor(vim.api.nvim_win_get_width(0) / 2),
+		height = vim.api.nvim_win_get_height(0),
+	}
+
+	vim.g.opencode_opts = {
+		server = {
+			start = function()
+				require("opencode.terminal").open(
+					"opencode --port",
+					opencode_window_opts
+				)
+			end,
+			toggle = function()
+				require("opencode.terminal").toggle(
+					"opencode --port",
+					opencode_window_opts
+				)
+			end,
+		},
+	}
 
 	vim.keymap.set(
 		{ "n", "x" },

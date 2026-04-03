@@ -1,3 +1,5 @@
+-- Configure builtin vim options
+
 vim.g.mapleader = ","
 vim.g.maplocalleader = ",."
 
@@ -119,6 +121,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.shortmess = vim.opt.shortmess + "OosatTcCFSW"
 
 -- Window
+vim.g.health = { style = "float" } -- floating checkhealth
 vim.opt.splitkeep = "screen" -- less jarring splitting
 vim.opt.splitbelow = true
 vim.opt.splitright = true
@@ -246,7 +249,7 @@ vim.diagnostic.config({
 	},
 })
 
--- Test new experimental UI
+-- Test the new experimental UI2
 if vim.version.ge(vim.version(), { 0, 12, 0 }) then
 	require("vim._core.ui2").enable({
 		enable = true,

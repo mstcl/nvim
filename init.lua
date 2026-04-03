@@ -8,9 +8,6 @@ _G.now_if_args = vim.fn.argc(-1) > 0 and _G.now or _G.later
 _G.on_event = function(ev, f) misc.safely("event:" .. ev, f) end
 _G.on_filetype = function(ft, f) misc.safely("filetype:" .. ft, f) end
 
--- Commands for common minideps operations
-vim.api.nvim_create_user_command("PackUpdate", function() vim.pack.update() end, {})
-
 ---Shortcut syntax to create autocmd with augroup @param group string @vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
 ---@return nil
 _G.augroup = function(group, ...)
@@ -24,7 +21,7 @@ end
 
 ---Detecting big file size (> 400 KB)
 ---Normally we want to pass `vim.fn.expand("%")`
----@ param filepath string
+---@param filepath string
 ---@return boolean
 _G.big = function(filepath)
 	if vim.fn.getfsize(filepath) > (400 * 1024) then return true end

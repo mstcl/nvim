@@ -1,16 +1,9 @@
----Highlight str with group hl in string representation
-local function set_hl(str, hl, restore)
-	restore = restore == nil or restore
-	return restore and table.concat({
-		"%#",
-		hl,
-		"#",
-		str or "",
-		"%*",
-	}) or table.concat({ "%#", hl, "#", str or "" })
-end
+-- Custom statusline
 
--- simple filetype for statusline
+_G.statusline = {}
+_G.statusline.components = {}
+
+-- Filetypes where only a simple statusline is displayed (showing only the filetype)
 local simple_filetypes = {
 	"fzf",
 	"oil",
@@ -25,14 +18,32 @@ local simple_filetypes = {
 	"nvim-undotree",
 }
 
+---Helper to highlight str with group hl in string representation
+---@param str string
+---@param hl string
+---@return string
+local function set_hl(str, hl, restore)
+	restore = restore == nil or restore
+	return restore and table.concat({
+		"%#",
+		hl,
+		"#",
+		str or "",
+		"%*",
+	}) or table.concat({ "%#", hl, "#", str or "" })
+end
+
+---Helper to determine whether a filetype is in the simple_filetypes table
+---@return boolean is_simple_ft
 local function is_simple_ft()
 	return vim.tbl_contains(simple_filetypes, vim.bo.filetype)
 end
 
-local function is_special_bufs()
-	return is_simple_ft() or vim.bo.buftype == "terminal"
-end
+---Helper to determine whether a filetype is a special buffer (in simple filetype or a terminal)
+---@return boolean is_special_buf
+local function is_special_buf() return is_simple_ft() or vim.bo.buftype == "terminal" end
 
+---A list of modes mapped to a code displayed on the statusline
 ---@type table<string, string>
 local modes = {
 	["n"] = "NOR",
@@ -57,6 +68,10 @@ local modes = {
 	["t"] = "TERM",
 }
 
+---A number helper or something idk
+---@param num string
+---@param sep string
+---@return string number
 local function group_number(num, sep)
 	if num < 999 then
 		return tostring(num)
@@ -66,9 +81,6 @@ local function group_number(num, sep)
 	end
 end
 
-_G.statusline = {}
-_G.statusline.components = {}
-
 -- State and config for git_branch (inlined from git-statusline.nvim)
 local git_state = {
 	by_root = {},
@@ -77,10 +89,8 @@ local git_state = {
 	autocmds_setup = false,
 }
 
-local git_config = {
-	debounce_ms = 200,
-}
-
+---Setup autocmd to update git statuses
+---@return nil
 local function git_setup_autocmds()
 	if git_state.autocmds_setup then return end
 	git_state.autocmds_setup = true
@@ -98,12 +108,18 @@ local function git_setup_autocmds()
 	)
 end
 
+---Get git root for current buffer
+---@param buf integer
+---@return string git_root
 local function git_root_for_buf(buf)
 	local name = vim.api.nvim_buf_get_name(buf)
 	if name == "" then return vim.fs.root(vim.fn.getcwd(0), { ".git" }) end
 	return vim.fs.root(name, { ".git" })
 end
 
+---Parse git status into pretty string for statusline
+---@param output string
+---@return string parsed_git_status
 local function parse_git_status(output)
 	if not output or output == "" then return "" end
 
@@ -133,6 +149,9 @@ local function parse_git_status(output)
 	return table.concat(parts, " ")
 end
 
+---Update git status
+---@param root string
+---@return nil
 local function refresh_git_status(root)
 	if git_state.inflight[root] then return end
 	git_state.inflight[root] = true
@@ -152,11 +171,15 @@ local function refresh_git_status(root)
 	)
 end
 
+---Schedule git status refresh
+---@param root string
+---@return nil
 local function schedule_git_refresh(root)
 	if git_state.timers[root] then return end
 	local timer = vim.uv.new_timer()
 	git_state.timers[root] = timer
-	timer:start(git_config.debounce_ms, 0, function()
+	-- debounce for 200ms
+	timer:start(200, 0, function()
 		timer:stop()
 		timer:close()
 		git_state.timers[root] = nil
@@ -164,6 +187,9 @@ local function schedule_git_refresh(root)
 	end)
 end
 
+---Ensure git status is not empty
+---@param root string
+---@return nil
 local function ensure_git_status(root)
 	if git_state.by_root[root] == nil then
 		git_state.by_root[root] = ""
@@ -181,11 +207,12 @@ _G.statusline.components.git_branch_refresh = function(buf)
 	schedule_git_refresh(root)
 end
 
+---[COMPONENT]
 ---Get git branch with ahead/behind counts (inlined from git-statusline.nvim)
 ---NOTE: https://github.com/mattmorgis/git-statusline.nvim/blob/main/lua/git_statusline/init.lua
----@return string
+---@return string git_branch
 _G.statusline.components.git_branch = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	git_setup_autocmds()
 	local buf = vim.api.nvim_get_current_buf()
@@ -235,8 +262,9 @@ _G.statusline.components.git_branch = function()
 	return git_icon .. result
 end
 
+---[COMPONENT]
 ---Get current mode
----@return string
+---@return string mode
 _G.statusline.components.mode = function()
 	if is_simple_ft() then return "" end
 
@@ -247,11 +275,11 @@ _G.statusline.components.mode = function()
 	return set_hl(string.format("%s", mode_str), hl)
 end
 
----Get diagnostics for current buffer
--- Padding and brackets added
----@return string
+---[COMPONENT]
+---Get diagnostics for current buffer with padding and brackets added
+---@return string lsp_diagnostic
 _G.statusline.components.lsp_diagnostic = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	local icon = set_hl(_G.config.signs.diagnostics, "StatusLineAlt")
 	local status = vim.diagnostic.status() == "" and set_hl("ok", "StatusLineNC")
@@ -263,17 +291,18 @@ _G.statusline.components.lsp_diagnostic = function()
 		.. _G.statusline.components.padding()
 end
 
----Get cwd
----@return string
+---[COMPONENT]
+---Get cwd of current buffer nicely formatted
+---@return string cwd
 _G.statusline.components.cwd = function()
 	return vim.fn.pathshorten(vim.fn.getcwd(), 1)
 end
 
----Get git diffs for current buffer
--- Padding and brackets added
----@return string
+---[COMPONENT]
+---Get git diffs for current buffer with adding and brackets added
+---@return string git_diffs
 _G.statusline.components.git_diffs = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	---@diagnostic disable-next-line: undefined-field
 	local diffs = vim.b.gitsigns_status_dict
@@ -306,10 +335,11 @@ _G.statusline.components.git_diffs = function()
 	return ""
 end
 
+---[COMPONENT]
 ---Get file path with root
----@return string
+---@return string filepath
 _G.statusline.components.filepath = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	local ft = vim.bo.filetype
 	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
@@ -329,17 +359,19 @@ _G.statusline.components.filepath = function()
 	return prefix .. root .. secondary
 end
 
+---[COMPONENT]
 ---Get filename
----@return string
+---@return string filename
 _G.statusline.components.filename = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	local fname = vim.fn.expand("%:t")
 	return set_hl(fname, "StatusLineBold")
 end
 
+---[COMPONENT]
 ---Get filetype
----@return string
+---@return string filetype
 _G.statusline.components.filetype = function()
 	local ft = vim.bo.filetype
 
@@ -352,10 +384,11 @@ _G.statusline.components.filetype = function()
 	return set_hl(s:gsub("^%l", string.upper), "StatusLineModeInv")
 end
 
+---[COMPONENT]
 ---Get file icon
----@return string
-_G.statusline.components.icon = function()
-	if is_special_bufs() then return "" end
+---@return string fileicon
+_G.statusline.components.fileicon = function()
+	if is_special_buf() then return "" end
 
 	local fname = vim.fn.expand("%:t")
 	local extension = vim.fn.fnamemodify(fname, ":e")
@@ -369,8 +402,11 @@ _G.statusline.components.icon = function()
 	end
 end
 
+---[COMPONENT]
+---Get search information
+---@return string search
 _G.statusline.components.search = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	if vim.v.hlsearch == 1 then
 		local ok, sinfo = pcall(vim.fn.searchcount, { maxcount = 0 })
@@ -387,8 +423,11 @@ _G.statusline.components.search = function()
 	return ""
 end
 
+---[COMPONENT]
+---Get macro status
+---@return string macro
 _G.statusline.components.macro = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	local recording_register = vim.fn.reg_recording()
 	if recording_register == "" then
@@ -398,25 +437,33 @@ _G.statusline.components.macro = function()
 	end
 end
 
+---[COMPONENT]
+---Get file format
+---@return string fformat
 _G.statusline.components.fformat = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	local ff = vim.bo.fileformat
 	if ff == "unix" or ff == "" then return "" end
 	return set_hl("[" .. ff .. "]", "StatusLineYellow")
 end
 
+---[COMPONENT]
+---Get file encoding
+---@return string ffenc
 _G.statusline.components.ffenc = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	local fe = vim.bo.fileencoding
 	if fe == "utf-8" or fe == "" then return "" end
 	return set_hl("[" .. fe .. "]", "StatusLineYellow")
 end
 
+---[COMPONENT]
 ---Get line count
+---@return string linecount
 local function get_vlinecount()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	local raw_count = vim.fn.line(".") - vim.fn.line("v")
 	raw_count = raw_count < 0 and raw_count - 1 or raw_count + 1
@@ -424,10 +471,11 @@ local function get_vlinecount()
 	return group_number(math.abs(raw_count), ",")
 end
 
---- Get wordcount for current buffer or visual selection
---- @return string word count
+---[COMPONENT]
+---Get wordcount for current buffer or visual selection
+---@return string wordcount
 _G.statusline.components.fileinfo = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	local lines = group_number(vim.api.nvim_buf_line_count(0), ",")
 	local mode = vim.api.nvim_get_mode().mode
@@ -439,26 +487,38 @@ _G.statusline.components.fileinfo = function()
 	end
 end
 
+---[COMPONENT]
+---Get an open bracket char
+---@return string open_bracket
 _G.statusline.components.open_bracket = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	return set_hl("(", "StatusLineAlt")
 end
 
+---[COMPONENT]
+---Get a close bracket char
+---@return string close_bracket
 _G.statusline.components.close_bracket = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	return set_hl(")", "StatusLineAlt")
 end
 
+---[COMPONENT]
+---Get a whitespace padding char
+---@return string padding
 _G.statusline.components.padding = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	return " "
 end
 
+---[COMPONENT]
+---Get current file indentation info
+---@return string indentation
 _G.statusline.components.indentation = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	---@diagnostic disable-next-line: undefined-field
 	local expandtab_string = vim.opt.expandtab:get() and "shift" or "tab"
@@ -472,13 +532,17 @@ _G.statusline.components.indentation = function()
 	)
 end
 
+---[COMPONENT]
+---Get a delimiter char
+---@return string indentation
 _G.statusline.components.delimiter = function()
-	if is_special_bufs() then return "" end
+	if is_special_buf() then return "" end
 
 	return set_hl(_G.config.signs.delimiter, "StatusLineAlt")
 end
 
-local blocks = {
+---All components properly formatted and rendered
+local rendered_components = {
 	-- LSP
 	lsp_diagnostics = [[%{%v:lua.statusline.components.lsp_diagnostic()%}]],
 	-- Git
@@ -492,7 +556,7 @@ local blocks = {
 	-- General
 	filepath = [[%{%v:lua.statusline.components.filepath()%}]],
 	filename = [[%{%v:lua.statusline.components.filename()%}]],
-	icon = [[%{%v:lua.statusline.components.icon()%}]],
+	fileicon = [[%{%v:lua.statusline.components.fileicon()%}]],
 	mode = [[%{%v:lua.statusline.components.mode()%}]],
 	fileinfo = [[%{%v:lua.statusline.components.fileinfo()%}]],
 	indentation = [[%{%v:lua.statusline.components.indentation()%}]],
@@ -503,49 +567,52 @@ local blocks = {
 	macro = [[%{%v:lua.statusline.components.macro()%}]],
 }
 
----@diagnostic disable-next-line: duplicate-set-field
+---Build the statusline from rendered_components
+---@return string statusline
 _G.statusline.get = function()
 	return table.concat({
 		" ",
-		blocks.filetype,
-		blocks.mode,
-		blocks.padding,
-		blocks.delimiter,
-		blocks.padding,
-		blocks.filepath,
-		blocks.padding,
-		blocks.git_branch,
-		blocks.padding,
-		blocks.delimiter,
-		blocks.padding,
-		blocks.icon,
-		blocks.padding,
-		blocks.filename,
-		blocks.padding,
-		blocks.git_diffs,
-		blocks.lsp_diagnostics,
-		blocks.truncate,
+		rendered_components.filetype,
+		rendered_components.mode,
+		rendered_components.padding,
+		rendered_components.delimiter,
+		rendered_components.padding,
+		rendered_components.filepath,
+		rendered_components.padding,
+		rendered_components.git_branch,
+		rendered_components.padding,
+		rendered_components.delimiter,
+		rendered_components.padding,
+		rendered_components.fileicon,
+		rendered_components.padding,
+		rendered_components.filename,
+		rendered_components.padding,
+		rendered_components.git_diffs,
+		rendered_components.lsp_diagnostics,
+		rendered_components.truncate,
 		-- Messy middle bit
-		blocks.align,
-		blocks.macro,
+		rendered_components.align,
+		rendered_components.macro,
 		--
-		blocks.search,
+		rendered_components.search,
 		--
-		blocks.fformat,
+		rendered_components.fformat,
 		--
-		blocks.fenc,
+		rendered_components.fenc,
 		-- Right most
-		blocks.align,
+		rendered_components.align,
 		--
-		blocks.fileinfo,
-		blocks.padding,
+		rendered_components.fileinfo,
+		rendered_components.padding,
 		--
-		blocks.padding,
-		blocks.indentation,
-		blocks.padding,
+		rendered_components.padding,
+		rendered_components.indentation,
+		rendered_components.padding,
 	}, "")
 end
 
+---Set the statusline
+---@return nil
 _G.statusline.set = function() vim.o.statusline = "%!v:lua.statusline.get()" end
 
 _G.statusline.set()

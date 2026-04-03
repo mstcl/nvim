@@ -1,4 +1,8 @@
+-- Custom tablline
 _G.tabline = {}
+
+---Build the tabline
+---@return string tabline
 _G.tabline.get = function()
 	local s = ""
 
@@ -22,6 +26,8 @@ _G.tabline.get = function()
 	return s
 end
 
+---Set the tabline
+---@return nil
 _G.tabline.set = function() vim.o.tabline = "%!v:lua.tabline.get()" end
 
 _G.tabline.set()

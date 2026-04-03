@@ -1,3 +1,5 @@
+-- External plugins for additional language/syntax support
+
 -- (typst.nvim) Typst syntax
 _G.later(function() vim.pack.add({ "https://github.com/kaarmu/typst.vim" }) end)
 

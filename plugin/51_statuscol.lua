@@ -1,22 +1,30 @@
-local function pad_str(in_str, width, align)
+-- Custom statuscolumn
+
+_G.statuscol = {}
+
+---Pad a string with given width and alignment
+---@param input string
+---@param width number
+---@param align string
+---@return string output
+local function pad_str(input, width, align)
 	-- right aligns content
 	-- https://vimhelp.org/options.txt.html#%27statusline%27
 	local ralign_token = "%="
 
-	local num_spaces = width - #in_str
-	if num_spaces < 1 then
-		num_spaces = 1
-	end
+	local num_spaces = width - #input
+	if num_spaces < 1 then num_spaces = 1 end
 	---@diagnostic disable-next-line: param-type-not-match
 	local spaces = string.rep(" ", num_spaces)
 
-	if align == "left" then
-		return table.concat({ in_str, spaces })
-	end
+	if align == "left" then return table.concat({ input, spaces }) end
 
-	return table.concat({ spaces, in_str, ralign_token })
+	return table.concat({ spaces, input, ralign_token })
 end
 
+---Return fold char (if available) for current linenumber
+---@param lnum integer
+---@return string fold
 local function get_fold(lnum)
 	local fcs = vim.opt.fillchars:get()
 	local foldopen = fcs.foldopen or "▾"
@@ -29,24 +37,22 @@ local function get_fold(lnum)
 end
 
 ---Return line number in configured format.
----@return string
+---@param args table
+---@return string line_number
 local function lnumfunc(args)
-	if not args.rnu and not args.nu then
-		return ""
-	end
+	if not args.rnu and not args.nu then return "" end
 
-	if args.virtnum ~= 0 then
-		return pad_str("+", 4, "right") .. " "
-	end
+	if args.virtnum ~= 0 then return pad_str("+", 4, "right") .. " " end
 
-	local lnum = args.rnu and (args.relnum > 0 and args.relnum or (args.nu and args.lnum or 0)) or args.lnum
+	local lnum = args.rnu
+			and (args.relnum > 0 and args.relnum or (args.nu and args.lnum or 0))
+		or args.lnum
 
 	return pad_str(tostring(lnum), 4, "right") .. " "
 end
 
-_G.statuscol = {}
-
----@diagnostic disable-next-line: duplicate-set-field
+---Build the statuscol
+---@return string statuscol
 _G.statuscol.get = function()
 	local win = vim.g.statusline_winid
 	local args = {}
@@ -61,9 +67,8 @@ _G.statuscol.get = function()
 	return "%=%s" .. lnumfunc(args) .. get_fold(vim.v.lnum)
 end
 
----@diagnostic disable-next-line: duplicate-set-field
-_G.statuscol.set = function()
-	vim.o.statuscolumn = "%!v:lua.statuscol.get()"
-end
+---Set the statuscol
+---@return nil
+_G.statuscol.set = function() vim.o.statuscolumn = "%!v:lua.statuscol.get()" end
 
 _G.statuscol.set()

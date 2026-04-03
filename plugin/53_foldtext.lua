@@ -1,3 +1,10 @@
+-- Custom foldtext
+
+---@type table
+_G.foldtext = {}
+
+---@param linenr integer
+---@return table|nil result
 local function parse_line(linenr)
 	local bufnr = vim.api.nvim_get_current_buf()
 
@@ -80,7 +87,9 @@ local function parse_line(linenr)
 	return result
 end
 
-function _G.custom_foldtext()
+---Get the foldtext
+---@return table|string result
+_G.foldtext.get = function()
 	local result = parse_line(vim.v.foldstart)
 	if not result then return vim.fn.foldtext() end
 
@@ -105,4 +114,8 @@ function _G.custom_foldtext()
 	return result
 end
 
-vim.opt.foldtext = "v:lua.custom_foldtext()"
+---Set the foldtext
+---@return nil
+_G.foldtext.set = function() vim.opt.foldtext = "v:lua.foldtext.get()" end
+
+_G.foldtext.set()

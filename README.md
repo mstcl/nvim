@@ -2,6 +2,21 @@
 
 **My opinionated neovim configuration.**
 
+## Customisation
+
+I'm running my own custom:
+
+- Dark/light colorscheme
+- Statusline
+- Statuscolumn
+- Foldtext
+
+In addition, there are also some nice commands:
+
+- `:Toggle <xyz>` user command
+- `:Mode <xyz>` user command
+- `:Pack up(date)/del/add` user command to wrap around Neovim 0.12 `vim.pack`
+
 ## Dependencies
 
 A lot of external tools are required for a complete experience.

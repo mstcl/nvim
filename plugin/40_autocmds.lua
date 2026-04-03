@@ -1,3 +1,7 @@
+-- Custom user autocommands
+-- this file is basically self-documenting and honestly it's a bit messy so
+-- I won't be documenting every single one of them
+
 _G.augroup("trim", {
 	"BufWritePre",
 	{
@@ -77,7 +81,7 @@ _G.augroup("bigfile", {
 		desc = "set settings for really big files",
 		pattern = "*",
 		callback = function()
-			if _G.big(vim.fn.expand("%")) then vim.cmd("BigFileMode") end
+			if _G.big(vim.fn.expand("%")) then vim.cmd("Mode bigfile") end
 		end,
 	},
 })
@@ -89,7 +93,7 @@ _G.augroup("terminal", {
 		pattern = "*",
 		callback = function()
 			if vim.bo.buftype == "terminal" and vim.bo.filetype == "" then
-				vim.cmd("MinimalMode")
+				vim.cmd("Mode minimal")
 			end
 		end,
 	},
@@ -193,7 +197,7 @@ _G.augroup("lsp", {
 
 			-- inlay hints
 			if client.server_capabilities.inlayHintProvider then
-				vim.lsp.inlay_hint.enable(_G.config.features.lsp.inlay_hints)
+				vim.lsp.inlay_hint.enable(_G.config.lsp.features.inlay_hints)
 			end
 
 			-- code lens
