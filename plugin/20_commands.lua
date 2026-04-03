@@ -1,5 +1,15 @@
 -- Custom user commands
 
+-- Yank latest commit hash
+-- While we can use Neogit for this it's a bit slow
+-- <leader>c -> YY whereas this is a single command
+vim.api.nvim_create_user_command("YankCommitHash", function()
+	local hash = vim.fn.system("git rev-parse HEAD")
+	vim.fn.setreg('"', hash)
+	vim.fn.setreg("+", hash)
+	vim.notify("Copied commit hash to clipboard", vim.log.levels.INFO)
+end, {})
+
 -- Clean register
 vim.api.nvim_create_user_command(
 	"CleanReg",
