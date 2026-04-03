@@ -218,7 +218,6 @@ local function minimal_mode()
 	vim.opt_local.statuscolumn = ""
 	vim.opt_local.colorcolumn = ""
 	vim.opt_local.signcolumn = "no"
-	vim.notify("Minimal mode enabled", vim.log.levels.INFO)
 end
 
 -- Big file mode - performance optimizations for large files

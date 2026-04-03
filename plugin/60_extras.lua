@@ -88,7 +88,8 @@ _G.later(function()
 			require("mini.clue").gen_clues.z(),
 			require("mini.clue").gen_clues.windows({ submode_resize = true }),
 
-			{ mode = "n", keys = "<leader>t", desc = "Tab actions [+]" },
+			{ mode = "n", keys = "<leader>c", desc = "Conflicts [+]" },
+			{ mode = "n", keys = "<leader>cd", desc = "Diffs [+]" },
 			{ mode = "n", keys = "gr", desc = "Symbol [+]" },
 			{ mode = "x", keys = "gr", desc = "Symbol [+]" },
 		},
@@ -538,13 +539,6 @@ _G.later(function()
 		"<leader>s",
 		function() vim.cmd("FzfLua live_grep multiline=2") end,
 		{ desc = "Search workspace", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>c",
-		function() vim.cmd("FzfLua commands") end,
-		{ desc = "Commands", noremap = false, silent = true }
 	)
 
 	require("fzf-lua-frecency").setup({
@@ -1899,5 +1893,89 @@ _G.later(function()
 		"<S-C-d>",
 		function() require("opencode").command("session.half.page.down") end,
 		{ desc = "Scroll OpenCode down" }
+	)
+end)
+
+-- (resolve.nvim) Utility to handle git conflict in-file
+_G.now(function()
+	vim.pack.add({ "https://github.com/spacedentist/resolve.nvim" })
+
+	require("resolve").setup({
+		default_keymaps = false,
+	})
+
+	vim.keymap.set("n", "]x", "<Plug>(resolve-next)", { desc = "Next conflict" })
+	vim.keymap.set("n", "[x", "<Plug>(resolve-prev)", { desc = "Previous conflict" })
+	vim.keymap.set(
+		"n",
+		"<leader>co",
+		"<Plug>(resolve-ours)",
+		{ desc = "Choose ours" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>ct",
+		"<Plug>(resolve-theirs)",
+		{ desc = "Choose theirs" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>cb",
+		"<Plug>(resolve-both)",
+		{ desc = "Choose both" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>cB",
+		"<Plug>(resolve-both-reverse)",
+		{ desc = "Choose both reverse" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>cm",
+		"<Plug>(resolve-base)",
+		{ desc = "Choose base" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>cn",
+		"<Plug>(resolve-none)",
+		{ desc = "Choose none" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>cdo",
+		"<Plug>(resolve-diff-ours)",
+		{ desc = "Diff ours" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>cdt",
+		"<Plug>(resolve-diff-theirs)",
+		{ desc = "Diff theirs" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>cdb",
+		"<Plug>(resolve-diff-both)",
+		{ desc = "Diff both" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>cdv",
+		"<Plug>(resolve-diff-vs)",
+		{ desc = "Diff ours → theirs" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>cdV",
+		"<Plug>(resolve-diff-vs-reverse)",
+		{ desc = "Diff theirs → ours" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>cl",
+		"<Plug>(resolve-list)",
+		{ desc = "List conflicts" }
 	)
 end)
