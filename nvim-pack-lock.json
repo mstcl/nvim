@@ -155,6 +155,10 @@
       "rev": "1d5436c0f55490893892441c0eca55e6cdf4916c",
       "src": "https://github.com/kaarmu/typst.vim"
     },
+    "vim-illuminate": {
+      "rev": "0d1e93684da00ab7c057410fecfc24f434698898",
+      "src": "https://github.com/RRethy/vim-illuminate"
+    },
     "vim-syntax-codeowners": {
       "rev": "57c1ca9358f1fa82c4adfd8f0f9292da26e01681",
       "src": "https://github.com/rhysd/vim-syntax-codeowners"

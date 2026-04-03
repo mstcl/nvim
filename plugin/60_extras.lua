@@ -1979,3 +1979,13 @@ _G.now(function()
 		{ desc = "List conflicts" }
 	)
 end)
+
+-- (vim-illuminate) Highlight word under cursor
+_G.later(function()
+	vim.pack.add({ "https://github.com/RRethy/vim-illuminate" })
+	require("illuminate").configure({
+		providers = { "lsp" },
+		modes_allowlist = { "n" },
+		under_cursor = false,
+	})
+end)
