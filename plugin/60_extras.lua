@@ -322,15 +322,44 @@ _G.later(function()
 	local fullscreen_picker_opts = { fullscreen = true }
 
 	-- default vim.ui.select configuration
-	-- different to the builtin pickers these are specifically placed
-	-- out-of-the-way
-	require("fzf-lua").register_ui_select(
-		function(_, _items)
-			return {
-				prompt = " ",
-			}
+	-- stolen from https://github.com/ibhagwan/fzf-lua/issues/793
+	require("fzf-lua").register_ui_select(function(_, items)
+		local min_h, max_h = 0.45, 0.70
+		local h = (#items + 2) / vim.o.lines
+		if h < min_h then
+			h = min_h
+		elseif h > max_h then
+			h = max_h
 		end
-	)
+
+		-- Auto-width
+		-- if (#items < 10000) then	-- Maybe disable auto-width on large results?
+		local min_w, max_w = 0.45, 0.70
+		local longest = 0
+		for _i, v in ipairs(items) do
+			local length = #v
+			if length > longest then longest = length end
+		end
+
+		local w = (longest + 5) / vim.o.columns
+		if w < min_w then
+			w = min_w
+		elseif w > max_w then
+			w = max_w
+		end
+
+		return {
+			prompt = " ",
+			winopts = {
+				width = w,
+				height = h,
+				preview = {
+					vertical = "down:70%",
+					layout = "vertical",
+				},
+			},
+		}
+	end)
 
 	require("fzf-lua").setup({
 		{ "default", "hide" },
@@ -447,11 +476,29 @@ _G.later(function()
 			},
 		},
 
+		-- builtin previwers options
+		previewers = {
+			builtin = {
+				toggle_behavior = "extend",
+			},
+		},
+
 		-- builtin picker configuration
 		-- global defaults; will override picker defaults unless defined below
 		defaults = {
 			formatter = "path.filename_first",
 			cwd_header = true,
+		},
+		builtin = {
+			fzf_opts = { ["--input-border"] = "top" },
+			winopts = {
+				preview = {
+					border = "none",
+					layout = "vertical",
+					hidden = false,
+					vertical = "up:1",
+				},
+			},
 		},
 		oldfiles = { include_current_session = true },
 		grep = { winopts = fullscreen_picker_opts },
@@ -459,46 +506,9 @@ _G.later(function()
 		lsp = {
 			symbol_fmt = function(s) return s:lower() .. "\t" end,
 			child_prefix = false,
-			code_actions = {
-				previewer = "codeaction_native",
-			},
 		},
 		tabs = { tab_marker = "◀" },
 	})
-
-	local zoxide_picker = function()
-		require("fzf-lua").fzf_exec("zoxide query -l", {
-			winopts = {
-				title = " Zoxide ",
-				title_pos = "center",
-			},
-			fzf_opts = { ["--no-multi"] = "" },
-			preview = {
-				fn = function(args)
-					return string.format(
-						"eza --color=always --group-directories-first -TDa --git --git-ignore -L 1 %s | head -200",
-						vim.fn.shellescape(args[1])
-					)
-				end,
-				type = "cmd",
-			},
-			actions = {
-				["ctrl-o"] = {
-					fn = function(selected) require("oil").open(selected[1]) end,
-					desc = "open-oil",
-					header = "open oil in selected directory",
-				},
-				["ctrl-s"] = {
-					fn = function(selected)
-						require("fzf-lua").files({ cwd = selected[1] })
-					end,
-					desc = "search-files",
-					header = "search files in selected directory",
-				},
-				["default"] = function(selected) vim.cmd("cd " .. selected[1]) end,
-			},
-		})
-	end
 
 	vim.keymap.set(
 		"n",
@@ -533,13 +543,6 @@ _G.later(function()
 		"<leader>b",
 		function() vim.cmd("FzfLua buffers") end,
 		{ desc = "Buffers", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>z",
-		function() zoxide_picker() end,
-		{ desc = "Zoxide", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
