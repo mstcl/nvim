@@ -303,41 +303,54 @@ _G.later(function()
 		"https://github.com/elanmed/fzf-lua-frecency.nvim",
 	})
 
-	require("fzf-lua").register_ui_select(function(_, items)
-		local min_h, max_h = 0.15, 0.70
-		local h = (#items + 4) / vim.o.lines
-		if h < min_h then
-			h = min_h
-		elseif h > max_h then
-			h = max_h
+	local central_picker_opts = {
+		preview = {
+			hidden = false,
+			border = _G.config.border,
+			layout = "flex",
+			vertical = "up:45%",
+			horizontal = "right:55%",
+		},
+		border = _G.config.border,
+		backdrop = 100,
+		height = 0.85,
+		width = 0.80,
+		row = 0.35,
+		col = 0.50,
+	}
+
+	local fullscreen_picker_opts = { fullscreen = true }
+
+	-- default vim.ui.select configuration
+	-- different to the builtin pickers these are specifically placed
+	-- out-of-the-way
+	require("fzf-lua").register_ui_select(
+		function(_, _items)
+			return {
+				prompt = " ",
+			}
 		end
-		return { winopts = { height = h, width = 0.60, row = 0.40 } }
-	end)
+	)
 
 	require("fzf-lua").setup({
-		"default-title",
-		defaults = {
-			git_icons = false,
-			file_icons = true,
-			formatter = "path.filename_first",
-			cwd_header = true,
-		},
+		{ "default", "hide" },
+
+		-- tweak fzf options a bit so it's a bit nicer with fzf-lua
 		fzf_opts = {
+			["--no-preview-label"] = "",
 			["--margin"] = "0,0",
 			["--info"] = "inline-right",
 			["--no-bold"] = "",
 			["--header-border"] = "bottom",
 			["--no-header-first"] = "",
+			["--border"] = "none",
 		},
-		winopts = {
-			backdrop = 100,
-			preview = {
-				hidden = true,
-				vertical = "up:45%",
-				horizontal = "right:55%",
-			},
-			border = _G.config.border,
-		},
+
+		-- default windown options
+		winopts = central_picker_opts,
+
+		-- configure highlights
+		-- TODO: use native highlights
 		hls = {
 			normal = "TelescopeNormal",
 			border = "TelescopeBorder",
@@ -364,6 +377,8 @@ _G.later(function()
 			live_sym = "Boolean",
 			scrollbar = "CursorLine",
 		},
+
+		-- tweak fzf colors to work nicer with fzf-lua
 		fzf_colors = {
 			["fg"] = { "fg", "TelescopeNormal" },
 			["fg+"] = { "fg", "TelescopeSelection" },
@@ -375,14 +390,8 @@ _G.later(function()
 			["preview-bg"] = { "bg", "TelescopePreviewNormal" },
 			["preview-border"] = { "bg", "TelescopePreviewBorder" },
 		},
-		builtin = {
-			syntax = true,
-			treesitter = {
-				enabled = true,
-				disabled = {},
-				context = { max_lines = 1, trim_scope = "inner" },
-			},
-		},
+
+		-- keymaps and actions for both fzf and fzf-lua
 		keymap = {
 			builtin = {
 				["<C-G>"] = "toggle-fullscreen",
@@ -437,32 +446,24 @@ _G.later(function()
 				["alt-w"] = require("fzf-lua").actions.toggle_follow,
 			},
 		},
-		oldfiles = {
-			winopts = { preview = { hidden = false } },
-			include_current_session = true,
+
+		-- builtin picker configuration
+		-- global defaults; will override picker defaults unless defined below
+		defaults = {
+			formatter = "path.filename_first",
+			cwd_header = true,
 		},
-		grep = {
-			winopts = {
-				fullscreen = true,
-				preview = { hidden = false },
-			},
-		},
+		oldfiles = { include_current_session = true },
+		grep = { winopts = fullscreen_picker_opts },
 		commands = { sort_lastused = true },
-		manpages = { previewer = "man_native" },
-		helptags = { previewer = "help_native" },
-		zoxide = { formatter = "path.dirname_first" },
 		lsp = {
 			symbol_fmt = function(s) return s:lower() .. "\t" end,
 			child_prefix = false,
+			code_actions = {
+				previewer = "codeaction_native",
+			},
 		},
-		tabs = {
-			tab_marker = "◀",
-			winopts = { preview = { hidden = false } },
-		},
-		buffers = {
-			sort_lastused = true,
-			winopts = { preview = { hidden = false } },
-		},
+		tabs = { tab_marker = "◀" },
 	})
 
 	local zoxide_picker = function()
@@ -471,8 +472,15 @@ _G.later(function()
 				title = " Zoxide ",
 				title_pos = "center",
 			},
-			fzf_opts = {
-				["--no-multi"] = "",
+			fzf_opts = { ["--no-multi"] = "" },
+			preview = {
+				fn = function(args)
+					return string.format(
+						"eza --color=always --group-directories-first -TDa --git --git-ignore -L 1 %s | head -200",
+						vim.fn.shellescape(args[1])
+					)
+				end,
+				type = "cmd",
 			},
 			actions = {
 				["ctrl-o"] = {
@@ -543,6 +551,7 @@ _G.later(function()
 
 	require("fzf-lua-frecency").setup({
 		display_score = false,
+		git_icons = false,
 		winopts = {
 			preview = { hidden = "nohidden" },
 		},
