@@ -2,15 +2,6 @@
 -- this file is basically self-documenting and honestly it's a bit messy so
 -- I won't be documenting every single one of them
 
-_G.augroup("trim", {
-	"BufWritePre",
-	{
-		desc = "trim whitespace on write",
-		pattern = "*",
-		command = [[%s/\s\+$//e]],
-	},
-})
-
 _G.augroup("formatoptions", {
 	"BufEnter",
 	{

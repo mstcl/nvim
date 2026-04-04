@@ -1250,6 +1250,7 @@ _G.now_if_args(function()
 			opa = { "opa_fmt" },
 			json = { "biome" },
 			jsonc = { "biome" },
+			["*"] = { "trim_whitespace" },
 		},
 		format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
 		formatters = {
