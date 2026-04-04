@@ -844,6 +844,14 @@ _G.later(function()
 		},
 		scope = { enabled = false },
 	})
+
+	_G.register_toggle(
+		"indent",
+		{ "ident" },
+		function()
+			require("blink.indent").enable(not require("blink.indent").is_enabled())
+		end
+	)
 end)
 
 -- (blink.cmp) Auto completion
