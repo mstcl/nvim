@@ -1,5 +1,8 @@
 {
-	"diagnostics": {
-		"disable": ["need-check-nil"]
-	}
+  "diagnostics": {
+    "disable": [
+      "need-check-nil",
+      "unresolved-require"
+    ]
+  }
 }
