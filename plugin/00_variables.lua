@@ -149,6 +149,7 @@ _G.config.treesitter.grammars = {
 ---(i.e. vim.treesitter.start(buf) won't run)
 ---@type table
 _G.config.treesitter.disabled_filetypes = {
+	"csv",
 	-- "go",
 	-- "terraform",
 	-- "hcl",

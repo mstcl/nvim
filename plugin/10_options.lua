@@ -139,7 +139,7 @@ vim.opt.scrolloff = 3
 vim.opt.wrap = false
 vim.opt.whichwrap = vim.opt.whichwrap + "<>[]hl"
 vim.opt.wrapmargin = 0
-vim.opt.textwidth = 0
+vim.opt.textwidth = 88
 vim.opt.colorcolumn = "88"
 vim.opt.linebreak = true
 
@@ -179,7 +179,7 @@ vim.opt.spelloptions = "camel"
 
 -- Special characters
 vim.opt.list = true
-vim.opt.showbreak = "↪"
+vim.opt.showbreak = "" -- we have fancy wrapped status column so don't need this
 vim.opt.fillchars = {
 	eob = " ",
 	vert = "│",

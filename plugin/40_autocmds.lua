@@ -22,9 +22,9 @@ _G.augroup("prose", {
 		desc = "enable text editing options, spellcheck and spell correction on certain filetypes",
 		pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd", "*.typ" },
 		callback = function()
+			vim.opt_local.wrap = true
 			vim.opt_local.list = false
 			vim.opt_local.spell = true
-			vim.opt_local.cursorline = false
 
 			-- Set keymap for spell autocorrect
 			vim.keymap.set(
@@ -105,8 +105,8 @@ _G.augroup("lsp", {
 			local bufnr = args.buf
 			local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
 
-			-- Prevent LSP from overwriting treesitter color settings
-			vim.highlight.priorities.semantic_tokens = 120
+			-- Set semantic tokens priority
+			vim.hl.priorities.semantic_tokens = 125
 
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
 				desc = "Definition",
