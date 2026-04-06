@@ -65,7 +65,10 @@ local function open_terminal()
 end
 
 local function hide_terminal()
-	if vim.fn.win_gotoid(vim.t.t_win_id) == 1 then vim.cmd("hide") end
+	if vim.fn.win_gotoid(vim.t.t_win_id) == 1 then
+		vim.cmd("hide")
+		vim.cmd.wincmd("p")
+	end
 end
 
 -- Unified Toggle command with extensible registry for plugin toggles
