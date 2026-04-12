@@ -33,6 +33,10 @@
       "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
+    "fyler.nvim": {
+      "rev": "e87911e6c21d099225063f5aa672e00f6dbb5976",
+      "src": "https://github.com/A7Lavinraj/fyler.nvim"
+    },
     "fzf-lua": {
       "rev": "9f0432fdd7825ab163520045831a40b6df82ea28",
       "src": "https://github.com/ibhagwan/fzf-lua"
@@ -90,11 +94,6 @@
       "rev": "af2f73ffd62e61a091b3503845b7704d76d81d95",
       "src": "https://github.com/chrisgrieser/nvim-spider"
     },
-    "nvim-tree.lua": {
-      "rev": "b548cfef00a79f0b3e3af24f91ae6bd14f22af95",
-      "src": "https://github.com/nvim-tree/nvim-tree.lua",
-      "version": "'b548cfef00a79f0b3e3af24f91ae6bd14f22af95'"
-    },
     "nvim-treesitter": {
       "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
@@ -110,10 +109,6 @@
     "nvim-web-devicons": {
       "rev": "40e9d5a6cc3db11b309e39593fc7ac03bb844e38",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
-    },
-    "oil.nvim": {
-      "rev": "0fcc83805ad11cf714a949c98c605ed717e0b83e",
-      "src": "https://github.com/stevearc/oil.nvim"
     },
     "opencode.nvim": {
       "rev": "fa0a495fa2c229115404cb3c1970578f9c6d2f76",

@@ -25,9 +25,9 @@ vim.api.nvim_create_user_command(
 )
 
 -- Replaces the old explorer with Oil
-vim.api.nvim_create_user_command("E", "Oil", {})
-vim.api.nvim_create_user_command("Ex", "Oil", {})
-vim.api.nvim_create_user_command("Explore", "Oil", {})
+vim.api.nvim_create_user_command("E", "Fyler", {})
+vim.api.nvim_create_user_command("Ex", "Fyler", {})
+vim.api.nvim_create_user_command("Explore", "Fyler", {})
 
 -- Clear screen with extra stuff
 vim.api.nvim_create_user_command("Clear", function()
@@ -297,7 +297,7 @@ end
 -- buddy don't get lost
 local function pair_mode_enter()
 	vim.opt.cursorlineopt = "both"
-	vim.cmd("NvimTreeOpen")
+	vim.cmd("FileTreeOpen")
 	vim.cmd("wincmd p")
 	vim.g.pair_mode_active = true
 	vim.notify("Pair mode enabled", vim.log.levels.INFO)
@@ -305,7 +305,7 @@ end
 
 local function pair_mode_leave()
 	vim.opt.cursorlineopt = "number"
-	vim.cmd("NvimTreeClose")
+	vim.cmd("FileTreeClose")
 	vim.g.pair_mode_active = false
 	vim.notify("Pair mode disabled", vim.log.levels.INFO)
 end

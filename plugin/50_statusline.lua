@@ -5,6 +5,7 @@ _G.statusline.components = {}
 
 -- Filetypes where only a simple statusline is displayed (showing only the filetype)
 local simple_filetypes = {
+	"fyler",
 	"fzf",
 	"oil",
 	"aerial",

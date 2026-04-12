@@ -1,3 +1,4 @@
+local diagnostic = require("vim.diagnostic")
 -- External plugins
 
 local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
@@ -194,106 +195,6 @@ _G.now(function()
 	vim.pack.add({ "https://github.com/vladdoster/remember.nvim" })
 
 	require("remember")
-end)
-
--- (oil.nvim) Buffer-like file browser
-_G.now_if_args(function()
-	vim.pack.add({ "https://github.com/stevearc/oil.nvim" })
-
-	_G.augroup("oil", {
-		"BufWinEnter",
-		{
-			nested = true,
-			desc = "start oil when opened with dir arg",
-			callback = function(info)
-				local path = info.file
-				if path == "" then return end
-				local stat = require("luv").fs_stat(path)
-				if stat and stat.type == "directory" then
-					vim.api.nvim_del_autocmd(info.id)
-					require("oil")
-					vim.cmd.edit({
-						bang = true,
-						mods = { keepjumps = true },
-					})
-					return true
-				end
-			end,
-		},
-	})
-
-	local detail = false
-	local oil_columns = {
-		icon = { "icon", directory = "+ ", add_padding = false },
-		permissions = { "permissions", highlight = "Number" },
-	}
-
-	require("oil").setup({
-		default_file_explorer = true,
-		experimental_watch_for_changes = true,
-		view_options = {
-			show_hidden = true,
-		},
-		keymaps = {
-			["g?"] = "actions.show_help",
-			["<CR>"] = "actions.select",
-			["<C-s>v"] = "actions.select_vsplit",
-			["<C-s>h"] = "actions.select_split",
-			["<C-t>"] = "actions.select_tab",
-			["<C-p>"] = "actions.preview",
-			["q"] = "actions.close",
-			["<C-l>"] = "actions.refresh",
-			["-"] = "actions.parent",
-			["_"] = "actions.open_cwd",
-			["`"] = "actions.cd",
-			["~"] = "actions.tcd",
-			["<C-h>"] = "actions.toggle_hidden",
-			["gd"] = {
-				desc = "Toggle file detail view",
-				callback = function()
-					detail = not detail
-					if detail then
-						require("oil").set_columns({
-							oil_columns.permissions,
-							oil_columns.icon,
-						})
-					else
-						require("oil").set_columns({ oil_columns.icon })
-					end
-				end,
-			},
-		},
-		columns = { oil_columns.icon },
-		float = {
-			padding = 2,
-			border = _G.config.border,
-			max_width = math.floor(vim.api.nvim_win_get_width(0) * 0.7),
-			max_height = math.floor(vim.api.nvim_win_get_height(0) * 0.6),
-		},
-		preview = { border = _G.config.border },
-		progress = { border = _G.config.border },
-		win_options = {
-			number = true,
-			relativenumber = true,
-			signcolumn = "no",
-			foldcolumn = "0",
-			statuscolumn = "",
-			colorcolumn = "",
-		},
-		keymaps_help = { border = _G.config.border },
-		ssh = { border = _G.config.border },
-		cleanup_delay_ms = false,
-		delete_to_trash = true,
-		skip_confirm_for_simple_edits = true,
-		prompt_save_on_select_new_entry = true,
-	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>e",
-		function() require("oil").open() end,
-		{ desc = "Explorer", noremap = false, silent = true }
-	)
 end)
 
 -- (fzf-lua) Navigation and fuzzy pickers
@@ -1552,138 +1453,6 @@ _G.later(function()
 	)
 end)
 
--- (nvim-tree) Tree file
-_G.later(function()
-	vim.pack.add({
-		{
-			src = "https://github.com/nvim-tree/nvim-tree.lua",
-			version = "b548cfef00a79f0b3e3af24f91ae6bd14f22af95",
-		},
-	})
-
-	require("nvim-tree").setup({
-		hijack_directories = { enable = false, auto_open = false },
-		sync_root_with_cwd = true,
-		reload_on_bufenter = true,
-		respect_buf_cwd = true,
-		view = {
-			cursorline = false,
-			width = 30,
-			signcolumn = "no",
-		},
-		git = { enable = true },
-		modified = { enable = true },
-		filters = {
-			dotfiles = true,
-			git_ignored = false,
-		},
-		update_focused_file = {
-			enable = true,
-			update_root = true,
-		},
-		renderer = {
-			root_folder_label = false,
-			group_empty = true,
-			highlight_hidden = "name",
-			highlight_modified = "name",
-			indent_width = 2,
-			indent_markers = { enable = true },
-			special_files = {
-				"go.mod",
-				"Cargo.toml",
-				"Makefile",
-				"Justfile",
-				"README.md",
-				"readme.md",
-			},
-			icons = {
-				symlink_arrow = " » ",
-				show = {
-					file = true,
-					folder = false,
-					folder_arrow = true,
-					git = true,
-					modified = true,
-					hidden = false,
-					diagnostics = false,
-					bookmarks = false,
-				},
-				git_placement = "right_align",
-				glyphs = {
-					modified = "[+]",
-					folder = {
-						arrow_closed = _G.config.signs.close,
-						arrow_open = _G.config.signs.open,
-					},
-					git = {
-						unstaged = "M",
-						staged = "S",
-						unmerged = "U",
-						renamed = "R",
-						untracked = "U",
-						deleted = "D",
-						ignored = "I",
-					},
-				},
-			},
-		},
-	})
-
-	_G.augroup("nvim_tree", {
-		{ "QuitPre" },
-		{
-			callback = function()
-				local tree_wins = {}
-				local floating_wins = {}
-				local wins = vim.api.nvim_list_wins()
-				for _, w in ipairs(wins) do
-					local bufname =
-						vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
-					if bufname:match("NvimTree_") ~= nil then
-						table.insert(tree_wins, w)
-					end
-					if vim.api.nvim_win_get_config(w).relative ~= "" then
-						table.insert(floating_wins, w)
-					end
-				end
-				if 1 == #wins - #floating_wins - #tree_wins then
-					-- Should quit, so we close all invalid windows.
-					for _, w in ipairs(tree_wins) do
-						vim.api.nvim_win_close(w, true)
-					end
-				end
-			end,
-		},
-	})
-
-	_G.augroup("nvimtree", {
-		{ "BufWinEnter", "BufReadPre", "BufEnter", "ColorScheme" },
-		{
-			desc = "set background for alt windows",
-			pattern = "*",
-			callback = function()
-				local filetypes = { "NvimTree" }
-				local current_ft = vim.bo.filetype
-				if vim.tbl_contains(filetypes, current_ft) then
-					vim.wo.winhighlight = "Normal:ColorColumn,CursorLine:CursorLine"
-				end
-			end,
-		},
-	})
-
-	require("nvim-tree.view").View.winopts.foldcolumn = "0"
-	require("nvim-tree.view").View.winopts.statuscolumn = ""
-	require("nvim-tree.view").View.winopts.colorcolumn = ""
-	require("nvim-tree.view").View.winopts.winhighlight =
-		"Normal:ColorColumn,CursorLine:CursorLine"
-
-	_G.register_toggle(
-		"tree",
-		{ "nvimtree", "filetree" },
-		function() vim.cmd("NvimTreeToggle") end
-	)
-end)
-
 -- (tiny-inline-diagnostic.nvim) Better virtual diagnostic
 _G.later(function()
 	vim.pack.add({ "https://github.com/rachartier/tiny-inline-diagnostic.nvim" })
@@ -2009,4 +1778,98 @@ _G.later(function()
 		modes_allowlist = { "n" },
 		under_cursor = false,
 	})
+end)
+
+-- (fyler.nvim) File tree with editor buffer
+_G.now_if_args(function()
+	vim.pack.add({ "https://github.com/A7Lavinraj/fyler.nvim" })
+	require("fyler").setup({
+		integrations = {
+			icons = "nvim_web_devicons",
+		},
+		views = {
+			finder = {
+				columns_order = { "git", "permission", "link" },
+				mappings = {
+					["q"] = "CloseView",
+					["<CR>"] = "Select",
+					["<C-t>"] = "SelectTab",
+					["<C-S>v"] = "SelectVSplit",
+					["<C-S>s"] = "SelectSplit",
+					["-"] = "GotoParent",
+					["="] = "GotoCwd",
+					["."] = "GotoNode",
+					["#"] = "CollapseAll",
+					["<BS>"] = "CollapseNode",
+				},
+				close_on_select = false,
+				default_explorer = true,
+				delete_to_trash = true,
+				columns = {
+					git = {
+						enabled = true,
+					},
+					diagnostic = {
+						enabled = false,
+					},
+					permission = {
+						enabled = true,
+					},
+					size = {
+						enabled = false,
+					},
+					link = {
+						enabled = true,
+					},
+				},
+				icon = {
+					directory_collapsed = _G.config.signs.close,
+					directory_expanded = _G.config.signs.open,
+					directory_empty = _G.config.signs.delimiter,
+				},
+				win = {
+					kind = "float",
+					kinds = {
+						split_left_most = {
+							width = "12%",
+							win_opts = {
+								winfixwidth = true,
+							},
+						},
+					},
+					win_opts = {
+						list = false,
+						relativenumber = true,
+						signcolumn = "no",
+						winhighlight = "Normal:ColorColumn,CursorLine:CursorLine",
+					},
+				},
+			},
+		},
+	})
+
+	_G.register_toggle(
+		"tree",
+		{ "filetree", "fyler" },
+		function() require("fyler").toggle({ kind = "split_left_most" }) end
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>e",
+		function() vim.cmd("Fyler") end,
+		{ desc = "Explorer (fyler)", noremap = false, silent = true }
+	)
+
+	vim.api.nvim_create_user_command(
+		"FileTreeOpen",
+		function() require("fyler").open({ kind = "split_left_most" }) end,
+		{}
+	)
+
+	vim.api.nvim_create_user_command(
+		"FileTreeClose",
+		function() require("fyler").close() end,
+		{}
+	)
 end)
