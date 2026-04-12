@@ -3,6 +3,28 @@
 
 _G.statuscol = {}
 
+-- Filetypes where no statuscolumn is returned
+local simple_filetypes = {
+	"fyler",
+	"fzf",
+	"oil",
+	"aerial",
+	"grug-far",
+	"NvimTree",
+	"gitsigns-blame",
+	"NeogitDiffView",
+	"NeogitLogView",
+	"codediff-explorer",
+	"codediff-history",
+	"nvim-undotree",
+}
+
+---Helper to determine whether a filetype is in the simple_filetypes table
+---@return boolean is_simple_ft
+local function is_simple_ft()
+	return vim.tbl_contains(simple_filetypes, vim.bo.filetype)
+end
+
 ---Get the number of wrapped lines
 ---@return number
 local function get_num_wraps()
@@ -56,15 +78,19 @@ end
 ---Return fold char (if available) for current linenumber
 ---@param virtnum integer
 ---@param lnum integer
+---@param winid integer
 ---@return string fold
-local function get_fold(virtnum, lnum)
+local function get_fold(virtnum, lnum, winid)
 	local fcs = vim.opt.fillchars:get()
 	local foldopen = fcs.foldopen or "▾"
 	local foldclose = fcs.foldclose or "▸"
-	if virtnum > 0 then return " " end
-	if vim.fn.foldlevel(lnum) <= vim.fn.foldlevel(lnum - 1) then return " " end
-	local str = vim.fn.foldclosed(lnum) == -1 and foldopen or foldclose
-	return "%#LineNr#%=" .. str .. " %*"
+	if virtnum ~= 0 then return " " end
+
+	return vim.api.nvim_win_call(winid, function()
+		if vim.fn.foldlevel(lnum) <= vim.fn.foldlevel(lnum - 1) then return " " end
+		local str = vim.fn.foldclosed(lnum) == -1 and foldopen or foldclose
+		return "%#LineNr#%=" .. str .. " %*"
+	end)
 end
 
 ---Return line number in configured format.
@@ -74,7 +100,7 @@ local function get_line_number(args)
 	if not args.rnu and not args.nu then return "" end
 
 	-- virtual line
-	if args.virtnum < 0 then return "%#NonText#%=" .. " ·%*" end
+	if args.virtnum < 0 then return "%#NonText#%=" .. "·%*  " end
 
 	-- wrapped line
 	if args.virtnum > 0 and (vim.wo.number or vim.wo.relativenumber) then
@@ -91,7 +117,7 @@ local function get_line_number(args)
 			and (args.relnum > 0 and args.relnum or (args.nu and args.lnum or 0))
 		or args.lnum
 
-	return pad_str(tostring(lnum), 4, "right") .. " "
+	return pad_str(tostring(lnum), 5, "right") .. " "
 end
 
 ---Build the statuscol
@@ -107,11 +133,17 @@ _G.statuscol.get = function()
 	args.nu = vim.api.nvim_get_option_value("nu", { win = win })
 	args.rnu = vim.api.nvim_get_option_value("rnu", { win = win })
 
-	return "%=%s" .. get_line_number(args) .. get_fold(args.virtnum, vim.v.lnum)
+	return "%=%s" .. get_line_number(args) .. get_fold(args.virtnum, vim.v.lnum, win)
 end
 
 ---Set the statuscol
 ---@return nil
-_G.statuscol.set = function() vim.o.statuscolumn = "%!v:lua.statuscol.get()" end
+_G.statuscol.set = function()
+	if is_simple_ft() then
+		vim.o.statuscolumn = ""
+	else
+		vim.o.statuscolumn = "%!v:lua.statuscol.get()"
+	end
+end
 
 _G.statuscol.set()
