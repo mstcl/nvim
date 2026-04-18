@@ -1,4 +1,3 @@
-local diagnostic = require("vim.diagnostic")
 -- External plugins
 
 local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
@@ -1783,6 +1782,7 @@ end)
 -- (fyler.nvim) File tree with editor buffer
 _G.now_if_args(function()
 	vim.pack.add({ "https://github.com/A7Lavinraj/fyler.nvim" })
+
 	require("fyler").setup({
 		integrations = {
 			icons = "nvim_web_devicons",
@@ -1803,7 +1803,7 @@ _G.now_if_args(function()
 					["<BS>"] = "CollapseNode",
 				},
 				close_on_select = false,
-				default_explorer = true,
+				default_explorer = false,
 				delete_to_trash = true,
 				columns = {
 					git = {
@@ -1872,4 +1872,73 @@ _G.now_if_args(function()
 		function() require("fyler").close() end,
 		{}
 	)
+end)
+
+-- (oil.nvim) Buffer-like file browser
+_G.now_if_args(function()
+	vim.pack.add({ "https://github.com/stevearc/oil.nvim" })
+
+	local detail = false
+	local oil_columns = {
+		icon = { "icon", directory = "+ ", add_padding = false },
+		permissions = { "permissions", highlight = "Number" },
+	}
+
+	require("oil").setup({
+		default_file_explorer = true,
+		experimental_watch_for_changes = true,
+		view_options = { show_hidden = true },
+		keymaps = {
+			["g?"] = "actions.show_help",
+			["<CR>"] = "actions.select",
+			["<C-s>v"] = "actions.select_vsplit",
+			["<C-s>h"] = "actions.select_split",
+			["<C-t>"] = "actions.select_tab",
+			["<C-p>"] = "actions.preview",
+			["q"] = "actions.close",
+			["<C-l>"] = "actions.refresh",
+			["-"] = "actions.parent",
+			["_"] = "actions.open_cwd",
+			["`"] = "actions.cd",
+			["~"] = "actions.tcd",
+			["<C-h>"] = "actions.toggle_hidden",
+			["gd"] = {
+				desc = "Toggle file detail view",
+				callback = function()
+					detail = not detail
+					if detail then
+						require("oil").set_columns({
+							oil_columns.permissions,
+							oil_columns.icon,
+						})
+					else
+						require("oil").set_columns({ oil_columns.icon })
+					end
+				end,
+			},
+		},
+		columns = { oil_columns.icon },
+		float = {
+			padding = 2,
+			border = _G.config.border,
+			max_width = math.floor(vim.api.nvim_win_get_width(0) * 0.7),
+			max_height = math.floor(vim.api.nvim_win_get_height(0) * 0.6),
+		},
+		preview = { border = _G.config.border },
+		progress = { border = _G.config.border },
+		win_options = {
+			number = true,
+			relativenumber = true,
+			signcolumn = "no",
+			foldcolumn = "0",
+			statuscolumn = "",
+			colorcolumn = "",
+		},
+		keymaps_help = { border = _G.config.border },
+		ssh = { border = _G.config.border },
+		cleanup_delay_ms = false,
+		delete_to_trash = true,
+		skip_confirm_for_simple_edits = true,
+		prompt_save_on_select_new_entry = true,
+	})
 end)
