@@ -452,6 +452,13 @@ _G.later(function()
 		{ desc = "Search workspace", noremap = false, silent = true }
 	)
 
+	vim.keymap.set(
+		"n",
+		"<leader>w",
+		function() vim.cmd("FzfLua grep_cword") end,
+		{ desc = "Word search", noremap = false, silent = true }
+	)
+
 	require("fzf-lua-frecency").setup({
 		display_score = false,
 		git_icons = false,
