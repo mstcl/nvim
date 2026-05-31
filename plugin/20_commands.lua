@@ -25,9 +25,9 @@ vim.api.nvim_create_user_command(
 )
 
 -- Replaces the old explorer
-vim.api.nvim_create_user_command("E", "Fyler", {})
-vim.api.nvim_create_user_command("Ex", "Fyler", {})
-vim.api.nvim_create_user_command("Explore", "Fyler", {})
+vim.api.nvim_create_user_command("E", "Oil", {})
+vim.api.nvim_create_user_command("Ex", "Oil", {})
+vim.api.nvim_create_user_command("Explore", "Oil", {})
 
 -- Clear screen with extra stuff
 vim.api.nvim_create_user_command("Clear", function()
