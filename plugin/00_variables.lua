@@ -124,6 +124,7 @@ _G.config.treesitter.grammars = {
 	"regex",
 	"ini",
 	"muttrc",
+	"printf",
 	"passwd",
 	"php",
 	"rasi",
