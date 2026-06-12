@@ -949,7 +949,7 @@ _G.later(function()
 	)
 end)
 
--- (nvim-treesitter/nvim-treesitter-textobjects/nvim-treesitter-context) Treesitter engine and more
+-- (arborist/nvim-treesitter-textobjects/nvim-treesitter-context) Treesitter engine and more
 _G.now_if_args(function()
 	vim.pack.add({
 		{ src = "https://github.com/arborist-ts/arborist.nvim", version = "dev" },
