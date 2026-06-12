@@ -611,10 +611,7 @@ end)
 -- (neogit) Magit for neovim
 _G.later(function()
 	vim.pack.add({
-		{
-			src = "https://github.com/NeogitOrg/neogit",
-			version = "210b1cccc7497c27798d7c963e028c9f03369924",
-		},
+		"https://github.com/NeogitOrg/neogit",
 		"https://github.com/nvim-lua/plenary.nvim",
 	})
 
@@ -642,6 +639,8 @@ _G.later(function()
 				tree = "https://codeberg.org/${owner}/${repository}/src/branch/${branch_name}",
 			},
 		},
+		treesitter_diff_highlight = true,
+		word_diff_highlight = true,
 		disable_insert_on_commit = false,
 		disable_context_highlighting = true,
 		disable_line_numbers = true,
@@ -677,14 +676,17 @@ _G.later(function()
 	})
 
 	_G.augroup("neogit", {
-		{ "Filetype" },
+		{ "BufEnter", "ColorScheme" },
 		{
 			pattern = "Neogit*",
 			desc = "disable neogit",
 			callback = function()
+				vim.api.nvim_set_hl(0, "NeogitWinSeparator", { link = "VertSplit" })
 				vim.b.miniindentscope_disable = true
 				vim.b.indent_guide = false
 				vim.wo.statuscolumn = ""
+				vim.opt_local.foldcolumn = "0"
+				vim.opt_local.signcolumn = "no"
 				vim.wo.cursorline = false
 				vim.wo.colorcolumn = ""
 			end,

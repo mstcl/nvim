@@ -55,7 +55,7 @@
       "src": "https://github.com/Zeioth/garbage-day.nvim"
     },
     "gitsigns.nvim": {
-      "rev": "dd3f588bacbeb041be6facf1742e42097f62165d",
+      "rev": "25050e4ed39e628282831d4cbecb1850454ce915",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "grug-far.nvim": {
@@ -75,9 +75,8 @@
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "neogit": {
-      "rev": "210b1cccc7497c27798d7c963e028c9f03369924",
-      "src": "https://github.com/NeogitOrg/neogit",
-      "version": "'210b1cccc7497c27798d7c963e028c9f03369924'"
+      "rev": "99326a1310fb2d616b455d2fd16d01bf00682f06",
+      "src": "https://github.com/NeogitOrg/neogit"
     },
     "nui.nvim": {
       "rev": "de740991c12411b663994b2860f1a4fd0937c130",
