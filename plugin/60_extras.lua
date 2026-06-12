@@ -1469,6 +1469,7 @@ _G.now(function()
 			width = 35,
 			initial_focus = "modified",
 			focus_on_select = true,
+			status_right_margin = 2,
 		},
 		history = {
 			position = "bottom",
