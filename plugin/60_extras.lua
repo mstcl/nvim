@@ -89,7 +89,7 @@ _G.later(function()
 			require("mini.clue").gen_clues.windows({ submode_resize = true }),
 
 			{ mode = "n", keys = "<leader>c", desc = "Conflicts [+]" },
-			{ mode = "n", keys = "<leader>cd", desc = "Diffs [+]" },
+			{ mode = "n", keys = "<leader>cd", desc = "Diff preview [+]" },
 			{ mode = "n", keys = "gr", desc = "Symbol [+]" },
 			{ mode = "x", keys = "gr", desc = "Symbol [+]" },
 		},
