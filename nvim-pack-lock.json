@@ -70,6 +70,10 @@
       "rev": "9c60ec2279d62487d942ce095e49006af28eed6e",
       "src": "https://github.com/rktjmp/lush.nvim"
     },
+    "matchparen.nvim": {
+      "rev": "5209e0ac66220408793f9f3f8a553bd4a1f0395e",
+      "src": "https://github.com/monkoose/matchparen.nvim"
+    },
     "mini.nvim": {
       "rev": "a59a9b7fb0a42cbcf022938ee5f0724320b66f63",
       "src": "https://github.com/nvim-mini/mini.nvim"

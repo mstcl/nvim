@@ -1866,3 +1866,9 @@ _G.now_if_args(function()
 		prompt_save_on_select_new_entry = true,
 	})
 end)
+
+-- (matchparen.nvim) Faster matchparen
+_G.later(function()
+	vim.pack.add({ "https://github.com/monkoose/matchparen.nvim" })
+	require("matchparen").setup()
+end)
