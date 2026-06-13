@@ -23,7 +23,7 @@
       "src": "https://github.com/saghen/blink.indent"
     },
     "codediff.nvim": {
-      "rev": "76ff1b13f0bcba655dca85cea1ef0df877a53c0f",
+      "rev": "7608f3b436ce1f84a4888f75e53079caa981a2e9",
       "src": "https://github.com/esmuellert/codediff.nvim"
     },
     "conform.nvim": {
@@ -137,10 +137,6 @@
     "render-markdown.nvim": {
       "rev": "629eb9533ec989d9d5c6cab8f3ad5372422c24e0",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
-    },
-    "resolve.nvim": {
-      "rev": "1ed8bcc9ce7d43a0e8e05d0001c9cadb822d95a8",
-      "src": "https://github.com/spacedentist/resolve.nvim"
     },
     "tavern.nvim": {
       "rev": "ec8bc04dd3ee804970a6f5bbc21d92c14e54ca1a",

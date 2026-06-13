@@ -92,7 +92,11 @@ _G.later(function()
 			require("mini.clue").gen_clues.windows({ submode_resize = true }),
 
 			{ mode = "n", keys = "<leader>c", desc = "Conflicts [+]" },
-			{ mode = "n", keys = "<leader>cd", desc = "Diff preview [+]" },
+			{
+				mode = "n",
+				keys = "<leader>cd",
+				desc = "Diff preview [+]",
+			},
 			{ mode = "n", keys = "gr", desc = "Symbol [+]" },
 			{ mode = "x", keys = "gr", desc = "Symbol [+]" },
 		},
@@ -514,7 +518,7 @@ _G.later(function()
 				end
 			end, {
 				desc = "Previous git hunk",
-				noremap = false,
+				noremap = true,
 				silent = true,
 				buffer = bufnr,
 			})
@@ -527,7 +531,7 @@ _G.later(function()
 				end
 			end, {
 				desc = "Next git hunk",
-				noremap = false,
+				noremap = true,
 				silent = true,
 				buffer = bufnr,
 			})
@@ -1481,18 +1485,10 @@ _G.now(function()
 			view_mode = "list",
 		},
 		keymaps = {
-			explorer = {
-				select = "<CR>",
-				hover = "K",
-				refresh = "<localleader>r",
-				toggle_view_mode = "<localleader>t",
-				stage_all = "<localleader>s",
-				unstage_all = "<localleader>u",
-				restore = "<localleader>x",
-			},
 			view = {
-				toggle_explorer = "<localleader>e",
 				quit = "q",
+				toggle_explorer = "<localleader>e",
+				focus_explorer = "<localleader>f",
 				next_hunk = "]g",
 				prev_hunk = "[g",
 				next_file = "]f",
@@ -1500,20 +1496,48 @@ _G.now(function()
 				diff_get = "do",
 				diff_put = "dp",
 				open_in_prev_tab = "gf",
+				close_on_open_in_prev_tab = false,
 				toggle_stage = "-",
 				stage_hunk = "<localleader>s",
 				unstage_hunk = "<localleader>u",
 				discard_hunk = "<localleader>x",
+				hunk_textobject = "ih",
+				show_help = "g?",
+				align_move = "gm",
+				toggle_layout = "<localleader>t",
+				toggle_compact = "<localleader>c",
+			},
+			explorer = {
+				select = "<CR>",
+				hover = "K",
+				refresh = "R",
+				toggle_view_mode = "i",
+				stage_all = "S",
+				unstage_all = "U",
+				restore = "X",
+				toggle_changes = "u",
+				toggle_staged = "s",
+				fold_toggle = "<S-Tab>",
+			},
+			history = {
+				select = "<CR>",
+				toggle_view_mode = "i",
+				refresh = "R",
+				fold_toggle = "<S-Tab>",
 			},
 			conflict = {
-				accept_incoming = "<localleader>ct", -- Accept incoming (theirs/left) change
-				accept_current = "<localleader>co", -- Accept current (ours/right) change
-				accept_both = "<localleader>cb", -- Accept both changes (incoming first)
-				discard = "<localleader>cx", -- Discard both, keep base
+				accept_incoming = "<leader>ct", -- Accept incoming (theirs/left) change
+				accept_current = "<leader>co", -- Accept current (ours/right) change
+				accept_both = "<leader>cb", -- Accept both changes (incoming first)
+				discard = "<leader>cx", -- Discard both, keep base
+				accept_all_incoming = "<leader>cT", -- Accept ALL incoming changes
+				accept_all_current = "<leader>cO", -- Accept ALL current changes
+				accept_all_both = "<leader>cB", -- Accept ALL both changes
+				discard_all = "<leader>cX", -- Discard ALL, reset to base
 				next_conflict = "]x", -- Jump to next conflict
 				prev_conflict = "[x", -- Jump to previous conflict
-				diffget_incoming = "2do", -- Get hunk from incoming (left/theirs) buffer
-				diffget_current = "3do", -- Get hunk from current (right/ours) buffer
+				diffget_incoming = "<leader>cdt", -- Get hunk from incoming (left/theirs) buffer
+				diffget_current = "<leader>cdo", -- Get hunk from current (right/ours) buffer
 			},
 		},
 	})
@@ -1657,90 +1681,6 @@ _G.later(function()
 		"<S-C-d>",
 		function() require("opencode").command("session.half.page.down") end,
 		{ desc = "Scroll OpenCode down" }
-	)
-end)
-
--- (resolve.nvim) Utility to handle git conflict in-file
-_G.now(function()
-	vim.pack.add({ "https://github.com/spacedentist/resolve.nvim" })
-
-	require("resolve").setup({
-		default_keymaps = false,
-	})
-
-	vim.keymap.set("n", "]x", "<Plug>(resolve-next)", { desc = "Next conflict" })
-	vim.keymap.set("n", "[x", "<Plug>(resolve-prev)", { desc = "Previous conflict" })
-	vim.keymap.set(
-		"n",
-		"<leader>co",
-		"<Plug>(resolve-ours)",
-		{ desc = "Choose ours" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>ct",
-		"<Plug>(resolve-theirs)",
-		{ desc = "Choose theirs" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>cb",
-		"<Plug>(resolve-both)",
-		{ desc = "Choose both" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>cB",
-		"<Plug>(resolve-both-reverse)",
-		{ desc = "Choose both reverse" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>cm",
-		"<Plug>(resolve-base)",
-		{ desc = "Choose base" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>cn",
-		"<Plug>(resolve-none)",
-		{ desc = "Choose none" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>cdo",
-		"<Plug>(resolve-diff-ours)",
-		{ desc = "Diff ours" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>cdt",
-		"<Plug>(resolve-diff-theirs)",
-		{ desc = "Diff theirs" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>cdb",
-		"<Plug>(resolve-diff-both)",
-		{ desc = "Diff both" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>cdv",
-		"<Plug>(resolve-diff-vs)",
-		{ desc = "Diff ours → theirs" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>cdV",
-		"<Plug>(resolve-diff-vs-reverse)",
-		{ desc = "Diff theirs → ours" }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>cl",
-		"<Plug>(resolve-list)",
-		{ desc = "List conflicts" }
 	)
 end)
 
