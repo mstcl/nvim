@@ -1467,6 +1467,14 @@ _G.now(function()
 	})
 
 	require("codediff").setup({
+		diff = {
+			hide_merge_artifacts = true,
+			original_position = "left",
+			conflict_ours_position = "right",
+			conflict_result_position = "bottom",
+			jump_to_first_change = false,
+			compute_moves = true,
+		},
 		explorer = {
 			icons = {
 				folder_closed = "",
@@ -1476,6 +1484,7 @@ _G.now(function()
 			width = 35,
 			initial_focus = "modified",
 			focus_on_select = true,
+			auto_open_on_cursor = false,
 			status_right_margin = 2,
 		},
 		history = {
