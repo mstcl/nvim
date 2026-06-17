@@ -66,6 +66,10 @@
       "rev": "4444ca587147852ec9121d76292d2dcaba1868a0",
       "src": "https://github.com/mstcl/ivory.nvim"
     },
+    "jupynvim": {
+      "rev": "9602701ff859530ce2894908dfda0724ee6adad8",
+      "src": "https://github.com/sheng-tse/jupynvim"
+    },
     "lush.nvim": {
       "rev": "9c60ec2279d62487d942ce095e49006af28eed6e",
       "src": "https://github.com/rktjmp/lush.nvim"

@@ -92,6 +92,8 @@ _G.later(function()
 			require("mini.clue").gen_clues.windows({ submode_resize = true }),
 
 			{ mode = "n", keys = "<leader>c", desc = "Conflicts [+]" },
+			{ mode = "n", keys = "<leader>j", desc = "Jupyter remote [+]" },
+			{ mode = "n", keys = "<leader>n", desc = "Jupyter [+]" },
 			{
 				mode = "n",
 				keys = "<leader>cd",
@@ -1871,4 +1873,29 @@ end)
 _G.later(function()
 	vim.pack.add({ "https://github.com/monkoose/matchparen.nvim" })
 	require("matchparen").setup()
+end)
+
+_G.now(function()
+	local plugin_dir = vim.fn.stdpath("data") .. "site/pack/core/opt/jupynvim/"
+	local manifest = plugin_dir .. "/core/Cargo.toml"
+
+	_G.on_packchanged(
+		"jupynvim",
+		{ "update" },
+		vim.fn.system({ "cargo", "build", "--release", "--manifest-path", manifest }),
+		":JupynvimUpdate"
+	)
+
+	vim.pack.add({ "https://github.com/sheng-tse/jupynvim" })
+
+	require("jupynvim").setup({
+		log_level = "info",
+		image_renderer = "chafa",
+		explorer_keys = { "<leader>je" }, -- remote file tree
+		terminal_keys = { "<leader>jt" }, -- toggle a remote PTY
+		pick_keys = {
+			files = { "<leader>jf" },
+			grep = { "<leader>js" },
+		},
+	})
 end)

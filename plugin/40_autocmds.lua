@@ -16,6 +16,18 @@ _G.augroup("formatoptions", {
 	},
 })
 
+_G.augroup("notebook", {
+	{ "BufRead", "BufEnter", "BufReadPre" },
+	{
+		desc = "disable some stuff for editing jupyter notebooks",
+		pattern = { "*.ipynb" },
+		callback = function()
+			vim.wo.colorcolumn = ""
+			vim.opt_local.list = false
+		end,
+	},
+})
+
 _G.augroup("prose", {
 	{ "BufNewFile", "BufRead" },
 	{
