@@ -33,7 +33,7 @@ _G.now(function()
 end)
 
 -- (mini.input) Mapping helper
-_G.later(function() require("mini.input").setup() end)
+-- _G.later(function() require("mini.input").setup() end)
 
 -- (mini.clue) Mapping helper
 _G.later(function()
