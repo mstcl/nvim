@@ -14,9 +14,9 @@
       "src": "https://github.com/mikavilpas/blink-ripgrep.nvim"
     },
     "blink.cmp": {
-      "rev": "451168851e8e2466bc97ee3e026c3dcb9141ce07",
+      "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",
-      "version": "'v1.10.1'"
+      "version": "'v1.10.2'"
     },
     "blink.indent": {
       "rev": "15b3b25c2e76025733cc96df0144e9a9ef4d495c",
@@ -157,6 +157,14 @@
     "typst.vim": {
       "rev": "1d5436c0f55490893892441c0eca55e6cdf4916c",
       "src": "https://github.com/kaarmu/typst.vim"
+    },
+    "vim-dadbod": {
+      "rev": "6d1d41da4873a445c5605f2005ad2c68c99d8770",
+      "src": "https://github.com/tpope/vim-dadbod"
+    },
+    "vim-dadbod-ui": {
+      "rev": "afd07819d8efcefc3317205b855ad4e3513b0011",
+      "src": "https://github.com/kristijanhusak/vim-dadbod-ui"
     },
     "vim-illuminate": {
       "rev": "0d1e93684da00ab7c057410fecfc24f434698898",

@@ -778,9 +778,8 @@ end)
 -- (blink.cmp) Auto completion
 _G.later(function()
 	vim.pack.add({
-		{ src = "https://github.com/saghen/blink.cmp", version = "v1.10.1" },
+		{ src = "https://github.com/saghen/blink.cmp", version = "v1.10.2" },
 		"https://github.com/rafamadriz/friendly-snippets",
-		"https://github.com/mikavilpas/blink-ripgrep.nvim",
 	})
 
 	---@diagnostic disable-next-line: undefined-field
@@ -853,28 +852,29 @@ _G.later(function()
 		sources = {
 			default = {
 				"lsp",
+				"buffer",
 				"path",
 				"snippets",
-				"ripgrep",
 			},
 			providers = {
-				ripgrep = {
-					name = "R",
-					module = "blink-ripgrep",
+				lsp = { name = "L", score_offset = 3, fallbacks = {} },
+				buffer = {
+					name = "B",
+					max_items = 3,
 					score_offset = 2,
-					max_items = 4,
-					min_keyword_length = 3,
+					min_keyword_length = 2,
 				},
-				lsp = { name = "L", score_offset = 4 },
 				path = {
 					name = "P",
 					opts = { trailing_slash = false },
 				},
 				snippets = {
+					opts = {
+						friendly_snippets = true,
+					},
 					name = "S",
-					score_offset = 2,
-					max_items = 3,
-					min_keyword_length = 0,
+					score_offset = 4,
+					min_keyword_length = 1,
 				},
 			},
 		},
@@ -972,6 +972,7 @@ _G.now_if_args(function()
 		concurrency = 1,
 		ensure_installed = _G.config.treesitter.grammars,
 		install_popular = false,
+		ignore = { "dbout" },
 		disable = {
 			indent = { "markdown" },
 			highlight = { "csv" },
@@ -1898,4 +1899,16 @@ _G.now(function()
 			grep = { "<leader>js" },
 		},
 	})
+end)
+
+-- (vim-dadbod) DB client and UI
+_G.later(function()
+	vim.pack.add({
+		"https://github.com/tpope/vim-dadbod",
+		"https://github.com/kristijanhusak/vim-dadbod-ui",
+	})
+
+	vim.g.db_ui_use_nerd_fonts = 1
+	vim.g.db_ui_winwidth = 45
+	vim.g.db_ui_disable_progress_bar = 1
 end)
