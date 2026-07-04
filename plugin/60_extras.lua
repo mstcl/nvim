@@ -855,8 +855,13 @@ _G.later(function()
 				"buffer",
 				"path",
 				"snippets",
+				"dadbod_grip",
 			},
 			providers = {
+				dadbod_grip = {
+					name = "Grip SQL",
+					module = "dadbod-grip.completion.blink",
+				},
 				lsp = { name = "L", score_offset = 3, fallbacks = {} },
 				buffer = {
 					name = "B",
@@ -1677,7 +1682,7 @@ _G.later(function()
 	)
 	vim.keymap.set(
 		"n",
-		"goo",
+		"gA",
 		function() return require("opencode").operator("@this ") .. "_" end,
 		{ desc = "Add line to OpenCode", expr = true }
 	)
@@ -1901,14 +1906,24 @@ _G.now(function()
 	})
 end)
 
--- (vim-dadbod) DB client and UI
+-- (dadbod-griop) DB client and UI
 _G.later(function()
-	vim.pack.add({
-		"https://github.com/tpope/vim-dadbod",
-		"https://github.com/kristijanhusak/vim-dadbod-ui",
+	vim.pack.add({ "https://github.com/joryeugene/dadbod-grip.nvim" })
+
+	require("dadbod-grip").setup({
+		ai = false,
+		keymaps = {
+			table_picker = "go",
+			table_picker_alt = false, -- table picker (alternate)
+			qpad_ai = false,
+		},
+		completion = false,
 	})
 
-	vim.g.db_ui_use_nerd_fonts = 1
-	vim.g.db_ui_winwidth = 45
-	vim.g.db_ui_disable_progress_bar = 1
+	vim.keymap.set(
+		"n",
+		"<leader>D",
+		function() vim.cmd("GripConnect") end,
+		{ desc = "Database connect", noremap = false, silent = true }
+	)
 end)
