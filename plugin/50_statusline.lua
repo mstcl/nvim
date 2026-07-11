@@ -162,11 +162,12 @@ local function refresh_git_status(root)
 		{ cwd = root },
 		function(result)
 			git_state.inflight[root] = nil
-			if result.code ~= 0 then
-				git_state.by_root[root] = ""
-				return
+			local new_status = ""
+			if result.code == 0 then
+				new_status = parse_git_status(result.stdout or "")
 			end
-			git_state.by_root[root] = parse_git_status(result.stdout or "")
+			if git_state.by_root[root] == new_status then return end
+			git_state.by_root[root] = new_status
 			vim.schedule(function() vim.cmd("redrawstatus") end)
 		end
 	)
@@ -188,16 +189,16 @@ local function schedule_git_refresh(root)
 	end)
 end
 
----Ensure git status is not empty
+---Ensure git status is not empty has been computed at least once for a root.
+---Purely for the initial population; does NOT reschedule on every call so
+---that the render path stays side-effect free (avoids a redraw<->refresh loop).
 ---@param root string
 ---@return nil
 local function ensure_git_status(root)
 	if git_state.by_root[root] == nil then
 		git_state.by_root[root] = ""
-		refresh_git_status(root)
-		return
+		schedule_git_refresh(root)
 	end
-	schedule_git_refresh(root)
 end
 
 ---Refresh git status for git_branch
@@ -220,6 +221,9 @@ _G.statusline.components.git_branch = function()
 	local root = git_root_for_buf(buf)
 	if not root then return "" end
 
+	-- Populate once on first sight of a root; afterwards the value is only
+	-- updated by the autocmds. The render path must not reschedule refreshes
+	-- on every draw, otherwise redrawstatus <-> refresh forms a loop
 	ensure_git_status(root)
 	local status = git_state.by_root[root] or ""
 	if status == "" then return "" end
