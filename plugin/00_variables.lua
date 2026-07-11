@@ -170,7 +170,7 @@ _G.config.lsp.servers = {
 	"bashls",
 	"cssls",
 	"ruff",
-	"pyrefly",
+	-- "pyrefly",
 	"ty",
 	"emmylua_ls",
 	"gopls",
