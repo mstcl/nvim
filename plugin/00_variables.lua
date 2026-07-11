@@ -180,6 +180,7 @@ _G.config.lsp.servers = {
 	"tflint",
 	"tofu_ls",
 	"sqlls",
+	"clangd",
 }
 
 ---LSP capabilities
