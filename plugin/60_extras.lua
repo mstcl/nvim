@@ -1923,7 +1923,7 @@ _G.later(function()
 	vim.keymap.set(
 		"n",
 		"<leader>D",
-		function() vim.cmd("GripConnect") end,
-		{ desc = "Database connect", noremap = false, silent = true }
+		function() vim.cmd("GripToggle") end,
+		{ desc = "Database toggle", noremap = false, silent = true }
 	)
 end)

@@ -179,6 +179,7 @@ _G.config.lsp.servers = {
 	"dockerls",
 	"tflint",
 	"tofu_ls",
+	"sqlls",
 }
 
 ---LSP capabilities
