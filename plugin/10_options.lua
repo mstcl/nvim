@@ -71,6 +71,7 @@ vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 
 -- UI components
+vim.opt.report = 1000000000
 vim.opt.hidden = true
 vim.opt.showmode = false
 vim.opt.showcmd = false
@@ -257,45 +258,37 @@ if vim.version.ge(vim.version(), { 0, 12, 0 }) then
 		msg = {
 			targets = {
 				[""] = "msg",
-				empty = "cmd",
+				empty = "msg",
 				bufwrite = "msg",
-				confirm = "cmd",
-				emsg = "pager",
 				echo = "msg",
 				echomsg = "msg",
-				echoerr = "pager",
-				completion = "cmd",
-				list_cmd = "pager",
-				lua_error = "pager",
-				lua_print = "msg",
-				progress = "pager",
-				rpc_error = "pager",
-				quickfix = "msg",
-				search_cmd = "cmd",
-				search_count = "cmd",
-				shell_cmd = "pager",
-				shell_err = "pager",
-				shell_out = "pager",
 				shell_ret = "msg",
 				undo = "msg",
-				verbose = "pager",
-				wildlist = "cmd",
 				wmsg = "msg",
-				typed_cmd = "cmd",
+				completion = "msg",
+				confirm = "dialog",
+				confirm_sub = "dialog",
+				echoerr = "msg",
+				emsg = "msg",
+				list_cmd = "pager",
+				lua_error = "msg",
+				lua_print = "msg",
+				progress = "msg",
+				quickfix = "msg",
+				rpc_error = "msg",
+				search_cmd = "msg",
+				search_count = "msg",
+				shell_cmd = "msg",
+				shell_err = "msg",
+				shell_out = "msg",
+				typed_cmd = "msg",
+				verbose = "pager",
+				wildlist = "msg",
 			},
-			cmd = {
-				height = 0.5,
-			},
-			dialog = {
-				height = 0.5,
-			},
-			msg = {
-				height = 0.3,
-				timeout = 5000,
-			},
-			pager = {
-				height = 0.5,
-			},
+			cmd = { height = 0.5 },
+			dialog = { height = 0.5 },
+			msg = { height = 0.5, timeout = 2000 },
+			pager = { height = 0.8 },
 		},
 	})
 end
