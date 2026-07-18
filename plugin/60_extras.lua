@@ -1374,6 +1374,7 @@ _G.later(function()
 			"unsupported",
 		},
 		show_guides = true,
+		open_automatic = true,
 		layout = {
 			placement = "edge",
 			close_on_select = false,
