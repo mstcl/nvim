@@ -46,6 +46,8 @@ vim.filetype.add({
 		[".*/fontconfig/%a*"] = "xml",
 		[".*/.*.yml.j2"] = "jinja2.yaml",
 		[".*/.*.yaml.j2"] = "jinja2.yaml",
+		[".*/.*.yml.jinja"] = "jinja2.yaml",
+		[".*/.*.yaml.jinja"] = "jinja2.yaml",
 		[".*/.*.json.j2"] = "jinja2.json",
 		[".*/.*rc.j2"] = "jinja2.rc",
 		[".*/.*.sh.j2"] = "jinja2.sh",
