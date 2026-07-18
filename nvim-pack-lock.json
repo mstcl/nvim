@@ -154,6 +154,10 @@
       "rev": "ec8bc04dd3ee804970a6f5bbc21d92c14e54ca1a",
       "src": "https://github.com/mstcl/tavern.nvim"
     },
+    "tiny-cmdline.nvim": {
+      "rev": "e247d9ee4c980734f8f8bf616d31e0ab7c27485d",
+      "src": "https://github.com/rachartier/tiny-cmdline.nvim"
+    },
     "tiny-inline-diagnostic.nvim": {
       "rev": "147af4e49f51dd48f41972de26552872b8ba7b25",
       "src": "https://github.com/rachartier/tiny-inline-diagnostic.nvim"

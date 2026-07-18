@@ -977,7 +977,7 @@ _G.now_if_args(function()
 		concurrency = 1,
 		ensure_installed = _G.config.treesitter.grammars,
 		install_popular = false,
-		ignore = { "dbout" },
+		ignore = { "dbout", "jinja", "jinja2" },
 		disable = {
 			indent = { "markdown" },
 			highlight = { "csv" },
@@ -1619,33 +1619,6 @@ end)
 _G.later(function()
 	vim.pack.add({ "https://github.com/nickjvandyke/opencode.nvim" })
 
-	local opencode_window_opts = {
-		relative = "editor",
-		border = "rounded",
-		style = "minimal",
-		col = math.floor(vim.go.columns / 2),
-		row = 0,
-		width = math.floor(vim.api.nvim_win_get_width(0) / 2),
-		height = vim.api.nvim_win_get_height(0),
-	}
-
-	vim.g.opencode_opts = {
-		server = {
-			start = function()
-				require("opencode.terminal").open(
-					"opencode --port",
-					opencode_window_opts
-				)
-			end,
-			toggle = function()
-				require("opencode.terminal").toggle(
-					"opencode --port",
-					opencode_window_opts
-				)
-			end,
-		},
-	}
-
 	vim.keymap.set(
 		{ "n", "x" },
 		"<leader>A",
@@ -1929,4 +1902,17 @@ _G.later(function()
 		function() vim.cmd("GripToggle") end,
 		{ desc = "Database toggle", noremap = false, silent = true }
 	)
+end)
+
+-- (tiny-cmdline) centered cmdline
+_G.later(function()
+	vim.pack.add({ "https://github.com/rachartier/tiny-cmdline.nvim" })
+	require("tiny-cmdline").setup({
+		on_reposition = require("tiny-cmdline").adapters.blink,
+		native_types = {},
+		position = {
+			x = "0%",
+			y = "0%",
+		},
+	})
 end)
