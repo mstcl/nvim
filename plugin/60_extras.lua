@@ -1378,7 +1378,7 @@ _G.later(function()
 		layout = {
 			placement = "edge",
 			close_on_select = false,
-			max_width = 28,
+			max_width = 35,
 			min_width = 28,
 		},
 	})
@@ -1722,13 +1722,13 @@ _G.now_if_args(function()
 						enabled = false,
 					},
 					permission = {
-						enabled = true,
+						enabled = false,
 					},
 					size = {
 						enabled = false,
 					},
 					link = {
-						enabled = true,
+						enabled = false,
 					},
 				},
 				icon = {
@@ -1736,11 +1736,12 @@ _G.now_if_args(function()
 					directory_expanded = _G.config.signs.open,
 					directory_empty = _G.config.signs.delimiter,
 				},
+				watcher = { enabled = true },
 				win = {
 					kind = "float",
 					kinds = {
 						split_left_most = {
-							width = "12%",
+							width = "14%",
 							win_opts = {
 								winfixwidth = true,
 							},
