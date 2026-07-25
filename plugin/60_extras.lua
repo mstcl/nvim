@@ -32,9 +32,6 @@ _G.now(function()
 	})
 end)
 
--- (mini.input) Mapping helper
--- _G.later(function() require("mini.input").setup() end)
-
 -- (mini.clue) Mapping helper
 _G.later(function()
 	require("mini.clue").setup({
@@ -1374,7 +1371,7 @@ _G.later(function()
 			"unsupported",
 		},
 		show_guides = true,
-		open_automatic = true,
+		open_automatic = false,
 		layout = {
 			placement = "edge",
 			close_on_select = false,
@@ -1394,6 +1391,13 @@ _G.later(function()
 		"n",
 		"{",
 		function() vim.cmd("AerialPrev") end,
+		{ desc = "Previous symbol", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>A",
+		function() vim.cmd("AerialToggle") end,
 		{ desc = "Previous symbol", noremap = false, silent = true }
 	)
 
@@ -1618,36 +1622,38 @@ end)
 
 -- (opencode.nvim) Opencode integration
 _G.later(function()
-	vim.pack.add({ "https://github.com/nickjvandyke/opencode.nvim" })
+	vim.pack.add({
+		"https://github.com/nickjvandyke/opencode.nvim",
+	})
+
+	---@type opencode.Opts
+	vim.g.opencode_opts = {
+		server = {
+			start = function()
+				vim.notify(
+					"No OpenCode server found. Start one manually with `opencode --port`.",
+					vim.log.levels.WARN
+				)
+			end,
+		},
+	}
 
 	vim.keymap.set(
 		{ "n", "x" },
-		"<leader>A",
-		function() require("opencode").ask("", { submit = true }) end,
-		{ desc = "Ask OpenCode (append)" }
+		"<leader>a",
+		function() require("opencode").ask("@this: ") end,
+		{ desc = "Ask OpenCode" }
 	)
 	vim.keymap.set(
 		{ "n", "x" },
-		"<leader>a",
-		function() require("opencode").ask("@this: ", { submit = true }) end,
-		{ desc = "Ask OpenCode (@this)" }
-	)
-	vim.keymap.set(
-		"n",
 		"<leader>o",
-		function() require("opencode").toggle() end,
-		{ desc = "OpenCode", noremap = false, silent = true }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>O",
 		function() require("opencode").select() end,
-		{ desc = "OpenCode actions", noremap = false, silent = true }
+		{ desc = "OpenCode" }
 	)
 	vim.keymap.set(
 		"n",
 		"<leader>I",
-		function() require("opencode").session.interrupt() end,
+		function() require("opencode").command("session.interrupt") end,
 		{ desc = "Interrupt OpenCode", noremap = false, silent = true }
 	)
 
@@ -1662,19 +1668,6 @@ _G.later(function()
 		"gA",
 		function() return require("opencode").operator("@this ") .. "_" end,
 		{ desc = "Add line to OpenCode", expr = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<S-C-u>",
-		function() require("opencode").command("session.half.page.up") end,
-		{ desc = "Scroll OpenCode up" }
-	)
-	vim.keymap.set(
-		"n",
-		"<S-C-d>",
-		function() require("opencode").command("session.half.page.down") end,
-		{ desc = "Scroll OpenCode down" }
 	)
 end)
 
@@ -1859,6 +1852,7 @@ _G.later(function()
 	require("matchparen").setup()
 end)
 
+-- (jupynvim) Jupyter notebook in nvim
 _G.now(function()
 	local plugin_dir = vim.fn.stdpath("data") .. "site/pack/core/opt/jupynvim/"
 	local manifest = plugin_dir .. "/core/Cargo.toml"
