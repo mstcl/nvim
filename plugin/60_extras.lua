@@ -1201,6 +1201,13 @@ _G.now_if_args(function()
 			end,
 		},
 	})
+
+	vim.keymap.set(
+		"n",
+		"<leader>F",
+		function() require("conform").format() end,
+		{ desc = "Format", noremap = false, silent = true }
+	)
 end)
 
 -- (nvim-highlight-colors) Highlight color blocks
