@@ -12,6 +12,7 @@ _G.now(function()
 		"https://github.com/rktjmp/lush.nvim",
 		"https://github.com/mstcl/tavern.nvim",
 		"https://github.com/mstcl/ivory.nvim",
+		"https://github.com/mstcl/orng.nvim",
 	})
 
 	_G.augroup("toggletheme", {

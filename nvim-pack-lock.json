@@ -67,7 +67,7 @@
       "src": "https://github.com/MagicDuck/grug-far.nvim"
     },
     "ivory.nvim": {
-      "rev": "4444ca587147852ec9121d76292d2dcaba1868a0",
+      "rev": "7eaecaa71889f49835f3e1f0e43af9462a72a694",
       "src": "https://github.com/mstcl/ivory.nvim"
     },
     "jupynvim": {
@@ -83,7 +83,7 @@
       "src": "https://github.com/monkoose/matchparen.nvim"
     },
     "mini.nvim": {
-      "rev": "8bf5c57bc82dd590932faa41bfde9fd6d40a9433",
+      "rev": "bcb4b2688b38f5c48ada025abe130d41840e11d5",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "neogit": {
@@ -130,6 +130,10 @@
       "rev": "41622312d5d8fb074699c1d5d96f089286191376",
       "src": "https://github.com/nickjvandyke/opencode.nvim"
     },
+    "orng.nvim": {
+      "rev": "5f3e980438588e28fcd520ba20cd46e59feab459",
+      "src": "https://github.com/mstcl/orng.nvim"
+    },
     "otter.nvim": {
       "rev": "f4a033d4e2bd86d4f09386a73d3861538601253d",
       "src": "https://github.com/jmbuhr/otter.nvim"
@@ -151,7 +155,7 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "tavern.nvim": {
-      "rev": "ec8bc04dd3ee804970a6f5bbc21d92c14e54ca1a",
+      "rev": "c0095ebab2d48661228119a7a5b4ae094950fdc6",
       "src": "https://github.com/mstcl/tavern.nvim"
     },
     "tiny-cmdline.nvim": {
