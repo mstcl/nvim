@@ -1758,13 +1758,6 @@ _G.now_if_args(function()
 		function() require("fyler").toggle({ kind = "split_left_most" }) end
 	)
 
-	vim.keymap.set(
-		"n",
-		"<leader>e",
-		function() vim.cmd("Fyler") end,
-		{ desc = "Explorer (fyler)", noremap = false, silent = true }
-	)
-
 	vim.api.nvim_create_user_command(
 		"FileTreeOpen",
 		function() require("fyler").open({ kind = "split_left_most" }) end,
@@ -1775,6 +1768,13 @@ _G.now_if_args(function()
 		"FileTreeClose",
 		function() require("fyler").close() end,
 		{}
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>T",
+		function() vim.cmd("Toggle tree") end,
+		{ desc = "Explorer (tree)", noremap = false, silent = true }
 	)
 end)
 
