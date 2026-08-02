@@ -1701,69 +1701,55 @@ _G.now_if_args(function()
 	vim.pack.add({ "https://github.com/A7Lavinraj/fyler.nvim" })
 
 	require("fyler").setup({
-		integrations = {
-			icons = "nvim_web_devicons",
+		win_opts = {
+			list = false,
+			relativenumber = true,
+			signcolumn = "no",
+			foldcolumn = "0",
+			statuscolumn = "",
+			colorcolumn = "",
+			winhighlight = "Normal:ColorColumn,CursorLine:CursorLine",
 		},
-		views = {
-			finder = {
-				columns_order = { "git", "permission", "link" },
-				mappings = {
-					["q"] = "CloseView",
-					["<CR>"] = "Select",
-					["<C-t>"] = "SelectTab",
-					["<C-S>v"] = "SelectVSplit",
-					["<C-S>s"] = "SelectSplit",
-					["-"] = "GotoParent",
-					["="] = "GotoCwd",
-					["."] = "GotoNode",
-					["#"] = "CollapseAll",
-					["<BS>"] = "CollapseNode",
-				},
-				close_on_select = false,
-				default_explorer = false,
-				delete_to_trash = true,
-				columns = {
-					git = {
-						enabled = true,
-					},
-					diagnostic = {
-						enabled = false,
-					},
-					permission = {
-						enabled = false,
-					},
-					size = {
-						enabled = false,
-					},
-					link = {
-						enabled = false,
-					},
-				},
-				icon = {
-					directory_collapsed = _G.config.signs.close,
-					directory_expanded = _G.config.signs.open,
-					directory_empty = _G.config.signs.delimiter,
-				},
-				watcher = { enabled = true },
-				win = {
-					kind = "float",
-					kinds = {
-						split_left_most = {
-							width = "14%",
-							win_opts = {
-								winfixwidth = true,
-							},
-						},
-					},
-					win_opts = {
-						list = false,
-						relativenumber = true,
-						signcolumn = "no",
-						winhighlight = "Normal:ColorColumn,CursorLine:CursorLine",
-					},
+		extensions = {
+			git = { enabled = true, inline = true },
+			trash = { enabled = true },
+			watcher = { enabled = true },
+		},
+		integrations = {
+			icon = "nvim_web_devicons",
+		},
+		kind = "split_left_most",
+		kind_presets = {
+			split_left_most = {
+				width = "14%",
+				win_opts = {
+					winfixwidth = true,
 				},
 			},
 		},
+		mappings = {
+			n = {
+				["<C-S>v"] = {
+					action = "select",
+					args = { vsplit = true },
+					desc = "Open in vertical split",
+				},
+				["<C-S>h"] = {
+					action = "select",
+					args = { split = true },
+					desc = "Open in horizontal split",
+				},
+				["<C-H>"] = {
+					action = "toggle_ui",
+					args = { "hidden_items" },
+					desc = "Toggle hidden files",
+				},
+				["<C-V>"] = { disabled = true },
+				["<C-S>"] = { disabled = true },
+				["g."] = { disabled = true },
+			},
+		},
+		ui = { indent_guides = true },
 	})
 
 	_G.register_toggle(
