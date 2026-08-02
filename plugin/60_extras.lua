@@ -1085,12 +1085,21 @@ _G.later(function()
 
 	require("lint").linters_by_ft = {
 		lua = { "selene" },
+		sh = { "shellcheck" },
+		bash = { "shellcheck" },
 		dockerfile = { "hadolint", "trivy" },
 		terraform = { "trivy", "terraform_validate" },
 		["yaml.ansible"] = { "ansible_lint" },
-		go = { "golangcilint" },
 		yaml = { "yamllint" },
 	}
+
+	_G.augroup("nvim-lint", {
+		{ "BufWritePost" },
+		{
+			desc = "lint file",
+			callback = function(args) require("lint").try_lint() end,
+		},
+	})
 end)
 
 -- (otter.nvim) LSP completion in code blocks
@@ -1122,18 +1131,13 @@ _G.now_if_args(function()
 		quiet = true,
 		default_format_opts = { lsp_format = "fallback" },
 		formatters_by_ft = {
-			typescript = { "biome" },
-			typescriptreact = { "biome" },
-			javascript = { "biome" },
-			javascriptreact = { "biome" },
 			html = { "biome" },
 			css = { "biome" },
 			scss = { "biome" },
-			lua = { "stylua", lsp_format = "prefer" },
+			lua = { "stylua" },
 			markdown = { "mdformat", "injected" },
 			quarto = { "mdformat", "injected" },
 			yaml = { "yamlfmt" },
-			graphql = { "biome" },
 			sh = { "shfmt" },
 			bash = { "shfmt" },
 			zsh = { "shfmt" },
@@ -1141,16 +1145,19 @@ _G.now_if_args(function()
 			terraform = { "terraform_fmt" },
 			hcl = { "hcl" },
 			python = { "ruff_format", "ruff_organize_imports", "ruff_fix" },
-			opa = { "opa_fmt" },
 			json = { "biome" },
 			jsonc = { "biome" },
-			sql = { "sqlfmt" },
-			c = { "clang-formatter" },
-			cpp = { "clang-formatter" },
 			["*"] = { "trim_whitespace" },
 		},
-		format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
+		format_on_save = { timeout_ms = 2000, lsp_format = "fallback" },
 		formatters = {
+			mdformat = {
+				prepend_args = function()
+					return {
+						"--number",
+					}
+				end,
+			},
 			injected = {
 				options = {
 					ignore_errors = true,
@@ -1465,6 +1472,7 @@ _G.later(function()
 				enabled = true,
 				if_many = true,
 			},
+			overwrite_events = { "DiagnosticChanged" },
 			use_icons_from_diagnostic = false,
 			override_open_float = true,
 			break_line = { enabled = true },

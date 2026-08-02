@@ -170,7 +170,6 @@ _G.config.lsp.servers = {
 	"bashls",
 	"cssls",
 	"ruff",
-	-- "pyrefly",
 	"ty",
 	"emmylua_ls",
 	"gopls",
@@ -179,8 +178,9 @@ _G.config.lsp.servers = {
 	"dockerls",
 	"tflint",
 	"tofu_ls",
-	"sqlls",
 	"clangd",
+	"golangci_lint_ls",
+	"biome",
 }
 
 ---LSP capabilities
