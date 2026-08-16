@@ -1899,16 +1899,3 @@ _G.later(function()
 		{ desc = "Database toggle", noremap = false, silent = true }
 	)
 end)
-
--- (tiny-cmdline) centered cmdline
-_G.later(function()
-	vim.pack.add({ "https://github.com/rachartier/tiny-cmdline.nvim" })
-	require("tiny-cmdline").setup({
-		on_reposition = require("tiny-cmdline").adapters.blink,
-		native_types = {},
-		position = {
-			x = "0%",
-			y = "0%",
-		},
-	})
-end)
