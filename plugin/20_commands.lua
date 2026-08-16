@@ -4,7 +4,7 @@
 -- While we can use Neogit for this it's a bit slow
 -- <leader>c -> YY whereas this is a single command
 vim.api.nvim_create_user_command("YankCommitHash", function()
-	local hash = vim.fn.system("git rev-parse HEAD")
+	local hash = vim.fn.system("git rev-parse HEAD"):gsub("%s+$", "")
 	vim.fn.setreg('"', hash)
 	vim.fn.setreg("+", hash)
 	vim.notify("Copied commit hash to clipboard", vim.log.levels.INFO)
@@ -23,11 +23,6 @@ vim.api.nvim_create_user_command(
 	function() vim.cmd("checkhealth vim.lsp") end,
 	{}
 )
-
--- Replaces the old explorer
-vim.api.nvim_create_user_command("E", "Oil", {})
-vim.api.nvim_create_user_command("Ex", "Oil", {})
-vim.api.nvim_create_user_command("Explore", "Oil", {})
 
 -- Clear screen with extra stuff
 vim.api.nvim_create_user_command("Clear", function()

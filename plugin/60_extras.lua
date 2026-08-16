@@ -397,13 +397,11 @@ _G.later(function()
 			cwd_header = true,
 		},
 		builtin = {
-			fzf_opts = { ["--input-border"] = "top" },
 			winopts = {
 				preview = {
-					border = "none",
 					layout = "vertical",
 					hidden = false,
-					vertical = "up:1",
+					vertical = "down:1",
 				},
 			},
 		},
@@ -464,6 +462,20 @@ _G.later(function()
 		"<leader>w",
 		function() vim.cmd("FzfLua grep_cword") end,
 		{ desc = "Word search", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>W",
+		function() vim.cmd("FzfLua lsp_live_workspace_symbols") end,
+		{ desc = "Workspace symbols", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>F",
+		function() vim.cmd("FzfLua files cwd=~/projects") end,
+		{ desc = "Files (all projects)", noremap = false, silent = true }
 	)
 
 	require("fzf-lua-frecency").setup({
@@ -1208,11 +1220,16 @@ _G.now_if_args(function()
 		},
 	})
 
-	vim.keymap.set(
-		"n",
-		"<leader>F",
+	vim.api.nvim_create_user_command(
+		"Format",
 		function() require("conform").format() end,
-		{ desc = "Format", noremap = false, silent = true }
+		{}
+	)
+
+	vim.api.nvim_create_user_command(
+		"F",
+		function() require("conform").format() end,
+		{}
 	)
 end)
 
@@ -1844,6 +1861,11 @@ _G.now_if_args(function()
 		skip_confirm_for_simple_edits = true,
 		prompt_save_on_select_new_entry = true,
 	})
+
+	-- Replaces the old explorer
+	vim.api.nvim_create_user_command("E", "Oil", {})
+	vim.api.nvim_create_user_command("Ex", "Oil", {})
+	vim.api.nvim_create_user_command("Explore", "Oil", {})
 end)
 
 -- (matchparen.nvim) Faster matchparen

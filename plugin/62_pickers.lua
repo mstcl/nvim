@@ -287,6 +287,53 @@ local zoxide_picker = function()
 	})
 end
 
+local env_picker = function()
+	local ok, fzf_lua = pcall(require, "fzf-lua")
+	if not ok then
+		vim.notify("fzf-lua not available", vim.log.levels.ERROR)
+		return
+	end
+
+	local envs = vim.fn.environ()
+	local names = vim.tbl_keys(envs)
+	table.sort(names)
+
+	local lines = {}
+	for _, name in ipairs(names) do
+		lines[#lines + 1] = string.format("%s\t%s", name, envs[name] or "")
+	end
+
+	fzf_lua.fzf_exec(lines, {
+		winopts = {
+			title = " Environment Variables ",
+			title_pos = "center",
+			width = 0.4,
+			preview = {
+				hidden = false,
+				layout = "vertical",
+				vertical = "down:1",
+			},
+		},
+		fzf_opts = {
+			["--with-nth"] = "1",
+			["--nth"] = "1",
+			["--delimiter"] = "\t",
+			["--accept-nth"] = "2",
+			["--no-multi"] = "",
+		},
+		preview = "echo {2}",
+		actions = {
+			["default"] = function(selected)
+				if not selected or #selected == 0 then return end
+				local parts = vim.split(selected[1], "\t")
+				local value = parts[2] or selected[1]
+				vim.fn.setreg("+", value)
+				vim.notify("Yanked: " .. value, vim.log.levels.INFO)
+			end,
+		},
+	})
+end
+
 vim.keymap.set(
 	"n",
 	"<leader>z",
@@ -299,4 +346,11 @@ vim.keymap.set(
 	"<leader>x",
 	function() context_picker() end,
 	{ desc = "Context picker", noremap = false, silent = true }
+)
+
+vim.keymap.set(
+	{ "n", "v" },
+	"<leader>k",
+	function() env_picker() end,
+	{ desc = "Env variables", noremap = false, silent = true }
 )
