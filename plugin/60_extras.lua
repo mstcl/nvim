@@ -911,6 +911,32 @@ _G.later(function()
 			augend.semver.alias.semver,
 			augend.constant.alias.bool,
 			augend.date.alias["%Y/%m/%d"],
+
+			-- and / or
+			augend.constant.new({
+				elements = { "and", "or" },
+				word = true,
+				cyclic = true,
+			}),
+			augend.constant.new({
+				elements = { "&&", "||" },
+				word = true,
+				cyclic = true,
+			}),
+
+			-- True / False
+			augend.constant.new({
+				elements = { "True", "False" },
+				word = true,
+				cyclic = true,
+			}),
+
+			-- like / not like
+			augend.constant.new({
+				elements = { "like", "not like" },
+				word = true,
+				cyclic = true,
+			}),
 		},
 	})
 
