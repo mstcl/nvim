@@ -912,9 +912,29 @@ _G.later(function()
 			cyclic = true,
 		}),
 
-		-- is / is not
+		-- true / false
 		augend.constant.new({
-			elements = { "is", "is not" },
+			elements = { "TRUE", "FALSE" },
+			word = true,
+			cyclic = true,
+		}),
+
+		-- join types
+		augend.constant.new({
+			elements = { "inner join", "left join", "right join", "full join" },
+			cyclic = true,
+		}),
+
+		-- asc / desc
+		augend.constant.new({
+			elements = { "asc", "desc" },
+			word = true,
+			cyclic = true,
+		}),
+
+		-- null / not null
+		augend.constant.new({
+			elements = { "null", "not null" },
 			word = true,
 			cyclic = true,
 		}),
@@ -922,7 +942,7 @@ _G.later(function()
 		-- = / <>
 		augend.constant.new({
 			elements = { "=", "<>" },
-			word = true,
+			word = false,
 			cyclic = true,
 		}),
 	}
@@ -930,19 +950,47 @@ _G.later(function()
 	local default_augends = {
 		augend.integer.alias.decimal,
 		augend.integer.alias.hex,
+		augend.integer.alias.binary,
+		augend.integer.alias.octal,
 		augend.semver.alias.semver,
 		augend.constant.alias.bool,
+		augend.constant.alias.Bool,
 		augend.date.alias["%Y/%m/%d"],
+		augend.date.alias["%Y-%m-%d"],
+		augend.date.alias["%H:%M:%S"],
+		augend.constant.alias.en_weekday_full,
+		augend.constant.alias.en_weekday,
 
 		-- and / or
 		augend.constant.new({
-			elements = { "and", "or" },
-			word = true,
+			elements = { "==", "!=" },
+			word = false,
 			cyclic = true,
 		}),
 		augend.constant.new({
 			elements = { "&&", "||" },
-			word = true,
+			word = false,
+			cyclic = true,
+		}),
+	}
+
+	local shell_augents = {
+		-- numeric test operators (the big one)
+		augend.constant.new({
+			elements = { "-eq", "-ne", "-gt", "-lt" },
+			word = false,
+			cyclic = true,
+		}),
+		-- string is-non-empty / is-empty
+		augend.constant.new({
+			elements = { "-n", "-z" },
+			word = false,
+			cyclic = true,
+		}),
+		-- [[ ]] / [ ] comparisons
+		augend.constant.new({
+			elements = { "==", "!=" },
+			word = false,
 			cyclic = true,
 		}),
 	}
@@ -958,12 +1006,67 @@ _G.later(function()
 	})
 
 	require("dial.config").augends:on_filetype({
+		bash = extend_augends(default_augends, shell_augents),
+		zsh = extend_augends(default_augends, shell_augents),
 		sql = extend_augends(default_augends, sql_augents),
 		["jinja.sql"] = extend_augends(default_augends, sql_augents),
 		python = extend_augends(default_augends, {
 			augend.constant.new({
-				elements = { "True", "False" },
+				elements = { "==", "!=" },
+				word = false,
+				cyclic = true,
+			}),
+		}),
+		lua = extend_augends(default_augends, {
+			augend.constant.new({
+				elements = { "==", "~=" },
+				word = false,
+				cyclic = true,
+			}),
+		}),
+		go = extend_augends(default_augends, {
+			augend.constant.new({
+				elements = { "==", "!=" },
+				word = false,
+				cyclic = true,
+			}),
+			augend.constant.new({
+				elements = { "=", ":=" },
+				word = false,
+				cyclic = true,
+			}),
+		}),
+		markdown = extend_augends(default_augends, {
+			augend.constant.new({
+				elements = { "#", "##", "###" },
+				word = false,
+				cyclic = true,
+			}),
+		}),
+		yaml = extend_augends(default_augends, {
+			augend.constant.new({
+				elements = { "yes", "no" },
 				word = true,
+				cyclic = true,
+			}),
+		}),
+		cpp = extend_augends(default_augends, {
+			augend.constant.new({
+				elements = { "==", "!=" },
+				word = false,
+				cyclic = true,
+			}),
+		}),
+		terraform = extend_augends(default_augends, {
+			augend.constant.new({
+				elements = { "==", "!=" },
+				word = false,
+				cyclic = true,
+			}),
+			-- version constraint operators
+			augend.constant.new({
+				elements = { "~>", ">=", "<=", "=", "!=" },
+				word = false,
 				cyclic = true,
 			}),
 		}),
