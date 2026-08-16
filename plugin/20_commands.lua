@@ -41,7 +41,7 @@ local function split_new_terminal()
 	if vim.api.nvim_win_get_width(0) >= 350 then
 		vim.cmd("vsplit | winc L | vertical resize 150 | term")
 	else
-		vim.cmd("split | winc J | resize 10 | term")
+		vim.cmd("split | winc J | resize 15 | term")
 	end
 end
 
