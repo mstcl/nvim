@@ -16,14 +16,29 @@ _G.augroup("formatoptions", {
 	},
 })
 
-_G.augroup("notebook", {
-	{ "BufRead", "BufEnter", "BufReadPre" },
+_G.augroup("clean", {
+	{ "BufRead", "BufEnter", "BufReadPre", "FileType" },
 	{
-		desc = "disable some stuff for editing jupyter notebooks",
-		pattern = { "*.ipynb" },
+		desc = "disable some buffer noise for special buftypes/filetypes",
+		pattern = { "*" },
 		callback = function()
-			vim.wo.colorcolumn = ""
-			vim.opt_local.list = false
+			local special_buftype = {
+				nofile = true,
+				help = true,
+				quickfix = true,
+				prompt = true,
+				acwrite = true,
+			}
+			local special_filetype = {
+				ipynb = true,
+			}
+			if
+				special_buftype[vim.bo.buftype]
+				or special_filetype[vim.bo.filetype]
+			then
+				vim.wo.colorcolumn = ""
+				vim.opt_local.list = false
+			end
 		end,
 	},
 })
