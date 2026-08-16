@@ -904,40 +904,69 @@ _G.later(function()
 
 	local augend = require("dial.augend")
 
+	local sql_augents = {
+		-- like / not like
+		augend.constant.new({
+			elements = { "like", "not like" },
+			word = true,
+			cyclic = true,
+		}),
+
+		-- is / is not
+		augend.constant.new({
+			elements = { "is", "is not" },
+			word = true,
+			cyclic = true,
+		}),
+
+		-- = / <>
+		augend.constant.new({
+			elements = { "=", "<>" },
+			word = true,
+			cyclic = true,
+		}),
+	}
+
+	local default_augends = {
+		augend.integer.alias.decimal,
+		augend.integer.alias.hex,
+		augend.semver.alias.semver,
+		augend.constant.alias.bool,
+		augend.date.alias["%Y/%m/%d"],
+
+		-- and / or
+		augend.constant.new({
+			elements = { "and", "or" },
+			word = true,
+			cyclic = true,
+		}),
+		augend.constant.new({
+			elements = { "&&", "||" },
+			word = true,
+			cyclic = true,
+		}),
+	}
+
+	local function extend_augends(defaults, additions)
+		local merged = vim.deepcopy(defaults)
+		vim.list_extend(merged, additions)
+		return merged
+	end
+
 	require("dial.config").augends:register_group({
-		default = {
-			augend.integer.alias.decimal,
-			augend.integer.alias.hex,
-			augend.semver.alias.semver,
-			augend.constant.alias.bool,
-			augend.date.alias["%Y/%m/%d"],
+		default = default_augends,
+	})
 
-			-- and / or
-			augend.constant.new({
-				elements = { "and", "or" },
-				word = true,
-				cyclic = true,
-			}),
-			augend.constant.new({
-				elements = { "&&", "||" },
-				word = true,
-				cyclic = true,
-			}),
-
-			-- True / False
+	require("dial.config").augends:on_filetype({
+		sql = extend_augends(default_augends, sql_augents),
+		["jinja.sql"] = extend_augends(default_augends, sql_augents),
+		python = extend_augends(default_augends, {
 			augend.constant.new({
 				elements = { "True", "False" },
 				word = true,
 				cyclic = true,
 			}),
-
-			-- like / not like
-			augend.constant.new({
-				elements = { "like", "not like" },
-				word = true,
-				cyclic = true,
-			}),
-		},
+		}),
 	})
 
 	vim.keymap.set(
