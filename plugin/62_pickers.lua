@@ -350,7 +350,7 @@ vim.keymap.set(
 
 vim.keymap.set(
 	{ "n", "v" },
-	"<leader>k",
+	"<leader>v",
 	function() env_picker() end,
-	{ desc = "Env variables", noremap = false, silent = true }
+	{ desc = "Environment variables", noremap = false, silent = true }
 )

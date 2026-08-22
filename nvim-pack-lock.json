@@ -58,6 +58,10 @@
       "rev": "2fcc56556281de8ee871a5f3beb9db7ab747ef32",
       "src": "https://github.com/Zeioth/garbage-day.nvim"
     },
+    "gitlinker.nvim": {
+      "rev": "a1b74070bbd5e50128190c85b09f1431ea5fbd83",
+      "src": "https://github.com/linrongbin16/gitlinker.nvim"
+    },
     "gitsigns.nvim": {
       "rev": "31d6fb2d618bca1482b9f274751ead5f03461408",
       "src": "https://github.com/lewis6991/gitsigns.nvim"

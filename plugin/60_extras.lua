@@ -745,13 +745,6 @@ _G.later(function()
 		function() vim.cmd("NeogitCommit") end,
 		{ desc = "Commit (latest)", noremap = false, silent = true }
 	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>L",
-		function() vim.cmd("NeogitLogCurrent") end,
-		{ desc = "Log (current ref)", noremap = false, silent = true }
-	)
 end)
 
 -- (blink.indent) Indent lines
@@ -802,6 +795,24 @@ _G.later(function()
 		function()
 			require("blink.indent").enable(not require("blink.indent").is_enabled())
 		end
+	)
+end)
+
+-- (gitlinker.nvim) Get git remote url for code position
+_G.later(function()
+	vim.pack.add({ "https://github.com/linrongbin16/gitlinker.nvim" })
+
+	require("gitlinker").setup()
+
+	vim.keymap.set(
+		{ "n", "v" },
+		"<leader>k",
+		function()
+			require("gitlinker").link({
+				action = require("gitlinker.actions").system,
+			})
+		end,
+		{ silent = true, noremap = true, desc = "GitLink" }
 	)
 end)
 
