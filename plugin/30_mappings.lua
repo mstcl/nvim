@@ -87,3 +87,41 @@ vim.keymap.set(
 	function() vim.cmd("YankCommitHash") end,
 	{ desc = "Yank commit hash", noremap = false, silent = true }
 )
+
+-- Go to special files
+local function open_project_file(names)
+	local file = vim.fs.find(names, {
+		upward = true,
+		path = vim.api.nvim_buf_get_name(0),
+	})[1]
+
+	if file then vim.cmd.edit(vim.fn.fnameescape(file)) end
+end
+
+vim.keymap.set(
+	"n",
+	"<leader>up",
+	function() open_project_file("pyproject.toml") end,
+	{ desc = "pyproject.toml" }
+)
+
+vim.keymap.set(
+	"n",
+	"<leader>ug",
+	function() open_project_file(".gitignore") end,
+	{ desc = ".gitignore" }
+)
+
+vim.keymap.set(
+	"n",
+	"<leader>ur",
+	function() open_project_file("README.md") end,
+	{ desc = "README.md" }
+)
+
+vim.keymap.set(
+	"n",
+	"<leader>ud",
+	function() open_project_file({ "Dockerfile", "Containerfile" }) end,
+	{ desc = "Dockerfile" }
+)

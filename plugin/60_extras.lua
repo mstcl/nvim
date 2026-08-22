@@ -89,6 +89,7 @@ _G.later(function()
 			require("mini.clue").gen_clues.z(),
 			require("mini.clue").gen_clues.windows({ submode_resize = true }),
 
+			{ mode = "n", keys = "<leader>u", desc = "Jump to special files [+]" },
 			{ mode = "n", keys = "<leader>c", desc = "Conflicts [+]" },
 			{ mode = "n", keys = "<leader>j", desc = "Jupyter remote [+]" },
 			{ mode = "n", keys = "<leader>n", desc = "Jupyter [+]" },
@@ -2068,6 +2069,11 @@ _G.later(function()
 			table_picker = "go",
 			table_picker_alt = false, -- table picker (alternate)
 			qpad_ai = false,
+			tab_4 = false, -- disable the `4` mapping
+			er_diagram = false, -- disable the `gG` mapping and palette entry
+			tab_5 = false, -- `5`, per-column aggregate statistics
+			grid_col_stats = false, -- `gS`, statistics for the column under cursor
+			grid_profile = false, -- `gR`, table profile/distribution queries
 		},
 		completion = false,
 	})
