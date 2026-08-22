@@ -173,6 +173,7 @@ _G.config.lsp.servers = {
 	"ty",
 	"emmylua_ls",
 	"gopls",
+	"rust_analyzer",
 	"gitlab_ci_ls",
 	"yamlls",
 	"dockerls",

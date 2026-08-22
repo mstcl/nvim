@@ -1293,6 +1293,7 @@ _G.later(function()
 		terraform = { "trivy", "terraform_validate" },
 		["yaml.ansible"] = { "ansible_lint" },
 		yaml = { "yamllint" },
+		rust = { "clippy" },
 	}
 
 	_G.augroup("nvim-lint", {
@@ -1349,6 +1350,7 @@ _G.now_if_args(function()
 			python = { "ruff_format", "ruff_organize_imports", "ruff_fix" },
 			json = { "biome" },
 			jsonc = { "biome" },
+			rust = { "rustfmt" },
 			["*"] = { "trim_whitespace" },
 		},
 		format_on_save = { timeout_ms = 2000, lsp_format = "fallback" },

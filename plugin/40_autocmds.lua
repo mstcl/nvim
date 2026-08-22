@@ -87,6 +87,7 @@ _G.augroup("root", {
 				"pyproject.toml",
 				"README.md",
 				"go.mod",
+				"Cargo.toml",
 			})
 			if root and root ~= "." then pcall(vim.cmd.tcd, root) end
 		end,
