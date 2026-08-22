@@ -1354,31 +1354,6 @@ _G.now_if_args(function()
 		},
 	})
 
-	_G.augroup("conform", {
-		"LspAttach",
-		{
-			desc = "on attach for LSP for conform",
-			callback = function(args)
-				local bufnr = args.buf
-				local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-
-				if client.server_capabilities.documentFormattingProvider then
-					vim.keymap.set(
-						{ "n", "v" },
-						"<leader>F",
-						require("conform").format,
-						{
-							desc = "Format code",
-							noremap = true,
-							silent = true,
-							buffer = bufnr,
-						}
-					)
-				end
-			end,
-		},
-	})
-
 	vim.api.nvim_create_user_command(
 		"Format",
 		function() require("conform").format() end,
