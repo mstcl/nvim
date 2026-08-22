@@ -1,0 +1,1 @@
+/home/lckdscl/.local/share/nvim/site/pack/core/opt/arborist.nvim/queries/sql/highlights.scm
