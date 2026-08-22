@@ -582,6 +582,13 @@ _G.later(function()
 				buffer = bufnr,
 			})
 
+			vim.keymap.set("n", "<leader>X", gitsigns.reset_hunk, {
+				desc = "Reset hunk",
+				noremap = false,
+				silent = true,
+				buffer = bufnr,
+			})
+
 			vim.keymap.set(
 				"v",
 				"<leader>S",
@@ -604,6 +611,20 @@ _G.later(function()
 				end,
 				{
 					desc = "Unstage hunk",
+					noremap = false,
+					silent = true,
+					buffer = bufnr,
+				}
+			)
+
+			vim.keymap.set(
+				"v",
+				"<leader>X",
+				function()
+					gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+				end,
+				{
+					desc = "Reset hunk",
 					noremap = false,
 					silent = true,
 					buffer = bufnr,
@@ -1562,7 +1583,7 @@ _G.later(function()
 		"n",
 		"<leader>A",
 		function() vim.cmd("AerialToggle") end,
-		{ desc = "Previous symbol", noremap = false, silent = true }
+		{ desc = "Aerial symbols", noremap = false, silent = true }
 	)
 
 	_G.register_toggle(
@@ -1817,7 +1838,7 @@ _G.later(function()
 	)
 	vim.keymap.set(
 		"n",
-		"<leader>I",
+		"<leader>i",
 		function() require("opencode").command("session.interrupt") end,
 		{ desc = "Interrupt OpenCode", noremap = false, silent = true }
 	)
@@ -1922,7 +1943,7 @@ _G.now_if_args(function()
 
 	vim.keymap.set(
 		"n",
-		"<leader>T",
+		"<leader>E",
 		function() vim.cmd("Toggle tree") end,
 		{ desc = "Explorer (tree)", noremap = false, silent = true }
 	)
@@ -2000,6 +2021,13 @@ _G.now_if_args(function()
 	vim.api.nvim_create_user_command("E", "Oil", {})
 	vim.api.nvim_create_user_command("Ex", "Oil", {})
 	vim.api.nvim_create_user_command("Explore", "Oil", {})
+
+	vim.keymap.set(
+		"n",
+		"<leader>e",
+		function() vim.cmd("Oil") end,
+		{ desc = "Explorer (oil)", noremap = false, silent = true }
+	)
 end)
 
 -- (matchparen.nvim) Faster matchparen
@@ -2026,6 +2054,7 @@ _G.now(function()
 		log_level = "info",
 		image_renderer = "chafa",
 		explorer_keys = { "<leader>je" }, -- remote file tree
+		explorer_cwd_keys = { "<leader>jE" },
 		terminal_keys = { "<leader>jt" }, -- toggle a remote PTY
 		pick_keys = {
 			files = { "<leader>jf" },

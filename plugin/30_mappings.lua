@@ -74,7 +74,7 @@ vim.keymap.set(
 -- Used relatively often so it's handy to have a keymap
 vim.keymap.set(
 	"n",
-	"<leader>N",
+	"<leader>m",
 	function() vim.cmd("Toggle relative_number") end,
 	{ desc = "Number relative toggle", noremap = false, silent = true }
 )
