@@ -19,3 +19,19 @@
   arguments: (argument_list
     (string (string_content) @injection.content)
     (#set! injection.language "sql")))
+
+(call
+  function: (attribute
+    attribute: (identifier) @method
+    (#lua-match? @method "^query"))
+  arguments: (argument_list
+    (string (string_content) @injection.content)
+    (#set! injection.language "sql")))
+
+(call
+  function: (attribute
+    attribute: (identifier) @method
+    (#lua-match? @method "^command"))
+  arguments: (argument_list
+    (string (string_content) @injection.content)
+    (#set! injection.language "sql")))
