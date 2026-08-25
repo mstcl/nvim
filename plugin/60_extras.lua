@@ -33,6 +33,17 @@ _G.now(function()
 	})
 end)
 
+-- (mini.jump) clever-f in lua
+_G.later(function()
+	require("mini.jump").setup({
+		delay = {
+			highlight = 80,
+			idle_stop = 5000,
+		},
+	})
+	vim.api.nvim_set_hl(0, "MiniJump", { link = "MatchParen" })
+end)
+
 -- (mini.clue) Mapping helper
 _G.later(function()
 	require("mini.clue").setup({
