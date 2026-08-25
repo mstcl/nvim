@@ -44,7 +44,7 @@ local function split_existing_terminal()
 	if vim.api.nvim_win_get_width(0) >= 350 then
 		vim.cmd("vert sb " .. vim.t.t_buf .. "| winc L | vertical resize 150")
 	else
-		vim.cmd("sb" .. vim.t.t_buf .. "| winc J | resize 10")
+		vim.cmd("sb" .. vim.t.t_buf .. "| winc J | resize 20")
 	end
 end
 
