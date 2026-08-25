@@ -680,23 +680,16 @@ _G.later(function()
 				tree = "https://codeberg.org/${owner}/${repository}/src/branch/${branch_name}",
 			},
 		},
-		treesitter_diff_highlight = true,
-		word_diff_highlight = true,
-		disable_insert_on_commit = false,
 		disable_context_highlighting = true,
-		disable_line_numbers = true,
-		disable_relative_line_numbers = true,
-		disable_signs = false,
 		disable_hint = true,
 		graph_style = "unicode",
-		fetch_after_checkout = true,
 		auto_show_console_on = "error",
 		console_timeout = 6000,
 		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
-		commit_view = { kind = "replace" },
-		commit_editor = { kind = "vsplit", staged_diff_split_kind = "vsplit" },
+		commit_editor = { kind = "vsplit" },
 		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
-		integrations = { fzf_lua = true, diffview = false },
+		integrations = { fzf_lua = true, codediff = true },
+		diff_viewer = "codediff",
 		signs = {
 			hunk = { " ", " " },
 			item = { _G.config.signs.close, _G.config.signs.open },
@@ -735,7 +728,7 @@ _G.later(function()
 	vim.keymap.set(
 		"n",
 		"<leader>g",
-		function() vim.cmd("Neogit kind=tab") end,
+		function() vim.cmd("Neogit") end,
 		{ desc = "Git", noremap = false, silent = true }
 	)
 
