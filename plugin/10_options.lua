@@ -206,6 +206,20 @@ vim.opt.listchars = {
 
 ---@diagnostic disable-next-line: param-type-not-match
 -- Configure builtin diagnostics
+local lsp_status_signs = {
+	[vim.diagnostic.severity.ERROR] = _G.config.signs.lsp.Error,
+	[vim.diagnostic.severity.WARN] = _G.config.signs.lsp.Warn,
+	[vim.diagnostic.severity.INFO] = _G.config.signs.lsp.Info,
+	[vim.diagnostic.severity.HINT] = _G.config.signs.lsp.Hint,
+}
+
+local lsp_status_hl_map = {
+	[vim.diagnostic.severity.ERROR] = "DiagnosticError",
+	[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
+	[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
+	[vim.diagnostic.severity.HINT] = "DiagnosticHint",
+}
+
 vim.diagnostic.config({
 	---@type vim.diagnostic.Opts
 	virtual_lines = false,
@@ -222,20 +236,31 @@ vim.diagnostic.config({
 			[vim.diagnostic.severity.HINT] = "",
 		},
 		numhl = {
-			[vim.diagnostic.severity.ERROR] = "DiagnosticError",
-			[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
-			[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
-			[vim.diagnostic.severity.HINT] = "DiagnosticHint",
+			[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+			[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+			[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+			[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
 		},
 	},
 
 	status = {
-		text = {
-			[vim.diagnostic.severity.ERROR] = _G.config.signs.lsp.Error,
-			[vim.diagnostic.severity.WARN] = _G.config.signs.lsp.Warn,
-			[vim.diagnostic.severity.INFO] = _G.config.signs.lsp.Info,
-			[vim.diagnostic.severity.HINT] = _G.config.signs.lsp.Hint,
-		},
+		format = function(severity_counts)
+			local items = {}
+			for severity in ipairs(vim.diagnostic.severity) do
+				local count = severity_counts[severity] or 0
+				if count ~= 0 then
+					table.insert(
+						items,
+						("%%#%s#%s:%s"):format(
+							lsp_status_hl_map[severity],
+							lsp_status_signs[severity],
+							count
+						)
+					)
+				end
+			end
+			return table.concat(items, " ")
+		end,
 	},
 
 	float = {

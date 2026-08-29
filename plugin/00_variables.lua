@@ -27,10 +27,10 @@ _G.config.signs = {
 	file = "@",
 
 	lsp = {
-		Error = "*",
-		Warn = "!",
-		Hint = "?",
-		Info = "i",
+		Error = "E",
+		Warn = "W",
+		Hint = "H",
+		Info = "I",
 	},
 
 	spinner = {

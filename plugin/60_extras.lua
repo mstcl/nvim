@@ -1479,13 +1479,6 @@ _G.later(function()
 	require("quicker").setup({
 		---@module "quicker"
 		---@type quicker.SetupOptions
-		type_icons = {
-			E = _G.config.signs.lsp.Error,
-			W = _G.config.signs.lsp.Warn,
-			I = _G.config.signs.lsp.Info,
-			N = _G.config.signs.lsp.Info,
-			H = _G.config.signs.lsp.Hint,
-		},
 		borders = {
 			vert = " ┆ ",
 			strong_header = "─",

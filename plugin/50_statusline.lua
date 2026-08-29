@@ -267,21 +267,53 @@ _G.statusline.components.git_branch = function()
 	-- Apply highlighting to branch part only
 	local highlighted_branch = set_hl(branch_part, branch_hl, false)
 
-	-- Wrap ahead/behind in brackets with StatusLineAlt if present
+	-- Wrap ahead/behind in brackets with MoreMsg if present
 	local result = highlighted_branch
 	if ahead_behind ~= "" then
-		local bracket_open = set_hl("[", "StatusLineAlt", false)
-		local bracket_close = set_hl("]", "StatusLineAlt", false)
-		local highlighted_ab = set_hl(ahead_behind, "StatusLineAlt", false)
+		local highlighted_ab = set_hl(ahead_behind, "StatusLineNC", false)
 		result = highlighted_branch
 			.. " "
-			.. bracket_open
+			.. _G.statusline.components.open_bracket()
 			.. highlighted_ab
-			.. bracket_close
+			.. _G.statusline.components.git_diffs()
+			.. _G.statusline.components.close_bracket()
 	end
 
-	local git_icon = set_hl(_G.config.signs.branch, "StatusLineAlt")
+	local git_icon = set_hl(_G.config.signs.branch, "MoreMsg")
 	return git_icon .. result
+end
+
+---[COMPONENT]
+---Get git diffs for current buffer with adding and brackets added
+---@return string git_diffs
+_G.statusline.components.git_diffs = function()
+	if is_special_buf() then return "" end
+
+	---@diagnostic disable-next-line: undefined-field
+	local diffs = vim.b.gitsigns_status_dict
+
+	if diffs ~= nil then
+		if diffs.added == 0 and diffs.removed == 0 and diffs.changed == 0 then
+			return ""
+		end
+
+		local items = {}
+		if diffs.added ~= 0 then
+			table.insert(items, set_hl("+" .. tostring(diffs.added), "MoreMsg"))
+		end
+
+		if diffs.changed ~= 0 then
+			table.insert(items, set_hl("~" .. tostring(diffs.changed), "MoreMsg"))
+		end
+
+		if diffs.changed ~= 0 then
+			table.insert(items, set_hl("-" .. tostring(diffs.removed), "MoreMsg"))
+		end
+
+		return " " .. table.concat(items, " ")
+	end
+
+	return ""
 end
 
 ---[COMPONENT]
@@ -303,14 +335,12 @@ end
 _G.statusline.components.lsp_diagnostic = function()
 	if is_special_buf() then return "" end
 
-	local icon = set_hl(_G.config.signs.diagnostics, "StatusLineAlt")
-	local status = vim.diagnostic.status() == "" and set_hl("ok", "StatusLineNC")
-		or vim.diagnostic.status()
+	local status = vim.diagnostic.status()
+	if status == "" then return "" end
+
 	return _G.statusline.components.open_bracket()
-		.. icon
 		.. status
 		.. _G.statusline.components.close_bracket()
-		.. _G.statusline.components.padding()
 end
 
 ---[COMPONENT]
@@ -321,54 +351,16 @@ _G.statusline.components.cwd = function()
 end
 
 ---[COMPONENT]
----Get git diffs for current buffer with adding and brackets added
----@return string git_diffs
-_G.statusline.components.git_diffs = function()
-	if is_special_buf() then return "" end
-
-	---@diagnostic disable-next-line: undefined-field
-	local diffs = vim.b.gitsigns_status_dict
-	local git_icon = set_hl(_G.config.signs.diff, "StatusLineAlt")
-
-	if diffs ~= nil then
-		local added = diffs.added or 0
-		local changed = diffs.changed or 0
-		local removed = diffs.removed or 0
-		if added == 0 and removed == 0 and changed == 0 then
-			return _G.statusline.components.open_bracket()
-				.. git_icon
-				.. set_hl("clean", "StatusLineNC")
-				.. _G.statusline.components.close_bracket()
-				.. _G.statusline.components.padding()
-		end
-
-		return _G.statusline.components.open_bracket()
-			.. git_icon
-			.. string.format(
-				"%s%s%s",
-				set_hl("+" .. tostring(added), "GitSignsAdd"),
-				set_hl("~" .. tostring(changed), "GitSignsChange"),
-				set_hl("-" .. tostring(removed), "GitSignsDelete")
-			)
-			.. _G.statusline.components.close_bracket()
-			.. _G.statusline.components.padding()
-	end
-
-	return ""
-end
-
----[COMPONENT]
 ---Get file path with root
 ---@return string filepath
 _G.statusline.components.filepath = function()
 	local ft = vim.bo.filetype
 	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
-	local prefix = set_hl(_G.config.signs.file .. " ", "StatusLineAlt")
+	local prefix = set_hl(_G.config.signs.file .. " ", "MoreMsg")
 
 	-- show filepath for oil first
 	if vim.tbl_contains({ "oil", "fyler_finder" }, ft) then
-		return " "
-			.. prefix
+		return prefix
 			.. set_hl(string.format("%s ", string.sub(fpath, 7)), "StatusLineNC")
 	end
 
@@ -378,7 +370,7 @@ _G.statusline.components.filepath = function()
 	local secondary = ""
 
 	if fpath ~= "." then secondary = string.format("/%s", fpath) end
-	secondary = set_hl(secondary, "StatusLineAlt")
+	secondary = set_hl(secondary, "MoreMsg")
 
 	return prefix .. root .. secondary
 end
@@ -387,7 +379,7 @@ end
 ---Get filename
 ---@return string filename
 _G.statusline.components.filename = function()
-	if is_special_buf() then return "" end
+	if is_special_buf() and vim.bo.buftype ~= "help" then return "" end
 
 	local fname = vim.fn.expand("%:t")
 	return set_hl(fname, "StatusLineBold")
@@ -403,7 +395,7 @@ _G.statusline.components.filetype = function()
 	local s = ""
 	local padding = ""
 	if bt == "acwrite" then
-		padding = " " .. set_hl(_G.config.signs.delimiter, "StatusLineAlt") .. " "
+		padding = " " .. set_hl(_G.config.signs.delimiter, "MoreMsg") .. " "
 	end
 
 	-- priority important here
@@ -419,13 +411,15 @@ _G.statusline.components.filetype = function()
 	-- finally fallback to filetype again
 	if s == "" then s = ft end
 
-	local icon, highlight, _ = require("mini.icons").get("filetype", ft)
+	local icon, highlight, is_default = require("mini.icons").get("filetype", ft)
+	if is_default then
+		icon = ""
+	else
+		icon = set_hl(icon, highlight) .. " "
+	end
 
 	if _G.big(vim.fn.expand("%")) then s = "BIG " end
-	return padding
-		.. set_hl(icon, highlight)
-		.. " "
-		.. set_hl(s, "StatusLineModeInv")
+	return padding .. icon .. set_hl(s, "StatusLineModeInv") .. " "
 end
 
 ---[COMPONENT]
@@ -448,13 +442,17 @@ _G.statusline.components.search = function()
 		local ok, sinfo = pcall(vim.fn.searchcount, { maxcount = 0 })
 		if not ok or not sinfo or sinfo.total == nil then return "" end
 		local search_stat = sinfo.incomplete > 0 and "[?/?]"
-			or sinfo.total > 0 and set_hl(sinfo.current, "StatusLineAccent") .. set_hl(
-				" out of ",
-				"StatusLineAlt"
-			) .. set_hl(sinfo.total, "StatusLineAccent")
+			or sinfo.total > 0 and set_hl(sinfo.current, "StatuslineNC") .. set_hl(
+				"/",
+				"MoreMsg"
+			) .. set_hl(sinfo.total, "StatusLineNC")
 			or ""
 
-		if search_stat ~= "" then return search_stat end
+		if search_stat ~= "" then
+			return _G.statusline.components.open_bracket()
+				.. search_stat
+				.. _G.statusline.components.close_bracket()
+		end
 	end
 	return ""
 end
@@ -469,7 +467,10 @@ _G.statusline.components.macro = function()
 	if recording_register == "" then
 		return ""
 	else
-		return set_hl(" ● REC [" .. recording_register .. "] ", "DiagnosticError")
+		return set_hl(
+			" ● REC [" .. recording_register .. "] ",
+			"DiagnosticSignError"
+		) .. " "
 	end
 end
 
@@ -481,7 +482,9 @@ _G.statusline.components.fformat = function()
 
 	local ff = vim.bo.fileformat
 	if ff == "unix" or ff == "" then return "" end
-	return set_hl("[" .. ff .. "]", "StatusLineYellow")
+	return _G.statusline.components.open_bracket()
+		.. set_hl(ff, "StatusLineNC")
+		.. _G.statusline.components.close_bracket()
 end
 
 ---[COMPONENT]
@@ -492,7 +495,9 @@ _G.statusline.components.ffenc = function()
 
 	local fe = vim.bo.fileencoding
 	if fe == "utf-8" or fe == "" then return "" end
-	return set_hl("[" .. fe .. "]", "StatusLineYellow")
+	return _G.statusline.components.open_bracket()
+		.. set_hl(fe, "StatusLineNC")
+		.. _G.statusline.components.close_bracket()
 end
 
 ---[COMPONENT]
@@ -510,16 +515,18 @@ end
 ---[COMPONENT]
 ---Get wordcount for current buffer or visual selection
 ---@return string wordcount
-_G.statusline.components.fileinfo = function()
+_G.statusline.components.filepos = function()
 	if is_special_buf() then return "" end
 
 	local lines = group_number(vim.api.nvim_buf_line_count(0), ",")
 	local mode = vim.api.nvim_get_mode().mode
 
 	if mode == "v" or mode == "V" then
-		return get_vlinecount() .. " lines selected"
+		return set_hl(get_vlinecount(), "StatusLineNC")
+			.. set_hl(" lines selected", "MoreMsg")
 	else
-		return set_hl(lines .. " lines", "StatusLineAlt")
+		return set_hl("%l", "StatusLineNC")
+			.. set_hl("/" .. lines .. " lines", "MoreMsg")
 	end
 end
 
@@ -529,7 +536,7 @@ end
 _G.statusline.components.open_bracket = function()
 	if is_special_buf() then return "" end
 
-	return set_hl("(", "StatusLineAlt")
+	return set_hl("[", "MoreMsg")
 end
 
 ---[COMPONENT]
@@ -538,7 +545,7 @@ end
 _G.statusline.components.close_bracket = function()
 	if is_special_buf() then return "" end
 
-	return set_hl(")", "StatusLineAlt")
+	return set_hl("]", "MoreMsg")
 end
 
 ---[COMPONENT]
@@ -563,7 +570,7 @@ _G.statusline.components.indentation = function()
 	return string.format(
 		"%s%s%s",
 		set_hl(expandtab_string, "StatusLineNC"),
-		set_hl(":", "StatusLineAlt"),
+		set_hl(":", "MoreMsg"),
 		set_hl(shiftwidth_string, "StatusLineNC")
 	)
 end
@@ -574,7 +581,7 @@ end
 _G.statusline.components.delimiter = function()
 	if is_special_buf() then return "" end
 
-	return set_hl(_G.config.signs.delimiter, "StatusLineAlt")
+	return set_hl(_G.config.signs.delimiter, "MoreMsg")
 end
 
 ---All components properly formatted and rendered
@@ -583,10 +590,10 @@ local rendered_components = {
 	lsp_diagnostics = [[%{%v:lua.statusline.components.lsp_diagnostic()%}]],
 	-- Git
 	git_branch = [[%{%v:lua.statusline.components.git_branch()%}]],
-	git_diffs = [[%{%v:lua.statusline.components.git_diffs()%}]],
 	-- Misc
 	align = [[%=]],
 	truncate = [[%<]],
+	percentage = [[%#StatusLineNC#%P]],
 	padding = [[%{%v:lua.statusline.components.padding()%}]],
 	delimiter = [[%{%v:lua.statusline.components.delimiter()%}]],
 	-- General
@@ -594,7 +601,7 @@ local rendered_components = {
 	filename = [[%{%v:lua.statusline.components.filename()%}]],
 	fileicon = [[%{%v:lua.statusline.components.fileicon()%}]],
 	mode = [[%{%v:lua.statusline.components.mode()%}]],
-	fileinfo = [[%{%v:lua.statusline.components.fileinfo()%}]],
+	filepos = [[%{%v:lua.statusline.components.filepos()%}]],
 	indentation = [[%{%v:lua.statusline.components.indentation()%}]],
 	filetype = [[%{%v:lua.statusline.components.filetype()%}]],
 	fformat = [[%{%v:lua.statusline.components.fformat()%}]],
@@ -608,6 +615,7 @@ local rendered_components = {
 _G.statusline.get = function()
 	return table.concat({
 		" ",
+		rendered_components.macro,
 		rendered_components.mode,
 		rendered_components.filetype, -- for simple files
 		rendered_components.padding,
@@ -615,35 +623,33 @@ _G.statusline.get = function()
 		rendered_components.padding,
 		rendered_components.filepath,
 		rendered_components.padding,
-		rendered_components.git_branch,
-		rendered_components.padding,
 		rendered_components.delimiter,
 		rendered_components.padding,
 		rendered_components.fileicon,
 		rendered_components.padding,
 		rendered_components.filename,
 		rendered_components.padding,
-		rendered_components.git_diffs,
-		rendered_components.lsp_diagnostics,
+		rendered_components.delimiter,
+		rendered_components.padding,
+		rendered_components.git_branch,
 		rendered_components.truncate,
 		-- Messy middle bit
 		rendered_components.align,
-		rendered_components.macro,
-		--
 		rendered_components.search,
-		--
 		rendered_components.fformat,
-		--
 		rendered_components.fenc,
+		rendered_components.lsp_diagnostics,
+		rendered_components.padding,
 		-- Right most
 		rendered_components.align,
-		--
-		rendered_components.fileinfo,
-		rendered_components.padding,
 		--
 		rendered_components.padding,
 		rendered_components.indentation,
 		rendered_components.padding,
+		rendered_components.delimiter,
+		--
+		rendered_components.padding,
+		rendered_components.filepos,
 	}, "")
 end
 
