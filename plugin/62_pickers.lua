@@ -268,14 +268,14 @@ local zoxide_picker = function()
 				desc = "open-oil",
 				header = "open oil in selected directory",
 			},
+			-- ["ctrl-f"] = {
+			-- 	fn = function(selected)
+			-- 		require("fyler").toggle({ root_path = selected[1] })
+			-- 	end,
+			-- 	desc = "open-fyler",
+			-- 	header = "open fyler in selected directory",
+			-- },
 			["ctrl-f"] = {
-				fn = function(selected)
-					require("fyler").toggle({ root_path = selected[1] })
-				end,
-				desc = "open-fyler",
-				header = "open fyler in selected directory",
-			},
-			["ctrl-s"] = {
 				fn = function(selected)
 					require("fzf-lua").files({ cwd = selected[1] })
 				end,

@@ -217,10 +217,7 @@ end)
 
 -- (fzf-lua) Navigation and fuzzy pickers
 _G.later(function()
-	vim.pack.add({
-		"https://github.com/ibhagwan/fzf-lua",
-		"https://github.com/elanmed/fzf-lua-frecency.nvim",
-	})
+	vim.pack.add({ "https://github.com/ibhagwan/fzf-lua" })
 
 	local central_picker_opts = {
 		preview = {
@@ -490,18 +487,10 @@ _G.later(function()
 		{ desc = "Files (all projects)", noremap = false, silent = true }
 	)
 
-	require("fzf-lua-frecency").setup({
-		display_score = false,
-		git_icons = false,
-		winopts = {
-			preview = { hidden = "nohidden" },
-		},
-	})
-
 	vim.keymap.set(
 		"n",
 		"<leader>f",
-		function() vim.cmd("FzfLua frecency cwd_only=true") end,
+		function() vim.cmd("FzfLua files") end,
 		{ desc = "Files", noremap = false, silent = true }
 	)
 end)
