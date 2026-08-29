@@ -153,8 +153,8 @@ _G.config.treesitter.grammars = {
 _G.config.treesitter.disabled_filetypes = {
 	"csv",
 	-- "go",
-	-- "terraform",
-	-- "hcl",
+	"terraform",
+	"hcl",
 }
 
 ---Set default LSP configuration (what appears as default)
