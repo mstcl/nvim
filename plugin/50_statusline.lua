@@ -5,9 +5,12 @@ _G.statusline.components = {}
 
 -- Filetypes where only a simple statusline is displayed (showing only the filetype)
 local simple_filetypes = {
+	"",
 	"fyler_finder",
 	"fzf",
 	"oil",
+	"grip_schema",
+	"grip-welcome",
 	"aerial",
 	"grug-far",
 	"NvimTree",
@@ -17,6 +20,14 @@ local simple_filetypes = {
 	"codediff-explorer",
 	"codediff-history",
 	"nvim-undotree",
+	"help",
+}
+
+local simple_buftypes = {
+	"terminal",
+	"nofile",
+	"help",
+	"quickfix",
 }
 
 ---Helper to highlight str with group hl in string representation
@@ -34,6 +45,12 @@ local function set_hl(str, hl, restore)
 	}) or table.concat({ "%#", hl, "#", str or "" })
 end
 
+---Helper to determine whether a buftype is in the simple_buftypes table
+---@return boolean is_simple_ft
+local function is_simple_bt()
+	return vim.tbl_contains(simple_buftypes, vim.bo.buftype)
+end
+
 ---Helper to determine whether a filetype is in the simple_filetypes table
 ---@return boolean is_simple_ft
 local function is_simple_ft()
@@ -42,7 +59,7 @@ end
 
 ---Helper to determine whether a filetype is a special buffer (in simple filetype or a terminal)
 ---@return boolean is_special_buf
-local function is_special_buf() return is_simple_ft() or vim.bo.buftype == "terminal" end
+local function is_special_buf() return is_simple_ft() or is_simple_bt() end
 
 ---A list of modes mapped to a code displayed on the statusline
 ---@type table<string, string>
@@ -271,8 +288,8 @@ end
 ---Get current mode
 ---@return string mode
 _G.statusline.components.mode = function()
-	if is_simple_ft() then return "" end
-
+	local bt = vim.bo.buftype
+	if is_special_buf() and bt ~= "acwrite" then return "" end
 	local mode = vim.api.nvim_get_mode().mode
 	local mode_str = (mode == "n" and (vim.bo.ro or not vim.bo.ma)) and "RO"
 		or modes[mode]
@@ -377,18 +394,38 @@ _G.statusline.components.filename = function()
 end
 
 ---[COMPONENT]
----Get filetype
+---Get filetype, used to display for special bufers
 ---@return string filetype
 _G.statusline.components.filetype = function()
 	local ft = vim.bo.filetype
+	local bt = vim.bo.buftype
 
 	local s = ""
+	local padding = ""
+	if bt == "acwrite" then
+		padding = " " .. set_hl(_G.config.signs.delimiter, "StatusLineAlt") .. " "
+	end
 
 	-- priority important here
-	if vim.tbl_contains(simple_filetypes, ft) then s = ft end
-	if _G.big(vim.fn.expand("%")) then s = "BIG " end
+	if is_special_buf() then
+		s = ft
+	else
+		return ""
+	end
 
-	return set_hl(s:gsub("^%l", string.upper), "StatusLineModeInv")
+	-- fallback to buftype
+	if s == "" and vim.tbl_contains(simple_buftypes, bt) then s = bt end
+
+	-- finally fallback to filetype again
+	if s == "" then s = ft end
+
+	local icon, highlight, _ = require("mini.icons").get("filetype", ft)
+
+	if _G.big(vim.fn.expand("%")) then s = "BIG " end
+	return padding
+		.. set_hl(icon, highlight)
+		.. " "
+		.. set_hl(s, "StatusLineModeInv")
 end
 
 ---[COMPONENT]
@@ -571,8 +608,8 @@ local rendered_components = {
 _G.statusline.get = function()
 	return table.concat({
 		" ",
-		rendered_components.filetype,
 		rendered_components.mode,
+		rendered_components.filetype, -- for simple files
 		rendered_components.padding,
 		rendered_components.delimiter,
 		rendered_components.padding,

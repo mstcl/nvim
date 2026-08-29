@@ -29,6 +29,8 @@ vim.api.nvim_create_user_command("Clear", function()
 	vim.cmd("nohlsearch")
 	vim.cmd("diffupdate")
 	vim.cmd("syntax sync fromstart")
+	if #vim.lsp.get_clients({ bufnr = 0 }) > 0 then vim.cmd("lsp restart") end
+	vim.cmd("edit!")
 	vim.cmd("normal! <C-l>")
 end, {})
 
