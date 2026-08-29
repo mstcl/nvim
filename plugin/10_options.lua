@@ -104,6 +104,7 @@ vim.opt.nrformats:append("unsigned")
 vim.opt.nrformats:remove("bin", "hex")
 
 -- Editing
+vim.opt.virtualedit = "onemore"
 vim.opt.mouse = "a"
 vim.opt.backspace = { "indent", "eol", "start" }
 vim.opt.virtualedit = "block"
