@@ -325,7 +325,7 @@ _G.statusline.components.mode = function()
 	local mode = vim.api.nvim_get_mode().mode
 	local mode_str = (mode == "n" and (vim.bo.ro or not vim.bo.ma)) and "RO"
 		or modes[mode]
-	local hl = vim.bo.mod and "StatusLineModifiedInv" or "StatusLineModeInv"
+	local hl = vim.bo.mod and "Exception" or "Function"
 	return set_hl(string.format("%s", mode_str), hl)
 end
 
@@ -366,7 +366,7 @@ _G.statusline.components.filepath = function()
 
 	if is_special_buf() then return "" end
 
-	local root = set_hl(vim.fn.fnamemodify(vim.fn.getcwd(), ":t"), "StatusLineBold")
+	local root = set_hl(vim.fn.fnamemodify(vim.fn.getcwd(), ":t"), "SpecialComment")
 	local secondary = ""
 
 	if fpath ~= "." then secondary = string.format("/%s", fpath) end
@@ -381,8 +381,7 @@ end
 _G.statusline.components.filename = function()
 	if is_special_buf() and vim.bo.buftype ~= "help" then return "" end
 
-	local fname = vim.fn.expand("%:t")
-	return set_hl(fname, "StatusLineBold")
+	return set_hl(vim.fn.expand("%:t"), "SpecialComment")
 end
 
 ---[COMPONENT]
