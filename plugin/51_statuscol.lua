@@ -5,6 +5,7 @@ _G.statuscol = {}
 
 -- Filetypes where no statuscolumn is returned
 local simple_filetypes = {
+	"",
 	"fyler_finder",
 	"fzf",
 	"oil",
@@ -145,5 +146,3 @@ _G.statuscol.set = function()
 		vim.o.statuscolumn = "%!v:lua.statuscol.get()"
 	end
 end
-
-_G.statuscol.set()

@@ -2,6 +2,18 @@
 
 local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
 
+-- (mini.statuscolumn) better statuscolumn
+_G.now(
+	function()
+		require("mini.statuscolumn").setup({
+			content = {
+				active = _G.statuscol.set,
+				inactive = _G.statuscol.set,
+			},
+		})
+	end
+)
+
 -- (mini.icons) UI icons for filetypes etc.
 _G.now(function() require("mini.icons").setup() end)
 _G.later(function() require("mini.icons").mock_nvim_web_devicons() end)
