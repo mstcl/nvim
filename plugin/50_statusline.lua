@@ -344,22 +344,24 @@ end
 ---Get file path with root
 ---@return string filepath
 _G.statusline.components.filepath = function()
-	if is_special_buf() then return "" end
-
 	local ft = vim.bo.filetype
 	local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.:h")
-	local root = set_hl(vim.fn.fnamemodify(vim.fn.getcwd(), ":t"), "StatusLineBold")
 	local prefix = set_hl(_G.config.signs.file .. " ", "StatusLineAlt")
-	local secondary = ""
 
-	if fpath ~= "." then secondary = string.format("/%s", fpath) end
-	secondary = set_hl(secondary, "StatusLineAlt")
-
-	if ft == "oil" then
+	-- show filepath for oil first
+	if vim.tbl_contains({ "oil", "fyler_finder" }, ft) then
 		return " "
 			.. prefix
 			.. set_hl(string.format("%s ", string.sub(fpath, 7)), "StatusLineNC")
 	end
+
+	if is_special_buf() then return "" end
+
+	local root = set_hl(vim.fn.fnamemodify(vim.fn.getcwd(), ":t"), "StatusLineBold")
+	local secondary = ""
+
+	if fpath ~= "." then secondary = string.format("/%s", fpath) end
+	secondary = set_hl(secondary, "StatusLineAlt")
 
 	return prefix .. root .. secondary
 end

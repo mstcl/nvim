@@ -1943,12 +1943,22 @@ _G.now_if_args(function()
 	_G.register_toggle(
 		"tree",
 		{ "filetree", "fyler" },
-		function() require("fyler").toggle({ kind = "split_left_most" }) end
+		function()
+			require("fyler").toggle({
+				kind = "split_left_most",
+				root_path = vim.fn.getcwd(),
+			})
+		end
 	)
 
 	vim.api.nvim_create_user_command(
 		"FileTreeOpen",
-		function() require("fyler").open({ kind = "split_left_most" }) end,
+		function()
+			require("fyler").open({
+				kind = "split_left_most",
+				root_path = vim.fn.getcwd(),
+			})
+		end,
 		{}
 	)
 

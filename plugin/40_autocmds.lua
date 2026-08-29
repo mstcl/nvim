@@ -78,7 +78,7 @@ _G.augroup("help", {
 })
 
 _G.augroup("root", {
-	{ "BufEnter" },
+	{ "BufEnter", "BufWinEnter", "WinEnter" },
 	{
 		desc = "set cwd to project root directory",
 		callback = function(args)
