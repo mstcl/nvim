@@ -418,7 +418,7 @@ _G.statusline.components.filetype = function()
 	end
 
 	if _G.big(vim.fn.expand("%")) then s = "BIG " end
-	return padding .. icon .. set_hl(s, "StatusLineModeInv") .. " "
+	return padding .. icon .. set_hl(s, "Function") .. " "
 end
 
 ---[COMPONENT]
