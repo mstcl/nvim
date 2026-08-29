@@ -19,7 +19,7 @@
       "src": "https://github.com/saghen/blink.indent"
     },
     "codediff.nvim": {
-      "rev": "e08a35a56a52c290398ebfaec33c34cfcf2d0f3c",
+      "rev": "ae8d28896184d4a02ed590da9c3063ba50389b43",
       "src": "https://github.com/esmuellert/codediff.nvim"
     },
     "conform.nvim": {
@@ -63,11 +63,11 @@
       "src": "https://github.com/MagicDuck/grug-far.nvim"
     },
     "ivory.nvim": {
-      "rev": "7eaecaa71889f49835f3e1f0e43af9462a72a694",
+      "rev": "0990fc5bedc1f173d20ea53a369a34c3e5d797f0",
       "src": "https://github.com/mstcl/ivory.nvim"
     },
     "jupynvim": {
-      "rev": "47a31d9a7bcbe1f68a8cc245f28382ad9df11b65",
+      "rev": "5e8eb2c2a6e41c722ff502360a5335dde21a634f",
       "src": "https://github.com/sheng-tse/jupynvim"
     },
     "lush.nvim": {
@@ -79,11 +79,11 @@
       "src": "https://github.com/monkoose/matchparen.nvim"
     },
     "mini.nvim": {
-      "rev": "e58ad4b0c9e9376096b9704f98fc00d4c9448870",
+      "rev": "fb2bbae327f3c306f3c825031345b89dd176ce60",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "neogit": {
-      "rev": "e43a7e83158fc98cd41b732dcb5e1721abb9f164",
+      "rev": "5adc81b26232954cd7a90f158aa7844c18fc3165",
       "src": "https://github.com/NeogitOrg/neogit"
     },
     "nui.nvim": {
@@ -95,11 +95,11 @@
       "src": "https://github.com/brenoprata10/nvim-highlight-colors"
     },
     "nvim-lint": {
-      "rev": "0370fe965697aa8f04252a1562441bdc13723cd1",
+      "rev": "3d55c8f67c6ae5c15e1042571e107c7a3d5c5f4e",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "221c43884319e791519f0d6c94a7f2fbcd653278",
+      "rev": "684cb45c2faa24ce463b4fe9aaf011bfe1e0fb26",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-spider": {
@@ -114,10 +114,6 @@
       "rev": "898ee307df58f854d11cd7edd06472574d48014e",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
-    "nvim-web-devicons": {
-      "rev": "2ae6958df7ced50baac5035cec0c15799eedfbf7",
-      "src": "https://github.com/nvim-tree/nvim-web-devicons"
-    },
     "oil.nvim": {
       "rev": "b73018b75affd13fa38e2fc94ef753b465f770d7",
       "src": "https://github.com/stevearc/oil.nvim"
@@ -127,7 +123,7 @@
       "src": "https://github.com/nickjvandyke/opencode.nvim"
     },
     "orng.nvim": {
-      "rev": "5f3e980438588e28fcd520ba20cd46e59feab459",
+      "rev": "63fae9e18adf915942df88bd2e5e44773c085ddc",
       "src": "https://github.com/mstcl/orng.nvim"
     },
     "otter.nvim": {
@@ -151,7 +147,7 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "tavern.nvim": {
-      "rev": "c0095ebab2d48661228119a7a5b4ae094950fdc6",
+      "rev": "3ae0480fe9ce09fdc99c9ef200593cd26170daf5",
       "src": "https://github.com/mstcl/tavern.nvim"
     },
     "tiny-cmdline.nvim": {
@@ -167,7 +163,7 @@
       "src": "https://github.com/kaarmu/typst.vim"
     },
     "vim-illuminate": {
-      "rev": "91313e598ca62e110bc71535c49069b66b9883c9",
+      "rev": "1cc33d347c574c3bd21a4852fc9ffed677c1c58c",
       "src": "https://github.com/RRethy/vim-illuminate"
     },
     "vim-syntax-codeowners": {
@@ -175,7 +171,7 @@
       "src": "https://github.com/rhysd/vim-syntax-codeowners"
     },
     "zk-nvim": {
-      "rev": "922134d8f95f0169bb572b09f2fa643573cb51f8",
+      "rev": "a2a2c850e7876415a9961c7c409328ead78f18b3",
       "src": "https://github.com/zk-org/zk-nvim"
     }
   }

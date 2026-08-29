@@ -396,17 +396,9 @@ end
 ---@return string fileicon
 _G.statusline.components.fileicon = function()
 	if is_special_buf() then return "" end
-
-	local fname = vim.fn.expand("%:t")
-	local extension = vim.fn.fnamemodify(fname, ":e")
-	local ok, devicons = pcall(require, "nvim-web-devicons")
-	if not ok then
-		return ""
-	else
-		local icon, highlight =
-			devicons.get_icon(fname, extension, { default = true })
-		return set_hl(icon, highlight)
-	end
+	local icon, highlight, _ =
+		require("mini.icons").get("file", vim.fn.expand("%:p"))
+	return set_hl(icon, highlight)
 end
 
 ---[COMPONENT]
