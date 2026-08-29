@@ -1167,24 +1167,56 @@ _G.later(function()
 	)
 end)
 
--- (arborist/nvim-treesitter-textobjects/nvim-treesitter-context) Treesitter engine and more
+-- (nvim-treesitter/nvim-treesitter-textobjects/nvim-treesitter-context) Treesitter engine and more
 _G.now_if_args(function()
+	local ts_update = function() vim.cmd("TSUpdate") end
+	_G.on_packchanged("nvim-treesitter", { "update" }, ts_update, ":TSUpdate")
+
 	vim.pack.add({
-		{ src = "https://github.com/arborist-ts/arborist.nvim", version = "dev" },
+		"https://github.com/nvim-treesitter/nvim-treesitter",
 		"https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
 		"https://github.com/nvim-treesitter/nvim-treesitter-context",
 	})
 
-	require("arborist").setup({
-		update_cadence = "weekly",
-		prefer_wasm = false,
-		concurrency = 1,
-		ensure_installed = _G.config.treesitter.grammars,
-		install_popular = false,
-		ignore = { "dbout", "jinja", "jinja2" },
-		disable = {
-			indent = { "markdown" },
-			highlight = { "csv" },
+	local isnt_installed = function(lang)
+		return #vim.api.nvim_get_runtime_file("parser/" .. lang .. ".*", false) == 0
+	end
+	local to_install = vim.tbl_filter(isnt_installed, _G.config.treesitter.grammars)
+	if #to_install > 0 then require("nvim-treesitter").install(to_install) end
+	require("nvim-treesitter").install({ "markdown_inline", "printf" })
+
+	local filetypes = { "gitconfig" }
+	for _, lang in ipairs(_G.config.treesitter.grammars) do
+		for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang)) do
+			table.insert(filetypes, ft)
+		end
+	end
+
+	local treesitter_start = function(ev)
+		-- start treesitter only for non huge files and if not disabled for this filetype
+		local filetype = vim.bo[ev.buf].filetype
+		if not _G.big(vim.fn.expand("%")) then
+			if
+				not vim.tbl_contains(
+					_G.config.treesitter.disabled_filetypes,
+					filetype
+				)
+			then
+				vim.treesitter.start(ev.buf)
+			end
+
+			vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+			vim.wo.foldmethod = "expr"
+			vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		end
+	end
+
+	_G.augroup("treesitter", {
+		{ "FileType" },
+		{
+			pattern = filetypes,
+			callback = treesitter_start,
+			desc = "Start tree-sitter",
 		},
 	})
 

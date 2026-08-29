@@ -4,11 +4,6 @@
       "rev": "28fe6e822ae344544c379d60fcb13c9519a1f08a",
       "src": "https://github.com/stevearc/aerial.nvim"
     },
-    "arborist.nvim": {
-      "rev": "1cc5fd239586e0f87870fa78c9981e473554d792",
-      "src": "https://github.com/arborist-ts/arborist.nvim",
-      "version": "'dev'"
-    },
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",
@@ -105,6 +100,10 @@
     "nvim-spider": {
       "rev": "38f74f733734566bec3b23a9dcf968a5a5559cd6",
       "src": "https://github.com/chrisgrieser/nvim-spider"
+    },
+    "nvim-treesitter": {
+      "rev": "857651fce37eba032ebe28f3a206283cdc65c45a",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
       "rev": "f3061339b8eaf9fda873600bc425b8d2d8502533",

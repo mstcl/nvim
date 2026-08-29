@@ -1,1 +1,0 @@
-/home/lckdscl/.local/share/nvim/site/pack/core/opt/arborist.nvim/queries/git_config/highlights.scm

@@ -119,6 +119,7 @@ _G.config.treesitter.grammars = {
 	"diff",
 	"dockerfile",
 	"gitignore",
+	"git_config",
 	"gitcommit",
 	"git_rebase",
 	"regex",
