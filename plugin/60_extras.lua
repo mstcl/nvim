@@ -7,17 +7,57 @@ local new_autocmd = _G.helpers.new_autocmd
 local register_toggle = _G.helpers.register_toggle
 local config = _G.config
 
--- (mini.statuscolumn) better statuscolumn
-now(
-	function()
-		require("mini.statuscolumn").setup({
-			content = {
-				active = _G.statuscol.set,
-				inactive = _G.statuscol.set,
+-- (statuscol.nvim) custom statuscolumn
+now(function()
+	vim.pack.add({ "https://github.com/luukvbaal/statuscol.nvim" })
+	local builtin = require("statuscol.builtin")
+	require("statuscol").setup({
+		ft_ignore = {
+			"codediff-explorer",
+			"codediff-history",
+		},
+		relculright = true,
+		clickhandlers = { Lnum = builtin.gitsigns_click },
+		segments = {
+			{
+				text = { " " },
+				colwidth = 1,
 			},
-		})
-	end
-)
+			{
+				sign = {
+					name = { ".*" },
+					namespace = { ".*" },
+					maxwidth = 1,
+					colwidth = 2,
+					auto = false,
+					wrap = true,
+				},
+			},
+			{
+				text = { builtin.lnumfunc, " " },
+				colwidth = 1,
+				click = "v:lua.ScLa",
+			},
+			{
+				sign = {
+					name = { "GitSigns*" },
+					namespace = { "gitsigns" },
+					colwidth = 1,
+					fillchar = " ",
+					fillcharhl = "Nrline",
+				},
+				click = "v:lua.ScSa",
+			},
+			{
+				text = { builtin.foldfunc, " " },
+				hl = "FoldColumn",
+				wrap = true,
+				colwidth = 1,
+				click = "v:lua.ScFa",
+			},
+		},
+	})
+end)
 
 -- (mini.icons) UI icons for filetypes etc.
 now(function() require("mini.icons").setup() end)
@@ -1471,7 +1511,10 @@ now_if_args(function()
 		end
 	)
 
-	require("treesitter-context").setup()
+	require("treesitter-context").setup({
+		multiwindow = true,
+		separator = "─",
+	})
 end)
 
 -- (nvim-lspconfig) LSP server configurations

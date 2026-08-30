@@ -118,6 +118,7 @@ o.iskeyword = "@,48-57,_,192-255,-" -- treat dash as `word` textobject part
 o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]] -- Pattern for a start of numbered list (used in `gw`). This reads as
 
 -- Folding (foldtext is set in 53_foldtext.lua)
+o.foldcolumn = "auto"
 o.foldmethod = "expr"
 o.foldlevel = 99
 
@@ -192,7 +193,7 @@ o.fillchars = {
 	vert = "│",
 	foldclose = config.signs.close,
 	foldopen = config.signs.open,
-	foldsep = "│",
+	foldsep = " ",
 	foldinner = " ",
 	fold = " ",
 	diff = "╱",
@@ -233,20 +234,7 @@ vim.diagnostic.config({
 	update_in_insert = false,
 	severity_sort = true,
 
-	signs = {
-		text = {
-			[vim.diagnostic.severity.ERROR] = "",
-			[vim.diagnostic.severity.WARN] = "",
-			[vim.diagnostic.severity.INFO] = "",
-			[vim.diagnostic.severity.HINT] = "",
-		},
-		numhl = {
-			[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
-			[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
-			[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
-			[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
-		},
-	},
+	signs = {},
 
 	status = {
 		format = function(severity_counts)

@@ -13,7 +13,7 @@
       "src": "https://github.com/saghen/blink.lib"
     },
     "codediff.nvim": {
-      "rev": "ae8d28896184d4a02ed590da9c3063ba50389b43",
+      "rev": "0abad4aa022a34fab0deb90dd9379d5de1c9c329",
       "src": "https://github.com/esmuellert/codediff.nvim"
     },
     "conform.nvim": {
@@ -21,7 +21,7 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "dadbod-grip.nvim": {
-      "rev": "2100fb7b9d817651ff417b8b8b40a061f0812553",
+      "rev": "cc8201bd3167d098d35d04f709d1c1f6bfcb95f1",
       "src": "https://github.com/joryeugene/dadbod-grip.nvim"
     },
     "dial.nvim": {
@@ -57,7 +57,7 @@
       "src": "https://github.com/MagicDuck/grug-far.nvim"
     },
     "ivory.nvim": {
-      "rev": "e731f9b5197b256a697d541a06214ceec0da6dc7",
+      "rev": "16b5524564e694fe8b14e982aca19bd95246a2ac",
       "src": "https://github.com/mstcl/ivory.nvim"
     },
     "jupynvim": {
@@ -73,7 +73,7 @@
       "src": "https://github.com/monkoose/matchparen.nvim"
     },
     "mini.nvim": {
-      "rev": "fb2bbae327f3c306f3c825031345b89dd176ce60",
+      "rev": "a311ed247d527db9592bb434356badc705363746",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "minibuffer.nvim": {
@@ -129,7 +129,7 @@
       "src": "https://github.com/nickjvandyke/opencode.nvim"
     },
     "orng.nvim": {
-      "rev": "0eb77252e9797b1aaed2f892b82d88b726f0ccce",
+      "rev": "421f6d40bf0a676ffce87110e70711a062665d0b",
       "src": "https://github.com/mstcl/orng.nvim"
     },
     "otter.nvim": {
@@ -148,8 +148,12 @@
       "rev": "4663eb3ecd538bd5062628fb6d95bbe6bdca78f6",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
+    "statuscol.nvim": {
+      "rev": "887b8a03ea3804628505c9002fd07bd06a3db2e0",
+      "src": "https://github.com/luukvbaal/statuscol.nvim"
+    },
     "tavern.nvim": {
-      "rev": "bf19d094d32c8b187c76f425174e2e6f4991c81f",
+      "rev": "0e4b69f3e53c8348f8216bc1cfce3364566dfa5e",
       "src": "https://github.com/mstcl/tavern.nvim"
     },
     "tiny-cmdline.nvim": {
