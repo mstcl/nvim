@@ -7,6 +7,8 @@ local new_autocmd = _G.helpers.new_autocmd
 local register_toggle = _G.helpers.register_toggle
 local config = _G.config
 
+_G.helpers.later(function() vim.cmd("packadd nvim.undotree") end)
+
 -- (statuscol.nvim) custom statuscolumn
 now(function()
 	vim.pack.add({ "https://github.com/luukvbaal/statuscol.nvim" })
