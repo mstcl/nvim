@@ -456,10 +456,7 @@ _G.helpers.now(function()
 		if recording_register == "" then
 			return ""
 		else
-			return set_hl(
-				" ● REC [" .. recording_register .. "] ",
-				"DiagnosticSignError"
-			) .. " "
+			return set_hl(" ● REC [" .. recording_register .. "] ", "Error") .. " "
 		end
 	end
 
