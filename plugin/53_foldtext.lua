@@ -31,7 +31,7 @@ _G.helpers.now(function()
 			local start_row, start_col, end_row, end_col = node:range()
 
 			local priority =
-				tonumber(metadata.priority or vim.highlight.priorities.treesitter)
+				tonumber(metadata.priority or vim.hl.priorities.treesitter)
 
 			if start_row == linenr - 1 and end_row == linenr - 1 then
 				-- check for characters ignored by treesitter
