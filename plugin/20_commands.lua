@@ -26,8 +26,6 @@ vim.api.nvim_create_user_command(
 
 -- Clear screen with extra stuff
 vim.api.nvim_create_user_command("Clear", function()
-	vim.cmd("nohlsearch")
-	vim.cmd("diffupdate")
 	vim.cmd("syntax sync fromstart")
 	if #vim.lsp.get_clients({ bufnr = 0 }) > 0 then vim.cmd("lsp restart") end
 	vim.cmd("edit!")
@@ -228,7 +226,7 @@ local function bigfile_mode()
 	vim.cmd("NoMatchParen")
 
 	-- defer disable lsp
-	_G.augroup("bigfile_deferred", {
+	_G.helpers.new_autocmd("bigfile_deferred", {
 		"LspAttach",
 		{
 			desc = "detach client for big files",

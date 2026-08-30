@@ -417,7 +417,7 @@ _G.statusline.components.filetype = function()
 		icon = set_hl(icon, highlight) .. " "
 	end
 
-	if _G.big(vim.fn.expand("%")) then s = "BIG " end
+	if _G.helpers.is_big_file(vim.fn.expand("%")) then s = "BIG " end
 	return padding .. icon .. set_hl(s, "Function") .. " "
 end
 

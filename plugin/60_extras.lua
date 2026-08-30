@@ -1,9 +1,12 @@
 -- External plugins
 
 local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
+local now = function(f) require("mini.misc").safely("now", f) end
+local later = function(f) require("mini.misc").safely("later", f) end
+local now_if_args = vim.fn.argc(-1) > 0 and now or later
 
 -- (mini.statuscolumn) better statuscolumn
-_G.now(
+now(
 	function()
 		require("mini.statuscolumn").setup({
 			content = {
@@ -15,11 +18,11 @@ _G.now(
 )
 
 -- (mini.icons) UI icons for filetypes etc.
-_G.now(function() require("mini.icons").setup() end)
-_G.later(function() require("mini.icons").mock_nvim_web_devicons() end)
+now(function() require("mini.icons").setup() end)
+later(function() require("mini.icons").mock_nvim_web_devicons() end)
 
 -- Colorschemes
-_G.now(function()
+now(function()
 	vim.pack.add({
 		"https://github.com/rktjmp/lush.nvim",
 		"https://github.com/mstcl/tavern.nvim",
@@ -27,7 +30,7 @@ _G.now(function()
 		"https://github.com/mstcl/orng.nvim",
 	})
 
-	_G.augroup("toggletheme", {
+	_G.helpers.new_autocmd("toggletheme", {
 		"Signal",
 		{
 			pattern = "SIGUSR1",
@@ -46,7 +49,7 @@ _G.now(function()
 end)
 
 -- (mini.jump) clever-f in lua
-_G.later(function()
+later(function()
 	require("mini.jump").setup({
 		delay = {
 			highlight = 80,
@@ -57,7 +60,7 @@ _G.later(function()
 end)
 
 -- (mini.clue) Mapping helper
-_G.later(function()
+later(function()
 	require("mini.clue").setup({
 		window = {
 			delay = 200,
@@ -128,13 +131,13 @@ _G.later(function()
 end)
 
 -- (mini.align) Utility to align text by delimiters
-_G.later(function() require("mini.align").setup() end)
+later(function() require("mini.align").setup() end)
 
 -- (mini.move) Move lines in visual
-_G.later(function() require("mini.move").setup() end)
+later(function() require("mini.move").setup() end)
 
 -- (mini.keymap) Supercharged keymapping
-_G.later(function()
+later(function()
 	require("mini.keymap").setup()
 
 	local tab_steps = {
@@ -181,7 +184,7 @@ _G.later(function()
 end)
 
 -- (mini.pairs) Auto pairs
-_G.later(function()
+later(function()
 	_G.register_toggle("autopairs", { "pairs", "minipairs" }, function()
 		vim.g.minipairs_disable = not vim.g.minipairs_disable
 		vim.notify(
@@ -204,7 +207,7 @@ _G.later(function()
 end)
 
 -- (mini.surround) Add motions to surround objects with brackets etc.
-_G.later(
+later(
 	function()
 		require("mini.surround").setup({
 			mappings = {
@@ -221,14 +224,14 @@ _G.later(
 )
 
 -- (remember.nvim) Remember last place
-_G.now(function()
+now(function()
 	vim.pack.add({ "https://github.com/vladdoster/remember.nvim" })
 
 	require("remember")
 end)
 
 -- (fzf-lua) Navigation and fuzzy pickers
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/ibhagwan/fzf-lua" })
 
 	local central_picker_opts = {
@@ -404,13 +407,6 @@ _G.later(function()
 			},
 		},
 
-		-- builtin previwers options
-		previewers = {
-			builtin = {
-				toggle_behavior = "extend",
-			},
-		},
-
 		-- builtin picker configuration
 		-- global defaults; will override picker defaults unless defined below
 		defaults = {
@@ -508,7 +504,7 @@ _G.later(function()
 end)
 
 -- (gitsigns.nvim) Blame and diff for git
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/lewis6991/gitsigns.nvim" })
 
 	require("gitsigns").setup({
@@ -652,7 +648,7 @@ _G.later(function()
 		end,
 	})
 
-	_G.augroup("gitsigns_refresh", {
+	_G.helpers.new_autocmd("gitsigns_refresh", {
 		"BufEnter",
 		{
 			callback = function() pcall(vim.cmd, "Gitsigns refresh") end,
@@ -662,7 +658,7 @@ _G.later(function()
 end)
 
 -- (neogit) Magit for neovim
-_G.later(function()
+later(function()
 	vim.pack.add({
 		"https://github.com/NeogitOrg/neogit",
 		"https://github.com/nvim-lua/plenary.nvim",
@@ -721,7 +717,7 @@ _G.later(function()
 		},
 	})
 
-	_G.augroup("neogit", {
+	_G.helpers.new_autocmd("neogit", {
 		{ "BufEnter", "ColorScheme" },
 		{
 			pattern = "Neogit*",
@@ -753,7 +749,7 @@ _G.later(function()
 end)
 
 -- (blink.indent) Indent lines
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/saghen/blink.indent" })
 
 	require("blink.indent").setup({
@@ -804,7 +800,7 @@ _G.later(function()
 end)
 
 -- (gitlinker.nvim) Get git remote url for code position
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/linrongbin16/gitlinker.nvim" })
 
 	require("gitlinker").setup()
@@ -822,7 +818,7 @@ _G.later(function()
 end)
 
 -- (blink.cmp) Auto completion
-_G.later(function()
+later(function()
 	vim.pack.add({
 		{ src = "https://github.com/saghen/blink.cmp", version = "v1.10.2" },
 		"https://github.com/rafamadriz/friendly-snippets",
@@ -854,6 +850,7 @@ _G.later(function()
 		},
 		completion = {
 			list = {
+				-- don't insert selected items
 				selection = {
 					preselect = false,
 					auto_insert = false,
@@ -861,6 +858,7 @@ _G.later(function()
 			},
 			menu = {
 				border = "none",
+				-- what the completion menu looks like
 				draw = {
 					treesitter = { "lsp" }, -- WARN: performance issues
 					padding = { 0, 1 },
@@ -886,10 +884,12 @@ _G.later(function()
 				window = {
 					max_width = 120,
 					max_height = math.floor(vim.o.lines * 0.3),
-					winhighlight = "Normal:BlinkCmpDoc,FloatBorder:FloatBorder,EndOfBuffer:BlinkCmpDoc",
 				},
 			},
-			ghost_text = { enabled = true },
+			ghost_text = {
+				enabled = true,
+				show_without_selection = true,
+			},
 		},
 		appearance = {
 			use_nvim_cmp_as_default = true, -- WARN: will be deprecated
@@ -937,7 +937,7 @@ _G.later(function()
 end)
 
 -- (dial.nvim) Toggling booleans and more
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/monaqa/dial.nvim" })
 
 	local augend = require("dial.augend")
@@ -1168,9 +1168,14 @@ _G.later(function()
 end)
 
 -- (nvim-treesitter/nvim-treesitter-textobjects/nvim-treesitter-context) Treesitter engine and more
-_G.now_if_args(function()
+now_if_args(function()
 	local ts_update = function() vim.cmd("TSUpdate") end
-	_G.on_packchanged("nvim-treesitter", { "update" }, ts_update, ":TSUpdate")
+	_G.helpers.on_packchanged(
+		"nvim-treesitter",
+		{ "update" },
+		ts_update,
+		":TSUpdate"
+	)
 
 	vim.pack.add({
 		"https://github.com/nvim-treesitter/nvim-treesitter",
@@ -1195,7 +1200,7 @@ _G.now_if_args(function()
 	local treesitter_start = function(ev)
 		-- start treesitter only for non huge files and if not disabled for this filetype
 		local filetype = vim.bo[ev.buf].filetype
-		if not _G.big(vim.fn.expand("%")) then
+		if not _G.helpers.is_big_file(vim.fn.expand("%")) then
 			if
 				not vim.tbl_contains(
 					_G.config.treesitter.disabled_filetypes,
@@ -1211,7 +1216,7 @@ _G.now_if_args(function()
 		end
 	end
 
-	_G.augroup("treesitter", {
+	_G.helpers.new_autocmd("treesitter", {
 		{ "FileType" },
 		{
 			pattern = filetypes,
@@ -1302,7 +1307,7 @@ _G.now_if_args(function()
 end)
 
 -- (nvim-lspconfig) LSP server configurations
-_G.now_if_args(function()
+now_if_args(function()
 	vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
 
 	vim.lsp.config("*", {
@@ -1314,12 +1319,10 @@ _G.now_if_args(function()
 end)
 
 -- (garbage-day.nvim) Kill idle/inactive language servers
-_G.later(
-	function() vim.pack.add({ "https://github.com/Zeioth/garbage-day.nvim" }) end
-)
+later(function() vim.pack.add({ "https://github.com/Zeioth/garbage-day.nvim" }) end)
 
 -- (nvim-lint) Async linter engine
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/mfussenegger/nvim-lint" })
 
 	require("lint").linters_by_ft = {
@@ -1333,7 +1336,7 @@ _G.later(function()
 		rust = { "clippy" },
 	}
 
-	_G.augroup("nvim-lint", {
+	_G.helpers.new_autocmd("nvim-lint", {
 		{ "BufWritePost" },
 		{
 			desc = "lint file",
@@ -1343,7 +1346,7 @@ _G.later(function()
 end)
 
 -- (otter.nvim) LSP completion in code blocks
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/jmbuhr/otter.nvim" })
 
 	require("otter").setup({
@@ -1351,7 +1354,7 @@ _G.later(function()
 		buffers = { set_filetype = true },
 	})
 
-	_G.augroup("otter", {
+	_G.helpers.new_autocmd("otter", {
 		{ "BufNewFile", "BufRead" },
 		{
 			desc = "activate otter",
@@ -1362,7 +1365,7 @@ _G.later(function()
 end)
 
 -- (conform.nvim) Formatter
-_G.now_if_args(function()
+now_if_args(function()
 	vim.pack.add({ "https://github.com/stevearc/conform.nvim" })
 
 	require("conform").setup({
@@ -1439,7 +1442,7 @@ _G.now_if_args(function()
 end)
 
 -- (nvim-highlight-colors) Highlight color blocks
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/brenoprata10/nvim-highlight-colors" })
 
 	require("nvim-highlight-colors").setup({
@@ -1458,7 +1461,7 @@ _G.later(function()
 end)
 
 -- (grug-far.nvim) Search and replace
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/MagicDuck/grug-far.nvim" })
 
 	require("grug-far").setup({
@@ -1500,7 +1503,7 @@ _G.later(function()
 		{ desc = "Replace", noremap = false, silent = true }
 	)
 
-	_G.augroup("grugfar", {
+	_G.helpers.new_autocmd("grugfar", {
 		{ "Filetype" },
 		{
 			pattern = "grug-far",
@@ -1517,7 +1520,7 @@ _G.later(function()
 end)
 
 -- (quicker.nvim) Quickfix list QOL
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/stevearc/quicker.nvim" })
 
 	require("quicker").setup({
@@ -1576,7 +1579,7 @@ _G.later(function()
 end)
 
 -- (aerial.nvim) Code outline and navigation
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/stevearc/aerial.nvim" })
 
 	require("aerial").setup({
@@ -1635,7 +1638,7 @@ _G.later(function()
 		function() vim.cmd("AerialToggle") end
 	)
 
-	_G.augroup("aerial", {
+	_G.helpers.new_autocmd("aerial", {
 		{ "Filetype" },
 		{
 			pattern = "aerial",
@@ -1652,7 +1655,7 @@ _G.later(function()
 end)
 
 -- (nvim-spider) use the w, e, b motions like a spider.
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/chrisgrieser/nvim-spider" })
 
 	require("spider").setup()
@@ -1675,7 +1678,7 @@ _G.later(function()
 end)
 
 -- (tiny-inline-diagnostic.nvim) Better virtual diagnostic
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/rachartier/tiny-inline-diagnostic.nvim" })
 
 	require("tiny-inline-diagnostic").setup({
@@ -1705,7 +1708,7 @@ _G.later(function()
 end)
 
 -- (codediff.nvim) Side-by-side diffs
-_G.now(function()
+now(function()
 	vim.pack.add({
 		"https://github.com/esmuellert/codediff.nvim",
 		"https://github.com/MunifTanjim/nui.nvim",
@@ -1803,7 +1806,7 @@ _G.now(function()
 		{ desc = "Diffmode", noremap = false, silent = true }
 	)
 
-	_G.augroup("codediff", {
+	_G.helpers.new_autocmd("codediff", {
 		{ "BufEnter", "ColorScheme" },
 		{
 			desc = "set highlights for history panel",
@@ -1850,7 +1853,7 @@ _G.now(function()
 end)
 
 -- (opencode.nvim) Opencode integration
-_G.later(function()
+later(function()
 	vim.pack.add({
 		"https://github.com/nickjvandyke/opencode.nvim",
 	})
@@ -1901,7 +1904,7 @@ _G.later(function()
 end)
 
 -- (vim-illuminate) Highlight word under cursor
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/RRethy/vim-illuminate" })
 	require("illuminate").configure({
 		providers = { "lsp" },
@@ -1911,7 +1914,7 @@ _G.later(function()
 end)
 
 -- (fyler.nvim) File tree with editor buffer
-_G.now_if_args(function()
+later(function()
 	vim.pack.add({ "https://github.com/A7Lavinraj/fyler.nvim" })
 
 	require("fyler").setup({
@@ -2003,7 +2006,7 @@ _G.now_if_args(function()
 end)
 
 -- (oil.nvim) Buffer-like file browser
-_G.now_if_args(function()
+now_if_args(function()
 	vim.pack.add({ "https://github.com/stevearc/oil.nvim" })
 
 	local detail = false
@@ -2084,17 +2087,17 @@ _G.now_if_args(function()
 end)
 
 -- (matchparen.nvim) Faster matchparen
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/monkoose/matchparen.nvim" })
 	require("matchparen").setup()
 end)
 
 -- (jupynvim) Jupyter notebook in nvim
-_G.now(function()
+now(function()
 	local plugin_dir = vim.fn.stdpath("data") .. "site/pack/core/opt/jupynvim/"
 	local manifest = plugin_dir .. "/core/Cargo.toml"
 
-	_G.on_packchanged(
+	_G.helpers.on_packchanged(
 		"jupynvim",
 		{ "update" },
 		vim.fn.system({ "cargo", "build", "--release", "--manifest-path", manifest }),
@@ -2117,7 +2120,7 @@ _G.now(function()
 end)
 
 -- (dadbod-griop) DB client and UI
-_G.later(function()
+later(function()
 	vim.pack.add({ "https://github.com/joryeugene/dadbod-grip.nvim" })
 
 	require("dadbod-grip").setup({
@@ -2141,4 +2144,108 @@ _G.later(function()
 		function() vim.cmd("GripToggle") end,
 		{ desc = "Database toggle", noremap = false, silent = true }
 	)
+end)
+-- (codeowners) CODEOWNERS syntax
+later(
+	function() vim.pack.add({ "https://github.com/rhysd/vim-syntax-codeowners" }) end
+)
+
+-- (zk-nvim) Markdown note taking assistant
+later(function()
+	vim.pack.add({ "https://github.com/zk-org/zk-nvim" })
+
+	require("zk").setup({
+		picker = "fzf_lua",
+		auto_attach = {
+			enabled = true,
+			filetypes = { "markdown" },
+		},
+		lsp = {},
+	})
+end)
+
+-- (render-markdown.nvim) Nice markdown rendering
+later(function()
+	vim.pack.add({ "https://github.com/MeanderingProgrammer/render-markdown.nvim" })
+
+	require("render-markdown").setup({
+		---@module 'render-markdown'
+		---@type render.md.UserConfig
+		completions = { lsp = { enabled = true } },
+		anti_conceal = { enabled = true },
+		latex = { enabled = false },
+		heading = {
+			width = "block",
+			left_pad = 0,
+			right_pad = 1,
+			left_margin = 0,
+			position = "inline",
+			icons = { " 󰉫 ", " 󰉬 ", " 󰉭 ", " 󰉮 ", " 󰉯 ", " 󰉰 " },
+		},
+		sign = { enabled = false },
+		code = {
+			sign = false,
+			language_pad = 1,
+			left_pad = 1,
+			right_pad = 1,
+			width = "block",
+			inline_pad = 1,
+			min_width = 50,
+			border = "thin",
+		},
+		checkbox = {
+			unchecked = { icon = "󰄱 " },
+			checked = { icon = "󰄲 " },
+			custom = {
+				todo = {
+					raw = "[-]",
+					rendered = "󰡖 ",
+					highlight = "RenderMarkdownTodo",
+					scope_highlight = nil,
+				},
+			},
+		},
+		link = {
+			footnote = {
+				superscript = false,
+				prefix = "[",
+				suffix = "]",
+			},
+			image = "󰋩 ",
+			email = "󰇮 ",
+			hyperlink = "󰌷 ",
+			highlight = "RenderMarkdownLink",
+			wiki = {
+				icon = "󱗖 ",
+				highlight = "RenderMarkdownWikiLink",
+			},
+			custom = {
+				web = { pattern = "^http", icon = "󰖟 " },
+				discord = { pattern = "discord%.com", icon = "󰙯 " },
+				github = { pattern = "github%.com", icon = "󰊤 " },
+				gitlab = { pattern = "gitlab%.com", icon = "󰮠 " },
+				gitea = { pattern = "g%.beee%.ps", icon = " " },
+				google = { pattern = "google%.com", icon = "󰊭 " },
+				neovim = { pattern = "neovim%.io", icon = " " },
+				reddit = { pattern = "reddit%.com", icon = "󰑍 " },
+				stackoverflow = { pattern = "stackoverflow%.com", icon = "󰓌 " },
+				wikipedia = { pattern = "wikipedia%.org", icon = "󰖬 " },
+				youtube = { pattern = "youtube%.com", icon = "󰗃 " },
+			},
+		},
+		win_options = {
+			conceallevel = {
+				default = vim.o.conceallevel,
+				rendered = 3,
+			},
+			concealcursor = {
+				default = vim.o.concealcursor,
+				rendered = "",
+			},
+		},
+		bullet = {
+			icons = { "•", "◦", "•", "◦" },
+		},
+		yaml = { enabled = false },
+	})
 end)

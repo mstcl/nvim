@@ -3,6 +3,9 @@
 ---@type table
 _G.config = {}
 
+-- autosave in milliseconds
+_G.config.autosave_debounce_delay = 300
+
 ---@type table
 _G.config.treesitter = {}
 
@@ -124,7 +127,6 @@ _G.config.treesitter.grammars = {
 	"git_rebase",
 	"regex",
 	"ini",
-	"muttrc",
 	"printf",
 	"passwd",
 	"php",
@@ -153,8 +155,8 @@ _G.config.treesitter.grammars = {
 _G.config.treesitter.disabled_filetypes = {
 	"csv",
 	-- "go",
-	"terraform",
-	"hcl",
+	-- "terraform",
+	-- "hcl",
 }
 
 ---Set default LSP configuration (what appears as default)

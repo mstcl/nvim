@@ -2,7 +2,28 @@
 -- this file is basically self-documenting and honestly it's a bit messy so
 -- I won't be documenting every single one of them
 
-_G.augroup("formatoptions", {
+_G.helpers.new_autocmd("autosave", {
+	{ "BufLeave", "WinLeave", "FocusLost" },
+	{
+		nested = true,
+		desc = "Autosave on focus change.",
+		callback = function(args)
+			-- Don't auto-save non-file buffers
+			vim.uv.fs_stat(args.file, function(err, stat)
+				if err or not stat or stat.type ~= "file" then return end
+				vim.schedule(function()
+					if not vim.api.nvim_buf_is_valid(args.buf) then return end
+					vim.api.nvim_buf_call(
+						args.buf,
+						function() vim.cmd.update({ mods = { emsg_silent = true } }) end
+					)
+				end)
+			end)
+		end,
+	},
+})
+
+_G.helpers.new_autocmd("formatoptions", {
 	"BufEnter",
 	{
 		pattern = "*",
@@ -16,7 +37,7 @@ _G.augroup("formatoptions", {
 	},
 })
 
-_G.augroup("clean", {
+_G.helpers.new_autocmd("clean", {
 	{ "BufRead", "BufEnter", "BufReadPre", "FileType" },
 	{
 		desc = "disable some buffer noise for special buftypes/filetypes",
@@ -43,7 +64,7 @@ _G.augroup("clean", {
 	},
 })
 
-_G.augroup("prose", {
+_G.helpers.new_autocmd("prose", {
 	{ "BufNewFile", "BufRead" },
 	{
 		desc = "enable text editing options, spellcheck and spell correction on certain filetypes",
@@ -64,7 +85,7 @@ _G.augroup("prose", {
 	},
 })
 
-_G.augroup("help", {
+_G.helpers.new_autocmd("help", {
 	{ "Filetype" },
 	{
 		desc = "open help in vertical split",
@@ -77,7 +98,7 @@ _G.augroup("help", {
 	},
 })
 
-_G.augroup("root", {
+_G.helpers.new_autocmd("root", {
 	{ "BufEnter" },
 	{
 		desc = "set cwd to project root directory",
@@ -94,18 +115,21 @@ _G.augroup("root", {
 	},
 })
 
-_G.augroup("bigfile", {
+_G.helpers.new_autocmd("bigfile", {
 	{ "BufReadPre" },
 	{
 		desc = "set settings for really big files",
 		pattern = "*",
 		callback = function()
-			if _G.big(vim.fn.expand("%")) then vim.cmd("Mode bigfile") end
+			---@diagnostic disable-next-line: param-type-mismatch
+			if _G.helpers.is_big_file(vim.fn.expand("%")) then
+				vim.cmd("Mode bigfile")
+			end
 		end,
 	},
 })
 
-_G.augroup("terminal", {
+_G.helpers.new_autocmd("terminal", {
 	{ "TermOpen", "BufWinEnter", "WinEnter" },
 	{
 		desc = "set settings for terminal",
@@ -125,7 +149,7 @@ _G.augroup("terminal", {
 	},
 })
 
-_G.augroup("lsp", {
+_G.helpers.new_autocmd("lsp", {
 	"LspAttach",
 	{
 		desc = "on attach for LSP",
@@ -219,14 +243,14 @@ _G.augroup("lsp", {
 
 			-- inlay hints
 			if client.server_capabilities.inlayHintProvider then
-				setup_inlay_hints()
+				_G.helpers.lsp.setup_inlay_hints()
 				vim.lsp.inlay_hint.enable(_G.config.lsp.features.inlay_hints)
 			end
 
 			-- code lens
 			if client.server_capabilities.codeLensProvider then
 				vim.lsp.codelens.enable(true, { buffer = bufnr, client = client })
-				_G.augroup("codeLensRefresh", {
+				_G.helpers.new_autocmd("codeLensRefresh", {
 					{ "BufEnter", "CursorHold", "InsertLeave" },
 					{
 						buffer = bufnr,
@@ -243,65 +267,38 @@ _G.augroup("lsp", {
 	},
 })
 
--- add padding around inlay hint
--- thanks https://github.com/nickkadutskyi/nvim/blob/0a06aaba3d0ac77256e0bf30842d1cb6ea742fe7/lua/ide/lsp/inlay_hint.lua
-function setup_inlay_hints()
-	local inlay_hint = require("vim.lsp._capability").all.inlay_hint
-	if inlay_hint.pill_renderer then return end
-	inlay_hint.pill_renderer = true
-
-	function inlay_hint:on_win(topline, botline)
-		local api = vim.api
-		local buf_versions = require("vim.lsp.util").buf_versions
-
-		for _, state in pairs(self.client_state) do
-			local current_result = state.current_result
-			if current_result.version == buf_versions[self.bufnr] then
-				if not current_result.namespace_cleared then
-					api.nvim_buf_clear_namespace(self.bufnr, state.namespace, 0, -1)
-					current_result.namespace_cleared = true
-				end
-
-				local hints = assert(current_result.hints)
-				for lnum = topline, botline do
-					local hint_virtual_texts = {}
-					local line_hints = hints[lnum]
-					if line_hints and not line_hints.applied then
-						line_hints.applied = true
-						for _, hint in pairs(line_hints.hints) do
-							local label = hint.label
-							local text = type(label) == "string" and label
-								or vim.iter(label)
-									:map(function(part) return part.value end)
-									:join("")
-							local virtual_text = hint_virtual_texts[hint.position.character]
-								or {}
-
-							virtual_text[#virtual_text + 1] = { "▐", "NonText" }
-							virtual_text[#virtual_text + 1] =
-								{ text, "LspInlayHint" }
-							virtual_text[#virtual_text + 1] = { "▌", "NonText" }
-
-							hint_virtual_texts[hint.position.character] =
-								virtual_text
-						end
-					end
-
-					for position, virtual_text in pairs(hint_virtual_texts) do
-						api.nvim_buf_set_extmark(
-							self.bufnr,
-							state.namespace,
-							lnum,
-							position,
-							{
-								virt_text_pos = "inline",
-								ephemeral = false,
-								virt_text = virtual_text,
-							}
-						)
-					end
-				end
-			end
-		end
+local function stop_hl()
+	if vim.v.hlsearch == 1 then
+		vim.api.nvim_feedkeys(
+			vim.api.nvim_replace_termcodes("<Cmd>nohl<CR>", true, false, true),
+			"n",
+			false
+		)
 	end
 end
+
+local function start_hl()
+	local res = vim.fn.getreg("/")
+	if vim.v.hlsearch == 0 or res == "" then return end
+	if res:find([[%#]], 1, true) then
+		stop_hl()
+		return
+	end
+
+	local ok, match = pcall(vim.fn.search, [[\%#\zs]] .. res, "cnW")
+	if ok and match == 0 then stop_hl() end
+end
+
+_G.helpers.new_autocmd("hlsearch", {
+	"CursorMoved",
+	{
+		callback = start_hl,
+		desc = "Auto clear hlsearch on cursor move",
+	},
+}, {
+	"InsertEnter",
+	{
+		callback = stop_hl,
+		desc = "Auto clear hlsearch on insert mode",
+	},
+})

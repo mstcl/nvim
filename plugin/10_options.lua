@@ -48,13 +48,14 @@ vim.g.markdown_enable_conceal = 1
 vim.g.markdown_enable_folding = 0
 
 -- Files
+vim.opt.autowriteall = true
 vim.opt.autochdir = false
 vim.opt.autoread = true
 vim.opt.swapfile = false
 vim.opt.path = vim.opt.path + "**"
 vim.opt.history = 1000
 vim.opt.undofile = true
-vim.opt.undolevels = 500
+vim.opt.undolevels = 500 -- save a lot of undo steps
 vim.opt.encoding = "utf-8"
 vim.opt.modeline = true
 vim.opt.modelines = 1
@@ -62,7 +63,7 @@ vim.opt.shada = "'100,<50,s10,:1000,/100,@100,h" -- limit shada file
 
 -- Ticks
 vim.opt.updatetime = 180
-vim.opt.timeoutlen = 400
+vim.opt.timeoutlen = 400 -- generous enough for ssh sessions
 vim.opt.ttimeout = true
 vim.opt.ttimeoutlen = 10
 

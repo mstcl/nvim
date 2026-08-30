@@ -10,13 +10,20 @@ vim.keymap.set(
 	{ remap = false, desc = "Command", silent = true }
 )
 
--- Overload default <C-L> with more stuff
+-- escape exits but also clear highlights
 vim.keymap.set(
 	"n",
-	"<C-L>",
-	function() vim.cmd("Clear") end,
+	"<esc>",
+	function() vim.cmd("noh") end,
 	{ desc = "Clear screen & highlights", noremap = false, silent = true }
 )
+
+-- <C-L> on steroids
+vim.keymap.set("n", "<leader>L", function() vim.cmd("Clear") end, {
+	desc = "Refresh screen and restart lsp",
+	noremap = false,
+	silent = true,
+})
 
 -- Searching with nicer focus so you can actually follow it
 vim.keymap.set("n", "n", "nzz", { desc = "Search previous result" })
