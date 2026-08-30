@@ -76,10 +76,6 @@
       "rev": "a311ed247d527db9592bb434356badc705363746",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
-    "minibuffer.nvim": {
-      "rev": "8fb32f132d2bd16218a2fb8e62fe91a3e3191d13",
-      "src": "https://github.com/simifalaye/minibuffer.nvim"
-    },
     "msgarea.nvim": {
       "rev": "00a50b329552b79d7d948d5b504b545df7edf951",
       "src": "https://github.com/edisj/msgarea.nvim"
@@ -156,25 +152,13 @@
       "rev": "0e4b69f3e53c8348f8216bc1cfce3364566dfa5e",
       "src": "https://github.com/mstcl/tavern.nvim"
     },
-    "tiny-cmdline.nvim": {
-      "rev": "e247d9ee4c980734f8f8bf616d31e0ab7c27485d",
-      "src": "https://github.com/rachartier/tiny-cmdline.nvim"
-    },
     "tiny-inline-diagnostic.nvim": {
       "rev": "6264451f14119d63a52580e5198d6baf8518b0b2",
       "src": "https://github.com/rachartier/tiny-inline-diagnostic.nvim"
     },
-    "typst.vim": {
-      "rev": "1d5436c0f55490893892441c0eca55e6cdf4916c",
-      "src": "https://github.com/kaarmu/typst.vim"
-    },
     "vim-illuminate": {
       "rev": "1cc33d347c574c3bd21a4852fc9ffed677c1c58c",
       "src": "https://github.com/RRethy/vim-illuminate"
-    },
-    "vim-syntax-codeowners": {
-      "rev": "57c1ca9358f1fa82c4adfd8f0f9292da26e01681",
-      "src": "https://github.com/rhysd/vim-syntax-codeowners"
     },
     "zk-nvim": {
       "rev": "a2a2c850e7876415a9961c7c409328ead78f18b3",
