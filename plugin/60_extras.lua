@@ -1920,7 +1920,7 @@ later(function()
 	require("fyler").setup({
 		win_opts = {
 			list = false,
-			relativenumber = true,
+			relativenumber = false,
 			signcolumn = "no",
 			foldcolumn = "0",
 			statuscolumn = "",
@@ -1933,7 +1933,7 @@ later(function()
 			watcher = { enabled = true },
 		},
 		integrations = {
-			icon = "mini.icons",
+			icon = "nvim_web_devicons",
 		},
 		kind = "split_left_most",
 		kind_presets = {
