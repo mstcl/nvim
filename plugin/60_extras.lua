@@ -1,5 +1,4 @@
 -- External plugins
-
 local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
 local now = _G.helpers.now
 local later = _G.helpers.later
@@ -67,9 +66,150 @@ later(function()
 	require("mini.clue").setup({
 		window = {
 			delay = 200,
-			config = {
-				width = 50,
-			},
+			-- show clue like which-key.nvim
+			config = function(buf_id)
+				local sep = "·"
+				local sep_len = vim.fn.strdisplaywidth(sep) -- Returns 2
+				local raw_lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
+				local ns_id = vim.api.nvim_create_namespace("miniclue_cols")
+
+				local entries = {}
+				local max_key_len = 0
+				local max_desc_len = 0
+
+				for _, line in ipairs(raw_lines) do
+					local key, desc = line:match("^%s*(.-)%s*│%s*(.-)%s*$")
+					if key and desc then
+						max_key_len =
+							math.max(max_key_len, vim.fn.strdisplaywidth(key))
+						max_desc_len =
+							math.max(max_desc_len, vim.fn.strdisplaywidth(desc))
+						table.insert(entries, { key = key, desc = desc })
+					end
+				end
+
+				if #entries == 0 then
+					return {
+						relative = "msgarea",
+						height = 1,
+						width = vim.o.columns,
+						row = 0,
+						col = 0,
+					}
+				end
+
+				-- 2. Calculate Dynamic Columns (accounting for left and right outer padding)
+				local left_pad = " "
+				local right_pad = " "
+				local outer_padding_width = vim.fn.strdisplaywidth(left_pad)
+					+ vim.fn.strdisplaywidth(right_pad)
+
+				local key_col_width = max_key_len
+				local desc_col_width = max_desc_len
+				local entry_width = key_col_width
+					+ 1
+					+ sep_len
+					+ 1
+					+ desc_col_width
+					+ 3
+
+				-- Subtract outer padding from total columns so dynamic column count fits precisely
+				local available_width = vim.o.columns - outer_padding_width
+				local num_cols =
+					math.max(1, math.floor(available_width / entry_width))
+				local num_rows = math.ceil(#entries / num_cols)
+
+				local chunked_lines = {}
+				local highlights = {}
+
+				for r = 1, num_rows do
+					-- Start line with the left padding
+					local line_str = left_pad
+
+					for c = 0, num_cols - 1 do
+						local idx = r + (c * num_rows)
+						if entries[idx] then
+							local item = entries[idx]
+
+							local key_pad = string.rep(
+								" ",
+								key_col_width - vim.fn.strdisplaywidth(item.key)
+							)
+							local desc_pad = string.rep(
+								" ",
+								desc_col_width - vim.fn.strdisplaywidth(item.desc)
+							)
+
+							-- Key
+							local key_start = #line_str
+							line_str = line_str .. item.key
+							local key_end = #line_str
+
+							table.insert(highlights, {
+								line = r - 1,
+								group = "MiniClueNextKey",
+								start_col = key_start,
+								end_col = key_end,
+							})
+
+							line_str = line_str .. key_pad .. " "
+
+							-- Separator
+							local sep_start = #line_str
+							line_str = line_str .. sep
+							local sep_end = #line_str
+
+							table.insert(highlights, {
+								line = r - 1,
+								group = "MiniClueSeparator",
+								start_col = sep_start,
+								end_col = sep_end,
+							})
+
+							line_str = line_str .. " "
+
+							-- Desc
+							local desc_start = #line_str
+							line_str = line_str .. item.desc
+							local desc_end = #line_str
+
+							table.insert(highlights, {
+								line = r - 1,
+								group = "MiniClueDesc",
+								start_col = desc_start,
+								end_col = desc_end,
+							})
+
+							line_str = line_str .. desc_pad .. "   "
+						end
+					end
+
+					-- Append the right padding to the end of the line
+					line_str = line_str .. right_pad
+					table.insert(chunked_lines, line_str)
+				end
+
+				vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, chunked_lines)
+
+				for _, hl in ipairs(highlights) do
+					vim.hl.range(
+						buf_id,
+						ns_id,
+						hl.group,
+						{ hl.line, hl.start_col },
+						{ hl.line, hl.end_col }
+					)
+				end
+
+				return {
+					relative = "msgarea",
+					height = #chunked_lines + 2,
+					width = entry_width,
+					border = config.border,
+					row = 0,
+					col = 0,
+				}
+			end,
 		},
 
 		triggers = {
@@ -108,6 +248,10 @@ later(function()
 
 			-- conflict
 			{ mode = "n", keys = "c" },
+
+			-- surround
+			{ mode = "n", keys = "s" },
+			{ mode = "x", keys = "s" },
 		},
 
 		clues = {
@@ -116,17 +260,18 @@ later(function()
 			require("mini.clue").gen_clues.registers(),
 			require("mini.clue").gen_clues.square_brackets(),
 			require("mini.clue").gen_clues.z(),
-			require("mini.clue").gen_clues.windows({ submode_resize = true }),
+			require("mini.clue").gen_clues.windows({
+				submode_resize = true,
+				submode_move = true,
+			}),
 
-			{ mode = "n", keys = "<leader>u", desc = "Jump to special files [+]" },
-			{ mode = "n", keys = "<leader>c", desc = "Conflicts [+]" },
-			{ mode = "n", keys = "<leader>j", desc = "Jupyter remote [+]" },
-			{ mode = "n", keys = "<leader>n", desc = "Jupyter [+]" },
 			{
 				mode = "n",
-				keys = "<leader>cd",
-				desc = "Diff preview [+]",
+				keys = "<leader>q",
+				desc = "Quick jump [+]",
 			},
+			{ mode = "n", keys = "<leader>c", desc = "Conflicts [+]" },
+			{ mode = "n", keys = "<leader>j", desc = "Jupyter [+]" },
 			{ mode = "n", keys = "gr", desc = "Symbol [+]" },
 			{ mode = "x", keys = "gr", desc = "Symbol [+]" },
 		},
@@ -237,60 +382,26 @@ end)
 later(function()
 	vim.pack.add({ "https://github.com/ibhagwan/fzf-lua" })
 
-	local central_picker_opts = {
-		preview = {
-			hidden = false,
-			border = config.border,
-			layout = "flex",
-			vertical = "up:45%",
-			horizontal = "right:55%",
-		},
-		border = config.border,
-		backdrop = 100,
-		height = 0.85,
-		width = 0.80,
-		row = 0.35,
-		col = 0.50,
-	}
-
-	local fullscreen_picker_opts = { fullscreen = true }
-
 	-- default vim.ui.select configuration
 	-- stolen from https://github.com/ibhagwan/fzf-lua/issues/793
 	require("fzf-lua").register_ui_select(function(_, items)
-		local min_h, max_h = 0.45, 0.70
-		local h = (#items + 2) / vim.o.lines
+		local min_h, max_h = 10, 12
+		local h = #items + 3
 		if h < min_h then
 			h = min_h
 		elseif h > max_h then
 			h = max_h
 		end
 
-		-- Auto-width
-		-- if (#items < 10000) then	-- Maybe disable auto-width on large results?
-		local min_w, max_w = 0.45, 0.70
-		local longest = 0
-		for _i, v in ipairs(items) do
-			local length = #v
-			if length > longest then longest = length end
-		end
-
-		local w = (longest + 5) / vim.o.columns
-		if w < min_w then
-			w = min_w
-		elseif w > max_w then
-			w = max_w
-		end
-
 		return {
+			fzf_opts = { ["--preview"] = "hidden" },
 			prompt = " ",
+			previewer = false,
 			winopts = {
-				width = w,
+				relative = "msgarea",
+				border = config.border,
 				height = h,
-				preview = {
-					vertical = "down:70%",
-					layout = "vertical",
-				},
+				preview = { hidden = true },
 			},
 		}
 	end)
@@ -308,9 +419,6 @@ later(function()
 			["--no-header-first"] = "",
 			["--border"] = "none",
 		},
-
-		-- default windown options
-		winopts = central_picker_opts,
 
 		-- configure highlights
 		-- TODO: use native highlights
@@ -410,36 +518,79 @@ later(function()
 			},
 		},
 
+		winopts = {
+			title_flags = false,
+			border = config.border,
+			backdrop = 100,
+			preview = {
+				border = config.border,
+			},
+		},
+
 		-- builtin picker configuration
 		-- global defaults; will override picker defaults unless defined below
 		defaults = {
 			formatter = "path.filename_first",
-			cwd_header = true,
+			winopts = { relative = "msgarea" },
 		},
+
+		args = { previewer = "bat" },
+		buffers = { previewer = "bat" },
 		builtin = {
+			previewer = false,
+			winopts = { preview = { hidden = false } },
+		},
+		files = {
+			previewer = "bat",
+			cwd_prompt = false,
+			cwd_header = true,
+			hidden = true,
+			follow = true,
+			no_ignore = false,
+		},
+		git = {
+			files = { previewer = "bat" },
+			hunks = { previewer = "bat" },
+		},
+		grep = { previewer = "bat" },
+		highlights = {
 			winopts = {
 				preview = {
-					layout = "vertical",
-					hidden = false,
-					vertical = "down:1",
+					title = false,
 				},
 			},
 		},
-		oldfiles = { include_current_session = true },
-		grep = { winopts = fullscreen_picker_opts },
+		quickfix = { previewer = "bat" },
+		loclist = { previewer = "bat" },
+		lines = { previewer = "bat" },
+		treesitter = { previewer = "bat" },
+		spellcheck = { previewer = "bat" },
+		profiles = { previewer = "bat" },
+		tagstack = { previewer = "bat" },
+		breakpoint = { previewer = "bat" },
+		complete_file = { previewer = "bat" },
+		undotree = { previewer = "undotree_native" },
+		manpages = { previewer = "man_native" },
+		helptags = { previewer = "help_native" },
+		oldfiles = { previewer = "bat", include_current_session = true },
 		commands = { sort_lastused = true },
 		lsp = {
-			symbol_fmt = function(s) return s:lower() .. "\t" end,
+			previewer = "bat",
+			-- symbol_fmt = function(s) return s:lower() .. "\t" end,
 			child_prefix = false,
+			symbols = { previewer = "bat" },
+			finder = { previewer = "bat" },
+			code_actions = { previewer = "codeaction_native" },
 		},
-		tabs = { tab_marker = "◀" },
+		tabs = { previewer = "bat", tab_marker = "◀" },
+		diagnostics = { previewer = "bat" },
 	})
 
 	vim.keymap.set(
 		"n",
 		"<leader>r",
 		function() vim.cmd("FzfLua resume") end,
-		{ desc = "Resume picker", noremap = false, silent = true }
+		{ desc = "Resume", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
@@ -474,28 +625,49 @@ later(function()
 		"n",
 		"<leader>s",
 		function() vim.cmd("FzfLua live_grep multiline=2") end,
-		{ desc = "Search workspace", noremap = false, silent = true }
+		{ desc = "Search", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
 		"<leader>w",
 		function() vim.cmd("FzfLua grep_cword") end,
-		{ desc = "Word search", noremap = false, silent = true }
+		{ desc = "Word", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
-		"<leader>W",
-		function() vim.cmd("FzfLua lsp_live_workspace_symbols") end,
-		{ desc = "Workspace symbols", noremap = false, silent = true }
+		"<leader>m",
+		function() vim.cmd("FzfLua lsp_document_symbols") end,
+		{ desc = "Symbols", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>M",
+		function() vim.cmd("FzfLua lsp_workspace_symbols") end,
+		{ desc = "Symbols [ws]", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>n",
+		function() vim.cmd("FzfLua lsp_document_diagnostics") end,
+		{ desc = "Diagnostics", noremap = false, silent = true }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>N",
+		function() vim.cmd("FzfLua lsp_workspace_diagnostics") end,
+		{ desc = "Diganostics [ws]", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		"n",
 		"<leader>F",
 		function() vim.cmd("FzfLua files cwd=~/projects") end,
-		{ desc = "Files (all projects)", noremap = false, silent = true }
+		{ desc = "Files [projects]", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
@@ -561,7 +733,7 @@ later(function()
 			})
 
 			vim.keymap.set("n", "<leader>G", gitsigns.preview_hunk, {
-				desc = "Git hunk diff",
+				desc = "Git [hunk]",
 				noremap = false,
 				silent = true,
 				buffer = bufnr,
@@ -572,7 +744,7 @@ later(function()
 				"<leader>B",
 				function() gitsigns.blame_line({ full = true }) end,
 				{
-					desc = "Blame line",
+					desc = "Blame",
 					noremap = false,
 					silent = true,
 					buffer = bufnr,
@@ -580,21 +752,21 @@ later(function()
 			)
 
 			vim.keymap.set("n", "<leader>S", gitsigns.stage_hunk, {
-				desc = "Stage hunk",
+				desc = "Stage",
 				noremap = false,
 				silent = true,
 				buffer = bufnr,
 			})
 
 			vim.keymap.set("n", "<leader>U", gitsigns.undo_stage_hunk, {
-				desc = "Unstage hunk",
+				desc = "Unstage",
 				noremap = false,
 				silent = true,
 				buffer = bufnr,
 			})
 
 			vim.keymap.set("n", "<leader>X", gitsigns.reset_hunk, {
-				desc = "Reset hunk",
+				desc = "Reset",
 				noremap = false,
 				silent = true,
 				buffer = bufnr,
@@ -607,7 +779,7 @@ later(function()
 					gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end,
 				{
-					desc = "Stage hunk",
+					desc = "Stage",
 					noremap = false,
 					silent = true,
 					buffer = bufnr,
@@ -621,7 +793,7 @@ later(function()
 					gitsigns.undo_stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end,
 				{
-					desc = "Unstage hunk",
+					desc = "Unstage",
 					noremap = false,
 					silent = true,
 					buffer = bufnr,
@@ -635,7 +807,7 @@ later(function()
 					gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end,
 				{
-					desc = "Reset hunk",
+					desc = "Reset",
 					noremap = false,
 					silent = true,
 					buffer = bufnr,
@@ -699,7 +871,7 @@ later(function()
 		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
 		commit_editor = { kind = "vsplit" },
 		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
-		integrations = { fzf_lua = true, codediff = true },
+		integrations = { fzf_lua = false }, -- purposefully turn this off to work with fzf in msgarea, so it doesn't do weird previewers
 		diff_viewer = "codediff",
 		signs = {
 			hunk = { " ", " " },
@@ -741,13 +913,6 @@ later(function()
 		"<leader>g",
 		function() vim.cmd("Neogit") end,
 		{ desc = "Git", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>C",
-		function() vim.cmd("NeogitCommit") end,
-		{ desc = "Commit (latest)", noremap = false, silent = true }
 	)
 end)
 
@@ -816,7 +981,7 @@ later(function()
 				action = require("gitlinker.actions").system,
 			})
 		end,
-		{ silent = true, noremap = true, desc = "GitLink" }
+		{ silent = true, noremap = true, desc = "Link" }
 	)
 end)
 
@@ -853,6 +1018,9 @@ later(function()
 			["<C-f>"] = {},
 			["<Up>"] = {},
 			["<Down>"] = {},
+		},
+		cmdline = {
+			enabled = false,
 		},
 		completion = {
 			list = {
@@ -1340,7 +1508,7 @@ later(function()
 		{ "BufWritePost" },
 		{
 			desc = "lint file",
-			callback = function(args) require("lint").try_lint() end,
+			callback = function(_) require("lint").try_lint() end,
 		},
 	})
 end)
@@ -1519,141 +1687,6 @@ later(function()
 	})
 end)
 
--- (quicker.nvim) Quickfix list QOL
-later(function()
-	vim.pack.add({ "https://github.com/stevearc/quicker.nvim" })
-
-	require("quicker").setup({
-		---@module "quicker"
-		---@type quicker.SetupOptions
-		borders = {
-			vert = " ┆ ",
-			strong_header = "─",
-			strong_cross = "─┼─",
-			strong_end = "─┤ ",
-			soft_header = "╌",
-			soft_cross = "╌┼╌",
-			soft_end = "╌┤ ",
-		},
-		opts = {
-			colorcolumn = "",
-			buflisted = false,
-			number = false,
-			relativenumber = false,
-			signcolumn = "auto",
-			winfixheight = true,
-			wrap = false,
-		},
-		keys = {
-			{
-				">",
-				function()
-					require("quicker").expand({
-						before = 2,
-						after = 2,
-						add_to_existing = true,
-					})
-				end,
-				desc = "expand quickfix context",
-			},
-			{
-				"<",
-				function() require("quicker").collapse() end,
-				desc = "collapse quickfix context",
-			},
-		},
-	})
-
-	vim.keymap.set(
-		"n",
-		"<leader>q",
-		function() require("quicker").toggle() end,
-		{ desc = "Quickfix", noremap = false, silent = true }
-	)
-	vim.keymap.set(
-		"n",
-		"<leader>l",
-		function() require("quicker").toggle({ loclist = true }) end,
-		{ desc = "Location list", noremap = false, silent = true }
-	)
-end)
-
--- (aerial.nvim) Code outline and navigation
-later(function()
-	vim.pack.add({ "https://github.com/stevearc/aerial.nvim" })
-
-	require("aerial").setup({
-		icons = config.signs.kinds_padded,
-		guides = {
-			nested_top = " │ ",
-			mid_item = " ├─",
-			last_item = " └─",
-			whitespace = "   ",
-		},
-		ignore = {
-			unlisted_buffers = false,
-			diff_windows = true,
-			buftypes = "special",
-			wintypes = "special",
-		},
-		close_automatic_events = {
-			"unfocus",
-			"switch_buffer",
-			"unsupported",
-		},
-		show_guides = true,
-		open_automatic = false,
-		layout = {
-			placement = "edge",
-			close_on_select = false,
-			max_width = 35,
-			min_width = 28,
-		},
-	})
-
-	vim.keymap.set(
-		"n",
-		"}",
-		function() vim.cmd("AerialNext") end,
-		{ desc = "Next symbol", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"{",
-		function() vim.cmd("AerialPrev") end,
-		{ desc = "Previous symbol", noremap = false, silent = true }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>A",
-		function() vim.cmd("AerialToggle") end,
-		{ desc = "Aerial symbols", noremap = false, silent = true }
-	)
-
-	register_toggle(
-		"aerial",
-		{ "outline", "symbol" },
-		function() vim.cmd("AerialToggle") end
-	)
-
-	new_autocmd("aerial", {
-		{ "Filetype" },
-		{
-			pattern = "aerial",
-			callback = function()
-				vim.b.miniindentscope_disable = true
-				vim.b.indent_guide = false
-				vim.wo.statuscolumn = ""
-				vim.wo.cursorline = false
-				vim.wo.colorcolumn = ""
-				vim.wo.winhighlight = "Normal:ColorColumn"
-			end,
-		},
-	})
-end)
-
 -- (nvim-spider) use the w, e, b motions like a spider.
 later(function()
 	vim.pack.add({ "https://github.com/chrisgrieser/nvim-spider" })
@@ -1803,7 +1836,7 @@ now(function()
 		"n",
 		"<leader>d",
 		function() vim.cmd("CodeDiff") end,
-		{ desc = "Diffmode", noremap = false, silent = true }
+		{ desc = "Diff", noremap = false, silent = true }
 	)
 
 	new_autocmd("codediff", {
@@ -1874,7 +1907,7 @@ later(function()
 		{ "n", "x" },
 		"<leader>a",
 		function() require("opencode").ask("@this: ") end,
-		{ desc = "Ask OpenCode" }
+		{ desc = "Ask" }
 	)
 	vim.keymap.set(
 		{ "n", "x" },
@@ -1884,9 +1917,9 @@ later(function()
 	)
 	vim.keymap.set(
 		"n",
-		"<leader>i",
+		"<leader>A",
 		function() require("opencode").command("session.interrupt") end,
-		{ desc = "Interrupt OpenCode", noremap = false, silent = true }
+		{ desc = "Interrupt", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
@@ -2001,7 +2034,7 @@ later(function()
 		"n",
 		"<leader>E",
 		function() vim.cmd("Toggle tree") end,
-		{ desc = "Explorer (tree)", noremap = false, silent = true }
+		{ desc = "Explorer [tree]", noremap = false, silent = true }
 	)
 end)
 
@@ -2082,7 +2115,7 @@ now_if_args(function()
 		"n",
 		"<leader>e",
 		function() vim.cmd("Oil") end,
-		{ desc = "Explorer (oil)", noremap = false, silent = true }
+		{ desc = "Explorer", noremap = false, silent = true }
 	)
 end)
 
@@ -2109,12 +2142,12 @@ now(function()
 	require("jupynvim").setup({
 		log_level = "info",
 		image_renderer = "chafa",
-		explorer_keys = { "<leader>je" }, -- remote file tree
-		explorer_cwd_keys = { "<leader>jE" },
-		terminal_keys = { "<leader>jt" }, -- toggle a remote PTY
+		explorer_keys = {}, -- remote file tree
+		explorer_cwd_keys = {},
+		terminal_keys = {}, -- toggle a remote PTY
 		pick_keys = {
-			files = { "<leader>jf" },
-			grep = { "<leader>js" },
+			files = {},
+			grep = {},
 		},
 	})
 end)
@@ -2142,9 +2175,30 @@ later(function()
 		"n",
 		"<leader>D",
 		function() vim.cmd("GripToggle") end,
-		{ desc = "Database toggle", noremap = false, silent = true }
+		{ desc = "Databases", noremap = false, silent = true }
 	)
 end)
+
+-- (msgarea.nvim)
+now(function()
+	vim.pack.add({ "https://github.com/edisj/msgarea.nvim" })
+	require("msgarea").setup({
+		view = { max_height = 0.5 },
+		-- Cmdline completion options
+		cmdline = {
+			enable = true,
+			dynamic_height = true,
+		},
+	})
+
+	vim.keymap.set(
+		"n",
+		"<leader>i",
+		function() require("msgarea").close_all() end,
+		{ desc = "MsgArea [close]", noremap = false, silent = true }
+	)
+end)
+
 -- (codeowners) CODEOWNERS syntax
 later(
 	function() vim.pack.add({ "https://github.com/rhysd/vim-syntax-codeowners" }) end

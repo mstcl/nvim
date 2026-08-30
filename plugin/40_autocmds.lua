@@ -167,42 +167,62 @@ _G.helpers.later(function()
 					client.server_capabilities.semanticTokensProvider = nil
 				end
 
-				vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
-					desc = "Definition",
-					noremap = true,
-					silent = true,
-					buffer = bufnr,
-				})
+				vim.keymap.set(
+					"n",
+					"gd",
+					function() vim.cmd("FzfLua lsp_definitions") end,
+					{
+						desc = "Definition",
+						noremap = true,
+						silent = true,
+						buffer = bufnr,
+					}
+				)
 
-				vim.keymap.set("n", "grt", vim.lsp.buf.type_definition, {
-					desc = "Type definition",
-					noremap = true,
-					silent = true,
-					buffer = bufnr,
-				})
+				vim.keymap.set(
+					"n",
+					"grt",
+					function() vim.cmd("FzfLua lsp_typedefs") end,
+					{
+						desc = "Type definition",
+						noremap = true,
+						silent = true,
+						buffer = bufnr,
+					}
+				)
 
-				vim.keymap.set("n", "grr", vim.lsp.buf.references, {
-					desc = "References",
-					noremap = true,
-					silent = true,
-					buffer = bufnr,
-				})
+				vim.keymap.set(
+					"n",
+					"grr",
+					function() vim.cmd("FzfLua lsp_references") end,
+					{
+						desc = "References",
+						noremap = true,
+						silent = true,
+						buffer = bufnr,
+					}
+				)
 
-				vim.keymap.set("n", "gri", vim.lsp.buf.implementation, {
-					desc = "Implementation",
-					noremap = true,
-					silent = true,
-					buffer = bufnr,
-				})
+				vim.keymap.set(
+					"n",
+					"gri",
+					function() vim.cmd("FzfLua lsp_implementations") end,
+					{
+						desc = "Implementation",
+						noremap = true,
+						silent = true,
+						buffer = bufnr,
+					}
+				)
 
 				if client.server_capabilities.inlayHintProvider then
-					vim.keymap.set("n", "<leader>i", function()
+					vim.keymap.set("n", "<leader>H", function()
 						---@diagnostic disable-next-line: missing-parameter
 						vim.lsp.inlay_hint.enable(
 							not vim.lsp.inlay_hint.is_enabled()
 						)
 					end, {
-						desc = "Inlay hints",
+						desc = "Hints",
 						noremap = true,
 						silent = true,
 						buffer = bufnr,
@@ -210,16 +230,10 @@ _G.helpers.later(function()
 				end
 
 				if client.server_capabilities.codeActionProvider then
-					vim.keymap.set("n", "gra", vim.lsp.buf.code_action, {
-						desc = "Code actions",
-						noremap = true,
-						silent = true,
-						buffer = bufnr,
-					})
 					vim.keymap.set(
-						"v",
+						"n",
 						"gra",
-						":'<,'>lua vim.lsp.buf.range_code_action()<CR>",
+						function() vim.cmd("FzfLua lsp_code_actions") end,
 						{
 							desc = "Code actions",
 							noremap = true,
@@ -239,12 +253,17 @@ _G.helpers.later(function()
 				end
 
 				if client.server_capabilities.declarationProvider then
-					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {
-						desc = "Declaration",
-						noremap = true,
-						silent = true,
-						buffer = bufnr,
-					})
+					vim.keymap.set(
+						"n",
+						"gD",
+						function() vim.cmd("FzfLua lsp_declarations") end,
+						{
+							desc = "Declaration",
+							noremap = true,
+							silent = true,
+							buffer = bufnr,
+						}
+					)
 				end
 
 				-- inlay hints
@@ -307,6 +326,45 @@ _G.helpers.later(function()
 		{
 			callback = stop_hlsearch,
 			desc = "Auto clear hlsearch on insert mode",
+		},
+	})
+
+	new_autocmd("quickfix", {
+		"BufRead",
+		{
+			callback = function(ev)
+				if vim.bo[ev.buf].buftype ~= "quickfix" then return end
+				vim.schedule(function()
+					local winid = vim.fn.bufwinid(ev.buf)
+					local wintype = vim.fn.win_gettype(winid)
+					local title = wintype == "loclist" and " Loclist "
+						or " Quickfix "
+					vim.api.nvim_win_set_config(winid, {
+						title = title,
+						relative = "msgarea",
+						height = 12,
+						style = "minimal",
+					})
+				end)
+			end,
+		},
+	})
+
+	new_autocmd("health", {
+		{ "FileType" },
+		{
+			pattern = "checkhealth",
+			callback = function(ev)
+				vim.schedule(function()
+					local winid = vim.fn.bufwinid(ev.buf)
+					vim.api.nvim_win_set_config(winid, {
+						title = "Health",
+						relative = "msgarea",
+						height = 12,
+						style = "minimal",
+					})
+				end)
+			end,
 		},
 	})
 end)

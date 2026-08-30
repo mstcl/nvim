@@ -230,11 +230,10 @@ _G.helpers.later(function()
 
 		-- picker
 		require("fzf-lua").fzf_exec(display, {
+			previewer = false,
 			winopts = {
 				title = " Context ",
-				title_pos = "center",
-				width = 0.35,
-				height = 0.21,
+				height = 13,
 			},
 			actions = {
 				["default"] = function(selected)
@@ -257,22 +256,10 @@ _G.helpers.later(function()
 		require("fzf-lua").fzf_exec("zoxide query -l", {
 			winopts = {
 				title = " Zoxide ",
-				title_pos = "center",
-				preview = {
-					horizontal = "right:30%",
-				},
-				width = 0.5,
 			},
 			fzf_opts = { ["--no-multi"] = "" },
-			preview = {
-				fn = function(args)
-					return string.format(
-						"eza --color=always --group-directories-first -TDa --git --git-ignore -L 1 %s | head -200",
-						vim.fn.shellescape(args[1])
-					)
-				end,
-				type = "cmd",
-			},
+			previewer = false,
+			preview = "eza --color=always --group-directories-first -TDa --git --git-ignore -L 1 {1} | head -200",
 			actions = {
 				["ctrl-o"] = {
 					fn = function(selected) require("oil").open(selected[1]) end,
@@ -308,17 +295,12 @@ _G.helpers.later(function()
 		end
 
 		fzf_lua.fzf_exec(lines, {
+			previewer = false,
 			winopts = {
 				title = " Environment Variables ",
-				title_pos = "center",
-				width = 0.4,
-				preview = {
-					hidden = false,
-					layout = "vertical",
-					vertical = "down:1",
-				},
 			},
 			fzf_opts = {
+				["--preview"] = "echo {1}",
 				["--with-nth"] = "1",
 				["--nth"] = "1",
 				["--delimiter"] = "\t",
@@ -347,15 +329,15 @@ _G.helpers.later(function()
 
 	vim.keymap.set(
 		{ "n", "v" },
-		"<leader>x",
+		"<leader>C",
 		function() context_picker() end,
-		{ desc = "Context picker", noremap = false, silent = true }
+		{ desc = "Context", noremap = false, silent = true }
 	)
 
 	vim.keymap.set(
 		{ "n", "v" },
 		"<leader>v",
 		function() env_picker() end,
-		{ desc = "Environment variables", noremap = false, silent = true }
+		{ desc = "Environment", noremap = false, silent = true }
 	)
 end)

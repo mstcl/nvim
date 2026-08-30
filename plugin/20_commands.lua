@@ -29,37 +29,69 @@ _G.helpers.later(function()
 		vim.cmd("normal! <C-l>")
 	end, {})
 
-	local split_new_terminal = function()
-		if vim.api.nvim_win_get_width(0) >= 350 then
-			vim.cmd("vsplit | winc L | vertical resize 150 | term")
-		else
-			vim.cmd("split | winc J | resize 20 | term")
-		end
-	end
-
-	local split_existing_terminal = function()
-		if vim.api.nvim_win_get_width(0) >= 350 then
-			vim.cmd("vert sb " .. vim.t.t_buf .. "| winc L | vertical resize 150")
-		else
-			vim.cmd("sb" .. vim.t.t_buf .. "| winc J | resize 20")
-		end
+	local terminal_msgarea_config = function()
+		return {
+			relative = "msgarea",
+			row = 0,
+			col = 0,
+			width = vim.o.columns,
+			height = 15,
+			border = _G.config.border,
+			title = " Quake ",
+		}
 	end
 
 	local open_terminal = function()
-		if vim.fn.bufexists(vim.t.t_buf) ~= 1 then
-			split_new_terminal()
-			vim.t.t_win_id = vim.fn.win_getid()
-			vim.t.t_buf = vim.fn.bufnr("%")
-		elseif vim.fn.win_gotoid(vim.t.t_win_id) ~= 1 then
-			split_existing_terminal()
-			vim.t.t_win_id = vim.fn.win_getid()
+		-- Create buffer if it doesn't exist or is invalid
+		if not vim.t.t_buf or not vim.api.nvim_buf_is_valid(vim.t.t_buf) then
+			vim.t.t_buf = vim.api.nvim_create_buf(false, true)
+
+			-- Spawn terminal inside the buffer without stealing focus yet
+			vim.api.nvim_buf_call(vim.t.t_buf, function() vim.cmd.terminal() end)
+		end
+
+		-- Open floating window relative to msgarea if not already open
+		if not vim.t.t_win_id or not vim.api.nvim_win_is_valid(vim.t.t_win_id) then
+			vim.t.t_win_id =
+				vim.api.nvim_open_win(vim.t.t_buf, true, terminal_msgarea_config())
+
+			-- Override FloatBorder back to global FloatBorder instead of MsgArea
+			local current_winhl = vim.api.nvim_get_option_value(
+				"winhighlight",
+				{ win = vim.t.t_win_id }
+			)
+			local updated_winhl = current_winhl .. ",FloatBorder:FloatBorder"
+
+			vim.api.nvim_set_option_value(
+				"winhighlight",
+				updated_winhl,
+				{ scope = "local", win = vim.t.t_win_id }
+			)
+
+			vim.cmd("startinsert") -- Enter terminal mode automatically
+		else
+			-- If window exists, focus it
+			vim.api.nvim_set_current_win(vim.t.t_win_id)
+			vim.cmd("startinsert")
 		end
 	end
 
 	local hide_terminal = function()
-		if vim.fn.win_gotoid(vim.t.t_win_id) == 1 then
-			vim.cmd("hide")
-			vim.cmd.wincmd("p")
+		if vim.t.t_win_id and vim.api.nvim_win_is_valid(vim.t.t_win_id) then
+			vim.api.nvim_win_close(vim.t.t_win_id, true)
+			vim.t.t_win_id = nil
+		end
+	end
+
+	local toggle_terminal = function()
+		if
+			vim.t.t_win_id
+			and vim.api.nvim_win_is_valid(vim.t.t_win_id)
+			and vim.api.nvim_get_current_win() == vim.t.t_win_id
+		then
+			hide_terminal()
+		else
+			open_terminal()
 		end
 	end
 
@@ -121,11 +153,7 @@ _G.helpers.later(function()
 			-- Toggle a quake terminal that always changes to the project's working
 			-- directory You also have a separate quake per tabpage, so you can work in
 			-- multiple projects/working dirs without fussing about with cd
-			if vim.fn.win_gotoid(vim.t.t_win_id) == 1 then
-				hide_terminal()
-			else
-				open_terminal()
-			end
+			toggle_terminal()
 		else
 			-- Build available options list dynamically
 			local builtins = {
@@ -346,60 +374,8 @@ _G.helpers.later(function()
 		end,
 	})
 
-	-- Unified LSP symbols command
-	create_user_command("Symbols", function(opts)
-		local scope = opts.args:lower()
-
-		if scope == "workspace" or scope == "ws" or scope == "w" then
-			vim.lsp.buf.workspace_symbol()
-		elseif
-			scope == "document"
-			or scope == "doc"
-			or scope == "d"
-			or scope == ""
-		then
-			vim.lsp.buf.document_symbol()
-		else
-			vim.notify(
-				"Unknown scope: "
-					.. opts.args
-					.. ". Available: workspace (ws), document (doc)",
-				vim.log.levels.ERROR
-			)
-		end
-	end, {
-		nargs = "?",
-		complete = function() return { "workspace", "document" } end,
-	})
-
-	-- Unified diagnostics command
-	create_user_command("Diagnostics", function(opts)
-		local scope = opts.args:lower()
-
-		if scope == "workspace" or scope == "ws" or scope == "w" then
-			vim.diagnostic.setqflist()
-		elseif
-			scope == "document"
-			or scope == "doc"
-			or scope == "d"
-			or scope == ""
-		then
-			vim.diagnostic.setloclist()
-		else
-			vim.notify(
-				"Unknown scope: "
-					.. opts.args
-					.. ". Available: workspace (ws), document (doc)",
-				vim.log.levels.ERROR
-			)
-		end
-	end, {
-		nargs = "?",
-		complete = function() return { "workspace", "document" } end,
-	})
-
 	-- Unified syntax highlighting command
-	create_user_command("Syntax", function(opts)
+	create_user_command("Hi", function(opts)
 		local args = vim.split(opts.args, " ", { plain = true, trimempty = true })
 		local target = args[1] and args[1]:lower() or ""
 		local action = args[2] and args[2]:lower() or ""

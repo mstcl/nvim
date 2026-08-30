@@ -1,17 +1,16 @@
 {
   "plugins": {
-    "aerial.nvim": {
-      "rev": "28fe6e822ae344544c379d60fcb13c9519a1f08a",
-      "src": "https://github.com/stevearc/aerial.nvim"
-    },
     "blink.cmp": {
-      "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
-      "src": "https://github.com/saghen/blink.cmp",
-      "version": "'v1.10.2'"
+      "rev": "101d71861f6a012f2be80e4100720874330d86aa",
+      "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.indent": {
       "rev": "8b69b9262891fe81fe728fe6a52fa2a84dd5d5e0",
       "src": "https://github.com/saghen/blink.indent"
+    },
+    "blink.lib": {
+      "rev": "c8fdc12c8a2fab6cf786dd7141a283f8079f902b",
+      "src": "https://github.com/saghen/blink.lib"
     },
     "codediff.nvim": {
       "rev": "ae8d28896184d4a02ed590da9c3063ba50389b43",
@@ -77,6 +76,14 @@
       "rev": "fb2bbae327f3c306f3c825031345b89dd176ce60",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
+    "minibuffer.nvim": {
+      "rev": "8fb32f132d2bd16218a2fb8e62fe91a3e3191d13",
+      "src": "https://github.com/simifalaye/minibuffer.nvim"
+    },
+    "msgarea.nvim": {
+      "rev": "00a50b329552b79d7d948d5b504b545df7edf951",
+      "src": "https://github.com/edisj/msgarea.nvim"
+    },
     "neogit": {
       "rev": "5adc81b26232954cd7a90f158aa7844c18fc3165",
       "src": "https://github.com/NeogitOrg/neogit"
@@ -132,10 +139,6 @@
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
-    },
-    "quicker.nvim": {
-      "rev": "4a6883cb13fe097a20a046eb55f6dffd239276e3",
-      "src": "https://github.com/stevearc/quicker.nvim"
     },
     "remember.nvim": {
       "rev": "e73350b07afdd4242a57e2e7c2b7cd38fce31d59",

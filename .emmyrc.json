@@ -3,7 +3,9 @@
     "disable": [
       "need-check-nil",
       "unresolved-require",
-      "unnecessary-if"
+      "unnecessary-if",
+      "type-not-found",
+      "undefined-field"
     ]
   }
 }

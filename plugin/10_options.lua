@@ -128,7 +128,7 @@ o.signcolumn = "yes"
 o.shortmess = o.shortmess + "OosatTcCFSW"
 
 -- Window
-g.health = { style = "float" } -- floating checkhealth
+g.health = { style = "float" }
 o.splitkeep = "screen" -- less jarring splitting
 o.splitbelow = true
 o.splitright = true

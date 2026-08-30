@@ -21,8 +21,8 @@ _G.helpers.later(function()
 	)
 
 	-- <C-L> on steroids
-	keymap_set("n", "<leader>L", function() vim.cmd("Clear") end, {
-		desc = "Refresh screen and restart lsp",
+	keymap_set("n", "<leader>l", function() vim.cmd("Clear") end, {
+		desc = "Clear",
 		noremap = false,
 		silent = true,
 	})
@@ -79,22 +79,13 @@ _G.helpers.later(function()
 		{ desc = "Zoom window", remap = false, silent = true }
 	)
 
-	-- Toggle number mode
+	-- Yank latest commit hash
 	-- Used relatively often so it's handy to have a keymap
 	keymap_set(
 		"n",
-		"<leader>m",
-		function() vim.cmd("Toggle relative_number") end,
-		{ desc = "Number relative toggle", noremap = false, silent = true }
-	)
-
-	-- Yank commit hash
-	-- Used relatively often so it's handy to have a keymap
-	keymap_set(
-		"n",
-		"<leader>y",
+		"<leader>x",
 		function() vim.cmd("YankCommitHash") end,
-		{ desc = "Yank commit hash", noremap = false, silent = true }
+		{ desc = "Hash", noremap = false, silent = true }
 	)
 
 	-- Go to special files
@@ -109,28 +100,28 @@ _G.helpers.later(function()
 
 	keymap_set(
 		"n",
-		"<leader>up",
+		"<leader>qp",
 		function() open_project_file("pyproject.toml") end,
 		{ desc = "pyproject.toml" }
 	)
 
 	keymap_set(
 		"n",
-		"<leader>ug",
+		"<leader>qg",
 		function() open_project_file(".gitignore") end,
 		{ desc = ".gitignore" }
 	)
 
 	keymap_set(
 		"n",
-		"<leader>ur",
+		"<leader>qr",
 		function() open_project_file("README.md") end,
 		{ desc = "README.md" }
 	)
 
 	keymap_set(
 		"n",
-		"<leader>ud",
+		"<leader>qd",
 		function() open_project_file({ "Dockerfile", "Containerfile" }) end,
 		{ desc = "Dockerfile" }
 	)

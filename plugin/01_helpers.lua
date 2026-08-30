@@ -99,6 +99,23 @@ _G.helpers.now = function(f) require("mini.misc").safely("now", f) end
 _G.helpers.later = function(f) require("mini.misc").safely("later", f) end
 _G.helpers.now_if_args = vim.fn.argc(-1) > 0 and _G.helpers.now or _G.helpers.later
 
+---Helper to highlight str with group hl in string representation
+---@param str string
+---@param hl string
+---@return string
+_G.helpers.set_hl = function(str, hl, restore)
+	restore = restore == nil or restore
+	return restore
+			and table.concat({
+				"%#",
+				hl,
+				"#",
+				str or "",
+				"%*",
+			})
+		or table.concat({ "%#", hl, "#", str or "" })
+end
+
 ---Shortcut syntax to create autocmd with augroup @param group string @vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
 ---@return nil
 _G.helpers.new_autocmd = function(group, ...)

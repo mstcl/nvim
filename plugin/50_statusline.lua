@@ -1,6 +1,6 @@
 -- Custom statusline
-
 local config = _G.config
+local set_hl = _G.helpers.set_hl
 
 ---@type table
 _G.statusline = {}
@@ -9,23 +9,6 @@ _G.statusline = {}
 _G.statusline.components = {}
 
 _G.helpers.now(function()
-	---Helper to highlight str with group hl in string representation
-	---@param str string
-	---@param hl string
-	---@return string
-	local set_hl = function(str, hl, restore)
-		restore = restore == nil or restore
-		return restore
-				and table.concat({
-					"%#",
-					hl,
-					"#",
-					str or "",
-					"%*",
-				})
-			or table.concat({ "%#", hl, "#", str or "" })
-	end
-
 	---Get an open bracket char
 	---@return string open_bracket
 	local open_bracket = function() return set_hl("[", "MoreMsg") end
@@ -405,7 +388,7 @@ _G.helpers.now(function()
 		end
 
 		-- priority important here
-		if is_special_buf() then
+		if is_special_buf() and not vim.tbl_contains({ "fzf" }, ft) then
 			s = ft
 		else
 			return ""
