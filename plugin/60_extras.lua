@@ -1,9 +1,12 @@
 -- External plugins
 
 local _plugin_path = vim.fn.stdpath("data") .. "/site/pack/deps/opt"
-local now = function(f) require("mini.misc").safely("now", f) end
-local later = function(f) require("mini.misc").safely("later", f) end
-local now_if_args = vim.fn.argc(-1) > 0 and now or later
+local now = _G.helpers.now
+local later = _G.helpers.later
+local now_if_args = _G.helpers.now_if_args
+local new_autocmd = _G.helpers.new_autocmd
+local register_toggle = _G.helpers.register_toggle
+local config = _G.config
 
 -- (mini.statuscolumn) better statuscolumn
 now(
@@ -30,7 +33,7 @@ now(function()
 		"https://github.com/mstcl/orng.nvim",
 	})
 
-	_G.helpers.new_autocmd("toggletheme", {
+	new_autocmd("toggletheme", {
 		"Signal",
 		{
 			pattern = "SIGUSR1",
@@ -185,7 +188,7 @@ end)
 
 -- (mini.pairs) Auto pairs
 later(function()
-	_G.register_toggle("autopairs", { "pairs", "minipairs" }, function()
+	register_toggle("autopairs", { "pairs", "minipairs" }, function()
 		vim.g.minipairs_disable = not vim.g.minipairs_disable
 		vim.notify(
 			"Autopairs " .. (vim.g.minipairs_disable and "disabled" or "enabled"),
@@ -237,12 +240,12 @@ later(function()
 	local central_picker_opts = {
 		preview = {
 			hidden = false,
-			border = _G.config.border,
+			border = config.border,
 			layout = "flex",
 			vertical = "up:45%",
 			horizontal = "right:55%",
 		},
-		border = _G.config.border,
+		border = config.border,
 		backdrop = 100,
 		height = 0.85,
 		width = 0.80,
@@ -648,7 +651,7 @@ later(function()
 		end,
 	})
 
-	_G.helpers.new_autocmd("gitsigns_refresh", {
+	new_autocmd("gitsigns_refresh", {
 		"BufEnter",
 		{
 			callback = function() pcall(vim.cmd, "Gitsigns refresh") end,
@@ -700,7 +703,7 @@ later(function()
 		diff_viewer = "codediff",
 		signs = {
 			hunk = { " ", " " },
-			item = { _G.config.signs.close, _G.config.signs.open },
+			item = { config.signs.close, config.signs.open },
 			section = { " ", " " },
 		},
 		---@diagnostic disable-next-line:  assign-type-mismatch
@@ -717,7 +720,7 @@ later(function()
 		},
 	})
 
-	_G.helpers.new_autocmd("neogit", {
+	new_autocmd("neogit", {
 		{ "BufEnter", "ColorScheme" },
 		{
 			pattern = "Neogit*",
@@ -790,7 +793,7 @@ later(function()
 		scope = { enabled = false },
 	})
 
-	_G.register_toggle(
+	register_toggle(
 		"indent",
 		{ "ident" },
 		function()
@@ -893,7 +896,7 @@ later(function()
 		},
 		appearance = {
 			use_nvim_cmp_as_default = true, -- WARN: will be deprecated
-			kind_icons = _G.config.signs.kinds,
+			kind_icons = config.signs.kinds,
 		},
 		sources = {
 			default = {
@@ -1186,12 +1189,12 @@ now_if_args(function()
 	local isnt_installed = function(lang)
 		return #vim.api.nvim_get_runtime_file("parser/" .. lang .. ".*", false) == 0
 	end
-	local to_install = vim.tbl_filter(isnt_installed, _G.config.treesitter.grammars)
+	local to_install = vim.tbl_filter(isnt_installed, config.treesitter.grammars)
 	if #to_install > 0 then require("nvim-treesitter").install(to_install) end
 	require("nvim-treesitter").install({ "markdown_inline", "printf" })
 
 	local filetypes = { "gitconfig" }
-	for _, lang in ipairs(_G.config.treesitter.grammars) do
+	for _, lang in ipairs(config.treesitter.grammars) do
 		for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang)) do
 			table.insert(filetypes, ft)
 		end
@@ -1202,10 +1205,7 @@ now_if_args(function()
 		local filetype = vim.bo[ev.buf].filetype
 		if not _G.helpers.is_big_file(vim.fn.expand("%")) then
 			if
-				not vim.tbl_contains(
-					_G.config.treesitter.disabled_filetypes,
-					filetype
-				)
+				not vim.tbl_contains(config.treesitter.disabled_filetypes, filetype)
 			then
 				vim.treesitter.start(ev.buf)
 			end
@@ -1216,7 +1216,7 @@ now_if_args(function()
 		end
 	end
 
-	_G.helpers.new_autocmd("treesitter", {
+	new_autocmd("treesitter", {
 		{ "FileType" },
 		{
 			pattern = filetypes,
@@ -1311,11 +1311,11 @@ now_if_args(function()
 	vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
 
 	vim.lsp.config("*", {
-		capabilities = _G.config.lsp.capabilities(),
+		capabilities = _G.helpers.lsp.setup_capabilities(),
 		---@diagnostic disable-next-line: missing-fields, assign-type-mismatch
 		flags = { debounce_text_changes = 150 },
 	})
-	vim.lsp.enable(_G.config.lsp.servers)
+	vim.lsp.enable(config.lsp.servers)
 end)
 
 -- (garbage-day.nvim) Kill idle/inactive language servers
@@ -1336,7 +1336,7 @@ later(function()
 		rust = { "clippy" },
 	}
 
-	_G.helpers.new_autocmd("nvim-lint", {
+	new_autocmd("nvim-lint", {
 		{ "BufWritePost" },
 		{
 			desc = "lint file",
@@ -1350,11 +1350,11 @@ later(function()
 	vim.pack.add({ "https://github.com/jmbuhr/otter.nvim" })
 
 	require("otter").setup({
-		lsp = { hover = { border = _G.config.border } },
+		lsp = { hover = { border = config.border } },
 		buffers = { set_filetype = true },
 	})
 
-	_G.helpers.new_autocmd("otter", {
+	new_autocmd("otter", {
 		{ "BufNewFile", "BufRead" },
 		{
 			desc = "activate otter",
@@ -1453,7 +1453,7 @@ later(function()
 		exclude_buftypes = { "nofile" },
 	})
 
-	_G.register_toggle(
+	register_toggle(
 		"colors",
 		{ "highlight_colors", "color" },
 		function() vim.cmd("HighlightColors Toggle") end
@@ -1467,7 +1467,7 @@ later(function()
 	require("grug-far").setup({
 		disableBufferLineNumbers = true,
 		resultsSeparatorLineChar = "─",
-		spinnerStates = _G.config.signs.spinner,
+		spinnerStates = config.signs.spinner,
 		showInputsTopPadding = false,
 		showInputsBottomPadding = false,
 		helpLine = {
@@ -1503,7 +1503,7 @@ later(function()
 		{ desc = "Replace", noremap = false, silent = true }
 	)
 
-	_G.helpers.new_autocmd("grugfar", {
+	new_autocmd("grugfar", {
 		{ "Filetype" },
 		{
 			pattern = "grug-far",
@@ -1583,7 +1583,7 @@ later(function()
 	vim.pack.add({ "https://github.com/stevearc/aerial.nvim" })
 
 	require("aerial").setup({
-		icons = _G.config.signs.kinds_padded,
+		icons = config.signs.kinds_padded,
 		guides = {
 			nested_top = " │ ",
 			mid_item = " ├─",
@@ -1632,13 +1632,13 @@ later(function()
 		{ desc = "Aerial symbols", noremap = false, silent = true }
 	)
 
-	_G.register_toggle(
+	register_toggle(
 		"aerial",
 		{ "outline", "symbol" },
 		function() vim.cmd("AerialToggle") end
 	)
 
-	_G.helpers.new_autocmd("aerial", {
+	new_autocmd("aerial", {
 		{ "Filetype" },
 		{
 			pattern = "aerial",
@@ -1700,7 +1700,7 @@ later(function()
 		},
 	})
 
-	_G.register_toggle(
+	register_toggle(
 		"virtual_diagnostics",
 		{ "virt", "virtual", "diag", "diagnostics", "inline_diag" },
 		function() vim.cmd("TinyInlineDiag toggle") end
@@ -1806,7 +1806,7 @@ now(function()
 		{ desc = "Diffmode", noremap = false, silent = true }
 	)
 
-	_G.helpers.new_autocmd("codediff", {
+	new_autocmd("codediff", {
 		{ "BufEnter", "ColorScheme" },
 		{
 			desc = "set highlights for history panel",
@@ -1969,7 +1969,7 @@ later(function()
 		ui = { indent_guides = true },
 	})
 
-	_G.register_toggle(
+	register_toggle(
 		"tree",
 		{ "filetree", "fyler" },
 		function()
@@ -2051,12 +2051,12 @@ now_if_args(function()
 		columns = { oil_columns.icon },
 		float = {
 			padding = 2,
-			border = _G.config.border,
+			border = config.border,
 			max_width = math.floor(vim.api.nvim_win_get_width(0) * 0.7),
 			max_height = math.floor(vim.api.nvim_win_get_height(0) * 0.6),
 		},
-		preview = { border = _G.config.border },
-		progress = { border = _G.config.border },
+		preview = { border = config.border },
+		progress = { border = config.border },
 		win_options = {
 			number = true,
 			relativenumber = true,
@@ -2065,8 +2065,8 @@ now_if_args(function()
 			statuscolumn = "",
 			colorcolumn = "",
 		},
-		keymaps_help = { border = _G.config.border },
-		ssh = { border = _G.config.border },
+		keymaps_help = { border = config.border },
+		ssh = { border = config.border },
 		cleanup_delay_ms = false,
 		delete_to_trash = true,
 		skip_confirm_for_simple_edits = true,

@@ -2,6 +2,9 @@
 -- thanks https://github.com/nickkadutskyi/nvim/blob/0a06aaba3d0ac77256e0bf30842d1cb6ea742fe7/lua/ide/lsp/inlay_hint.lua
 _G.helpers = {}
 _G.helpers.lsp = {}
+
+---Setup inlay hints
+---@return table
 _G.helpers.lsp.setup_inlay_hints = function()
 	local inlay_hint = require("vim.lsp._capability").all.inlay_hint
 	if inlay_hint.pill_renderer then return end
@@ -63,6 +66,39 @@ _G.helpers.lsp.setup_inlay_hints = function()
 	end
 end
 
+---LSP capabilities
+---@return table
+_G.helpers.lsp.setup_capabilities = function()
+	local capabilities = vim.lsp.protocol.make_client_capabilities()
+	capabilities = vim.tbl_deep_extend("force", capabilities, {
+		textDocument = {
+			foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true,
+			},
+			completionItem = {
+				snippetSupport = true,
+			},
+		},
+		workspace = {
+			fileOperations = {
+				didRename = true,
+				willRename = true,
+			},
+			didChangeWatchedFiles = {
+				dynamicRegistration = true,
+			},
+		},
+	})
+
+	return capabilities
+end
+
+-- now/deferred
+_G.helpers.now = function(f) require("mini.misc").safely("now", f) end
+_G.helpers.later = function(f) require("mini.misc").safely("later", f) end
+_G.helpers.now_if_args = vim.fn.argc(-1) > 0 and _G.helpers.now or _G.helpers.later
+
 ---Shortcut syntax to create autocmd with augroup @param group string @vararg { [1]: string|string[], [2]: vim.api.keyset.create_autocmd }
 ---@return nil
 _G.helpers.new_autocmd = function(group, ...)
@@ -101,4 +137,30 @@ _G.helpers.on_packchanged = function(plugin_name, kinds, callback, desc)
 			desc = desc,
 		},
 	})
+end
+
+--- Register a toggle handler for the unified Toggle command
+---@param name string The toggle name (what users type)
+---@param aliases string[] Optional aliases for the toggle
+---@param handler function The function to call when toggled
+_G.helpers.register_toggle = function(name, aliases, handler)
+	_G.toggle_registry[name:lower()] = handler
+	if aliases then
+		for _, alias in ipairs(aliases) do
+			_G.toggle_registry[alias:lower()] = handler
+		end
+	end
+end
+
+--- Register a mode handler for the unified Mode command
+---@param name string The mode name (what users type)
+---@param aliases string[] Optional aliases for the mode
+---@param handler function The function to call when entering the mode
+_G.helpers.register_mode = function(name, aliases, handler)
+	_G.mode_registry[name:lower()] = handler
+	if aliases then
+		for _, alias in ipairs(aliases) do
+			_G.mode_registry[alias:lower()] = handler
+		end
+	end
 end

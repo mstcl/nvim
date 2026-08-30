@@ -1,200 +1,203 @@
 -- Configure builtin vim options
+local g = vim.g
+local o = vim.opt
+local config = _G.config
 
-vim.g.mapleader = ","
-vim.g.maplocalleader = ",."
+g.mapleader = ","
+g.maplocalleader = ",."
 
 -- Disable plugins
-vim.g.loaded_gzip = 1
-vim.g.loaded_zip = 1
-vim.g.loaded_zipPlugin = 1
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrw_nogx = 1
-vim.g.loaded_netrwPlugin = 1
-vim.g.loaded_netrwSettings = 1
-vim.g.loaded_netrwFileHandlers = 1
-vim.g.loaded_tar = 1
-vim.g.loaded_matchparen = 1
-vim.g.loaded_tarPlugin = 1
-vim.g.loaded_getscript = 1
-vim.g.loaded_getscriptPlugin = 1
-vim.g.loaded_vimballPlugin = 1
+g.loaded_gzip = 1
+g.loaded_zip = 1
+g.loaded_zipPlugin = 1
+g.loaded_netrw = 1
+g.loaded_netrw_nogx = 1
+g.loaded_netrwPlugin = 1
+g.loaded_netrwSettings = 1
+g.loaded_netrwFileHandlers = 1
+g.loaded_tar = 1
+g.loaded_matchparen = 1
+g.loaded_tarPlugin = 1
+g.loaded_getscript = 1
+g.loaded_getscriptPlugin = 1
+g.loaded_vimballPlugin = 1
 ---@diagnostic disable-next-line: assign-type-mismatch
-vim.g.loaded_2html_plugin = 1
-vim.g.loaded_spellfile_plugin = 1
-vim.g.loaded_tutor_mode_plugin = 1
-vim.g.loaded_matchit = 1
-vim.g.loaded_tutor = 1
-vim.g.loaded_tohtml = 1
+g.loaded_2html_plugin = 1
+g.loaded_spellfile_plugin = 1
+g.loaded_tutor_mode_plugin = 1
+g.loaded_matchit = 1
+g.loaded_tutor = 1
+g.loaded_tohtml = 1
 
 -- Disable providers
-vim.g.loaded_python_provider = false
-vim.g.loaded_ruby_provider = false
-vim.g.loaded_node_provider = false
-vim.g.loaded_perl_provider = false
+g.loaded_python_provider = false
+g.loaded_ruby_provider = false
+g.loaded_node_provider = false
+g.loaded_perl_provider = false
 
 -- Use filetype.lua
-vim.g.do_filetype_lua = true
+g.do_filetype_lua = true
 
 -- Vim syntax options
-vim.g["vimsyn_embed"] = "l"
-vim.g["tex_flavor"] = "latex"
-vim.g["tex_fold_enabled"] = "1"
-vim.g["tex_conceal"] = "abdgms"
-vim.g.markdown_enable_mappings = 1
-vim.g.markdown_enable_insert_mode_leader_mappings = 0
-vim.g.markdown_enable_insert_mode_mappings = 0
-vim.g.markdown_mapping_switch_status = "<C-space>"
-vim.g.markdown_enable_conceal = 1
-vim.g.markdown_enable_folding = 0
+g["vimsyn_embed"] = "l"
+g["tex_flavor"] = "latex"
+g["tex_fold_enabled"] = "1"
+g["tex_conceal"] = "abdgms"
+g.markdown_enable_mappings = 1
+g.markdown_enable_insert_mode_leader_mappings = 0
+g.markdown_enable_insert_mode_mappings = 0
+g.markdown_mapping_switch_status = "<C-space>"
+g.markdown_enable_conceal = 1
+g.markdown_enable_folding = 0
 
 -- Files
-vim.opt.autowriteall = true
-vim.opt.autochdir = false
-vim.opt.autoread = true
-vim.opt.swapfile = false
-vim.opt.path = vim.opt.path + "**"
-vim.opt.history = 1000
-vim.opt.undofile = true
-vim.opt.undolevels = 500 -- save a lot of undo steps
-vim.opt.encoding = "utf-8"
-vim.opt.modeline = true
-vim.opt.modelines = 1
-vim.opt.shada = "'100,<50,s10,:1000,/100,@100,h" -- limit shada file
+o.autowriteall = true
+o.autochdir = false
+o.autoread = true
+o.swapfile = false
+o.path = o.path + "**"
+o.history = 1000
+o.undofile = true
+o.undolevels = 500 -- save a lot of undo steps
+o.encoding = "utf-8"
+o.modeline = true
+o.modelines = 1
+o.shada = "'100,<50,s10,:1000,/100,@100,h" -- limit shada file
 
 -- Ticks
-vim.opt.updatetime = 180
-vim.opt.timeoutlen = 400 -- generous enough for ssh sessions
-vim.opt.ttimeout = true
-vim.opt.ttimeoutlen = 10
+o.updatetime = 180
+o.timeoutlen = 400 -- generous enough for ssh sessions
+o.ttimeout = true
+o.ttimeoutlen = 10
 
 -- Cursorline
-vim.opt.cursorline = true
-vim.opt.cursorlineopt = "number"
+o.cursorline = true
+o.cursorlineopt = "number"
 
 -- UI components
-vim.opt.report = 1000000000
-vim.opt.hidden = true
-vim.opt.showmode = false
-vim.opt.showcmd = false
-vim.opt.showcmdloc = "statusline"
-vim.opt.laststatus = 3
-vim.opt.cmdheight = 0
-vim.opt.ruler = true
-vim.opt.showtabline = 1
+o.report = 1000000000
+o.hidden = true
+o.showmode = false
+o.showcmd = false
+o.showcmdloc = "statusline"
+o.laststatus = 3
+o.cmdheight = 0
+o.ruler = true
+o.showtabline = 1
 
 -- Rendering
-vim.opt.lazyredraw = false
-vim.opt.ttyfast = true
-vim.opt.conceallevel = 2
-vim.opt.winblend = 0
-vim.opt.termguicolors = true
-vim.opt.guicursor =
+o.lazyredraw = false
+o.ttyfast = true
+o.conceallevel = 2
+o.winblend = 0
+o.termguicolors = true
+o.guicursor =
 	"n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:ver25-blinkon500-blinkoff500-TermCursor"
-vim.opt.synmaxcol = 400
-vim.opt.winborder = _G.config.border
+o.synmaxcol = 400
+o.winborder = config.border
 
 -- Pum
-vim.opt.pumblend = 0
-vim.opt.pumheight = 15
-vim.opt.pumwidth = 15
+o.pumblend = 0
+o.pumheight = 15
+o.pumwidth = 15
 
 -- Hacks
 ---@diagnostic disable: undefined-field
-vim.opt.iskeyword:append("-")
-vim.opt.nrformats:append("unsigned")
-vim.opt.nrformats:remove("bin", "hex")
+o.iskeyword:append("-")
+o.nrformats:append("unsigned")
+o.nrformats:remove("bin", "hex")
 
 -- Editing
-vim.opt.virtualedit = "onemore"
-vim.opt.mouse = "a"
-vim.opt.backspace = { "indent", "eol", "start" }
-vim.opt.virtualedit = "block"
-vim.opt.selection = "old"
-vim.opt.formatoptions = "rqnl1j" -- improve comment editing
-vim.opt.iskeyword = "@,48-57,_,192-255,-" -- treat dash as `word` textobject part
-vim.opt.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]] -- Pattern for a start of numbered list (used in `gw`). This reads as
+o.virtualedit = "onemore"
+o.mouse = "a"
+o.backspace = { "indent", "eol", "start" }
+o.virtualedit = "block"
+o.selection = "old"
+o.formatoptions = "rqnl1j" -- improve comment editing
+o.iskeyword = "@,48-57,_,192-255,-" -- treat dash as `word` textobject part
+o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]] -- Pattern for a start of numbered list (used in `gw`). This reads as
 
 -- Folding (foldtext is set in 53_foldtext.lua)
-vim.opt.foldmethod = "expr"
-vim.opt.foldlevel = 99
+o.foldmethod = "expr"
+o.foldlevel = 99
 
 -- number/sign/status column
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.signcolumn = "yes"
-vim.opt.shortmess = vim.opt.shortmess + "OosatTcCFSW"
+o.number = true
+o.relativenumber = true
+o.signcolumn = "yes"
+o.shortmess = o.shortmess + "OosatTcCFSW"
 
 -- Window
-vim.g.health = { style = "float" } -- floating checkhealth
-vim.opt.splitkeep = "screen" -- less jarring splitting
-vim.opt.splitbelow = true
-vim.opt.splitright = true
-vim.opt.jumpoptions = "stack,view"
-vim.opt.viewoptions = "folds,cursor,unix,curdir"
-vim.go.tabclose = "left"
-vim.opt.switchbuf = "usetab" -- use already opened buffers when switching
+g.health = { style = "float" } -- floating checkhealth
+o.splitkeep = "screen" -- less jarring splitting
+o.splitbelow = true
+o.splitright = true
+o.jumpoptions = "stack,view"
+o.viewoptions = "folds,cursor,unix,curdir"
+o.tabclose = "left"
+o.switchbuf = "usetab" -- use already opened buffers when switching
 
 -- Scrolling
-vim.opt.scrolljump = 1
-vim.opt.sidescrolloff = 5
-vim.opt.scrolloff = 3
+o.scrolljump = 1
+o.sidescrolloff = 5
+o.scrolloff = 3
 
 -- Wrap & textwidth
-vim.opt.wrap = false
-vim.opt.whichwrap = vim.opt.whichwrap + "<>[]hl"
-vim.opt.wrapmargin = 0
-vim.opt.textwidth = 88
-vim.opt.colorcolumn = "88"
-vim.opt.linebreak = true
+o.wrap = false
+o.whichwrap = o.whichwrap + "<>[]hl"
+o.wrapmargin = 0
+o.textwidth = 88
+o.colorcolumn = "88"
+o.linebreak = true
 
 -- Completion
-vim.opt.completeopt = "menu,menuone,noselect,noinsert"
-vim.opt.wildmenu = true
-vim.opt.wildmode = "longest:full,full"
-vim.opt.wildoptions = "pum"
+o.completeopt = "menu,menuone,noselect,noinsert"
+o.wildmenu = true
+o.wildmode = "longest:full,full"
+o.wildoptions = "pum"
 
 -- Searching
-vim.opt.inccommand = "split" -- split when s/find/replace
-vim.opt.hlsearch = true
-vim.opt.ignorecase = true
-vim.opt.infercase = true
-vim.opt.incsearch = true
-vim.opt.smartcase = true
-vim.opt.showmatch = true
-vim.opt.matchtime = 1
+o.inccommand = "split" -- split when s/find/replace
+o.hlsearch = true
+o.ignorecase = true
+o.infercase = true
+o.incsearch = true
+o.smartcase = true
+o.showmatch = true
+o.matchtime = 1
 
 -- Indentation
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.softtabstop = 4
-vim.opt.expandtab = false
-vim.opt.smarttab = true
-vim.opt.autoindent = true
-vim.opt.shiftround = true
-vim.opt.smartindent = false
-vim.opt.breakindent = true
-vim.opt.breakindentopt = "list:-1"
-vim.opt.copyindent = true
+o.tabstop = 4
+o.shiftwidth = 4
+o.softtabstop = 4
+o.expandtab = false
+o.smarttab = true
+o.autoindent = true
+o.shiftround = true
+o.smartindent = false
+o.breakindent = true
+o.breakindentopt = "list:-1"
+o.copyindent = true
 
 -- Spell
-vim.opt.spelllang = "en_gb"
-vim.opt.spell = false
-vim.opt.spelloptions = "camel"
+o.spelllang = "en_gb"
+o.spell = false
+o.spelloptions = "camel"
 
 -- Special characters
-vim.opt.list = true
-vim.opt.showbreak = "" -- we have fancy wrapped status column so don't need this
-vim.opt.fillchars = {
+o.list = true
+o.showbreak = "" -- we have fancy wrapped status column so don't need this
+o.fillchars = {
 	eob = " ",
 	vert = "│",
-	foldclose = _G.config.signs.close,
-	foldopen = _G.config.signs.open,
+	foldclose = config.signs.close,
+	foldopen = config.signs.open,
 	foldsep = "│",
 	foldinner = " ",
 	fold = " ",
 	diff = "╱",
 }
-vim.opt.listchars = {
+o.listchars = {
 	tab = "  »",
 	extends = "›",
 	precedes = "‹",
@@ -209,10 +212,10 @@ vim.opt.listchars = {
 ---@diagnostic disable-next-line: param-type-not-match
 -- Configure builtin diagnostics
 local lsp_status_signs = {
-	[vim.diagnostic.severity.ERROR] = _G.config.signs.lsp.Error,
-	[vim.diagnostic.severity.WARN] = _G.config.signs.lsp.Warn,
-	[vim.diagnostic.severity.INFO] = _G.config.signs.lsp.Info,
-	[vim.diagnostic.severity.HINT] = _G.config.signs.lsp.Hint,
+	[vim.diagnostic.severity.ERROR] = config.signs.lsp.Error,
+	[vim.diagnostic.severity.WARN] = config.signs.lsp.Warn,
+	[vim.diagnostic.severity.INFO] = config.signs.lsp.Info,
+	[vim.diagnostic.severity.HINT] = config.signs.lsp.Hint,
 }
 
 local lsp_status_hl_map = {
@@ -272,50 +275,52 @@ vim.diagnostic.config({
 			"InsertEnter",
 			"FocusLost",
 		},
-		border = _G.config.border,
+		border = config.border,
 		source = "always",
 		focus = false,
 	},
 })
 
 -- Test the new experimental UI2
-if vim.version.ge(vim.version(), { 0, 12, 0 }) then
-	require("vim._core.ui2").enable({
-		enable = true,
-		msg = {
-			targets = {
-				[""] = "msg",
-				empty = "msg",
-				bufwrite = "msg",
-				echo = "msg",
-				echomsg = "msg",
-				shell_ret = "msg",
-				undo = "msg",
-				wmsg = "msg",
-				completion = "msg",
-				confirm = "dialog",
-				confirm_sub = "dialog",
-				echoerr = "msg",
-				emsg = "msg",
-				list_cmd = "pager",
-				lua_error = "msg",
-				lua_print = "msg",
-				progress = "msg",
-				quickfix = "msg",
-				rpc_error = "msg",
-				search_cmd = "msg",
-				search_count = "msg",
-				shell_cmd = "msg",
-				shell_err = "msg",
-				shell_out = "msg",
-				typed_cmd = "msg",
-				verbose = "pager",
-				wildlist = "msg",
+_G.helpers.now(function()
+	if vim.version.ge(vim.version(), { 0, 12, 0 }) then
+		require("vim._core.ui2").enable({
+			enable = true,
+			msg = {
+				targets = {
+					[""] = "msg",
+					empty = "msg",
+					bufwrite = "msg",
+					echo = "msg",
+					echomsg = "msg",
+					shell_ret = "msg",
+					undo = "msg",
+					wmsg = "msg",
+					completion = "msg",
+					confirm = "dialog",
+					confirm_sub = "dialog",
+					echoerr = "msg",
+					emsg = "msg",
+					list_cmd = "pager",
+					lua_error = "msg",
+					lua_print = "msg",
+					progress = "msg",
+					quickfix = "msg",
+					rpc_error = "msg",
+					search_cmd = "msg",
+					search_count = "msg",
+					shell_cmd = "msg",
+					shell_err = "msg",
+					shell_out = "msg",
+					typed_cmd = "msg",
+					verbose = "pager",
+					wildlist = "msg",
+				},
+				cmd = { height = 0.5 },
+				dialog = { height = 0.5 },
+				msg = { height = 0.5, timeout = 2000 },
+				pager = { height = 0.8 },
 			},
-			cmd = { height = 0.5 },
-			dialog = { height = 0.5 },
-			msg = { height = 0.5, timeout = 2000 },
-			pager = { height = 0.8 },
-		},
-	})
-end
+		})
+	end
+end)
