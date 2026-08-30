@@ -232,7 +232,7 @@ _G.helpers.now(function()
 				)
 			end
 
-			return " " .. table.concat(items, " ")
+			return table.concat(items, " ")
 		end
 
 		return ""
@@ -293,12 +293,14 @@ _G.helpers.now(function()
 
 		-- Wrap ahead/behind in brackets with MoreMsg if present
 		local result = highlighted_branch
-		if ahead_behind ~= "" then
+		if ahead_behind ~= "" or git_diffs ~= "" then
 			local highlighted_ab = set_hl(ahead_behind, "StatusLineNC", false)
+			local padding = ahead_behind ~= "" and " " or ""
 			result = highlighted_branch
 				.. " "
 				.. open_bracket()
 				.. highlighted_ab
+				.. padding
 				.. git_diffs()
 				.. close_bracket()
 		end
