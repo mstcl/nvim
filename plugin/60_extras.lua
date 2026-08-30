@@ -823,9 +823,12 @@ end)
 -- (blink.cmp) Auto completion
 later(function()
 	vim.pack.add({
-		{ src = "https://github.com/saghen/blink.cmp", version = "v1.10.2" },
+		"https://github.com/saghen/blink.lib",
+		"https://github.com/saghen/blink.cmp",
 		"https://github.com/rafamadriz/friendly-snippets",
 	})
+
+	require("blink.cmp").build():pwait()
 
 	---@diagnostic disable-next-line: undefined-field
 	require("blink.cmp").setup({
@@ -891,7 +894,7 @@ later(function()
 			},
 			ghost_text = {
 				enabled = true,
-				show_without_selection = true,
+				show_without_selection = false,
 			},
 		},
 		appearance = {
@@ -923,9 +926,6 @@ later(function()
 					opts = { trailing_slash = false },
 				},
 				snippets = {
-					opts = {
-						friendly_snippets = true,
-					},
 					name = "S",
 					score_offset = 4,
 					min_keyword_length = 1,
