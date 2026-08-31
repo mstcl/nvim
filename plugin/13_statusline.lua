@@ -202,7 +202,6 @@ end
 local git_diffs = function()
 	if is_special_buf() then return "" end
 
-	---@diagnostic disable-next-line: undefined-field
 	local diffs = vim.b.gitsigns_status_dict
 
 	if diffs ~= nil then
@@ -287,13 +286,13 @@ _G.statusline.components.git = function()
 	end
 
 	local highlighted_ab = set_hl(ahead_behind, "StatusLineNC", false)
-	local padding = ahead_behind ~= "" and " " or ""
+	local padding = (ahead_behind ~= "" and git_diffs_result ~= "") and " " or ""
 	return highlighted_branch
 		.. " "
 		.. open_bracket()
 		.. highlighted_ab
 		.. padding
-		.. git_diffs()
+		.. git_diffs_result
 		.. close_bracket()
 end
 
@@ -311,9 +310,57 @@ _G.statusline.components.mode = function()
 end
 
 ---[COMPONENT]
+---Get lsp servers for current buffer
+---@return string lsp_names
+_G.statusline.components.lsp_names = function()
+	if is_special_buf() then return "" end
+
+	local servers = vim.lsp.get_clients({ bufnr = 0 })
+	local server_names = {}
+
+	local ignored_servers = { "render-markdown" }
+
+	for _, s in pairs(servers) do
+		if not vim.tbl_contains(ignored_servers, s.name) then
+			table.insert(server_names, s.name)
+		end
+	end
+
+	local result = table.concat(server_names, set_hl("|", "MoreMsg"))
+	if result == "" then return "" end
+
+	return open_bracket() .. result .. close_bracket()
+end
+
+---[COMPONENT]
+---Get formatters for current buffer
+---@return string formatter_names
+_G.statusline.components.formatter_names = function()
+	if is_special_buf() then return "" end
+
+	local ok, conform = pcall(require, "conform")
+	if not ok then return "" end
+
+	local formatters = conform.list_formatters_to_run(0)
+	local formatter_names = {}
+
+	local ignored_formatters = { "trim_whitespace" }
+
+	for _, f in pairs(formatters) do
+		if f.available and not vim.tbl_contains(ignored_formatters, f.name) then
+			table.insert(formatter_names, f.name)
+		end
+	end
+
+	return open_bracket()
+		.. table.concat(formatter_names, set_hl(",", "MoreMsg"))
+		.. close_bracket()
+end
+
+---[COMPONENT]
 ---Get diagnostics for current buffer with padding and brackets added
 ---@return string lsp_diagnostic
-_G.statusline.components.lsp_diagnostic = function()
+_G.statusline.components.diagnostics = function()
 	if is_special_buf() then return "" end
 
 	local status = vim.diagnostic.status()
@@ -527,9 +574,7 @@ end
 _G.statusline.components.indentation = function()
 	if is_special_buf() then return "" end
 
-	---@diagnostic disable-next-line: undefined-field
 	local expandtab_string = vim.opt.expandtab:get() and "shift" or "tab"
-	---@diagnostic disable-next-line: undefined-field
 	local shiftwidth_string = vim.opt.shiftwidth:get()
 	return string.format(
 		"%s%s%s",
@@ -550,8 +595,10 @@ end
 
 ---All components properly formatted and rendered
 local rendered_components = {
-	-- LSP
-	lsp_diagnostics = [[%{%v:lua.statusline.components.lsp_diagnostic()%}]],
+	-- LSP / dev tools
+	diagnostics = [[%{%v:lua.statusline.components.diagnostics()%}]],
+	lsp_names = [[%{%v:lua.statusline.components.lsp_names()%}]],
+	formatter_names = [[%{%v:lua.statusline.components.formatter_names()%}]],
 	-- Git
 	git = [[%{%v:lua.statusline.components.git()%}]],
 	-- Misc
@@ -602,7 +649,8 @@ _G.statusline.get = function()
 		rendered_components.search,
 		rendered_components.fformat,
 		rendered_components.fenc,
-		rendered_components.lsp_diagnostics,
+		rendered_components.diagnostics,
+		rendered_components.lsp_names,
 		rendered_components.padding,
 		-- Right most
 		rendered_components.align,
