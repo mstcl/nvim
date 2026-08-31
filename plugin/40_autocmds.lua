@@ -185,6 +185,25 @@ _G.helpers.later(function()
 					}
 				)
 
+				local foldtext_disabled_filetypes = { "lua" }
+
+				if client.server_capabilities.foldingRangeProvider then
+					local winid = vim.fn.bufwinid(bufnr)
+					local ft = vim.bo[bufnr].filetype
+
+					vim.wo[winid][0].foldexpr = vim.lsp.foldexpr
+
+					if not vim.tbl_contains(foldtext_disabled_filetypes, ft) then
+						vim.wo[winid][0].foldtext = vim.lsp.foldtext
+					end
+
+					vim.defer_fn(function()
+						if vim.api.nvim_win_is_valid(winid) then
+							vim.lsp.foldclose("imports", winid)
+						end
+					end, 150)
+				end
+
 				if client.server_capabilities.inlayHintProvider then
 					vim.keymap.set("n", "<leader>H", function()
 						---@diagnostic disable-next-line: missing-parameter
@@ -321,8 +340,7 @@ _G.helpers.later(function()
 		},
 	})
 
-	-- When opening undo tree put it to the left and make it wider
-	_G.helpers.new_autocmd("undotree", {
+	new_autocmd("undotree", {
 		{ "Filetype" },
 		{
 			desc = "Wider undotree",
