@@ -3,7 +3,7 @@
 "return" @keyword.return
 
 (raise_statement
-  "raise" @keyword.exception)
+  "raise" @keyword.return)
 
 (import_statement
   "import" @keyword.import)

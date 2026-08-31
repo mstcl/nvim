@@ -163,9 +163,6 @@ _G.helpers.later(function()
 
 				-- Set semantic tokens priority
 				vim.hl.priorities.semantic_tokens = 125
-				if client and vim.bo[args.buf].filetype == "python" then
-					client.server_capabilities.semanticTokensProvider = nil
-				end
 
 				vim.keymap.set(
 					"n",
