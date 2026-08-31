@@ -21,7 +21,7 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "dadbod-grip.nvim": {
-      "rev": "cc8201bd3167d098d35d04f709d1c1f6bfcb95f1",
+      "rev": "b4c709ddee299a5140863280e25710eb4f66c425",
       "src": "https://github.com/joryeugene/dadbod-grip.nvim"
     },
     "dial.nvim": {
@@ -97,7 +97,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "684cb45c2faa24ce463b4fe9aaf011bfe1e0fb26",
+      "rev": "16286347bdba1333c7d124d9de9fe6630731b2b2",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-spider": {
@@ -105,7 +105,7 @@
       "src": "https://github.com/chrisgrieser/nvim-spider"
     },
     "nvim-treesitter": {
-      "rev": "857651fce37eba032ebe28f3a206283cdc65c45a",
+      "rev": "19071296d3d643b48615ee574a20e8a03ac40872",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
@@ -125,7 +125,7 @@
       "src": "https://github.com/nickjvandyke/opencode.nvim"
     },
     "orng.nvim": {
-      "rev": "421f6d40bf0a676ffce87110e70711a062665d0b",
+      "rev": "5ec4ebae67159f57f1494949d91bd4c77a86c0ab",
       "src": "https://github.com/mstcl/orng.nvim"
     },
     "otter.nvim": {
