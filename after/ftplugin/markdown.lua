@@ -1,8 +1,10 @@
 local opt_local = vim.opt_local
 
-opt_local.shiftwidth = 4
 opt_local.expandtab = true
 opt_local.colorcolumn = ""
+opt_local.wrap = true
+opt_local.list = false
+opt_local.spell = true
 
 vim.b.minisurround_config = {
 	custom_surroundings = {
@@ -18,3 +20,10 @@ vim.b.minisurround_config = {
 		S = { output = { left = "~~", right = "~~" } },
 	},
 }
+
+vim.keymap.set(
+	"i",
+	"<C-L>",
+	"<c-g>u<Esc>[s1z=`]a<c-g>u",
+	{ noremap = true, silent = true }
+) -- autocorrect last spelling error

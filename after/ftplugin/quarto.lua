@@ -1,8 +1,17 @@
 local opt_local = vim.opt_local
 
-opt_local.shiftwidth = 4
 opt_local.expandtab = true
 
-local map = vim.keymap.set
+vim.keymap.set(
+	"n",
+	"mr",
+	require("quarto.runner").run_cell,
+	{ desc = "Run cell", buffer = true }
+)
 
-map("n", "mr", require("quarto.runner").run_cell, { desc = "Run cell", buffer = true })
+vim.keymap.set(
+	"i",
+	"<C-L>",
+	"<c-g>u<Esc>[s1z=`]a<c-g>u",
+	{ noremap = true, silent = true }
+) -- autocorrect last spelling error

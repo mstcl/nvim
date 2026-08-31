@@ -33,9 +33,9 @@ _G.helpers.now(function()
 					verbose = "pager",
 					wildlist = "msg",
 				},
-				cmd = { height = 0.5 },
 				dialog = { height = 0.5 },
-				msg = { height = 0.5, timeout = 2000 },
+				msg = { height = 0.5 },
+				messagesopt = { maxheight = 0.5, timeout = 2000 },
 				pager = { height = 0.8 },
 			},
 		})

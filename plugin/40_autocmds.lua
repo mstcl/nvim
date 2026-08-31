@@ -42,7 +42,7 @@ _G.helpers.later(function()
 	})
 
 	new_autocmd("clean", {
-		{ "BufRead", "BufEnter", "BufReadPre", "FileType" },
+		{ "BufRead", "BufEnter", "BufReadPre" },
 		{
 			desc = "disable some buffer noise for special buftypes/filetypes",
 			pattern = { "*" },
@@ -54,37 +54,10 @@ _G.helpers.later(function()
 					prompt = true,
 					acwrite = true,
 				}
-				local special_filetype = {
-					ipynb = true,
-				}
-				if
-					special_buftype[vim.bo.buftype]
-					or special_filetype[vim.bo.filetype]
-				then
+				if special_buftype[vim.bo.buftype] then
 					vim.wo.colorcolumn = ""
 					vim.opt_local.list = false
 				end
-			end,
-		},
-	})
-
-	new_autocmd("prose", {
-		{ "BufNewFile", "BufRead" },
-		{
-			desc = "enable text editing options, spellcheck and spell correction on certain filetypes",
-			pattern = { "*.md", "*.txt", "*.tex", "*.org", "*.qmd", "*.typ" },
-			callback = function()
-				vim.opt_local.wrap = true
-				vim.opt_local.list = false
-				vim.opt_local.spell = true
-
-				-- Set keymap for spell autocorrect
-				vim.keymap.set(
-					"i",
-					"<C-L>",
-					"<c-g>u<Esc>[s1z=`]a<c-g>u",
-					{ noremap = true, silent = true }
-				) -- autocorrect last spelling error
 			end,
 		},
 	})
@@ -329,6 +302,7 @@ _G.helpers.later(function()
 	new_autocmd("quickfix", {
 		"BufRead",
 		{
+			desc = "Put quickfix in the msgarea",
 			callback = function(ev)
 				if vim.bo[ev.buf].buftype ~= "quickfix" then return end
 				vim.schedule(function()
@@ -347,31 +321,17 @@ _G.helpers.later(function()
 		},
 	})
 
-	new_autocmd("health", {
-		{ "FileType" },
-		{
-			pattern = "checkhealth",
-			callback = function(ev)
-				vim.schedule(function()
-					local winid = vim.fn.bufwinid(ev.buf)
-					vim.api.nvim_win_set_config(winid, {
-						title = "Health",
-						relative = "msgarea",
-						height = 12,
-						style = "minimal",
-					})
-				end)
-			end,
-		},
-	})
-
-	-- When opening undo tree set it to minimal mode
+	-- When opening undo tree put it to the left and make it wider
 	_G.helpers.new_autocmd("undotree", {
 		{ "Filetype" },
 		{
-			desc = "open help in vertical split",
+			desc = "Wider undotree",
 			pattern = "nvim-undotree",
-			callback = function() vim.cmd("Mode minimal") end,
+			callback = function()
+				vim.cmd.wincmd("H")
+				vim.api.nvim_win_set_width(0, 40)
+				vim.cmd("Mode minimal")
+			end,
 		},
 	})
 end)
