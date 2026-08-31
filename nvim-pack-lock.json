@@ -57,7 +57,7 @@
       "src": "https://github.com/MagicDuck/grug-far.nvim"
     },
     "ivory.nvim": {
-      "rev": "ddf8e2512a836e41cbfa7cfbd7a5c27c55894b05",
+      "rev": "20c786ba4999f907db5fa845b1a9be3617c5c762",
       "src": "https://github.com/mstcl/ivory.nvim"
     },
     "jupynvim": {
@@ -125,7 +125,7 @@
       "src": "https://github.com/nickjvandyke/opencode.nvim"
     },
     "orng.nvim": {
-      "rev": "79f7f01cd2bb7f70c98adefea1e7b7010e856d50",
+      "rev": "52a454d56237f74464bc423969e083b58c6a37f9",
       "src": "https://github.com/mstcl/orng.nvim"
     },
     "otter.nvim": {
@@ -149,7 +149,7 @@
       "src": "https://github.com/luukvbaal/statuscol.nvim"
     },
     "tavern.nvim": {
-      "rev": "d3efff008f6e629c374871df1ad637fb478ae5f3",
+      "rev": "f98e2e8cfeab7db0bf55466a2190f20e4d4639c0",
       "src": "https://github.com/mstcl/tavern.nvim"
     },
     "tiny-inline-diagnostic.nvim": {
@@ -161,7 +161,7 @@
       "src": "https://github.com/RRethy/vim-illuminate"
     },
     "zk-nvim": {
-      "rev": "a2a2c850e7876415a9961c7c409328ead78f18b3",
+      "rev": "38e18a6941627f998a5ddbcf2030d0486c99e3c6",
       "src": "https://github.com/zk-org/zk-nvim"
     }
   }

@@ -3,129 +3,7 @@
 -- I won't be documenting every single one of them
 local new_autocmd = _G.helpers.new_autocmd
 
-_G.helpers.later(function()
-	new_autocmd("autosave", {
-		{ "BufLeave", "WinLeave", "FocusLost" },
-		{
-			nested = true,
-			desc = "Autosave on focus change.",
-			callback = function(args)
-				-- Don't auto-save non-file buffers
-				vim.uv.fs_stat(args.file, function(err, stat)
-					if err or not stat or stat.type ~= "file" then return end
-					vim.schedule(function()
-						if not vim.api.nvim_buf_is_valid(args.buf) then return end
-						vim.api.nvim_buf_call(
-							args.buf,
-							function()
-								vim.cmd.update({ mods = { emsg_silent = true } })
-							end
-						)
-					end)
-				end)
-			end,
-		},
-	})
-
-	new_autocmd("formatoptions", {
-		"BufEnter",
-		{
-			pattern = "*",
-			desc = "set the format options globally",
-			callback = function()
-				local vals = { "c", "r", "o" }
-				for _, val in ipairs(vals) do
-					vim.opt_local.formatoptions:remove(val)
-				end
-			end,
-		},
-	})
-
-	new_autocmd("clean", {
-		{ "BufRead", "BufEnter", "BufReadPre" },
-		{
-			desc = "disable some buffer noise for special buftypes/filetypes",
-			pattern = { "*" },
-			callback = function()
-				local special_buftype = {
-					nofile = true,
-					help = true,
-					quickfix = true,
-					prompt = true,
-					acwrite = true,
-				}
-				if special_buftype[vim.bo.buftype] then
-					vim.wo.colorcolumn = ""
-					vim.opt_local.list = false
-				end
-			end,
-		},
-	})
-
-	new_autocmd("help", {
-		{ "Filetype" },
-		{
-			desc = "open help in vertical split",
-			pattern = "help",
-			callback = function()
-				vim.bo.bufhidden = "unload"
-				vim.cmd.wincmd("L")
-				vim.cmd("vertical resize 81")
-			end,
-		},
-	})
-
-	new_autocmd("root", {
-		{ "BufEnter" },
-		{
-			desc = "set cwd to project root directory",
-			callback = function(args)
-				local root = vim.fs.root(args.buf, {
-					".git",
-					"pyproject.toml",
-					"README.md",
-					"go.mod",
-					"Cargo.toml",
-				})
-				if root and root ~= "." then pcall(vim.cmd.tcd, root) end
-			end,
-		},
-	})
-
-	new_autocmd("bigfile", {
-		{ "BufReadPre" },
-		{
-			desc = "set settings for really big files",
-			pattern = "*",
-			callback = function()
-				---@diagnostic disable-next-line: param-type-mismatch
-				if _G.helpers.is_big_file(vim.fn.expand("%")) then
-					vim.cmd("Mode bigfile")
-				end
-			end,
-		},
-	})
-
-	new_autocmd("terminal", {
-		{ "TermOpen", "BufWinEnter", "WinEnter" },
-		{
-			desc = "set settings for terminal",
-			pattern = "*",
-			callback = function()
-				if vim.bo.buftype == "terminal" and vim.bo.filetype == "" then
-					vim.cmd("Mode minimal")
-				end
-			end,
-		},
-	}, {
-		{ "TermLeave" },
-		{
-			desc = "reload buffers when leaving terminal",
-			pattern = "*",
-			callback = function() vim.cmd.checktime() end,
-		},
-	})
-
+_G.helpers.now(function()
 	new_autocmd("lsp", {
 		"LspAttach",
 		{
@@ -281,6 +159,130 @@ _G.helpers.later(function()
 					})
 				end
 			end,
+		},
+	})
+end)
+
+_G.helpers.later(function()
+	new_autocmd("autosave", {
+		{ "BufLeave", "WinLeave", "FocusLost" },
+		{
+			nested = true,
+			desc = "Autosave on focus change.",
+			callback = function(args)
+				-- Don't auto-save non-file buffers
+				vim.uv.fs_stat(args.file, function(err, stat)
+					if err or not stat or stat.type ~= "file" then return end
+					vim.schedule(function()
+						if not vim.api.nvim_buf_is_valid(args.buf) then return end
+						vim.api.nvim_buf_call(
+							args.buf,
+							function()
+								vim.cmd.update({ mods = { emsg_silent = true } })
+							end
+						)
+					end)
+				end)
+			end,
+		},
+	})
+
+	new_autocmd("formatoptions", {
+		"BufEnter",
+		{
+			pattern = "*",
+			desc = "set the format options globally",
+			callback = function()
+				local vals = { "c", "r", "o" }
+				for _, val in ipairs(vals) do
+					vim.opt_local.formatoptions:remove(val)
+				end
+			end,
+		},
+	})
+
+	new_autocmd("clean", {
+		{ "BufRead", "BufEnter", "BufReadPre" },
+		{
+			desc = "disable some buffer noise for special buftypes/filetypes",
+			pattern = { "*" },
+			callback = function()
+				local special_buftype = {
+					nofile = true,
+					help = true,
+					quickfix = true,
+					prompt = true,
+					acwrite = true,
+				}
+				if special_buftype[vim.bo.buftype] then
+					vim.wo.colorcolumn = ""
+					vim.opt_local.list = false
+				end
+			end,
+		},
+	})
+
+	new_autocmd("help", {
+		{ "Filetype" },
+		{
+			desc = "open help in vertical split",
+			pattern = "help",
+			callback = function()
+				vim.bo.bufhidden = "unload"
+				vim.cmd.wincmd("L")
+				vim.cmd("vertical resize 81")
+			end,
+		},
+	})
+
+	new_autocmd("root", {
+		{ "BufEnter" },
+		{
+			desc = "set cwd to project root directory",
+			callback = function(args)
+				local root = vim.fs.root(args.buf, {
+					".git",
+					"pyproject.toml",
+					"README.md",
+					"go.mod",
+					"Cargo.toml",
+				})
+				if root and root ~= "." then pcall(vim.cmd.tcd, root) end
+			end,
+		},
+	})
+
+	new_autocmd("bigfile", {
+		{ "BufReadPre" },
+		{
+			desc = "set settings for really big files",
+			pattern = "*",
+			callback = function()
+				---@diagnostic disable-next-line: param-type-mismatch
+				if _G.helpers.is_big_file(vim.fn.expand("%")) then
+					vim.cmd("Mode bigfile")
+				end
+			end,
+		},
+	})
+
+	new_autocmd("terminal", {
+		{ "TermOpen", "BufWinEnter", "WinEnter" },
+		{
+			desc = "set settings for terminal",
+			pattern = "*",
+			callback = function()
+				if vim.bo.buftype == "terminal" and vim.bo.filetype == "" then
+					vim.cmd("Mode minimal")
+				end
+			end,
+		},
+	}, {
+		{ "TermLeave" },
+		{
+			desc = "reload buffers when leaving terminal",
+			pattern = "*",
+			callback = function() vim.cmd.checktime() end,
 		},
 	})
 

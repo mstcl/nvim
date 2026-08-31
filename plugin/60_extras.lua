@@ -1422,7 +1422,6 @@ now_if_args(function()
 
 			vim.wo.foldexpr = vim.treesitter.foldexpr
 			vim.wo.foldmethod = "expr"
-			vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 		end
 	end
 
@@ -2203,6 +2202,7 @@ later(function()
 
 	require("dadbod-grip").setup({
 		ai = false,
+		open_sidebar = false,
 		keymaps = {
 			table_picker = "go",
 			table_picker_alt = false, -- table picker (alternate)
