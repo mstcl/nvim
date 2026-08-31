@@ -278,26 +278,23 @@ _G.statusline.components.git = function()
 	-- Format: "branch*" or "branch* ↑2" or "branch* ↓3" or "branch* ↑2 ↓3"
 	local branch_part = status:match("^([^%s]+)") or ""
 	local ahead_behind = status:match("%s+(.+)$") or ""
+	local git_diffs_result = git_diffs()
+	local git_icon = set_hl(config.signs.branch, "MoreMsg")
+	local highlighted_branch = git_icon .. set_hl(branch_part, branch_hl, false)
 
-	-- Apply highlighting to branch part only
-	local highlighted_branch = set_hl(branch_part, branch_hl, false)
-
-	-- Wrap ahead/behind in brackets with MoreMsg if present
-	local result = highlighted_branch
-	if ahead_behind ~= "" or git_diffs ~= "" then
-		local highlighted_ab = set_hl(ahead_behind, "StatusLineNC", false)
-		local padding = ahead_behind ~= "" and " " or ""
-		result = highlighted_branch
-			.. " "
-			.. open_bracket()
-			.. highlighted_ab
-			.. padding
-			.. git_diffs()
-			.. close_bracket()
+	if ahead_behind == "" and git_diffs_result == "" then
+		return highlighted_branch
 	end
 
-	local git_icon = set_hl(config.signs.branch, "MoreMsg")
-	return git_icon .. result
+	local highlighted_ab = set_hl(ahead_behind, "StatusLineNC", false)
+	local padding = ahead_behind ~= "" and " " or ""
+	return highlighted_branch
+		.. " "
+		.. open_bracket()
+		.. highlighted_ab
+		.. padding
+		.. git_diffs()
+		.. close_bracket()
 end
 
 ---[COMPONENT]
