@@ -12,14 +12,6 @@ _G.helpers.later(function()
 		{ remap = false, desc = "Command", silent = true }
 	)
 
-	-- escape exits but also clear highlights
-	keymap_set(
-		"n",
-		"<esc>",
-		function() vim.cmd("noh") end,
-		{ desc = "Clear screen & highlights", noremap = false, silent = true }
-	)
-
 	-- <C-L> on steroids
 	keymap_set("n", "<leader>l", function() vim.cmd("Clear") end, {
 		desc = "Clear",
