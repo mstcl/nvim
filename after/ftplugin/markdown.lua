@@ -1,8 +1,8 @@
-local setlocal = vim.opt_local
+local opt_local = vim.opt_local
 
-setlocal.shiftwidth = 4
-setlocal.expandtab = true
-setlocal.colorcolumn = ""
+opt_local.shiftwidth = 4
+opt_local.expandtab = true
+opt_local.colorcolumn = ""
 
 vim.b.minisurround_config = {
 	custom_surroundings = {

@@ -1,7 +1,7 @@
-local setlocal = vim.opt_local
+local opt_local = vim.opt_local
 
-setlocal.shiftwidth = 2
-setlocal.expandtab = true
-setlocal.conceallevel = 2
-setlocal.concealcursor = "nc"
-setlocal.foldlevel = 99
+opt_local.shiftwidth = 2
+opt_local.expandtab = true
+opt_local.conceallevel = 2
+opt_local.concealcursor = "nc"
+opt_local.foldlevel = 99
